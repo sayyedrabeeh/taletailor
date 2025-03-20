@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+    <title>TaleTailor </title>
+    {% load static %}
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: white;
+            height: 100%;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #424242;
+            padding: 10px 20px;
+        }
+        .irish-grover-regular {
+  font-family: "Irish Grover", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #000;
+            border-radius: 5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            background-color: #000;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .user-options {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #7b68ee;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .favorite-icon, .profile-icon {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+        
+        .main-content {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+        
+        .logo-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .logo-img {
+            width: 500px;
+            height: 500px;
+            margin-bottom: 20px;
+            
+        }
+        
+        .logo-text {
+            color: #9370DB;
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        
+        .tagline {
+            color: #9370DB;
+            font-size: 1.5rem;
+            letter-spacing: 10px;
+            text-align: center;
+        }
+        
+        .form-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-form {
+            background-color: #111;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+        }
+        
+        .form-field {
+            margin-bottom: 20px;
+        }
+        
+        .form-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .form-field input {
+            width: 94%;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+            background-color: #e0e0e0;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .signup-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #ccc;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        
+        .forgot-password {
+            text-align: center;
+        }
+        
+        .forgot-password a {
+            color: white;
+            text-decoration: none;
+        }
+        .error-message {
+    color: white;
+    background-color: red;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+
+  .success-message {
+    color: white;
+    background-color: green;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="{% url 'authentication:home' %}" class="logo irish-grover-regular">TALETAILOR</a>
+        
+        <div class="nav-links">
+            <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+            <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+            <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+        </div>
+        
+        <div class="user-options">
+            <div class="toggle-container">
+    
+                   
+               
+            </div>
+            
+            <svg class="favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            
+            <div class="profile-icon" style="background-color: #666; border-radius: 50%; width: 30px; height: 30px;"></div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="logo-section">
+            
+            <img src="{% static 'images/logo.png' %}" alt="TaleTailor Logo" class="logo-img">
+            
+             
+        </div>
+        
+        <div class="form-section">
+            <form class="login-form" method="POST" action="{% url 'authentication:signup' %}">
+                {% csrf_token %}
+
+                <div class="form-field">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" value="{{ email|default:'' }}"placeholder="Enter your Email" required>
+                </div>
+                
+                <div class="form-field">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Enter A Password" required>
+                </div>
+                {% if messages %}
+                        {% for message in messages %}
+                          <div class="{% if message.tags == 'error' %}error-message{% elif message.tags == 'success' %}success-message{% endif %}">
+                            {{ message }}
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                   
+                <button type="submit" class="signup-btn">Sign Up</button>
+                <div class="forgot-password">
+                    you alredy have an account :
+                    <a href="{% url 'authentication:login' %}">login</a>
+                </div>
+                 
+            </form>
+        </div>
+    </div>
+    <script>
+       setTimeout(function() {
+    let messages = document.querySelectorAll('.error-message, .success-message');
+    messages.forEach(function(message) {
+      message.style.transition = "opacity 0.5s ease-out";
+      message.style.opacity = "0";
+      setTimeout(() => message.remove(), 500);  // Remove the element after fade out
+    });
+  }, 3000); // 3 seconds
+    </script>
+    
+</body>
+</html>

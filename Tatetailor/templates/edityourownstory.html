@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>StoryForge - Story Editor</title>
+  <style>
+    :root {
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --text-primary: #ffffff;
+      --text-secondary: #b3b3b3;
+      --accent: #9c27b0;
+      --accent-light: #bb86fc;
+      --editor-bg: #2d2d2d;
+      --editor-text: #e0e0e0;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    header {
+      background-color: var(--bg-secondary);
+      padding: 1rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .nav-link {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      background-color: var(--accent);
+    }
+    
+    .user-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+    }
+    
+    .toggle-label {
+      margin-right: 0.5rem;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #333;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: var(--accent);
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    
+    .profile-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #555;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .heart-icon {
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    
+    .heart-icon:hover {
+      color: #e91e63;
+    }
+    
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .editor-container {
+      flex: 1;
+      display: flex;
+      padding: 1rem;
+      gap: 1rem;
+    }
+    
+    .editor-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--editor-bg);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .title-input {
+      font-size: 2.5rem;
+      font-weight: bold;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      background-color: transparent;
+      border: none;
+      color: var(--editor-text);
+      width: 100%;
+      font-family: 'Times New Roman', Times, serif;
+    }
+    
+    .title-input:focus {
+      outline: none;
+    }
+    
+    .story-editor {
+      flex: 1;
+      padding: 1rem;
+      background-color: var(--editor-bg);
+      color: var(--editor-text);
+      border: none;
+      resize: none;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      font-family: 'Times New Roman', Times, serif;
+    }
+    
+    .story-editor:focus {
+      outline: none;
+    }
+    .modal-backdrop {
+    display: none !important;
+}
+
+    
+    .editor-sidebar {
+      width: 250px;
+      background-color: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .save-btn, .collaborate-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      border: none;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .save-btn:hover, .collaborate-btn:hover {
+      background-color: var(--accent);
+    }
+    
+    .collaborate-btn {
+      background-color: #2c3e50;
+    }
+    
+    .collaborate-btn:hover {
+      background-color: #3498db;
+    }
+    
+    .btn-icon {
+      font-size: 1.2rem;
+    }
+    
+    .word-count {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      text-align: center;
+      margin-top: auto;
+      padding-top: 1rem;
+    }
+    
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background-color: var(--bg-secondary);
+      border-radius: 8px;
+      width: 400px;
+      max-width: 90%;
+      padding: 1.5rem;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent-light);
+    }
+    
+    .close-modal {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    .close-modal:hover {
+      color: var(--text-primary);
+    }
+    
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    
+    .input-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+    
+    .text-input {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    
+    .text-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    .invite-btn {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 4px;
+      background-color: var(--accent);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .invite-btn:hover {
+      background-color: var(--accent-light);
+    }
+    header {
+            background-color: #333;
+            padding: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+        }
+        .logo-container {
+            padding: 0.5rem 1.5rem;
+            background-color: #000;
+            border-radius: 0;
+            margin-left: 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            background-color: #000;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-right: 2rem;
+        }
+
+        .dynamic-label {
+            color: #aaa;
+        }
+
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background-color: #444;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .toggle::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle.active::after {
+            transform: translateX(26px);
+        }
+
+        .heart-icon, .profile-icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .irish-grover-regular {
+                 font-family: "Irish Grover", serif;
+                 font-weight: 400;
+                 font-style: normal;
+        }
+        .messages {
+          margin-bottom: 20px;
+        }
+        
+        .alert {
+          padding: 10px;
+          border-radius: 5px;
+          margin-bottom: 10px;
+        }
+        
+        .alert-success {
+          background-color: #d4edda;
+          color: #155724;
+          border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+          background-color: #f8d7da;
+          color: #721c24;
+          border: 1px solid #f5c6cb;
+        }
+        .highlight {
+        background-color: yellow;
+        font-weight: bold;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+        /* General Button Styling */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+}
+
+/* Download Button */
+.download-btn {
+    background: #4CAF50;
+    color: white;
+    box-shadow: 0px 4px 10px rgba(0, 128, 0, 0.3);
+}
+
+.download-btn:hover {
+    background: #45a049;
+    box-shadow: 0px 6px 14px rgba(0, 128, 0, 0.4);
+}
+
+/* Share Button */
+.share-btn {
+    background: #007BFF;
+    color: white;
+    box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+.share-btn:hover {
+    background: #0056b3;
+    box-shadow: 0px 6px 14px rgba(0, 123, 255, 0.4);
+}
+
+/* Icon Styling */
+.btn-icon {
+    font-size: 18px;
+}
+/* General Button Styling */
+/* General Button Styling */
+.btn, .update-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Download Button - Dark Grey */
+.download-btn {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #333;
+}
+
+.download-btn:hover {
+    background-color: #444;
+    border-color: #444;
+    transform: translateY(-2px);
+}
+
+/* Share Button - Deep Navy Blue */
+.share-btn {
+    background-color: #1a237e;
+    color: #fff;
+    border: 1px solid #1a237e;
+}
+
+.share-btn:hover {
+    background-color: #0d1445;
+    border-color: #0d1445;
+    transform: translateY(-2px);
+}
+
+/* Update Button - Elegant Burgundy */
+.update-btn {
+    background-color: #800020;
+    color: white;
+    border: 1px solid #800020;
+}
+
+.update-btn:hover {
+    background-color: #5b0015;
+    border-color: #5b0015;
+    transform: translateY(-2px);
+}
+
+/* Button Icon Styling */
+.btn-icon {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.editor-sidebar {
+    width: 300px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.section-title {
+    color: var(--primary-color);
+    font-weight: 700;
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.preference-group {
+    margin-bottom: 20px;
+}
+
+.preference-label {
+    display: block;
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.radio-option, 
+.checkbox-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    transition: background-color var(--transition-speed);
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.radio-option input[type="radio"],
+.checkbox-option input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: var(--secondary-color);
+    transform: scale(1.2);
+}
+
+.radio-option:hover,
+.checkbox-option:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.theme-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d3d3d3;
+    border-radius: var(--border-radius);
+    background-color: white;
+    /* color: var(--text-color); */
+    transition: all var(--transition-speed);
+}
+
+.theme-select:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all var(--transition-speed);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-icon {
+    margin-right: 8px;
+    font-size: 1.1em;
+}
+
+.download-btn {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.download-btn:hover {
+    background-color: #3781c3;
+}
+
+.share-btn {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.share-btn:hover {
+    background-color: #24a35b;
+}
+
+.update-btn {
+    background-color: #f39c12;
+    color: white;
+}
+
+.update-btn:hover {
+    background-color: #d35400;
+}
+
+.public-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    flex-grow: 1;
+}
+
+.public-btn:hover {
+    background-color: #3781c3;
+}
+
+.private-btn {
+    background-color: var(--primary-color);
+    color: white;
+    flex-grow: 1;
+}
+.button-grou {
+    display: flex
+;
+    justify-content: space-evenly;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: stretch;
+    align-items: stretch;
+}
+.private-btn:hover {
+    background-color: #22313f;
+}
+
+.word-count {
+    margin-top: 15px;
+    text-align: center;
+    color: var(--text-color);
+    font-size: 0.9em;
+    opacity: 0.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .editor-sidebar {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+ .story-container {
+  position: relative;
+  width: 100%;
+}
+
+.story-image-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.story-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* For placing the image between story sections */
+.story-editor {
+  margin-bottom: 20px;
+}
+/* Professional Dark Editor - Corporate Style */
+.editor-main {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 32px;
+  font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #121212;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  color: #e0e0e0;
+}
+
+/* Alert messages styling */
+.messages {
+  margin-bottom: 24px;
+}
+
+.alert {
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  background-color: #1e1e1e;
+  border-left: 3px solid transparent;
+}
+
+.alert-success {
+  border-color: #4caf50;
+  color: #a5d6a7;
+}
+
+.alert-info {
+  border-color: #2196f3;
+  color: #90caf9;
+}
+
+.alert-warning {
+  border-color: #ff9800;
+  color: #ffcc80;
+}
+
+.alert-danger {
+  border-color: #f44336;
+  color: #ef9a9a;
+}
+
+/* Title input styling */
+.title-input {
+  width: 100%;
+  font-size: 20px;
+  padding: 14px 16px;
+  margin-bottom: 22px;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #1e1e1e;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.title-input::placeholder {
+  color: #707070;
+}
+
+/* Story image styling */
+.story-image {
+  width: 100%;
+  height: auto;
+  max-height: 380px;
+  margin: 5px 0 22px;
+  border-radius: 4px;
+  object-fit: contain;
+  border: 1px solid #333333;
+}
+
+/* Story editor textarea styling */
+.story-editor {
+  width: 100%;
+  min-height: 360px;
+  padding: 16px;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #e0e0e0;
+  resize: vertical;
+  font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #1e1e1e;
+}
+
+.story-editor::placeholder {
+  color: #707070;
+}
+
+/* Focus states for input elements */
+.title-input:focus,
+.story-editor:focus {
+  outline: none;
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.25);
+}
+
+/* Custom scrollbar */
+.story-editor::-webkit-scrollbar {
+  width: 8px;
+  background-color: #121212;
+}
+
+.story-editor::-webkit-scrollbar-thumb {
+  background: #424242;
+  border-radius: 4px;
+}
+
+.story-editor::-webkit-scrollbar-thumb:hover {
+  background: #555555;
+}
+
+/* Button styling */
+button {
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #303f9f;
+}
+
+button:active {
+  background-color: #283593;
+}
+
+button.secondary {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #424242;
+}
+
+button.secondary:hover {
+  background-color: #333333;
+}
+
+/* Status bar (optional) */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px 0;
+  border-top: 1px solid #333333;
+  font-size: 12px;
+  color: #9e9e9e;
+}
+
+/* Content toolbar (optional) */
+.editor-toolbar {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #333333;
+}
+
+.toolbar-button {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #424242;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.toolbar-button:hover {
+  background-color: #2a2a2a;
+}
+
+/* Print optimizations */
+@media print {
+  .editor-main {
+    background: white;
+    color: black;
+    box-shadow: none;
+    border: none;
+  }
+  
+  .title-input, 
+  .story-editor {
+    border: none;
+    color: black;
+    background: white;
+  }
+  
+  .editor-toolbar,
+  .status-bar {
+    display: none;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .editor-main {
+    padding: 20px 15px;
+  }
+  
+  .title-input {
+    font-size: 18px;
+    padding: 12px 14px;
+  }
+  
+  .story-editor {
+    font-size: 14px;
+    padding: 12px;
+  }
+}
+  </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo irish-grover-regular">TALETAILOR</div>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+            <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+            <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+            {% if user.is_superuser %}
+            <br><br>
+            <a href="{% url 'authentication:users' %}">
+                <button  class="nav-link">
+                    Admin Panel
+                </button>
+            </a>
+        {% endif %}
+        </div>
+        <div class="user-actions">
+             
+            <a href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
+        
+            <!-- Profile Icon to trigger the modal -->
+            <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
+                👤
+            </div>
+        </div>
+    </header>
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">Profile Options</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><a href="#" class="btn btn-light w-100">👤 Profile </a></p>
+                    <p><a href="{% url 'mystory:mystory1' %}" class="btn btn-light w-100">💾 My Story </a></p>
+                    <p><a href="#" class="btn btn-light w-100">⚙️ Settings </a></p>
+                    <p><a href="{% url 'authentication:logout' %}" class="btn btn-danger w-100">🚪 Logout</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+  <main>
+    <form class="editor-container" method="POST" action="{% if story11 %}
+    {% url 'mystory:edit_story' sid %}
+  {% else %}
+    {% url 'mystory:edit_story' %}
+  {% endif %}
+   ">
+      {% csrf_token %}
+      <div class="editor-main">
+         {% if messages %}
+             <div class="messages">
+               {% for message in messages %}
+                 <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                   {{ message }}
+                 </div>
+               {% endfor %}
+             </div>
+        {% endif %}
+
+        <input type="text" name="title" class="title-input" value="{{ title }}" placeholder="Heading" />
+        {% if story.image %}
+          <img src="{{ story.image.url }}" alt="Story Image"class="story-image" >
+        {% endif %}
+        <textarea class="story-editor" name="story" placeholder="Start writing your story here...">
+          {{ story11|default:''  }} 
+      </textarea>
+      
+
+            </div>
+      
+      <div class="editor-sidebar">
+        
+        {% if story11 %}
+            {% if is_collaborator and not is_owner %}
+                     <h2 class="section-title">Story Management</h2>
+                     <div class="button-grou">
+                      {% if status != "public" and status != "private" %}
+                      <button class="btn update-btn" name="update" type="submit">
+                        🔄 Update
+                    </button>   
+                   {% else %}
+                   <a href="{% url 'mystory:download_story' sid %}" class="btn download-btn">
+                    <span class="btn-icon">📥</span> Download
+                </a>
+                
+                <a href="{% url 'mystory:share_story' sid %}" class="btn share-btn">
+                    <span class="btn-icon">📤</span> Share
+                </a>
+                {% endif %}
+            {% elif    is_owner  %}
+             
+            <h2 class="section-title">Story Management</h2>
+            <div class="button-grou">
+              {% if status == "public" or status == "private" %}
+                <a href="{% url 'mystory:download_story' sid %}" class="btn download-btn">
+                    <span class="btn-icon">📥</span> Download
+                </a>
+                
+                <a href="{% url 'mystory:share_story' sid %}" class="btn share-btn">
+                    <span class="btn-icon">📤</span> Share
+                </a>
+                
+                <button class="btn update-btn" name="update" type="submit">
+                    🔄 Update
+                </button>
+                {% endif %}
+              {% if status != "public" and status != "private" %}
+                <button class="btn update-btn" name="update" type="submit">
+                  🔄 Update
+              </button>
+              <div class="preference-group">
+                <label class="preference-label">Story Length:</label>
+                <div class="option-list">
+                    <div class="radio-option">
+                        <input type="radio" name="length" value="short"  >
+                        Short (Less than 500 words)
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="length" value="medium">
+                        Medium (500 - 1500 words)
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="length" value="long">
+                        Long (More than 1500 words)
+                    </div>
+                </div>
+            </div>
+
+            <div class="preference-group">
+                <label class="preference-label">Story Emotion:</label>
+                <div class="option-list">
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="happy"  >
+                        Happy
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="sad">
+                        Sad
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="thriller">
+                        Thrilling
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="romantic">
+                        Romantic
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="mystery">
+                        Mysterious
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="adventure">
+                        adventure
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="comedy">
+                        comedy
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="horror">
+                        horror
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="fantasy">
+                        fantasy
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="scifi">
+                        scifi
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="inspirational">
+                        inspirational
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="melancholy">
+                        melancholy
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="anger">
+                        anger
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="surprise">
+                        surprise
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="emotion" value="fear">
+                        fear
+                    </div>
+                </div>
+            </div>
+
+            <div class="preference-group">
+                <label class="preference-label">Story Theme:</label>
+                <select name="theme" class="theme-select"  >
+                    <option value="" disabled selected>Select a theme</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="adventure">Adventure</option>
+                    <option value="horror">Horror</option>
+                    <option value="sci-fi">Sci-Fi</option>
+                    <option value="historical">Historical</option>
+                    <option value="drama">Drama</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button class="btn public-btn" type="submit" name="post_type" value="public">
+                    <span class="btn-icon">🌍</span> Post Publicly
+                </button>
+
+                <button class="btn private-btn" type="submit" name="post_type" value="private">
+                    <span class="btn-icon">🔒</span> Post Privately
+                </button>
+            </div>
+        <!-- </div> -->
+      
+            </div>
+            {% endif %}
+            {% endif %}
+
+      {% else %}
+            <h2 class="section-title">Story Preferences</h2>
+            
+            <div class="preference-group">
+                <label class="preference-label">Story Length:</label>
+                <div class="option-list">
+                    <div class="radio-option">
+                        <input type="radio" name="length" value="short"  >
+                        Short (Less than 500 words)
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="length" value="medium">
+                        Medium (500 - 1500 words)
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="length" value="long">
+                        Long (More than 1500 words)
+                    </div>
+                </div>
+            </div>
+
+            <div class="preference-group">
+              <label class="preference-label">Story Emotion:</label>
+              <div class="option-list">
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="happy"  >
+                      Happy
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="sad">
+                      Sad
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="thriller">
+                      Thrilling
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="romantic">
+                      Romantic
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="mystery">
+                      Mysterious
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="adventure">
+                      adventure
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="comedy">
+                      comedy
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="horror">
+                      horror
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="fantasy">
+                      fantasy
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="scifi">
+                      scifi
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="inspirational">
+                      inspirational
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="melancholy">
+                      melancholy
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="anger">
+                      anger
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="surprise">
+                      surprise
+                  </div>
+                  <div class="checkbox-option">
+                      <input type="checkbox" name="emotion" value="fear">
+                      fear
+                  </div>
+              </div>
+          </div>
+
+            <div class="preference-group">
+                <label class="preference-label">Story Theme:</label>
+                <select name="theme" class="theme-select"  >
+                    <option value="" disabled selected>Select a theme</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="adventure">Adventure</option>
+                    <option value="horror">Horror</option>
+                    <option value="sci-fi">Sci-Fi</option>
+                    <option value="historical">Historical</option>
+                    <option value="drama">Drama</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button class="btn public-btn" type="submit" name="post_type" value="public">
+                    <span class="btn-icon">🌍</span> Post Publicly
+                </button>
+
+                <button class="btn private-btn" type="submit" name="post_type" value="private">
+                    <span class="btn-icon">🔒</span> Post Privately
+                </button>
+            </div>
+        {% endif %}
+
+        
+        
+        <div class="word-count">
+          Words: 0 | Characters: 0
+        </div>
+      </div>
+
+
+
+    </form>
+  </main>
+  
+
+  
+</form>
+  <!-- Collaboration Modal -->
+ <!-- Collaboration Modal -->
+ <div class="modal fade" id="collaborationModal" aria-labelledby="collaborationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="collaborationModalLabel">Invite Collaborators</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <form method="POST" action=" ">
+              {% csrf_token %}
+              <div class="modal-body">
+                  <div class="mb-3">
+                      <label class="form-label">Enter email addresses</label>
+                      <input type="text" name="collaborator_emails" class="form-control" placeholder="friend@example.com, writer@example.com"  >
+                  </div>
+
+                  <div class="mb-3">
+                      <label class="form-label">Add a message (optional)</label>
+                      <textarea name="message" class="form-control" rows="3" placeholder="Hey, I'd like to collaborate with you on this story!"></textarea>
+                  </div>
+              </div>
+
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Send Invitations</button>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>
+
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <script>
+ 
+    const storyEditor = document.querySelector('.story-editor');
+    const wordCount = document.querySelector('.word-count');
+    
+    function updateWordCount() {
+      const text = storyEditor.value;
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const characters = text.length;
+      wordCount.textContent = `Words: ${words} | Characters: ${characters}`;
+    }
+    
+ 
+    updateWordCount();
+    
+ 
+    storyEditor.addEventListener('input', updateWordCount);
+
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".btn-close, .btn-secondary").forEach(button => {
+        button.addEventListener("click", function () {
+            let modal = document.getElementById("collaborationModal");
+            let modalInstance = bootstrap.Modal.getInstance(modal);
+            modalInstance.hide(); // Properly hides the modal
+
+            // Remove any leftover modal-backdrop
+            document.querySelectorAll(".modal-backdrop").forEach(backdrop => backdrop.remove());
+            document.body.classList.remove("modal-open"); // Remove the extra scroll lock
+            document.body.style.overflow = ""; // Restore scrolling
+        });
+    });
+});
+
+  </script>
+  
+</body>
+</html>

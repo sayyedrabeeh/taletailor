@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #2E3440;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #4C566A;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .share-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            min-width: 180px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .whatsapp { background-color: #25D366; }
+        .whatsapp:hover { background-color: #1fba5a; }
+        
+        .facebook { background-color: #1877F2; }
+        .facebook:hover { background-color: #1561c5; }
+        
+        .twitter { background-color: #1DA1F2; }
+        .twitter:hover { background-color: #1a91da; }
+        
+        .linkedin { background-color: #0077B5; }
+        .linkedin:hover { background-color: #006396; }
+        
+        .story-preview {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #4C566A;
+        }
+        
+        .story-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .story-excerpt {
+            color: #4C566A;
+            font-style: italic;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .share-btn {
+                width: 100%;
+            }
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Share This Story</h1>
+            <p class="subtitle">Help others discover this amazing content</p>
+        </header>
+        
+        <div class="story-preview">
+            <div class="story-title">{{ story.title }}</div>
+            <p class="story-excerpt">{{ story.excerpt|default:"An incredible story worth sharing with your network." }}</p>
+        </div>
+        
+        <div class="share-options">
+            <!-- WhatsApp Share -->
+            <a class="share-btn whatsapp" href="https://api.whatsapp.com/send?text={{ share_url }}" target="_blank">
+                <i class="fab fa-whatsapp icon"></i>WhatsApp
+            </a>
+            
+            <!-- Facebook Share -->
+            <a class="share-btn facebook" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url }}" target="_blank">
+                <i class="fab fa-facebook-f icon"></i>Facebook
+            </a>
+            
+            <!-- Twitter Share -->
+            <a class="share-btn twitter" href="https://twitter.com/intent/tweet?url={{ share_url }}&text=Check%20out%20this%20story!" target="_blank">
+                <i class="fab fa-twitter icon"></i>Twitter
+            </a>
+            
+            <!-- LinkedIn Share -->
+            <a class="share-btn linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url={{ share_url }}" target="_blank">
+                <i class="fab fa-linkedin-in icon"></i>LinkedIn
+            </a>
+        </div>
+        
+        <footer>
+            <p>Thanks for sharing our content!</p>
+        </footer>
+    </div>
+</body>
+</html>

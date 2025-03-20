@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaleTailor - Professional Story Generator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(to bottom, #0f0f1a, #1a1a2e);
+      color: #fff;
+      min-height: 100vh;
+    }
+    
+    header {
+            background-color: #333;
+            padding: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+        }
+
+        .logo-container {
+            padding: 0.5rem 1.5rem;
+            background-color: #000;
+            border-radius: 0;
+            margin-left: 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            background-color: #000;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-right: 2rem;
+        }
+
+        .dynamic-label {
+            color: #aaa;
+        }
+
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background-color: #444;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .toggle::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle.active::after {
+            transform: translateX(26px);
+        }
+
+        .heart-icon, .profile-icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    .generator-container {
+      max-width: 1000px;
+      margin: 70px auto;
+      padding: 2.5rem;
+      background: linear-gradient(to bottom, rgba(30, 30, 50, 0.8), rgba(20, 20, 40, 0.8));
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .controls-row {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      justify-content: space-between;
+    }
+    
+    .dropdown-container {
+      flex: 1;
+      position: relative;
+    }
+    
+    .dropdown {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      background: rgba(30, 30, 60, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dropdown:hover {
+      background: rgba(50, 50, 80, 0.5);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .dropdown-arrow {
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      display: inline-block;
+      padding: 3px;
+      transform: rotate(45deg);
+      transition: transform 0.3s ease;
+    }
+    
+    .dropdown:hover .dropdown-arrow {
+      transform: rotate(-135deg);
+    }
+    
+    .toggle-switch-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      background: rgba(30, 30, 60, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .toggle-switch-container:hover {
+      background: rgba(50, 50, 80, 0.5);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: .4s;
+      border-radius: 34px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    
+    input:checked + .toggle-slider {
+      background: linear-gradient(to right, #8b5cf6, #3b82f6);
+    }
+    
+    input:checked + .toggle-slider:before {
+      transform: translateX(30px);
+    }
+    
+    .theme-input, .situation-input {
+      width: 100%;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      color: #fff;
+      background: rgba(30, 30, 60, 0.5);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .theme-input:focus, .situation-input:focus {
+      outline: none;
+      border-color: rgba(139, 92, 246, 0.5);
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.25);
+      background: rgba(50, 50, 80, 0.5);
+    }
+    
+    .theme-input::placeholder, .situation-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    .generate-button {
+      padding: 1rem 2.5rem;
+      background: linear-gradient(45deg, #8b5cf6, #6366f1);
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      letter-spacing: 0.5px;
+    }
+    
+    .generate-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+      background: linear-gradient(45deg, #9333ea, #4f46e5);
+    }
+    
+    .generate-button:active {
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo irish-grover-regular">TALETAILOR</div>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+            <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+            <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+            {% if user.is_superuser %}
+            <br><br>
+            <a href="{% url 'authentication:users' %}">
+                <button  class="nav-link">
+                    Admin Panel
+                </button>
+            </a>
+        {% endif %}
+        </div>
+        <div class="user-actions">
+       
+            <a href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
+        
+             
+            <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
+                👤
+            </div>
+        </div>
+    </header>
+  
+    <form method="POST" action="{% url 'aistory:aimake1' %}">
+        {% csrf_token %}
+      
+        <div class="generator-container">
+          <div class="controls-row">
+            <div class="dropdown-container">
+              <div class="dropdown">
+                <label>Emotion</label>
+                <input type="text" name="emotion" placeholder="Enter emotion">
+              </div>
+            </div>
+      
+            <div class="dropdown-container">
+              <div class="toggle-switch-container">
+                Twists & climax
+                <label class="toggle-switch">
+                  <input type="checkbox" name="twists" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+      
+            <div class="dropdown-container">
+              <div class="dropdown">
+                <label>Length</label>
+                <input type="text" name="length" placeholder="Short / Medium / Long">
+              </div>
+            </div>
+          </div>
+      
+          <input type="text" name="theme" class="theme-input" placeholder="Your Theme Of Story (at least 100 words)">
+          <input type="text" name="situation" class="situation-input" placeholder="Your Occasion or Situation (optional)">
+      
+          <div class="button-container">
+            <button type="submit" class="generate-button">Next</button>
+          </div>
+        </div>
+      </form>
+      
+  
+  <script>
+     
+
+      
+    
+  </script>
+</body>
+</html>

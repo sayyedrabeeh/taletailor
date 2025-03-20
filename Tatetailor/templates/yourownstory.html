@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>StoryForge - Create Your Stories</title>
+  <style>
+    :root {
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --text-primary: #ffffff;
+      --text-secondary: #b3b3b3;
+      --accent: #9c27b0;
+      --accent-light: #bb86fc;
+      --card-bg: #2d2d2d;
+      --card-hover: #3d3d3d;
+    }
+    .irish-grover-regular {
+  font-family: "Irish Grover", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+    
+    header {
+      background-color: var(--bg-secondary);
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent-light);
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+    
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    
+    .section-container {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .section {
+      flex: 1;
+      min-width: 300px;
+      background-color: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    
+    .section:hover {
+      transform: translateY(-5px);
+    }
+    
+    .section h2 {
+      color: var(--accent-light);
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.5rem;
+    }
+    
+    .section-description {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .draft-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .draft-card {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      padding: 1.2rem;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .draft-card:hover {
+      background-color: var(--card-hover);
+    }
+    
+    .draft-title {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .draft-excerpt {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      flex: 1;
+    }
+    
+    .draft-date {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      text-align: right;
+    }
+    
+    .create-new {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+    
+    .create-new:hover {
+      background-color: var(--accent-light);
+    }
+    
+    .icon {
+      margin-right: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .section-container {
+        flex-direction: column;
+      }
+    }
+    header {
+            background-color: #333;
+            padding: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+        }
+        .logo-container {
+            padding: 0.5rem 1.5rem;
+            background-color: #000;
+            border-radius: 0;
+            margin-left: 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            background-color: #000;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-right: 2rem;
+        }
+
+        .dynamic-label {
+            color: #aaa;
+        }
+
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background-color: #444;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .toggle::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle.active::after {
+            transform: translateX(26px);
+        }
+
+        .heart-icon, .profile-icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .draft-link {
+        text-decoration: none;
+        color: inherit;
+    }
+    .messages {
+    margin: 20px 0; /* Adds space above and below */
+    padding: 15px; /* Adds space inside the box */
+    border-radius: 8px; /* Soft rounded corners */
+    background-color: #f8f9fa; /* Light gray background */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.alert {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Different alert styles based on message type */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 5px solid #28a745;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 5px solid #dc3545;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-left: 5px solid #17a2b8;
+}
+
+  </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo irish-grover-regular">TALETAILOR</div>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+            <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+            <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+            {% if user.is_superuser %}
+            <br><br>
+            <a href="{% url 'authentication:dashboard' %}">
+                <button  class="nav-link">
+                    Admin Panel
+                </button>
+            </a>
+        {% endif %}
+        </div>
+        <div class="user-actions">
+             
+          <a href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
+        
+            <!-- Profile Icon to trigger the modal -->
+            <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
+                👤
+            </div>
+        </div>
+    </header>
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">Profile Options</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    
+                </div>
+                <div class="modal-body">
+                    <p><a href="#" class="btn btn-light w-100">👤 Profile </a></p>
+                    <p><a href="#" class="btn btn-light w-100">💾 My Story </a></p>
+                    <p><a href="#" class="btn btn-light w-100">⚙️ Settings </a></p>
+                    <p><a href="{% url 'authentication:logout' %}" class="btn btn-danger w-100">🚪 Logout</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+  <main>
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="section-container">
+     
+      <section class="section">
+        <h2>Create Your Own Story</h2>
+        <p class="section-description">
+          Embark on a solo adventure and craft your own narrative. Let your imagination run wild with characters, plots, and worlds entirely of your making.
+        </p>
+        <a href="{% url 'mystory:edit_story' %}">
+            <button class="create-new">
+                <span class="icon">✏️</span> Start New Story
+            </button>
+        </a>
+        
+       
+        <div class="draft-container">
+          {% for story in my_stories %}
+          <a href="{% url 'mystory:edit_story' story.id %}" class="draft-link">
+            <div class="draft-card">
+                <div class="draft-title">{{ story.title }}</div>
+                <div class="draft-excerpt">{{ story.content|truncatewords:20 }}</div>
+                {% if story.status == 'draft' %}
+                <div class="draft-status" style="color: red;">
+                  Draft
+                </div>
+              {% elif story.status %}
+                <div class="draft-status" style="color: green;">
+                  {{ story.status|title }}
+                </div>
+              {% else %}
+                <div class="draft-status" style="color: red;">
+                  Draft
+                </div>
+              {% endif %}
+              
+                <div class="draft-date">Last edited: {{ story.updated_at|date:"M d, Y" }}</div>
+            </div>
+        </a>
+          {% empty %}
+            <p>No stories found.</p>
+          {% endfor %}
+        </div>
+        
+      </section>
+      
+      <section class="section">
+        <h2>Create with a Friend</h2>
+        <p class="section-description">
+          Collaborate   with friends to weave tales together. Take turns adding chapters, creating characters, or building upon each other's ideas.
+          <!-- <p>Story ID: {{ story.id }}</p> -->
+
+        </p>
+         
+        {% if story %}
+        <a href="{% url 'mystory:invite_collaborator' %}">
+            <button class="create-new">
+                <span class="icon">👥</span> Start Collaborative Story
+            </button>
+        </a>
+    {% else %}
+        <p>✍️ Create at least one story to unlock this feature 🔓.</p>
+    {% endif %}
+    
+        <div class="draft-container">
+          {% for story in colla_stories %}
+          <a href="{% url 'mystory:edit_story' story.id %}" class="draft-link">
+            <div class="draft-card">
+                <div class="draft-title">{{ story.title }}</div>
+                <div class="draft-excerpt">{{ story.content|truncatewords:20 }}</div>
+                {% if story.status == 'draft' %}
+                  <div class="draft-status" style="color: red;">
+                    Draft
+                  </div>
+                {% elif story.status %}
+                  <div class="draft-status" style="color: green;">
+                    {{ story.status|title }}
+                  </div>
+                {% else %}
+                  <div class="draft-status" style="color: red;">
+                    Draft
+                  </div>
+                {% endif %}
+              
+                <div class="draft-date">Last edited: {{ story.updated_at|date:"M d, Y" }}</div>
+            </div>
+        </a>
+          {% empty %}
+            <p>No stories found.</p>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

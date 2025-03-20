@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Output Display</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #3d4a59, #252b3a, #1a1e2c);
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        main {
+            background: #1e1e1e;
+            border-radius: 0 0 10px 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+        
+        .output-container {
+            margin-top: 20px;
+        }
+        
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        
+        .output-title {
+            font-size: 1.5rem;
+            color: #8b5cf6;
+        }
+        
+        .timestamp {
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+        
+        .output-content {
+            background-color: #252525;
+            border-left: 4px solid #8b5cf6;
+            padding: 20px;
+            border-radius: 0 5px 5px 0;
+            font-size: 1.1rem;
+            color: #e0e0e0;
+        }
+        
+        .output-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+        }
+        
+        button {
+            background-color: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+        
+        button:hover {
+            background-color: #7c3aed;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #252525;
+            border-radius: 10px;
+        }
+        
+        select, input {
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #333;
+            color: #e0e0e0;
+        }
+        
+        .model-selection {
+            display: flex;
+            align-items: center;
+        }
+        
+        .model-selection label {
+            margin-right: 10px;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .output-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .timestamp {
+                margin-top: 5px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .model-selection {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Output Display</h1>
+            <p class="subtitle">Professional visualization of AI-generated content</p>
+        </header>
+        
+        <main>
+             
+            
+            <div class="output-container">
+                <div class="output-header">
+                    <h2 class="output-title">AI Response</h2>
+                    <span class="timestamp">Generated on March 15, 2025 at 10:45 AM</span>
+                </div>
+                <h1>Title:{{ theme }}</h1>
+                <div class="output-content">
+                    
+
+                    {% if story %}
+                        {% for paragraph in story.splitlines %}
+                            <p>{{ paragraph }}</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>No story found.</p>
+                    {% endif %}
+                </div>
+                <div class="word-count">
+                    <strong>Word Count:</strong> {{ word_count }}
+                </div>
+                
+                {% if story %}
+                <div class="output-footer">
+                    <form method="POST" action="{% url 'aistory:post_private_story' %}" enctype="multipart/form-data" >
+                        {% csrf_token %}
+                        <input type="hidden" name="emotion" value="{{ emotion }}">
+                        <input type="hidden" name="length" value="{{ length }}">
+                        <input type="hidden" name="theme" value="{{ theme }}">
+                        <input type="hidden" name="situation" value="{{ situation }}">
+                        <input type="hidden" name="twists" value="{{ twists }}">
+ 
+                        <textarea name="story" style="display:none;">{{ story }}</textarea>
+
+                        <button type="submit">Post Privately</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 AI Output Display Platform | All rights reserved</p>
+        </footer>
+    </div>
+</body>
+</html>

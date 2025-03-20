@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaboration Requests</title>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --text-color: #f8f9fa;
+            --bg-color: #0a1128;
+            --card-bg: #1a2639;
+            --item-bg: #283044;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 650px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-top: 4px solid var(--primary-color);
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-size: 1.8rem;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .invite-item {
+            background: var(--item-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .invite-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .invite-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .sender-name {
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .story-title {
+            font-style: italic;
+            color: #f1c40f;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 90px;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 20px 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .header-icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 600px) {
+            .invite-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .btn-group {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <span class="header-icon">📩</span>
+        <h2>Pending Collaboration Requests</h2>
+    </div>
+
+    {% if pending_invites %}
+        <ul style="list-style: none; padding: 0;">
+            {% for invite in pending_invites %}
+                <li class="invite-item">
+                    <div class="invite-content">
+                        <span class="sender-name">{{ invite.sender.username }}</span>
+                        invited you to collaborate on 
+                        <span class="story-title">{{ invite.story.title }}</span>
+                    </div>
+                    <div class="btn-group">
+                        <a href="{% url 'mystory:accept_invite' invite.id %}" class="btn btn-success">Accept</a>
+                        <a href="{% url 'mystory:reject_invite' invite.id %}" class="btn btn-danger">Reject</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="empty-state">
+            <p>No pending collaboration requests.</p>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>

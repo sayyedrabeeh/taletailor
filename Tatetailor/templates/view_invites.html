@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Invitations</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+            background: #121212;
+            border-radius: 12px;
+            box-shadow: 0px 0px 20px rgba(0, 255, 255, 0.15);
+        }
+        .invite-card {
+            background: #1e1e1e;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .invite-button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+        .accept {
+            background-color: #28a745;
+        }
+        .reject {
+            background-color: #dc3545;
+        }
+        .accept:hover {
+            background-color: #218838;
+        }
+        .reject:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Pending Invitations</h2>
+        
+        {% if pending_invites %}
+            {% for invite in pending_invites %}
+                <div class="invite-card">
+                    <p>{{ invite.sender.username }} invited you</p>
+                    <div>
+                        <a href="{% url 'mystory:respond_invite' invite.id 'accept' %}">
+                            <button class="invite-button accept">Accept</button>
+                        </a>
+                        <a href="{% url 'mystory:respond_invite' invite.id 'reject' %}">
+                            <button class="invite-button reject">Reject</button>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No pending invitations.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

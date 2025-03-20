@@ -1,0 +1,1949 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Viewer - TALETAILOR</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary-color: #4a0e5c;
+      --secondary-color: #1fc55c;
+      --accent-color: #8a0e74;
+      --background-color: #121212;
+      --card-background: #1e1e1e;
+      --text-color: #e0e0e0;
+      --light-gray: #333333;
+      --joker-purple: #5f2585;
+      --joker-green: #1fc55c;
+      --joker-red: #ec1846;
+      --white: #f5f5f5;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      --border-radius: 6px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+
+    .story-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2rem;
+      padding: 0 1rem;
+    }
+
+    .story-main {
+      background-color: var(--card-background);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border-top: 4px solid var(--joker-purple);
+    }
+
+    .story-header {
+      background: linear-gradient(135deg, var(--joker-purple), var(--accent-color));
+      color: var(--white);
+      padding: 2rem;
+      position: relative;
+    }
+
+    .story-header::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background: linear-gradient(135deg, var(--joker-purple), var(--accent-color));
+      filter: blur(10px);
+      opacity: 0.4;
+    }
+
+    .story-title {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    .story-author {
+      opacity: 0.9;
+      font-weight: 500;
+    }
+
+    .story-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.08);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      border-left: 3px solid var(--joker-green);
+    }
+
+    .story-image {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      filter: saturate(1.1) contrast(1.05);
+    }
+
+    .story-content {
+      padding: 2rem;
+      line-height: 1.8;
+      font-size: 1.05rem;
+    }
+
+    .story-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .action-card {
+      background-color: var(--card-background);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border-top: 4px solid var(--joker-green);
+    }
+
+    .card-header {
+      padding: 1rem;
+      background-color: rgba(31, 197, 92, 0.1);
+      color: var(--joker-green);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      border-bottom: 1px solid rgba(31, 197, 92, 0.2);
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 4px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    .download-btn {
+      background-color: var(--joker-green);
+      color: #121212;
+    }
+
+    .download-btn:hover {
+      background-color: #17a44a;
+      box-shadow: 0 0 15px rgba(31, 197, 92, 0.4);
+    }
+
+    .share-btn {
+      background-color: var(--joker-purple);
+      color: var(--white);
+    }
+
+    .share-btn:hover {
+      background-color: #3f0b4e;
+      box-shadow: 0 0 15px rgba(95, 37, 133, 0.4);
+    }
+
+    .like-btn {
+      background-color: var(--joker-red);
+      color: var(--white);
+    }
+
+    .like-btn:hover {
+      background-color: #cf0f3a;
+      box-shadow: 0 0 15px rgba(236, 24, 70, 0.4);
+    }
+
+    .story-info-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      background-color: rgba(31, 197, 92, 0.1);
+      border-radius: 4px;
+      color: var(--joker-green);
+    }
+
+    .info-label {
+      color: #969696;
+      font-size: 0.8rem;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      background-color: rgba(95, 37, 133, 0.15);
+      color: #c087e0;
+      padding: 0.25rem 0.75rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      border-left: 2px solid var(--joker-purple);
+    }
+
+    .similar-stories {
+      margin-top: 0.5rem;
+    }
+
+    .similar-story {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--light-gray);
+      transition: all 0.2s ease;
+    }
+
+    .similar-story:hover {
+      padding-left: 0.5rem;
+      background-color: rgba(31, 197, 92, 0.05);
+    }
+
+    .similar-story:last-child {
+      border-bottom: none;
+    }
+
+    .similar-story-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+
+    .similar-story-title {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .story-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    
+    .like-btn {
+  transition: all 0.3s ease;
+}
+
+.like-btn .fa-heart {
+  color: gray;
+}
+
+.like-btn.liked .fa-heart {
+  color: red;
+}
+.ai-badge {
+    background-color: #f39c12;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    margin-left: 10px;
+}
+/* .translation-box {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #f3f3f3;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+} */
+.translation-box {
+      background-color: rgba(31, 197, 92, 0.05);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid var(--joker-green);
+    }
+
+    .translation-box form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .translation-box label {
+      font-weight: 600;
+      color: var(--joker-green);
+    }
+
+    .translation-box button {
+      background-color: var(--joker-green);
+      color: #121212;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .translation-box button:hover {
+      background-color: #17a44a;
+      transform: translateY(-2px);
+    }
+
+    /* Base Theme Variables */
+    :root {
+    --transition-speed: 0.3s;
+    --header-height: 60px;
+    --shadow-standard: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+}
+
+/* Theme Classes */
+.theme-neutral {
+    --primary-color: #4a0e5c;
+    --secondary-color: #1fc55c;
+    --accent-color: #8a0e74;
+    --background-color: #121212;
+    --card-background: #1e1e1e;
+    --text-color: #e0e0e0;
+    --light-gray: #333333;
+    --header-gradient: linear-gradient(135deg, #4a0e5c, #8a0e74);
+    --button-hover: #17a44a;
+    --button-glow: rgba(31, 197, 92, 0.4);
+}
+
+.theme-happy {
+    --primary-color: #FF9800;
+    --secondary-color: #FFEB3B;
+    --accent-color: #FF5722;
+    --background-color: #FFF9C4;
+    --card-background: #FFFDE7;
+    --text-color: #5D4037;
+    --light-gray: #E6EE9C;
+    --header-gradient: linear-gradient(135deg, #FFD54F, #FF9800);
+    --button-hover: #FFB300;
+    --button-glow: rgba(255, 152, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-happy::after {
+    content: "🎈 🎊 🌞 🌈";
+    position: fixed;
+    font-size: 20px;
+    opacity: 0.1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    animation: float-around 30s linear infinite;
+}
+
+.theme-happy .story-header::before {
+    content: "😄 🎉 ✨";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+}
+
+.theme-sad {
+    --primary-color: #78909C;
+    --secondary-color: #90A4AE;
+    --accent-color: #607D8B;
+    --background-color: #ECEFF1;
+    --card-background: #CFD8DC;
+    --text-color: #263238;
+    --light-gray: #B0BEC5;
+    --header-gradient: linear-gradient(135deg, #78909C, #546E7A);
+    --button-hover: #546E7A;
+    --button-glow: rgba(96, 125, 139, 0.4);
+}
+
+.theme-sad .story-header::before {
+    content: "😢 💧 🌧️";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.theme-sad::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0) 80%, rgba(176, 190, 197, 0.2) 100%);
+    pointer-events: none;
+    animation: sad-mist 10s ease-in-out infinite;
+}
+
+.theme-romantic {
+    --primary-color: #E91E63;
+    --secondary-color: #F48FB1;
+    --accent-color: #C2185B;
+    --background-color: #FCE4EC;
+    --card-background: #F8BBD0;
+    --text-color: #880E4F;
+    --light-gray: #F8BBD0;
+    --header-gradient: linear-gradient(135deg, #EC407A, #AD1457);
+    --button-hover: #D81B60;
+    --button-glow: rgba(233, 30, 99, 0.4);
+}
+
+.theme-romantic .story-header::before {
+    content: "❤️ 💕 💖";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.theme-romantic::after {
+    content: "💘 💝 💗";
+    position: fixed;
+    font-size: 24px;
+    opacity: 0.1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    animation: float-hearts 20s linear infinite;
+}
+
+.theme-thriller {
+    --primary-color: #37474F;
+    --secondary-color: #546E7A;
+    --accent-color: #263238;
+    --background-color: #1A2327;
+    --card-background: #263238;
+    --text-color: #ECEFF1;
+    --light-gray: #455A64;
+    --header-gradient: linear-gradient(135deg, #263238, #000000);
+    --button-hover: #1A2327;
+    --button-glow: rgba(38, 50, 56, 0.4);
+}
+
+.theme-thriller .story-header::before {
+    content: "😱 🔪 🩸";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: shake 0.5s ease-in-out infinite;
+}
+
+.theme-thriller .story-main::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.1) 10px,
+        rgba(0, 0, 0, 0) 10px,
+        rgba(0, 0, 0, 0) 20px
+    );
+    pointer-events: none;
+    animation: thriller-bg 30s linear infinite;
+}
+
+.theme-adventure {
+    --primary-color: #43A047;
+    --secondary-color: #66BB6A;
+    --accent-color: #2E7D32;
+    --background-color: #E8F5E9;
+    --card-background: #C8E6C9;
+    --text-color: #1B5E20;
+    --light-gray: #A5D6A7;
+    --header-gradient: linear-gradient(135deg, #43A047, #1B5E20);
+    --button-hover: #388E3C;
+    --button-glow: rgba(67, 160, 71, 0.4);
+}
+
+.theme-adventure .story-header::before {
+    content: "🏔️ 🧗 🌄";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: scale 2s ease-in-out infinite;
+}
+
+.theme-adventure::after {
+    content: "🏕️ 🌲 🍃";
+    position: fixed;
+    font-size: 24px;
+    opacity: 0.1;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    animation: adventure-elements 20s linear infinite;
+}
+
+.theme-mystery {
+    --primary-color: #5E35B1;
+    --secondary-color: #7E57C2;
+    --accent-color: #4527A0;
+    --background-color: #EDE7F6;
+    --card-background: #D1C4E9;
+    --text-color: #311B92;
+    --light-gray: #B39DDB;
+    --header-gradient: linear-gradient(135deg, #5E35B1, #311B92);
+    --button-hover: #512DA8;
+    --button-glow: rgba(94, 53, 177, 0.4);
+}
+
+.theme-mystery .story-header::before {
+    content: "🔍 🕵️ 🔎";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: rotate 3s linear infinite;
+}
+
+.theme-mystery::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle at 50% 50%, rgba(94, 53, 177, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+    pointer-events: none;
+    animation: mystery-fog 15s ease-in-out infinite alternate;
+}
+
+.theme-comedy {
+    --primary-color: #FFCA28;
+    --secondary-color: #FFD54F;
+    --accent-color: #FFC107;
+    --background-color: #FFF8E1;
+    --card-background: #FFECB3;
+    --text-color: #FF6F00;
+    --light-gray: #FFE082;
+    --header-gradient: linear-gradient(135deg, #FFCA28, #FF6F00);
+    --button-hover: #FFB300;
+    --button-glow: rgba(255, 202, 40, 0.4);
+}
+
+.theme-comedy .story-header::before {
+    content: "😂 🤣 😆";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+.theme-comedy::after {
+    content: "🎭 🎪 🤹";
+    position: fixed;
+    font-size: 24px;
+    opacity: 0.1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    animation: comedy-elements 25s linear infinite;
+}
+
+.theme-horror {
+    --primary-color: #212121;
+    --secondary-color: #424242;
+    --accent-color: #000000;
+    --background-color: #121212;
+    --card-background: #1E1E1E;
+    --text-color: #F5F5F5;
+    --light-gray: #303030;
+    --header-gradient: linear-gradient(135deg, #212121, #000000);
+    --button-hover: #000000;
+    --button-glow: rgba(33, 33, 33, 0.4);
+}
+
+.theme-horror .story-header::before {
+    content: "👻 💀 🧟";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: float 2s ease-in-out infinite alternate;
+}
+
+.theme-horror::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23333' stroke-width='1' stroke-dasharray='5,5'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 100 100'%3E%3Cpath d='M20,20 L80,80 M80,20 L20,80' stroke='%23333' stroke-width='1'/%3E%3C/svg%3E");
+    background-position: center;
+    background-size: 300px 300px, 200px 200px;
+    opacity: 0.05;
+    pointer-events: none;
+    animation: horror-bg 60s linear infinite;
+}
+
+.theme-fantasy {
+    --primary-color: #7B1FA2;
+    --secondary-color: #9C27B0;
+    --accent-color: #6A1B9A;
+    --background-color: #F3E5F5;
+    --card-background: #E1BEE7;
+    --text-color: #4A148C;
+    --light-gray: #CE93D8;
+    --header-gradient: linear-gradient(-45deg, #7B1FA2, #9C27B0, #6A1B9A, #4A148C);
+    --button-hover: #8E24AA;
+    --button-glow: rgba(123, 31, 162, 0.4);
+    background-size: 400% 400%;
+    animation: gradient-shift 15s ease infinite;
+}
+
+.theme-fantasy .story-header::before {
+    content: "🧙 🐉 ✨";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+.theme-fantasy::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(2px 2px at 40px 60px, #FFF, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 100px 120px, #FFF, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 200px 50px, #FFF, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 300px 200px, #FFF, rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 400px 400px;
+    pointer-events: none;
+    opacity: 0.2;
+    animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+.theme-scifi {
+    --primary-color: #00BCD4;
+    --secondary-color: #4DD0E1;
+    --accent-color: #0097A7;
+    --background-color: #E0F7FA;
+    --card-background: #B2EBF2;
+    --text-color: #006064;
+    --light-gray: #80DEEA;
+    --header-gradient: linear-gradient(135deg, #00BCD4, #006064);
+    --button-hover: #00ACC1;
+    --button-glow: rgba(0, 188, 212, 0.4);
+}
+
+.theme-scifi .story-header::before {
+    content: "🚀 👽 🛸";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: rocket 3s ease-in-out infinite;
+}
+
+.theme-scifi::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(1px 1px at 40px 60px, #4DD0E1, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 100px 120px, #4DD0E1, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 200px 50px, #4DD0E1, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 300px 200px, #4DD0E1, rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 400px 400px;
+    pointer-events: none;
+    opacity: 0.2;
+    animation: scifi-stars 10s linear infinite;
+}
+
+.theme-scifi .story-main::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 L90 90 L10 90 Z' fill='none' stroke='%2300BCD4' stroke-width='2'%3E%3Canimate attributeName='stroke-dasharray' from='0,300' to='300,0' dur='3s' repeatCount='indefinite' /%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.theme-inspirational {
+    --primary-color: #FFC107;
+    --secondary-color: #FFD54F;
+    --accent-color: #FFA000;
+    --background-color: #FFF8E1;
+    --card-background: #FFECB3;
+    --text-color: #FF6F00;
+    --light-gray: #FFE082;
+    --header-gradient: linear-gradient(135deg, #FFC107, #FF6F00);
+    --button-hover: #FFB300;
+    --button-glow: rgba(255, 193, 7, 0.4);
+}
+
+.theme-inspirational .story-header::before {
+    content: "✨ 🌟 💫";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: sparkle 1.5s ease-in-out infinite;
+}
+
+.theme-inspirational::after {
+    content: "🙌 💪 🌈";
+    position: fixed;
+    font-size: 24px;
+    opacity: 0.1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    animation: inspiration-elements 20s linear infinite;
+}
+
+.theme-melancholy {
+    --primary-color: #78909C;
+    --secondary-color: #90A4AE;
+    --accent-color: #607D8B;
+    --background-color: #ECEFF1;
+    --card-background: #CFD8DC;
+    --text-color: #263238;
+    --light-gray: #B0BEC5;
+    --header-gradient: linear-gradient(135deg, #78909C, #546E7A);
+    --button-hover: #546E7A;
+    --button-glow: rgba(96, 125, 139, 0.4);
+}
+
+.theme-melancholy .story-header::before {
+    content: "🌧️ 🍂 🌫️";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: rain 2s ease-in-out infinite;
+}
+
+.theme-melancholy::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, 
+        rgba(176, 190, 197, 0) 0%,
+        rgba(176, 190, 197, 0.05) 75%,
+        rgba(176, 190, 197, 0.1) 100%);
+    pointer-events: none;
+    animation: melancholy-mist 10s ease-in-out infinite;
+}
+
+.theme-anger {
+    --primary-color: #F44336;
+    --secondary-color: #EF5350;
+    --accent-color: #D32F2F;
+    --background-color: #FFEBEE;
+    --card-background: #FFCDD2;
+    --text-color: #B71C1C;
+    --light-gray: #EF9A9A;
+    --header-gradient: linear-gradient(135deg, #F44336, #B71C1C);
+    --button-hover: #E53935;
+    --button-glow: rgba(244, 67, 54, 0.4);
+}
+
+.theme-anger .story-header::before {
+    content: "😠 🔥 💢";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: pulse 0.5s ease-in-out infinite;
+}
+
+.theme-anger::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at bottom right, rgba(244, 67, 54, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+    pointer-events: none;
+    animation: anger-glow 4s ease-in-out infinite alternate;
+}
+
+.theme-surprise {
+    --primary-color: #26C6DA;
+    --secondary-color: #4DD0E1;
+    --accent-color: #00ACC1;
+    --background-color: #E0F7FA;
+    --card-background: #B2EBF2;
+    --text-color: #006064;
+    --light-gray: #80DEEA;
+    --header-gradient: linear-gradient(135deg, #26C6DA, #00ACC1);
+    --button-hover: #00BCD4;
+    --button-glow: rgba(38, 198, 218, 0.4);
+}
+
+.theme-surprise .story-header::before {
+    content: "😲 🎁 ✨";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: jump 1s ease-in-out infinite;
+}
+
+.theme-surprise::after {
+    content: "🎉 🎊 🎈";
+    position: fixed;
+    font-size: 24px;
+    opacity: 0.1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    animation: surprise-elements 15s linear infinite;
+}
+
+.theme-fear {
+    --primary-color: #455A64;
+    --secondary-color: #607D8B;
+    --accent-color: #37474F;
+    --background-color: #263238;
+    --card-background: #37474F;
+    --text-color: #ECEFF1;
+    --light-gray: #546E7A;
+    --header-gradient: linear-gradient(135deg, #455A64, #263238);
+    --button-hover: #37474F;
+    --button-glow: rgba(69, 90, 100, 0.4);
+}
+
+.theme-fear .story-header::before {
+    content: "😨 🕸️ 🌑";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    animation: shake 0.8s ease-in-out infinite;
+}
+
+.theme-fear::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M30,30 C50,10 70,30 70,30 C70,30 90,50 70,70 C70,70 50,90 30,70 C30,70 10,50 30,30 Z' fill='none' stroke='%23455A64' stroke-width='0.5'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 100px 100px;
+    opacity: 0.05;
+    pointer-events: none;
+    animation: fear-bg 60s linear infinite;
+}
+
+/* Particles container */
+.particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Apply theme variables to the elements */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+.story-main {
+    background-color: var(--card-background);
+    border-top: 4px solid var(--primary-color);
+    transition: background-color var(--transition-speed), border-color var(--transition-speed), transform 0.3s ease;
+    position: relative;
+    animation: fade-in 0.8s ease-in-out;
+}
+
+.story-main:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-standard);
+}
+
+.story-header {
+    background: var(--header-gradient);
+    transition: background var(--transition-speed);
+    position: relative;
+}
+
+.story-header::after {
+    background: var(--header-gradient);
+    transition: background var(--transition-speed);
+}
+
+.story-title {
+    position: relative;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.meta-item {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 3px solid var(--secondary-color);
+    transition: border-color var(--transition-speed), transform 0.3s ease;
+}
+
+.meta-item:hover {
+    transform: translateX(5px);
+}
+
+.action-card {
+    background-color: var(--card-background);
+    border-top: 4px solid var(--secondary-color);
+    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+    animation: fade-in 0.8s ease-in-out;
+}
+
+.card-header {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--secondary-color);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: color var(--transition-speed), background-color var(--transition-speed), border-color var(--transition-speed);
+}
+
+.download-btn, .share-btn, .like-btn {
+    transform: scale(1);
+    transition: transform 0.2s ease, background-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.download-btn:hover, .share-btn:hover, .like-btn:hover {
+    transform: scale(1.1);
+}
+
+.download-btn:active, .share-btn:active, .like-btn:active {
+    transform: scale(0.95);
+}
+
+.download-btn {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.download-btn:hover {
+    background-color: var(--button-hover);
+    box-shadow: 0 0 15px var(--button-glow);
+}
+
+.share-btn {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.share-btn:hover {
+    background-color: var(--button-hover);
+    box-shadow: 0 0 15px var(--button-glow);
+}
+
+.like-btn {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.like-btn:hover {
+    background-color: var(--button-hover);
+    box-shadow: 0 0 15px var(--button-glow);
+}
+
+.info-icon {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--secondary-color);
+    transition: background-color var(--transition-speed), color var(--transition-speed), transform 0.3s ease;
+}
+
+.info-icon:hover {
+    transform: rotate(15deg);
+}
+
+.info-item {
+    border-bottom: 1px solid var(--light-gray);
+    transition: border-color var(--transition-speed), transform 0.3s ease;
+    opacity: 0;
+    animation: item-appear 0.5s ease-in-out forwards;
+}
+
+.info-item:nth-child(1) { animation-delay: 0.2s; }
+.info-item:nth-child(2) { animation-delay: 0.4s; }
+.info-item:nth-child(3) { animation-delay: 0.6s; }
+.info-item:nth-child(4) { animation-delay: 0.8s; }
+.info-item:nth-child(5) { animation-delay: 1s; }
+
+.info-item:hover {
+    transform: translateX(5px);
+}
+
+.tag {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--secondary-color);
+    border-left: 2px solid var(--primary-color);
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: item-appear 0.5s ease-in-out forwards;
+}
+
+.tag:nth-child(1) { animation-delay: 0.3s; }
+.tag:nth-child(2) { animation-delay: 0.5s; }
+.tag:nth-child(3) { animation-delay: 0.7s; }
+.tag:nth-child(4) { animation-delay: 0.9s; }
+
+.tag:hover {
+    transform: scale(1.05);
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+}
+
+.similar-story {
+    border-bottom: 1px solid var(--light-gray);
+    transition: border-color var(--transition-speed), background-color var(--transition-speed), transform 0.3s ease;
+    opacity: 0;
+    animation: item-appear 0.5s ease-in-out forwards;
+}
+
+.similar-story {
+    border-bottom: 1px solid var(--light-gray);
+    transition: border-color var(--transition-speed), background-color var(--transition-speed), transform 0.3s ease;
+    opacity: 0;
+    animation: item-appear 0.5s ease-in-out forwards;
+}
+
+.similar-story:nth-child(1) { animation-delay: 0.2s; }
+.similar-story:nth-child(2) { animation-delay: 0.4s; }
+.similar-story:nth-child(3) { animation-delay: 0.6s; }
+
+.similar-story:hover {
+    transform: translateX(5px);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.theme-toggle {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: 2px solid var(--secondary-color);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.05);
+    box-shadow: 0 0 10px var(--button-glow);
+}
+
+/* Animation Keyframes */
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes item-appear {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes float-around {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(5%, 5%) rotate(180deg); }
+    100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes scale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes rocket {
+    0% { transform: translateX(0) translateY(0) rotate(0deg); }
+    50% { transform: translateX(10px) translateY(-10px) rotate(5deg); }
+    100% { transform: translateX(0) translateY(0) rotate(0deg); }
+}
+
+@keyframes jump {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.1; }
+    100% { opacity: 0.3; }
+}
+
+@keyframes rain {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(5px); }
+}
+
+@keyframes sad-mist {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.3; }
+}
+
+@keyframes melancholy-mist {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.2; }
+}
+
+@keyframes float-hearts {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-100vh) rotate(360deg); }
+}
+
+@keyframes comedy-elements {
+    0% { transform: translateY(100vh) rotate(0deg); }
+    100% { transform: translateY(-100vh) rotate(360deg); }
+}
+
+@keyframes adventure-elements {
+    0% { transform: translateX(-100vw); }
+    100% { transform: translateX(100vw); }
+}
+
+@keyframes inspiration-elements {
+    0% { transform: translateY(100vh) rotate(0deg); }
+    100% { transform: translateY(-100vh) rotate(360deg); }
+}
+
+@keyframes surprise-elements {
+    0% { transform: scale(0) translateY(100vh); }
+    100% { transform: scale(1) translateY(-100vh); }
+}
+
+@keyframes horror-bg {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+@keyframes thriller-bg {
+    0% { opacity: 0.1; }
+    50% { opacity: 0.15; }
+    100% { opacity: 0.1; }
+}
+
+@keyframes mystery-fog {
+    0% { opacity: 0.1; transform: translateX(0); }
+    100% { opacity: 0.2; transform: translateX(10px); }
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes scifi-stars {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-400px); }
+}
+
+@keyframes anger-glow {
+    0% { opacity: 0.1; }
+    100% { opacity: 0.2; }
+}
+
+@keyframes fear-bg {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    :root {
+        --header-height: 50px;
+    }
+    
+    .story-container {
+        flex-direction: column;
+    }
+    
+    .story-main, .action-card {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .story-header {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .meta-info {
+        flex-direction: column;
+    }
+    
+    .meta-item {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .tag-container {
+        flex-wrap: wrap;
+    }
+    
+    .tag {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .action-card {
+        display: none;
+    }
+    
+    .story-main {
+        width: 100%;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+    
+    body {
+        background-color: white;
+        color: black;
+    }
+}
+
+/* Focus states for accessibility */
+button:focus, a:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Dark mode preference */
+@media (prefers-color-scheme: dark) {
+    /* Default to dark theme if user prefers dark mode and no theme is selected */
+    body:not([class*="theme-"]) {
+        --primary-color: #4a0e5c;
+        --secondary-color: #1fc55c;
+        --accent-color: #8a0e74;
+        --background-color: #121212;
+        --card-background: #1e1e1e;
+        --text-color: #e0e0e0;
+        --light-gray: #333333;
+        --header-gradient: linear-gradient(135deg, #4a0e5c, #8a0e74);
+        --button-hover: #17a44a;
+        --button-glow: rgba(31, 197, 92, 0.4);
+    }
+}
+.volume-btn {
+  background-color: #f3f3f3;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.volume-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.volume-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.volume-btn.speaking {
+  background-color: #ffecec;
+  border-color: #ff6b6b;
+}
+
+.volume-btn.limited-support {
+  background-color: #fff9e6;
+  border-color: #ffc107;
+}
+
+.volume-btn.limited-support:hover::after {
+  content: "This language has limited support. Text may not be read correctly.";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 5px;
+  width: 200px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 12px;
+  color: #333;
+  text-align: center;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Add a fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.volume-btn.limited-support:hover::after {
+  animation: fadeIn 0.2s ease-out;
+}
+  </style>
+</head>
+<body class="{{ theme_class }}">
+  <div class="story-container">
+    <div class="story-main">
+      <div class="story-header">
+        <h1 class="story-title">{{ story.title }}</h1>
+        <div class="story-author">By {{ story.user.username }}</div>
+        {% if story.is_ai_generated %}
+                <span class="badge ai-badge">AI Created</span>
+            {% endif %}
+
+        <div class="story-meta">
+          <div class="meta-item">
+            <i class="fas fa-clock"></i>
+            <span>{{ story.get_length_display }}</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-eye"></i>
+            <span>{{ view_count }} views</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-heart"></i>
+            <span>{{  like_count }} likes</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-calendar"></i>
+            <span>{{ story.created_at|date:"M d, Y" }}</span>
+          </div>
+        </div>
+      </div>
+      
+      {% if story.image %}
+      <img src="{{ story.image.url }}" alt="{{ story.title }}" class="story-image">
+      {% endif %}
+      <div class="translation-box" style="display: flex; justify-content: space-between;">
+        <form method="post" action="{% url 'aistory:translate_story' story.id %}">
+            {% csrf_token %}
+            <label for="language">Translate to:</label>
+            <select class="select-language" name="language" id="language" style="width: 300px;">
+                <option value="en">English</option>
+                <option value="af">Afrikaans</option>
+                <option value="sq">Albanian</option>
+                <option value="am">Amharic</option>
+                <option value="ar">Arabic</option>
+                <option value="hy">Armenian</option>
+                <option value="az">Azerbaijani</option>
+                <option value="eu">Basque</option>
+                <option value="be">Belarusian</option>
+                <option value="bn">Bengali</option>
+                <option value="bs">Bosnian</option>
+                <option value="bg">Bulgarian</option>
+                <option value="ca">Catalan</option>
+                <option value="ceb">Cebuano</option>
+                <option value="ny">Chichewa</option>
+                <option value="zh-cn">Chinese (Simplified)</option>
+                <option value="zh-tw">Chinese (Traditional)</option>
+                <option value="co">Corsican</option>
+                <option value="hr">Croatian</option>
+                <option value="cs">Czech</option>
+                <option value="da">Danish</option>
+                <option value="nl">Dutch</option>
+                <option value="en">English</option>
+                <option value="eo">Esperanto</option>
+                <option value="et">Estonian</option>
+                <option value="tl">Filipino</option>
+                <option value="fi">Finnish</option>
+                <option value="fr">French</option>
+                <option value="fy">Frisian</option>
+                <option value="gl">Galician</option>
+                <option value="ka">Georgian</option>
+                <option value="de">German</option>
+                <option value="el">Greek</option>
+                <option value="gu">Gujarati</option>
+                <option value="ht">Haitian Creole</option>
+                <option value="ha">Hausa</option>
+                <option value="haw">Hawaiian</option>
+                <option value="iw">Hebrew</option>
+                <option value="hi">Hindi</option>
+                <option value="hmn">Hmong</option>
+                <option value="hu">Hungarian</option>
+                <option value="is">Icelandic</option>
+                <option value="ig">Igbo</option>
+                <option value="id">Indonesian</option>
+                <option value="ga">Irish</option>
+                <option value="it">Italian</option>
+                <option value="ja">Japanese</option>
+                <option value="jw">Javanese</option>
+                <option value="kn">Kannada</option>
+                <option value="kk">Kazakh</option>
+                <option value="km">Khmer</option>
+                <option value="ko">Korean</option>
+                <option value="ku">Kurdish (Kurmanji)</option>
+                <option value="ky">Kyrgyz</option>
+                <option value="lo">Lao</option>
+                <option value="la">Latin</option>
+                <option value="lv">Latvian</option>
+                <option value="lt">Lithuanian</option>
+                <option value="lb">Luxembourgish</option>
+                <option value="mk">Macedonian</option>
+                <option value="mg">Malagasy</option>
+                <option value="ms">Malay</option>
+                <option value="ml">Malayalam</option>
+                <option value="mt">Maltese</option>
+                <option value="mi">Maori</option>
+                <option value="mr">Marathi</option>
+                <option value="mn">Mongolian</option>
+                <option value="my">Myanmar (Burmese)</option>
+                <option value="ne">Nepali</option>
+                <option value="no">Norwegian</option>
+                <option value="ps">Pashto</option>
+                <option value="fa">Persian</option>
+                <option value="pl">Polish</option>
+                <option value="pt">Portuguese</option>
+                <option value="pa">Punjabi</option>
+                <option value="ro">Romanian</option>
+                <option value="ru">Russian</option>
+                <option value="sm">Samoan</option>
+                <option value="gd">Scots Gaelic</option>
+                <option value="sr">Serbian</option>
+                <option value="st">Sesotho</option>
+                <option value="sn">Shona</option>
+                <option value="sd">Sindhi</option>
+                <option value="si">Sinhala</option>
+                <option value="sk">Slovak</option>
+                <option value="sl">Slovenian</option>
+                <option value="so">Somali</option>
+                <option value="es">Spanish</option>
+                <option value="su">Sundanese</option>
+                <option value="sw">Swahili</option>
+                <option value="sv">Swedish</option>
+                <option value="tg">Tajik</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="th">Thai</option>
+                <option value="tr">Turkish</option>
+                <option value="uk">Ukrainian</option>
+                <option value="ur">Urdu</option>
+                <option value="uz">Uzbek</option>
+                <option value="vi">Vietnamese</option>
+                <option value="cy">Welsh</option>
+                <option value="xh">Xhosa</option>
+                <option value="yi">Yiddish</option>
+                <option value="yo">Yoruba</option>
+                <option value="zu">Zulu</option>
+            </select>
+            <button type="submit">Translate</button>
+        </form>
+        <div id="language-support-notification" style="display: none; margin-top: 10px; padding: 8px; background-color: #fff9e6; border: 1px solid #ffc107; border-radius: 4px; font-size: 14px;">
+          <p style="margin: 0; color: #856404;">
+            <strong>Note:</strong> <span id="notification-message">Text-to-speech may have limited support for this language.</span>
+          </p>
+        </div>
+      </div>
+       
+      <div id="loaderOverlay" style="
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+  ">
+      <div style="border: 5px solid #eee; border-top: 5px solid #1e90ff; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite;"></div>
+      <p style="margin-top: 20px; font-family: sans-serif; color: #333;">Loading your magical story...</p>
+  </div>
+      
+      <div class="story-content">
+        {% if translated_content %}
+        <hr>
+        <h2>Translated Content ({{ language }})</h2>
+        <p id="story-text">{{ translated_content }}</p>
+        <button type="button" class="volume-btn" id="volume-btn" style="margin-left: 10px; display: none;">🔊</button>
+
+        {% else %}
+               <p id="story-text" >{{ story.content|linebreaks }}</p>
+        {% endif %}
+      </div>
+    </div>
+    
+    <div class="story-sidebar">
+      <div class="action-card">
+        <div class="card-header">Story Actions</div>
+        <div class="card-content">
+          <a style="text-decoration: none;"  href="{% url 'mystory:download_story' story.id %}" class="btn download-btn">
+            <i class="fas fa-download"></i> Download Story
+          </a>
+          <a style="text-decoration: none;" href="{% url 'mystory:share_story' story.id %}" class="btn share-btn">
+            <i class="fas fa-share-alt"></i> Share Story
+          </a>
+          <a  style="text-decoration: none;"  href="{% url 'aistory:like_story' story.id %}" class="btn like-btn">
+            {% if is_liked %}
+              <i class="fas fa-heart text-red-500"></i> Liked
+            {% else %}
+              <i class="far fa-heart"></i> Like Story
+            {% endif %}
+          </a>
+          
+          
+        </div>
+      </div>
+      
+      <div class="action-card">
+        <div class="card-header">Story Information</div>
+        <div class="card-content story-info-card">
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <div>
+              <div class="info-label">Theme</div>
+              <div>{{ story.theme|title }}</div>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <div>
+              <div class="info-label">Emotions</div>
+              <div class="tags-container">
+                {% for emotion in emotions_list %}
+                  <span class="tag">{{ emotion|title }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div>
+                <div class="info-label">Collaboration</div>
+                <div>
+                  {% if story.is_collaborated %}
+                    Collaborative
+                    {% if collaborators %}
+                      <br>
+                      <strong>Collaborated with:</strong>
+                      <ul>
+                        {% for user in collaborators %}
+                          <li>{{ user.username }}</li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  {% else %}
+                    Individual
+                  {% endif %}
+                </div>
+                
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="action-card">
+        <div class="card-header">Similar Stories</div>
+        <div class="card-content">
+          <div class="similar-stories">
+            {% for story in similar_stories %}
+            <div class="similar-story">
+              {% if story.image %}
+                <img src="{{ story.image.url }}" alt="{{ story.title }}" class="similar-story-img">
+              {% else %}
+                <img src="{% static 'images/logo4.webp' %}" alt="{{ story.title }}" class="similar-story-img">
+              {% endif %}
+              <div class="similar-story-title">{{ story.title }}</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- JS for Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+
+   window.addEventListener('load', function () {
+        const loader = document.getElementById('loaderOverlay');
+        loader.style.display = 'none';
+    });
+    $(document).ready(function() {
+        $('.select-language').select2({
+            placeholder: "Select a language",
+            allowClear: true
+        });
+    });
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+  const volumeBtn = document.getElementById("volume-btn");
+  const languageSelect = document.getElementById("language");
+  let isSpeaking = false;
+  const synth = window.speechSynthesis;
+  let utterance;
+
+  // Get available voices
+  function getVoices() {
+    return synth.getVoices();
+  }
+
+  // Map language codes to available voices
+  // This is a fallback map for languages without direct support
+  const languageFallbackMap = {
+    'ar': 'en-US',    // Arabic falls back to English
+    'fa': 'en-US',    // Persian falls back to English
+    'ur': 'en-US',    // Urdu falls back to English
+    // Add more mappings as needed
+  };
+
+  // Determine if a language is directly supported
+  function isLanguageDirectlySupported(langCode) {
+    const voices = getVoices();
+    return voices.some(voice => voice.lang.toLowerCase().includes(langCode.toLowerCase()));
+  }
+
+  // Find the best voice for a language
+  function findBestVoice(langCode) {
+    const voices = getVoices();
+    
+    // Try to find direct match
+    let matchingVoice = voices.find(voice => 
+      voice.lang.toLowerCase().startsWith(langCode.toLowerCase())
+    );
+    
+    // If no direct match, use fallback
+    if (!matchingVoice && languageFallbackMap[langCode]) {
+      const fallbackCode = languageFallbackMap[langCode];
+      matchingVoice = voices.find(voice => 
+        voice.lang.toLowerCase().startsWith(fallbackCode.toLowerCase())
+      );
+    }
+    
+    // If still no match, use any available voice (preferably Google)
+    if (!matchingVoice) {
+      matchingVoice = voices.find(voice => voice.name.includes('Google')) || voices[0];
+    }
+    
+    return matchingVoice;
+  }
+
+  // Update button appearance based on language support
+  function updateVolumeButton() {
+    const selectedLang = languageSelect?.value || "en";
+    
+    // Always show the button
+    volumeBtn.style.display = "inline-block";
+    
+    if (!isLanguageDirectlySupported(selectedLang)) {
+      volumeBtn.title = "Limited support for this language";
+      volumeBtn.classList.add("limited-support");
+      // Add a warning indicator
+      volumeBtn.innerHTML = "🔊 ⚠️";
+    } else {
+      volumeBtn.title = "Read aloud";
+      volumeBtn.classList.remove("limited-support");
+      volumeBtn.innerHTML = "🔊";
+    }
+  }
+
+  // When voices are loaded, setup the system
+  if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = updateVolumeButton;
+  }
+  
+  // Initial setup
+  setTimeout(updateVolumeButton, 1000);
+
+  // Handle click on the volume button
+  volumeBtn.addEventListener("click", () => {
+    // Get the text at the time of clicking
+    const storyText = document.getElementById("story-text")?.innerText;
+    
+    if (!storyText) {
+      console.log("No story text found");
+      return;
+    }
+
+    if (!isSpeaking) {
+      try {
+        // Stop any ongoing speech
+        synth.cancel();
+        
+        // Create a new utterance
+        utterance = new SpeechSynthesisUtterance(storyText);
+        
+        // Set the language
+        const selectedLang = languageSelect?.value || "en";
+        utterance.lang = selectedLang;
+        
+        // Find the best voice
+        const bestVoice = findBestVoice(selectedLang);
+        if (bestVoice) {
+          console.log(`Using voice: ${bestVoice.name} (${bestVoice.lang}) for ${selectedLang}`);
+          utterance.voice = bestVoice;
+        }
+
+        // Adjust speech settings for better clarity
+        utterance.rate = 0.9;  // Slightly slower
+        utterance.pitch = 1.0; // Normal pitch
+        
+        // Handle when speech finishes
+        utterance.onend = () => {
+          isSpeaking = false;
+          updateVolumeButtonState(false);
+        };
+        
+        // Handle errors
+        utterance.onerror = (event) => {
+          console.error("Speech synthesis error:", event);
+          isSpeaking = false;
+          updateVolumeButtonState(false);
+        };
+        
+        // Start speaking
+        synth.speak(utterance);
+        isSpeaking = true;
+        updateVolumeButtonState(true);
+      } catch (error) {
+        console.error("Error starting speech synthesis:", error);
+        isSpeaking = false;
+        updateVolumeButtonState(false);
+      }
+    } else {
+      // Stop speaking if already in progress
+      synth.cancel();
+      isSpeaking = false;
+      updateVolumeButtonState(false);
+    }
+  });
+
+  // Update button state based on speaking status
+  function updateVolumeButtonState(speaking) {
+    if (speaking) {
+      volumeBtn.innerHTML = "⏹️";
+      volumeBtn.classList.add("speaking");
+    } else {
+      const selectedLang = languageSelect?.value || "en";
+      if (!isLanguageDirectlySupported(selectedLang)) {
+        volumeBtn.innerHTML = "🔊 ⚠️";
+      } else {
+        volumeBtn.innerHTML = "🔊";
+      }
+      volumeBtn.classList.remove("speaking");
+    }
+  }
+
+  // Update button when language changes
+  if (languageSelect) {
+    languageSelect.addEventListener("change", () => {
+      // Cancel any current speech
+      if (isSpeaking) {
+        synth.cancel();
+        isSpeaking = false;
+      }
+      
+      updateVolumeButton();
+    });
+  }
+
+  // Log available voices for debugging
+  console.log("Available voices:", getVoices().map((v, i) => `${i}: "${v.name} (${v.lang})"`));
+});
+function updateLanguageSupportNotification() {
+    const selectedLang = document.getElementById("language")?.value || "en";
+    const notification = document.getElementById("language-support-notification");
+    const message = document.getElementById("notification-message");
+    
+    // Check if the language is directly supported
+    const isSupported = isLanguageDirectlySupported(selectedLang);
+    
+    if (!isSupported) {
+      const langName = document.querySelector(`#language option[value="${selectedLang}"]`)?.textContent || selectedLang;
+      message.textContent = `Text-to-speech has limited support for ${langName}. Some text may not be read correctly.`;
+      notification.style.display = "block";
+    } else {
+      notification.style.display = "none";
+    }
+  }
+  
+  // Call this function when language changes
+  if (languageSelect) {
+    languageSelect.addEventListener("change", updateLanguageSupportNotification);
+  }
+  
+  // Call it initially
+  setTimeout(updateLanguageSupportNotification, 1000);
+
+
+   
+</script>
+
+</body>
+</html>

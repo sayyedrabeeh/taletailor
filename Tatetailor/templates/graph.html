@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart Types Demonstration</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        @media (min-width: 768px) {
+            .charts-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .chart-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .chart-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .chart-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .chart-description {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button.active {
+            background-color: #16a085;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Chart Types Demonstration</h1>
+        <p class="subtitle">Interactive visualization of different chart types using Chart.js</p>
+    </header>
+    
+    <div class="container">
+        <div class="controls">
+            <button id="showAll" class="active">Show All</button>
+            <button id="showBasic">Basic Charts</button>
+            <button id="showStatistical">Statistical Charts</button>
+            <button id="showComparison">Comparison Charts</button>
+        </div>
+        
+        <div class="charts-grid">
+            <!-- Line Chart -->
+            <div class="chart-card" data-category="basic">
+                <h2 class="chart-title">Line Chart</h2>
+                <div class="chart-container">
+                    <canvas id="lineChart"></canvas>
+                </div>
+                <p class="chart-description">Line charts display information as a series of data points connected by straight lines. They're ideal for showing trends over time or continuous data.</p>
+            </div>
+            
+            <!-- Bar Chart -->
+            <div class="chart-card" data-category="basic">
+                <h2 class="chart-title">Bar Chart</h2>
+                <div class="chart-container">
+                    <canvas id="barChart"></canvas>
+                </div>
+                <p class="chart-description">Bar charts use rectangular bars to represent data. They're excellent for comparing values across different categories.</p>
+            </div>
+            
+            <!-- Pie Chart -->
+            <div class="chart-card" data-category="basic">
+                <h2 class="chart-title">Pie Chart</h2>
+                <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <p class="chart-description">Pie charts show composition or proportion of data as slices of a circle. They're best for displaying percentage or proportional data.</p>
+            </div>
+            
+            <!-- Doughnut Chart -->
+            <div class="chart-card" data-category="basic">
+                <h2 class="chart-title">Doughnut Chart</h2>
+                <div class="chart-container">
+                    <canvas id="doughnutChart"></canvas>
+                </div>
+                <p class="chart-description">Similar to pie charts but with a hole in the center. They're useful for showing proportional data with a cleaner look.</p>
+            </div>
+            
+            <!-- Scatter Chart -->
+            <div class="chart-card" data-category="statistical">
+                <h2 class="chart-title">Scatter Chart</h2>
+                <div class="chart-container">
+                    <canvas id="scatterChart"></canvas>
+                </div>
+                <p class="chart-description">Scatter charts show the relationship between two variables. They're used to identify correlations, patterns, or outliers in data.</p>
+            </div>
+            
+            <!-- Radar Chart -->
+            <div class="chart-card" data-category="comparison">
+                <h2 class="chart-title">Radar Chart</h2>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+                <p class="chart-description">Radar charts compare multiple variables for one or more data series. They're effective for seeing which variables have similar values or outliers.</p>
+            </div>
+            
+            <!-- Polar Area Chart -->
+            <div class="chart-card" data-category="comparison">
+                <h2 class="chart-title">Polar Area Chart</h2>
+                <div class="chart-container">
+                    <canvas id="polarChart"></canvas>
+                </div>
+                <p class="chart-description">Polar area charts are similar to pie charts, but segments have equal angles and differ in distance from the center. They're good for showing comparative size.</p>
+            </div>
+            
+            <!-- Bubble Chart -->
+            <div class="chart-card" data-category="statistical">
+                <h2 class="chart-title">Bubble Chart</h2>
+                <div class="chart-container">
+                    <canvas id="bubbleChart"></canvas>
+                </div>
+                <p class="chart-description">Bubble charts display three dimensions of data: x-position, y-position, and bubble size. They're useful for showing relationships with a third variable.</p>
+            </div>
+            
+            <!-- Horizontal Bar Chart -->
+            <div class="chart-card" data-category="basic">
+                <h2 class="chart-title">Horizontal Bar Chart</h2>
+                <div class="chart-container">
+                    <canvas id="horizBarChart"></canvas>
+                </div>
+                <p class="chart-description">Horizontal bar charts are like regular bar charts but with bars running horizontally. They're especially useful for long category names.</p>
+            </div>
+            
+            <!-- Stacked Bar Chart -->
+            <div class="chart-card" data-category="comparison">
+                <h2 class="chart-title">Stacked Bar Chart</h2>
+                <div class="chart-container">
+                    <canvas id="stackedBarChart"></canvas>
+                </div>
+                <p class="chart-description">Stacked bar charts show how each category contributes to a total. They help visualize both individual values and the overall total.</p>
+            </div>
+            
+            <!-- Area Chart -->
+            <div class="chart-card" data-category="basic">
+                <h2 class="chart-title">Area Chart</h2>
+                <div class="chart-container">
+                    <canvas id="areaChart"></canvas>
+                </div>
+                <p class="chart-description">Area charts are line charts with the area below the line filled in. They're effective for showing volume over time and comparing multiple series.</p>
+            </div>
+            
+            <!-- Mixed Chart -->
+            <div class="chart-card" data-category="comparison">
+                <h2 class="chart-title">Mixed Chart (Bar & Line)</h2>
+                <div class="chart-container">
+                    <canvas id="mixedChart"></canvas>
+                </div>
+                <p class="chart-description">Mixed charts combine different chart types to visualize different aspects of data. This example shows bars for discrete values and a line for trend observation.</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Interactive Chart Types Demonstration using Chart.js</p>
+    </footer>
+
+    <script>
+        // Sample data
+        const months = ['January', 'February', 'March', 'April', 'May', 'June'];
+        const salesData = [65, 59, 80, 81, 56, 55];
+        const expensesData = [28, 48, 40, 19, 86, 27];
+        const profitData = salesData.map((sale, i) => sale - expensesData[i]);
+
+        // Function to get random color
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Function to get array of random colors
+        function getRandomColors(count) {
+            return Array(count).fill().map(() => getRandomColor());
+        }
+
+        // 1. Line Chart
+        function createLineChart() {
+            const ctx = document.getElementById('lineChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Sales',
+                        data: salesData,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }, {
+                        label: 'Expenses',
+                        data: expensesData,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. Bar Chart
+        function createBarChart() {
+            const ctx = document.getElementById('barChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Sales',
+                        data: salesData,
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Expenses',
+                        data: expensesData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // 3. Pie Chart
+        function createPieChart() {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            const data = [300, 250, 200, 150, 100, 50];
+            const backgroundColors = getRandomColors(6);
+            
+            return new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Product A', 'Product B', 'Product C', 'Product D', 'Product E', 'Product F'],
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 1,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+        }
+
+        // 4. Doughnut Chart
+        function createDoughnutChart() {
+            const ctx = document.getElementById('doughnutChart').getContext('2d');
+            const data = [300, 250, 200, 150, 100];
+            const backgroundColors = getRandomColors(5);
+            
+            return new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Category A', 'Category B', 'Category C', 'Category D', 'Category E'],
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 1,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        }
+
+        // 5. Scatter Chart
+        function createScatterChart() {
+            const ctx = document.getElementById('scatterChart').getContext('2d');
+            
+            // Generate random scatter data
+            function generateScatterData(count, baseFactor) {
+                const data = [];
+                for (let i = 0; i < count; i++) {
+                    data.push({
+                        x: Math.random() * 100 * baseFactor,
+                        y: Math.random() * 100
+                    });
+                }
+                return data;
+            }
+            
+            return new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Group A',
+                        data: generateScatterData(15, 1),
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)'
+                    }, {
+                        label: 'Group B',
+                        data: generateScatterData(15, 0.7),
+                        backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // 6. Radar Chart
+        function createRadarChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Speed', 'Durability', 'Comfort', 'Design', 'Features', 'Price'],
+                    datasets: [{
+                        label: 'Product A',
+                        data: [85, 80, 70, 80, 75, 65],
+                        fill: true,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgb(75, 192, 192)',
+                        pointBackgroundColor: 'rgb(75, 192, 192)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(75, 192, 192)'
+                    }, {
+                        label: 'Product B',
+                        data: [70, 90, 80, 65, 90, 85],
+                        fill: true,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        pointBackgroundColor: 'rgb(255, 99, 132)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(255, 99, 132)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        }
+                    }
+                }
+            });
+        }
+
+        // 7. Polar Area Chart
+        function createPolarChart() {
+            const ctx = document.getElementById('polarChart').getContext('2d');
+            const data = [11, 16, 7, 14, 12];
+            const backgroundColors = [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(255, 205, 86, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(153, 102, 255, 0.7)'
+            ];
+            
+            return new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: ['Category A', 'Category B', 'Category C', 'Category D', 'Category E'],
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 1,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+        }
+
+        // 8. Bubble Chart
+        function createBubbleChart() {
+            const ctx = document.getElementById('bubbleChart').getContext('2d');
+            
+            // Generate random bubble data
+            function generateBubbleData(count, baseFactor, sizeFactor) {
+                const data = [];
+                for (let i = 0; i < count; i++) {
+                    data.push({
+                        x: Math.random() * 100 * baseFactor,
+                        y: Math.random() * 100,
+                        r: Math.random() * 15 * sizeFactor + 5 // radius between 5 and 20
+                    });
+                }
+                return data;
+            }
+            
+            return new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Group A',
+                        data: generateBubbleData(10, 1, 1),
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)'
+                    }, {
+                        label: 'Group B',
+                        data: generateBubbleData(10, 0.8, 1.2),
+                        backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // 9. Horizontal Bar Chart
+        function createHorizBarChart() {
+            const ctx = document.getElementById('horizBarChart').getContext('2d');
+            const regions = ['North America', 'Europe', 'Asia Pacific', 'Latin America', 'Middle East & Africa'];
+            const salesByRegion = [1200, 1900, 2400, 900, 500];
+            
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: regions,
+                    datasets: [{
+                        label: 'Sales by Region',
+                        data: salesByRegion,
+                        backgroundColor: getRandomColors(5),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // 10. Stacked Bar Chart
+        function createStackedBarChart() {
+            const ctx = document.getElementById('stackedBarChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Direct Sales',
+                            data: [30, 25, 40, 35, 20, 30],
+                            backgroundColor: 'rgba(75, 192, 192, 0.7)'
+                        },
+                        {
+                            label: 'Online Sales',
+                            data: [20, 15, 25, 20, 15, 15],
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                        },
+                        {
+                            label: 'Partner Sales',
+                            data: [15, 19, 15, 26, 21, 10],
+                            backgroundColor: 'rgba(255, 206, 86, 0.7)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // 11. Area Chart
+        function createAreaChart() {
+            const ctx = document.getElementById('areaChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Website Traffic',
+                        data: [10000, 15000, 12000, 20000, 18000, 25000],
+                        borderColor: 'rgb(54, 162, 235)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // 12. Mixed Chart (Bar & Line)
+        function createMixedChart() {
+            const ctx = document.getElementById('mixedChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Revenue',
+                            data: salesData,
+                            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            order: 2
+                        },
+                        {
+                            label: 'Profit Margin',
+                            data: [15, 18, 20, 22, 25, 23],
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            type: 'line',
+                            tension: 0.4,
+                            yAxisID: 'percentage',
+                            order: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Revenue ($)'
+                            }
+                        },
+                        percentage: {
+                            beginAtZero: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            title: {
+                                display: true,
+                                text: 'Profit Margin (%)'
+                            },
+                            max: 30
+                        }
+                    }
+                }
+            });
+        }
+
+        // Category filtering buttons
+        document.querySelectorAll('.controls button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.controls button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const category = this.id.replace('show', '').toLowerCase();
+                
+                // Show/hide chart cards based on category
+                document.querySelectorAll('.chart-card').forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Initialize all charts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createLineChart();
+            createBarChart();
+            createPieChart();
+            createDoughnutChart();
+            createScatterChart();
+            createRadarChart();
+            createPolarChart();
+            createBubbleChart();
+            createHorizBarChart();
+            createStackedBarChart();
+            createAreaChart();
+            createMixedChart();
+        });
+    </script>
+</body>
+</html>

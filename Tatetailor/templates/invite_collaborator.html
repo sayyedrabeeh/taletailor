@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invite Collaborators</title>
+    <style>
+        /* Ultra-modern dark mode */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 60%;
+            background: #121212;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 40px rgba(0, 255, 255, 0.15);
+            text-align: center;
+        }
+
+        .invite-header {
+            margin-bottom: 20px;
+        }
+
+        .invite-header h1 {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .invite-header p {
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        /* Search box */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            background-color: #1e1e1e;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-button {
+            padding: 12px 18px;
+            background-color: #00bcd4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: #0097a7;
+        }
+
+        /* Collaborator list */
+        .collaborator-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .collaborator-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            transition: 0.3s;
+        }
+
+        .collaborator-card:hover {
+            box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .collaborator-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .collaborator-info p {
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .collaborator-checkbox {
+            transform: scale(1.3);
+        }
+
+        /* Invite button */
+        .invite-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .invite-button:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            transform: scale(1.05);
+        }
+
+        /* Pagination */
+        .pagination {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .pagination a {
+            padding: 10px 15px;
+            text-decoration: none;
+            background: #00bcd4;
+            color: white;
+            border-radius: 6px;
+            margin: 0 5px;
+            transition: 0.3s;
+        }
+
+        .pagination a:hover {
+            background: #0097a7;
+        }
+
+        .pagination span {
+            margin: 0 10px;
+        }
+
+        /* Message alert */
+        .message {
+            background: #1f7a1f;
+            color: #ffffff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: #8a2b2b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="invite-header">
+            <h1>Invite Collaborators</h1>
+            <p>Find the perfect writing partners for your story</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {% if message.tags == 'warning' %}warning{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="GET" action="">
+            <div class="search-container">
+                <input type="text" name="q" placeholder="Search users..." value="{{ search_query }}">
+                <button type="submit" class="search-button">🔍 Search</button>
+            </div>
+        </form>
+
+        <form method="POST" action="{% url 'mystory:invite_collaborator'   %}">
+            {% csrf_token %}
+            <div class="collaborator-list">
+                {% for user in users %}
+                    <div class="collaborator-card">
+                        <div class="collaborator-info">
+                            <p>{{ user.username }}</p>
+                        </div>
+                        <input type="checkbox" name="selected_users" value="{{ user.id }}" class="collaborator-checkbox">
+                    </div>
+                {% empty %}
+                    <p>No users found.</p>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="invite-button">Send Invitations</button>
+        </form>
+
+        <div class="pagination">
+            {% if users.has_previous %}
+                <a href="?q={{ search_query }}&page=1">First</a>
+                <a href="?q={{ search_query }}&page={{ users.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <span>Page {{ users.number }} of {{ users.paginator.num_pages }}</span>
+
+            {% if users.has_next %}
+                <a href="?q={{ search_query }}&page={{ users.next_page_number }}">Next</a>
+                <a href="?q={{ search_query }}&page={{ users.paginator.num_pages }}">Last</a>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>

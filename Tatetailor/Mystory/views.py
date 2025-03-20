@@ -1,0 +1,379 @@
+from django.shortcuts import render,redirect,get_object_or_404
+from django.contrib import messages
+from .models import Story
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.http import HttpResponseBadRequest
+from django.urls import reverse
+from django.core.paginator import Paginator
+from .models import CollaborationInvite, User
+from Mystory.models import CollaborationInvite
+from django.contrib.auth.decorators import login_required
+from PIL import Image, ImageDraw, ImageFont
+from django.core.files.base import ContentFile
+from io import BytesIO
+import textwrap
+import uuid
+ 
+from django.core.files.base import ContentFile
+import requests
+from django.conf import settings
+import os
+from dotenv import load_dotenv
+
+import requests
+from django.core.files.base import ContentFile
+from django.db.models import Q
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from io import BytesIO
+ 
+
+load_dotenv()
+
+
+@login_required(login_url='authentication:login') 
+def yourownstory(request):
+    my_stories = Story.objects.filter(user=request.user, is_collaborated=False).order_by('-id')[:3]
+    you_created_and_collaborated = Story.objects.filter(user=request.user, is_collaborated=True)
+    you_were_invited = Story.objects.filter(collaborators=request.user)
+    collaborated_stories = (you_created_and_collaborated | you_were_invited).distinct().order_by('-id')[:3]
+    stories = Story.objects.filter(user=request.user)   
+    if stories.exists():
+        story = stories.first()   
+    else:
+        story = None 
+    return render(request, "yourownstory.html", {"my_stories": my_stories,"stories": stories, "story": story,'colla_stories':collaborated_stories})
+
+# @login_required(login_url='authentication:login') 
+def get_unsplash_image(query):
+    access_key = 'sx-HxKDsbMy5QCfZfQhhgu7Vu3m9CtkZkZKk1NtaGm4'  
+    url = f"https://api.unsplash.com/photos/random?query={query}&client_id={access_key}"    
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        image_url = data['urls']['regular']
+        image_response = requests.get(image_url)
+        if image_response.status_code == 200:
+            return ContentFile(image_response.content)  
+    return None
+
+@login_required(login_url='authentication:login') 
+def edit_story(request, story_id=None):    
+    if not story_id:
+        if request.method == "POST":
+            post_type = request.POST.get("post_type")
+            new_title = request.POST.get("title", "")
+            new_content = request.POST.get("story", "")
+            story_length = request.POST.get("length", "medium")
+            emotions = request.POST.getlist("emotion")
+            theme = request.POST.get("theme", "")
+            word_count = len(new_content.split())
+            if not new_title.strip() or not new_content.strip():
+                messages.error(request, "Title and content cannot be empty.")
+                return render(request, "edityourownstory.html", {"title": new_title, "story11": new_content})
+            if word_count < 300:
+                messages.error(request, f"Your story must have at least 300 words. (Currently {word_count} words)")
+                return render(request, "edityourownstory.html", {"title": new_title, "story11": new_content})
+            if post_type in ["public", "private"]:
+                story= Story.objects.create(
+                    user=request.user,
+                    title=new_title,
+                    content=new_content,
+                    status=post_type,
+                    length=story_length,
+                    emotions=", ".join(emotions),
+                )
+                img_file = get_unsplash_image(new_title)
+                story.image.save(f"{story.id}.jpg", img_file)
+                story.save()
+                messages.success(request, f"Story Created Successfully as {post_type.capitalize()}.")
+                return redirect("mystory:yourownstory")
+        return render(request, "edityourownstory.html", {})
+    story = get_object_or_404(Story, id=story_id)
+    if story.user != request.user and not story.collaborators.filter(id=request.user.id).exists():
+        messages.error(request, "You do not have permission to edit this story.")
+        return redirect("mystory:yourownstory")
+    is_owner = story.user == request.user
+    is_collaborator = story.collaborators.filter(id=request.user.id).exists()
+    if request.method == "POST":
+        post_type = request.POST.get("post_type")
+        update_action = request.POST.get("update")
+        new_title = request.POST.get("title", story.title)
+        new_content = request.POST.get("story", story.content)
+        word_count = len(new_content.split())
+        if not new_title.strip() or not new_content.strip():
+            messages.error(request, "Title and content cannot be empty.")
+            return render(request, "edityourownstory.html", {
+                "title": new_title, 
+                "story11": new_content,
+                "sid": story.id,
+                "is_collaborator": is_collaborator,
+                "is_owner": is_owner,
+                "status": story.status,
+            })
+        if word_count < 300:
+            messages.error(request, f"Your story must have at least 300 words. (Currently {word_count} words)")
+            return render(request, "edityourownstory.html", {
+                "title": new_title, 
+                "story11": new_content,
+                "sid": story.id,
+                "is_collaborator": is_collaborator,
+                "is_owner": is_owner,
+                "status": story.status,
+            })
+        if is_owner and post_type in ["public", "private"]:
+            story.title = new_title
+            story.content = new_content
+            story.status = post_type
+            story.save()
+            img_file = get_unsplash_image(new_title)
+            if img_file:
+               story.image.save(f"{story.id}.jpg", img_file)
+               story.save()
+            print("Image file generated:", img_file)
+            print('sto',story.image)
+            messages.success(request, f"Story posted {post_type.capitalize()} successfully!")
+            return redirect("mystory:yourownstory")
+        elif update_action is not None:
+            story.title = new_title
+            story.content = new_content
+            story.save()
+            messages.success(request, "Story updated successfully!")
+            return redirect("mystory:edit_story", story_id=story.id)
+        else:
+           messages.error(request, "Invalid action. Please use one of the provided buttons.")
+           return render(request, "edityourownstory.html", {
+            "title": new_title, 
+            "story11": new_content,
+            "sid": story.id,
+            "is_collaborator": is_collaborator,
+            "is_owner": is_owner,
+            "status": story.status,
+           })
+    return render(request, "edityourownstory.html", {
+        "story": story, 
+        "story11": story.content,
+        "title": story.title,
+        "sid": story.id,
+        "is_collaborator": is_collaborator,
+        "is_owner": is_owner,
+        "status": story.status,
+    })
+
+@login_required(login_url='authentication:login') 
+def share_story(request, story_id):
+    story = get_object_or_404(Story, id=story_id)
+    share_url = request.build_absolute_uri(f"/Mystory/story/{story.id}/")
+    return render(request, "share_story.html", {"share_url": share_url, "story": story})
+
+@login_required(login_url='authentication:login') 
+
+
+def download_story(request, story_id):
+    from reportlab.lib import colors
+    from reportlab.lib.pagesizes import letter
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.units import inch
+    from io import BytesIO
+    import os
+    from datetime import datetime
+    
+    story = get_object_or_404(Story, id=story_id)
+    
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=letter,
+        rightMargin=72,
+        leftMargin=72,
+        topMargin=72,
+        bottomMargin=72
+    )
+    
+    elements = []
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        name='CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=16,
+        alignment=1,  
+        spaceAfter=20
+    )
+    try:
+
+        logo_path = os.path.join('static', 'images', 'company_logo.jpg')
+        if os.path.exists(logo_path):
+            logo = Image(logo_path, width=2*inch, height=1*inch)
+            elements.append(logo)
+    except:
+
+        header_style = ParagraphStyle(
+            name='Header',
+            parent=styles['Heading2'],
+            fontSize=14,
+            alignment=1,
+            textColor=colors.darkblue
+        )
+        elements.append(Paragraph("OFFICIAL DOCUMENT", header_style))
+    elements.append(Spacer(1, 0.5*inch))
+    elements.append(Paragraph(story.title, title_style))
+    data = [
+        ["Document ID:", f"STORY-{story_id}"],
+        ["Date:", datetime.now().strftime("%B %d, %Y")],
+        ["Author:", getattr(story, 'author', 'Unknown')]
+    ]
+    metadata_table = Table(data, colWidths=[1.5*inch, 4*inch])
+    metadata_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (0, -1), colors.lightgrey),
+        ('TEXTCOLOR', (0, 0), (0, -1), colors.darkblue),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+        ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+        ('TOPPADDING', (0, 0), (-1, -1), 8),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+    elements.append(metadata_table)
+    elements.append(Spacer(1, 0.3*inch))
+    content_style = ParagraphStyle(
+        name='Content',
+        parent=styles['Normal'],
+        fontSize=12,
+        leading=14,
+        firstLineIndent=20
+    )
+    for paragraph in story.content.split('\n\n'):
+        if paragraph.strip():
+            elements.append(Paragraph(paragraph, content_style))
+            elements.append(Spacer(1, 0.1*inch))
+    footer_style = ParagraphStyle(
+        name='Footer',
+        parent=styles['Normal'],
+        fontSize=8,
+        textColor=colors.grey,
+        alignment=1
+    )
+    elements.append(Spacer(1, 0.5*inch))
+    elements.append(Paragraph("This is an official document. All rights reserved.", footer_style))
+    doc.build(elements, onFirstPage=add_page_number, onLaterPages=add_page_number)
+    buffer.seek(0)
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{story.title}.pdf"'
+    return response
+
+def add_page_number(canvas, doc):
+    canvas.saveState()
+    canvas.setStrokeColor(colors.darkblue)
+    canvas.setFillColor(colors.darkblue)
+    canvas.rect(72, 730, 450, 20, fill=1)
+    canvas.setStrokeColor(colors.darkblue)
+    canvas.setFillColor(colors.darkblue)
+    canvas.rect(72, 50, 450, 2, fill=1)
+    canvas.setFont("Helvetica", 9)
+    canvas.setFillColor(colors.black)
+    page_num = canvas.getPageNumber()
+    text = f"Page {page_num}"
+    canvas.drawRightString(540, 30, text)
+    canvas.setFont("Helvetica", 60)
+    canvas.setFillColor(colors.lightgrey.clone(alpha=0.2))
+    canvas.rotate(45)
+    canvas.drawCentredString(350, 50, "OFFICIAL")
+    canvas.restoreState()
+
+@login_required(login_url='authentication:login') 
+def story_detail_view(request, story_id):
+    story = get_object_or_404(Story, id=story_id)
+    story=story.content
+    return render(request, "edityourownstory.html", {"stor11": story})
+
+@login_required(login_url='authentication:login') 
+def invite_collaborator(request):
+    users = User.objects.exclude(id=request.user.id)
+    search_query = request.GET.get('q', '')
+    if search_query:
+        users = users.filter(username__icontains=search_query)
+    paginator = Paginator(users, 5)
+    page_number = request.GET.get('page')
+    page_users = paginator.get_page(page_number)
+    if request.method == "POST":
+        selected_user_ids = request.POST.getlist("selected_users")
+        new_story = Story.objects.create(
+            user=request.user,
+            title="New Collaborative Story",
+            content="Start your collaborative journey here!",
+            status=None,
+            is_collaborated=True,
+        )
+        for user_id in selected_user_ids:
+            receiver = User.objects.get(id=user_id)
+            CollaborationInvite.objects.create(
+                story=new_story,
+                sender=request.user,
+                receiver=receiver
+            )
+        messages.success(request, f"Story created and invitations sent!")
+        return redirect("mystory:edit_story", story_id=new_story.id)
+    return render(request, "invite_collaborator.html", {
+        "users": page_users,
+        "search_query": search_query
+    })
+
+@login_required(login_url='authentication:login')
+def collaboration_requests(request):
+    pending_invites = CollaborationInvite.objects.filter(receiver=request.user, status="pending")
+    return render(request, "collaboration_requests.html", {"pending_invites": pending_invites})
+
+@login_required(login_url='authentication:login') 
+def view_invites(request):
+    return render(request, "view_invites.html")
+ 
+@login_required(login_url='authentication:login') 
+def accept_invite(request, invite_id):
+    invite = get_object_or_404(CollaborationInvite, id=invite_id, receiver=request.user)
+    invite.accept()
+    messages.success(request, f"You are now a collaborator on '{invite.story.title}'!")
+    return redirect("mystory:edit_story", story_id=invite.story.id)
+ 
+def reject_invite(request, invite_id):
+    invite = get_object_or_404(CollaborationInvite, id=invite_id, receiver=request.user)
+    invite.reject()
+    messages.info(request, f"Collaboration invite for '{invite.story.title}' rejected.")
+    return redirect("mystory:collaboration_requests")
+
+@login_required(login_url='authentication:login') 
+def my_collaborations(request):
+    stories = request.user.collaborations.all()   
+    return render(request, "my_collaborations.html", {"stories": stories})
+
+@login_required(login_url='authentication:login') 
+def mystory1(request):
+    query = request.GET.get('search', '')
+    stories = Story.objects.filter(
+        Q(user=request.user) | Q(collaborators=request.user)
+    ).distinct()
+
+    if query:
+        stories = stories.filter(
+            Q(title__icontains=query) |
+            Q(user__username__icontains=query) |
+            Q(genre__icontains=query)
+        )
+
+    paginator = Paginator(stories, 5)   
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'mystory.html', {'stories': page_obj, 'query': query})
+
+@login_required(login_url='authentication:login') 
+def delete_story(request, story_id):
+    if request.method == "POST":
+        story = get_object_or_404(Story, id=story_id)
+        story.delete()
+        messages.success(request, "Story deleted successfully.")
+    return redirect("mystory:mystory1")

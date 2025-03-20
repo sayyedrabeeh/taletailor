@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TaleTailor - Professional Story Generator Tool">
+  <title>TaleTailor - Professional Story Generation Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+    
+    :root {
+      --primary-color: #8b5cf6;
+      --primary-hover: #7c3aed;
+      --secondary-color: #4f46e5;
+      --bg-dark: #0f0f1a;
+      --bg-darker: #080812;
+      --bg-card: rgba(38, 38, 45, 0.75);
+      --text-primary: #ffffff;
+      --text-secondary: #d1d5db;
+      --text-muted: #9ca3af;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --border-hover: rgba(255, 255, 255, 0.2);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    header {
+            background-color: #333;
+            padding: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+        }
+
+        .logo-container {
+            padding: 0.5rem 1.5rem;
+            background-color: #000;
+            border-radius: 0;
+            margin-left: 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            background-color: #000;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-right: 2rem;
+        }
+
+        .dynamic-label {
+            color: #aaa;
+        }
+
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background-color: #444;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .toggle::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle.active::after {
+            transform: translateX(26px);
+        }
+
+        .heart-icon, .profile-icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    .content-container {
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 3rem;
+      background: var(--bg-card);
+      border-radius: 1rem;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+    }
+    
+    .step-title {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin-bottom: 2.5rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .step-title::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+    
+    .input-row {
+      margin-bottom: 1.75rem;
+      position: relative;
+    }
+    
+    .input-field {
+      width: 100%;
+      padding: 1.25rem 3rem;
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      color: #333;
+      background: rgba(255, 255, 255, 0.95);
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+    }
+    
+    .input-field::placeholder {
+      color: #6b7280;
+    }
+    
+    .radio-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 1.25rem;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #6b7280;
+      background: #fff;
+      cursor: pointer;
+      z-index: 10;
+      transition: var(--transition);
+    }
+    
+    .radio-selected {
+      border-color: var(--primary-color);
+      border-width: 6px;
+    }
+    
+    .radio-deselected {
+      background: #fff;
+    }
+    
+    .radio-button:hover {
+      transform: translateY(-50%) scale(1.05);
+    }
+    
+    .dropdown-arrow {
+      position: absolute;
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
+      width: 10px;
+      height: 10px;
+      border: solid #6b7280;
+      border-width: 0 2px 2px 0;
+      display: inline-block;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    
+    .dropdown-arrow:hover {
+      border-color: #333;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+    
+    .btn {
+      padding: 1rem 0;
+      border-radius: 0.75rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 230px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+    
+    .back-button {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .next-button {
+      background: #000;
+      color: var(--text-primary);
+      border: none;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .next-button:hover {
+      background: #111;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .next-button:active, .back-button:active {
+      transform: translateY(0);
+    }
+    
+    /* Professional additions */
+    .progress-container {
+      margin-bottom: 2.5rem;
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      width: 66%; /* Step 2 of 3 = ~66% */
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      border-radius: 4px;
+    }
+    
+    .step-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    
+    .step-label {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .step-label.active {
+      color: var(--primary-color);
+    }
+    
+    .tooltip {
+      position: absolute;
+      right: 0;
+      top: -25px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: var(--transition);
+      pointer-events: none;
+    }
+    
+    .input-row:hover .tooltip {
+      opacity: 1;
+    }
+    
+    .backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .dropdown-menu {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: var(--shadow-lg);
+      width: 300px;
+      overflow: hidden;
+      animation: slideDown 0.3s ease;
+    }
+    
+    .dropdown-item {
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      color: #333;
+    }
+    
+    .dropdown-item:hover {
+      background: #f3f4f6;
+    }
+    
+    .dropdown-item.selected {
+      background: #f0f9ff;
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+    
+    .dropdown-item:not(:last-child) {
+      border-bottom: 1px solid #f3f4f6;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .content-container {
+        width: 90%;
+        padding: 2rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header {
+        padding: 1rem;
+        flex-wrap: wrap;
+      }
+      
+      .nav {
+        order: 3;
+        width: 100%;
+        margin-top: 1rem;
+        justify-content: space-between;
+      }
+      
+      .nav-button {
+        padding: 0.75rem 1rem;
+        flex: 1;
+      }
+      
+      .button-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo irish-grover-regular">TALETAILOR</div>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+            <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+            <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+            {% if user.is_superuser %}
+            <br><br>
+            <a href="{% url 'authentication:users' %}">
+                <button  class="nav-link">
+                    Admin Panel
+                </button>
+            </a>
+        {% endif %}
+        </div>
+        <div class="user-actions">
+         
+            <a href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
+        
+            <!-- Profile Icon to trigger the modal -->
+            <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
+                👤
+            </div>
+        </div>
+    </header>
+  
+  <div class="content-container">
+    <div class="step-indicator">
+      <span class="step-label">Story Theme</span>
+      <span class="step-label active">Character Details</span>
+      <span class="step-label">Final Settings</span>
+    </div>
+    
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
+    
+    <h2 class="step-title">Next step of making</h2>
+    
+    <form method="POST" action="{% url 'aistory:aimake2' %}">
+        {% csrf_token %}
+      
+        <div class="content-container">
+          <!-- Progress Indicators & Labels -->
+      
+          <h2 class="step-title">Next step of making</h2>
+      
+          <div class="input-row">
+            <span class="tooltip">Select number of characters</span>
+            <input type="text" name="char_count" class="input-field" placeholder="Character count (optional)">
+          </div>
+      
+          <div class="input-row">
+            <span class="tooltip">Add character names</span>
+            <input type="text" name="char_names" class="input-field" placeholder="Character Names (optional)">
+          </div>
+      
+          <div class="input-row">
+            <span class="tooltip">Enter story locations</span>
+            <input type="text" name="places" class="input-field" placeholder="Places in the story (optional)">
+          </div>
+      
+          <div class="button-container">
+            <button type="submit" class="btn next-button">Generate Story</button>
+          </div>
+        </div>
+      </form>
+      
+  <script>
+    // Radio button functionality
+    const radioButtons = document.querySelectorAll('.radio-button');
+    const inputFields = document.querySelectorAll('.input-field');
+    
+    radioButtons.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        // Clear all selected state
+        radioButtons.forEach(btn => {
+          btn.classList.remove('radio-selected');
+          btn.classList.add('radio-deselected');
+        });
+        
+        // Set clicked button to selected
+        button.classList.add('radio-selected');
+        button.classList.remove('radio-deselected');
+        
+        // Focus the corresponding input field
+        inputFields[index].focus();
+      });
+    });
+    
+    // Toggle switch functionality
+    const toggleSwitch = document.querySelector('.toggle-switch');
+    
+    toggleSwitch.addEventListener('click', () => {
+      toggleSwitch.classList.toggle('active');
+    });
+    
+    // Dropdown functionality
+    const dropdownArrow = document.querySelector('.dropdown-arrow');
+    const backdrop = document.querySelector('.backdrop');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    
+    dropdownArrow.addEventListener('click', () => {
+      backdrop.style.display = 'flex';
+    });
+    
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) {
+        backdrop.style.display = 'none';
+      }
+    });
+    
+    dropdownItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Update selected item
+        dropdownItems.forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+        
+        // Update input field with selection
+        inputFields[0].value = item.textContent;
+        
+        // Close dropdown
+        backdrop.style.display = 'none';
+      });
+    });
+    
+    // Input field focus effects
+    inputFields.forEach((field, index) => {
+      field.addEventListener('focus', () => {
+        radioButtons.forEach(btn => {
+          btn.classList.remove('radio-selected');
+          btn.classList.add('radio-deselected');
+        });
+        
+        radioButtons[index].classList.add('radio-selected');
+        radioButtons[index].classList.remove('radio-deselected');
+      });
+    });
+    
+    // Navigation buttons
+    document.querySelector('.back-button').addEventListener('click', () => {
+      console.log('Back button clicked');
+      // Animation effect
+      document.querySelector('.content-container').style.opacity = '0.5';
+      setTimeout(() => {
+        // This would normally navigate to previous page
+        document.querySelector('.content-container').style.opacity = '1';
+      }, 300);
+    });
+    
+    document.querySelector('.next-button').addEventListener('click', () => {
+      console.log('Next button clicked');
+      // Validation and animation effect
+      const characterCount = inputFields[0].value;
+      
+      if (!characterCount && radioButtons[0].classList.contains('radio-selected')) {
+        inputFields[0].style.borderColor = '#ef4444';
+        inputFields[0].style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.25)';
+        
+        setTimeout(() => {
+          inputFields[0].style.borderColor = '';
+          inputFields[0].style.boxShadow = '';
+        }, 2000);
+        return;
+      }
+      
+      document.querySelector('.content-container').style.opacity = '0.5';
+      setTimeout(() => {
+        // This would normally navigate to next page
+        document.querySelector('.content-container').style.opacity = '1';
+      }, 300);
+    });
+    
+    // Professional additions: Key commands and accessibility
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && backdrop.style.display === 'flex') {
+        backdrop.style.display = 'none';
+      }
+      
+      if (e.key === 'Enter' && document.activeElement === inputFields[0]) {
+        backdrop.style.display = 'flex';
+      }
+    });
+    
+    // Save data in session storage for persistence
+    window.addEventListener('beforeunload', () => {
+      const formData = {
+        characterCount: inputFields[0].value,
+        characterNames: inputFields[1].value,
+        places: inputFields[2].value
+      };
+      
+      sessionStorage.setItem('taletailorFormData', JSON.stringify(formData));
+    });
+    
+    // Load saved data if exists
+    window.addEventListener('load', () => {
+      const savedData = sessionStorage.getItem('taletailorFormData');
+      if (savedData) {
+        const formData = JSON.parse(savedData);
+        inputFields[0].value = formData.characterCount || '';
+        inputFields[1].value = formData.characterNames || '';
+        inputFields[2].value = formData.places || '';
+      }
+      
+      // Add page load animation
+      document.querySelector('.content-container').style.opacity = '0';
+      setTimeout(() => {
+        document.querySelector('.content-container').style.opacity = '1';
+      }, 100);
+    });
+  </script>
+</body>
+</html>

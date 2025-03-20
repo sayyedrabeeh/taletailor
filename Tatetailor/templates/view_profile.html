@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ request.user.username }}'s Vibrant Profile</title>
+    <style>
+        :root {
+            --primary-color: #0b0316;
+            --secondary-color: #0a332f;
+            --accent-color: #3b2615;
+            --text-light: #ffffff;
+            --text-dark: #272727;
+            --gradient-start: #1d0e31;
+            --gradient-mid: #b64fc8;
+            --gradient-end: #3d200a;
+            --card-bg: rgba(255, 255, 255, 0.15);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
+            min-height: 100vh;
+            padding: 30px;
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/api/placeholder/1000/1000') center/cover no-repeat;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .profile-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 900px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-header {
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+        }
+
+        .profile-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-light);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .profile-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .profile-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .profile-content {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+        }
+
+        .profile-image-section {
+            margin-bottom: 30px;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .profile-image-section {
+                margin-right: 40px;
+                margin-bottom: 0;
+            }
+        }
+
+        .profile-image-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--primary-color);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, var(--primary-color), var(--gradient-mid));
+        }
+
+        .profile-image-placeholder span {
+            font-size: 5rem;
+            font-weight: bold;
+            color: var(--text-light);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            flex-grow: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .profile-details {
+            flex: 1;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+
+        .detail-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .detail-item:hover {
+            transform: translateX(5px);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .detail-item h3 {
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .detail-item h3::before {
+            content: '〉';
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+
+        .detail-item p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .profile-actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .edit-button {
+            background: var(--accent-color);
+            color: var(--text-light);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 109, 0, 0.3);
+        }
+
+        .edit-button:hover {
+            background: #ff8f00;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 15px rgba(255, 109, 0, 0.5);
+        }
+
+        /* Animation elements */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 15s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background bubbles -->
+    <div class="bubble" style="width: 100px; height: 100px; top: 10%; left: 10%;"></div>
+    <div class="bubble" style="width: 150px; height: 150px; top: 60%; left: 80%;"></div>
+    <div class="bubble" style="width: 80px; height: 80px; top: 30%; left: 70%;"></div>
+    <div class="bubble" style="width: 120px; height: 120px; top: 80%; left: 20%;"></div>
+    <div class="bubble" style="width: 60px; height: 60px; top: 10%; left: 50%;"></div>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <h2 class="profile-title">{{ request.user.username }}'s Profile</h2>
+        </div>
+        
+        <div class="profile-content">
+            <div class="profile-image-section">
+                {% if profile.profile_picture %}
+                    <div class="profile-image-container">
+                        <img src="{{ profile.profile_picture.url }}" alt="{{ request.user.username }}'s profile picture" class="profile-image">
+                    </div>
+                {% else %}
+                    <div class="profile-image-container">
+                        <div class="profile-image-placeholder">
+                            <span>{{ request.user.username|first|upper }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                
+            </div>
+            
+            <div class="profile-details">
+                <div class="detail-item">
+                    <h3>Bio</h3>
+                    <p>{{ profile.bio|default:"No bio provided. Tell us about yourself!" }}</p>
+                </div>
+                
+                <div class="detail-item">
+                    <h3>Address</h3>
+                    <p>{{ profile.address|default:"No address provided." }}</p>
+                </div>
+                <div class="detail-item">
+                    <h3>Phone Number</h3>
+                    <p>{{ profile.phone_number|default:"No phone number provided." }}</p>
+                </div>
+                
+                <div class="profile-actions">
+                    <a href="{% url 'authentication:edit_profile' %}" class="edit-button">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animate the bubbles
+        document.querySelectorAll('.bubble').forEach((bubble, index) => {
+            const delay = index * 2;
+            const duration = 15 + Math.random() * 10;
+            
+            bubble.style.animationDelay = `${delay}s`;
+            bubble.style.animationDuration = `${duration}s`;
+        });
+        
+        // Add interactive elements
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add mousemove parallax effect
+            document.addEventListener('mousemove', (e) => {
+                const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+                const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+                
+                document.querySelectorAll('.bubble').forEach((bubble, index) => {
+                    const factor = (index + 1) * 0.2;
+                    bubble.style.transform = `translate(${moveX * factor}px, ${moveY * factor}px)`;
+                });
+            });
+            
+            // Add stats counter animation
+            const statElements = document.querySelectorAll('.stat-number');
+            statElements.forEach(stat => {
+                const finalValue = parseInt(stat.textContent);
+                let currentValue = 0;
+                stat.textContent = '0';
+                
+                const interval = setInterval(() => {
+                    currentValue += Math.ceil(finalValue / 30);
+                    if (currentValue >= finalValue) {
+                        clearInterval(interval);
+                        stat.textContent = finalValue;
+                    } else {
+                        stat.textContent = currentValue;
+                    }
+                }, 30);
+            });
+        });
+    </script>
+</body>
+</html>

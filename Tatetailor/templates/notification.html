@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ultra Legendary Messaging Interface</title>
+    <style>
+        :root {
+            --bg-dark: #0f0f1a;
+            --card-dark: #1a1a2e;
+            --accent-purple: #6a5acd;
+            --text-primary: #e0e0ff;
+            --text-secondary: #a0a0c0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .messaging-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidebar {
+            width: 350px;
+            background-color: var(--card-dark);
+            border-right: 2px solid var(--accent-purple);
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .conversation-list {
+            list-style: none;
+        }
+
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .conversation-item:hover {
+            background-color: rgba(106, 90, 205, 0.2);
+        }
+
+        .conversation-item.active {
+            background-color: rgba(106, 90, 205, 0.4);
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background-color: var(--accent-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .conversation-details {
+            flex-grow: 1;
+        }
+
+        .conversation-name {
+            font-weight: bold;
+        }
+
+        .conversation-preview {
+            color: var(--text-secondary);
+            font-size: 0.8em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .unread-badge {
+            background-color: #ff4d4d;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+        }
+
+        .chat-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-dark);
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--card-dark);
+            border-bottom: 2px solid var(--accent-purple);
+        }
+
+        .messages-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            max-width: 70%;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            background-color: var(--accent-purple);
+            color: white;
+        }
+
+        .message.received {
+            align-self: flex-start;
+            background-color: #2c2c4a;
+            color: var(--text-primary);
+        }
+
+        .message-time {
+            font-size: 0.7em;
+            color: rgba(255,255,255,0.6);
+            margin-top: 5px;
+        }
+
+        .message-input {
+            display: flex;
+            padding: 20px;
+            background-color: var(--card-dark);
+        }
+
+        .message-input input {
+            flex-grow: 1;
+            padding: 15px;
+            background-color: #2c2c4a;
+            border: none;
+            border-radius: 10px;
+            color: var(--text-primary);
+            margin-right: 15px;
+        }
+
+        .message-input button {
+            background-color: var(--accent-purple);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .message-input button:hover {
+            background-color: #5a4acd;
+        }
+    </style>
+</head>
+<body>
+    <div class="messaging-container">
+        <div class="sidebar">
+            <ul class="conversation-list" id="conversationList">
+                <!-- Conversations will be dynamically added here -->
+            </ul>
+        </div>
+        <div class="chat-area">
+            <div class="chat-header" id="chatHeader">
+                <!-- Selected conversation details will appear here -->
+            </div>
+            <div class="messages-container" id="messagesContainer">
+                <!-- Messages will be dynamically added here -->
+            </div>
+            <div class="message-input">
+                <input type="text" id="messageInput" placeholder="Type your message...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const conversations = [
+            {
+                id: 1,
+                name: 'Alex Johnson',
+                avatar: 'AJ',
+                messages: [
+                    { id: 1, text: 'Hey, how are you doing today?', type: 'received', time: '10:15 AM' },
+                    { id: 2, text: 'I\'m great! Just finished an amazing project.', type: 'sent', time: '10:16 AM' },
+                    { id: 3, text: 'That\'s awesome! Can you tell me more about it?', type: 'received', time: '10:17 AM' }
+                ],
+                unread: 2
+            },
+            {
+                id: 2,
+                name: 'Sarah Williams',
+                avatar: 'SW',
+                messages: [
+                    { id: 1, text: 'Meeting is scheduled for tomorrow at 2 PM.', type: 'received', time: '9:45 AM' },
+                    { id: 2, text: 'Got it, I\'ll be prepared.', type: 'sent', time: '9:46 AM' }
+                ],
+                unread: 1
+            }
+        ];
+
+        let currentConversationId = null;
+
+        function renderConversations() {
+            const conversationList = document.getElementById('conversationList');
+            conversationList.innerHTML = '';
+
+            conversations.forEach(conv => {
+                const li = document.createElement('li');
+                li.classList.add('conversation-item');
+                li.dataset.id = conv.id;
+
+                li.innerHTML = `
+                    <div class="avatar">${conv.avatar}</div>
+                    <div class="conversation-details">
+                        <div class="conversation-name">${conv.name}</div>
+                        <div class="conversation-preview">${conv.messages[conv.messages.length - 1].text}</div>
+                    </div>
+                    ${conv.unread > 0 ? `<div class="unread-badge">${conv.unread}</div>` : ''}
+                `;
+
+                li.addEventListener('click', () => selectConversation(conv.id));
+                conversationList.appendChild(li);
+            });
+        }
+
+        function selectConversation(id) {
+            currentConversationId = id;
+            const conversation = conversations.find(c => c.id === id);
+            
+            // Update active state
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.conversation-item[data-id="${id}"]`).classList.add('active');
+
+            // Render chat header
+            const chatHeader = document.getElementById('chatHeader');
+            chatHeader.innerHTML = `
+                <div class="avatar">${conversation.avatar}</div>
+                <div class="conversation-details">
+                    <div class="conversation-name">${conversation.name}</div>
+                </div>
+            `;
+
+            // Render messages
+            renderMessages(conversation.messages);
+        }
+
+        function renderMessages(messages) {
+            const messagesContainer = document.getElementById('messagesContainer');
+            messagesContainer.innerHTML = '';
+
+            messages.forEach(msg => {
+                const msgElement = document.createElement('div');
+                msgElement.classList.add('message', msg.type);
+                msgElement.innerHTML = `
+                    ${msg.text}
+                    <div class="message-time">${msg.time}</div>
+                `;
+                messagesContainer.appendChild(msgElement);
+            });
+
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const messageText = input.value.trim();
+
+            if (messageText && currentConversationId) {
+                const conversation = conversations.find(c => c.id === currentConversationId);
+                
+                const newMessage = {
+                    id: conversation.messages.length + 1,
+                    text: messageText,
+                    type: 'sent',
+                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                };
+
+                conversation.messages.push(newMessage);
+                renderMessages(conversation.messages);
+                input.value = '';
+            }
+        }
+
+        // Initial render
+        renderConversations();
+        selectConversation(conversations[0].id);
+    </script>
+</body>
+</html>
