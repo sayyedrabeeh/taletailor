@@ -1,149 +1,254 @@
-Tailtailor: The Ultimate AI-Powered Storytelling Ecosystem
-An Immersive Creative Platform Where Technology Meets Imagination
-StoryWeave transforms traditional storytelling into a dynamic, interactive experience through an innovative full-stack platform that marries advanced AI story generation with robust social connectivity. This comprehensive ecosystem empowers users to craft narratives that resonate across multiple dimensions of creativity and engagement.
+# StoryWeave 📚✨
 
-✨ Core Experience
-AI Story Generation Studio
-Experience the thrill of co-creating with artificial intelligence. The AI generation process guides users through a thoughtfully designed multi-step journey:
+A full-stack AI-powered interactive storytelling platform that combines story generation with social media features.
 
-Emotional Blueprint: Select the emotional palette for your story—from heart-pounding suspense to tear-jerking melancholy or uplifting joy
-Narrative Architecture: Choose between short, concise tales or expansive, richly detailed epics
-Thematic Framework: Select foundational themes like medieval fantasy, cyberpunk dystopia, romantic period drama, cosmic horror, and more
-Situational Springboard: Provide a starting scenario that the AI will develop into a complete narrative
-Character Ensemble: Define the cast of characters who will bring your story to life
-Setting Canvas: Establish the worlds, locations, and environments where your tale unfolds
+![StoryWeave Banner](https://placeholder-image-url.com/storyweave-banner.jpg)
 
-Once parameters are set, the Falcon-7b-instruct model crafts a unique narrative tailored to your specifications, creating stories that feel personal and original.
-Manual Creation Workshop
-For those preferring complete creative control, the platform offers an intuitive rich-text editor with:
+## 🌟 Features
 
-Word Count Tracking: Real-time monitoring of story length with minimum thresholds (300 words) to ensure substantial content
-Formatting Tools: Text styling options for creating visually appealing narratives
-Draft Saving: Automatic preservation of works-in-progress
-Image Integration: Cover image generation based on story themes and titles
+### AI Story Generation
+Generate unique stories by selecting emotions, themes, length, and situational elements:
 
+![AI Story Generation](https://placeholder-image-url.com/ai-story-demo.gif)
 
-🌈 Adaptive Emotional Design
-StoryWeave's signature feature is its responsive emotional theming system that transforms the entire reading experience based on story content:
+```
+Example parameters:
+- Emotion: Suspenseful
+- Length: Medium
+- Theme: Mystery
+- Situation: "A detective finds an unusual object at a crime scene"
+```
 
-Romantic Tales: Soft pink interfaces with heart motifs and gentle transitions
-Horror Stories: Dark mode with high contrast, eerie fonts, and subtle animated shadows
-Adventure Narratives: Earth tones with compass-inspired navigation elements and dynamic backgrounds
-Sci-Fi Worlds: Futuristic neon blue interfaces with tech-inspired animations
-Mystery Plots: Deep purple themes with fog effects and clue-inspired design elements
-Fantasy Epics: Magical green interfaces with ancient scroll styling and mystical iconography
-Comedy Pieces: Vibrant yellow themes with playful typography and light-hearted animations
+### Collaborative Storytelling
+Invite others to co-create stories with real-time collaboration:
 
-Each emotional category triggers a complete interface transformation, creating an immersive container that enhances the story's impact and transports readers more deeply into the narrative world.
+![Collaboration Demo](https://placeholder-image-url.com/collaboration-demo.gif)
 
-🤝 Collaborative Storytelling Ecosystem
-Invitation System
-Build creative partnerships through a sophisticated collaboration system:
+### Dynamic Emotional Theming
+Interface adapts to match story emotions:
 
-Collaborator Discovery: Search functionality to find potential co-authors by username
-Invitation Dashboard: Central hub for managing outgoing and incoming collaboration requests
-Notification System: Real-time alerts when collaboration invitations arrive
-Acceptance Workflow: One-click process to join collaborative projects
+| Emotion | Theme Preview |
+|---------|---------------|
+| Romantic | ![Romantic Theme](https://placeholder-image-url.com/romantic-theme.jpg) |
+| Horror | ![Horror Theme](https://placeholder-image-url.com/horror-theme.jpg) |
+| Adventure | ![Adventure Theme](https://placeholder-image-url.com/adventure-theme.jpg) |
 
-Collaborative Workspace
-Once a collaboration begins, co-authors enter a shared creative environment:
+### Social Features
+- Like stories
+- Track views
+- Discover trending content
+- Follow favorite authors
 
-Version History: Track changes and contributions from each collaborator
-Contribution Tracking: Visual indicators showing which sections were written by which authors
-Pre-Publication Editing: All collaborators can modify and enhance the story until publication
-Publishing Controls: Story creator maintains final publication authority
-Collaboration Locking: After publication, the story becomes read-only for all collaborators
+![Social Features](https://placeholder-image-url.com/social-features.gif)
 
+### Accessibility Features
+- Translate stories to any language
+- Text-to-speech narration
+- Download as PDF
 
-🌎 Accessibility & Global Reach
-Universal Language Support
-Break down language barriers with comprehensive translation capabilities:
+![Accessibility Demo](https://placeholder-image-url.com/accessibility-demo.gif)
 
-One-Click Translation: Transform stories into 100+ languages via Google Translator integration
-Original/Translated Toggle: Easily switch between original and translated versions
-Language Preference Memory: System remembers user language preferences
+## 🚀 Installation
 
-Audio Experience
-Transform written stories into engaging audio narratives:
+### Prerequisites
+- Python 3.8+
+- Django 4.0+
+- Node.js 14+
+- PostgreSQL
 
-Text-to-Speech Conversion: Convert any story into spoken word with natural-sounding narration
-Voice Selection: Choose from multiple voice options for different storytelling styles
-Audio Controls: Playback speed adjustment, pause/resume functionality, and position memory
-Background Ambience: Optional themed background sounds that match story genres
+### Setup Instructions
 
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/storyweave.git
+   cd storyweave
+   ```
 
-🔍 Discovery & Engagement
-Exploration Interface
-Find perfect stories through sophisticated discovery mechanisms:
+2. **Set up virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-Emotion-Based Filtering: Browse stories by specific emotional experiences
-Length Categorization: Find quick reads or deeper narratives based on time availability
-Genre Navigation: Explore stories by thematic categories
-Multi-Parameter Search: Combine filters for highly specific content discovery
-Trending Algorithm: Stories gaining rapid popularity receive featured placement
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Social Engagement Framework
-Build community through interactive features:
+4. **Environment variables**
+   Create a `.env` file in the root directory:
+   ```
+   SECRET_KEY=your_django_secret_key
+   DEBUG=True
+   DATABASE_URL=postgresql://user:password@localhost/storyweave
+   HUGGINGFACE_API_KEY=your_huggingface_api_key
+   UNSPLASH_ACCESS_KEY=your_unsplash_key
+   EMAIL_HOST=smtp.example.com
+   EMAIL_PORT=587
+   EMAIL_HOST_USER=your_email@example.com
+   EMAIL_HOST_PASSWORD=your_email_password
+   ```
 
-Like System: Express appreciation for stories with one-click engagement
-View Counters: Transparent metrics showing story popularity
-Comment Threads: Discuss and provide feedback on stories
-Reader Profiles: View reading history and preferences
-Similar Story Recommendations: AI-powered suggestion engine for content discovery
+5. **Database setup**
+   ```bash
+   python manage.py migrate
+   ```
 
+6. **Run the development server**
+   ```bash
+   python manage.py runserver
+   ```
 
-🛠️ Professional Tools & Utilities
-Export Functionality
-Take stories beyond the digital platform:
+## 📊 Project Structure
 
-Professional PDF Generation: Export stories as beautifully formatted documents with:
+```
+storyweave/
+├── authentication/      # User authentication, profiles, admin views
+├── Mystory/             # Core story models and main user functionality
+├── aistory/             # AI story generation and enhanced features
+├── static/              # CSS, JS, images
+│   ├── css/             # Stylesheets including emotional themes
+│   ├── js/              # JavaScript files
+│   └── images/          # Static images and icons
+├── templates/           # HTML templates
+└── manage.py            # Django management script
+```
 
-Custom headers and footers
-Professional typography and layout
-Story metadata and attribution
-Optional watermarking
-Page numbering and document structure
+## 🧩 Core Components
 
+### Models
+- User: Authentication and profile information
+- Story: Central story content and metadata
+- StoryLike: Tracks likes on stories
+- StoryView: Tracks views on stories
+- CollaborationInvite: Manages collaboration invitations
+- Profile: Extended user profile information
 
+### Key Views
+- AI story generation workflow
+- Story editing and collaboration
+- Exploration and discovery
+- Translation and text-to-speech
+- Social interaction (likes, views)
 
-Analytics Dashboard
-Gain insights through comprehensive metrics:
+## 🔧 API Integration
 
-Engagement Tracking: Monitor views, likes, and time spent reading
-Demographic Information: Understand audience composition
-Performance Comparison: See how stories perform against platform averages
-Growth Visualization: Track popularity trends over time
+### HuggingFace AI
+Uses the Falcon-7b-instruct model for story generation:
 
+```python
+def generate_story(prompt):
+    API_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+    payload = {
+        "inputs": prompt,
+        "parameters": {
+            "max_length": 700,
+            "temperature": 0.9,
+            "top_p": 0.95,
+            "repetition_penalty": 1.2,
+        }
+    }
 
-👤 User Experience & Interface
-Profile Customization
-Create a personalized presence within the community:
+    response = requests.post(API_URL, headers=headers, json=payload)
+    if response.status_code == 200:
+        data = response.json()
+        return data[0]["generated_text"]
+    else:
+        return "Error: Couldn't generate story."
+```
 
-Bio Information: Share writing interests and personal background
-Profile Pictures: Visual representation within the community
-Contact Details: Optional information for networking opportunities
-Achievement Badges: Visual indicators of publishing milestones and community recognition
+### Unsplash API
+Fetches relevant images for story covers:
 
-Responsive Design
-Access StoryWeave across all devices with optimized experiences:
+```python
+def get_unsplash_image(query):
+    access_key = 'your_unsplash_access_key'  
+    url = f"https://api.unsplash.com/photos/random?query={query}&client_id={access_key}"    
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        image_url = data['urls']['regular']
+        image_response = requests.get(image_url)
+        if image_response.status_code == 200:
+            return ContentFile(image_response.content)  
+    return None
+```
 
-Desktop Optimization: Full-featured interface for writing and reading
-Tablet Adaptation: Touch-friendly controls with maintained functionality
-Mobile Experience: Streamlined interface focusing on reading experience with simplified writing tools
+### Google Translator
+Provides multi-language support:
 
+```python
+def translate_story(story_content, target_language):
+    return GoogleTranslator(source='auto', target=target_language).translate(story_content)
+```
 
-🔐 Security & Administration
-User Authentication
-Protect accounts with robust security measures:
+## 🖌️ Emotional Theming
 
-Email Verification: OTP (One-Time Password) system for account validation
-Session Management: Secure login persistence with appropriate timeout controls
-Password Security: Strong hashing and storage protocols
+The `emotion_theme` context processor determines the appropriate theme based on story emotions:
 
-Administrative Controls
-Maintain platform integrity through powerful admin tools:
+```python
+def emotion_theme(request):
+    theme_class = 'theme-neutral'
+    theme_emoji = '😊'
+    
+    story_id = request.resolver_match.kwargs.get('story_id')
+    
+    if story_id:
+        from Mystory.models import Story
+        try:
+            story = Story.objects.get(id=story_id)
+            emotions = story.emotions.lower() if story and story.emotions else ''
+            
+            theme_map = {
+                'happy': {'class': 'theme-happy', 'emoji': '😄'},
+                'sad': {'class': 'theme-sad', 'emoji': '😢'},
+                'romantic': {'class': 'theme-romantic', 'emoji': '❤️'},
+                'thriller': {'class': 'theme-thriller', 'emoji': '😱'},
+                # Additional emotion mappings...
+            }
+            
+            if ',' in emotions:
+                primary_emotion = emotions.split(',')[0].strip()
+                theme_data = theme_map.get(primary_emotion, {'class': 'theme-neutral', 'emoji': '😊'})
+            else:
+                theme_data = theme_map.get(emotions, {'class': 'theme-neutral', 'emoji': '😊'})
+                
+            theme_class = theme_data['class']
+            theme_emoji = theme_data['emoji']
+        except Story.DoesNotExist:
+            pass
+    
+    return {
+        'theme_class': theme_class,
+        'theme_emoji': theme_emoji
+    }
+```
 
-Content Moderation: Tools for reviewing and moderating inappropriate content
-User Management: Capabilities for account suspension and management
-Analytics Dashboard: Platform-wide metrics for monitoring growth and engagement
-Story Management: Tools for featuring exceptional content and managing reported items
+## 👥 Contributing
+
+We welcome contributions to StoryWeave!
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📬 Contact
+
+Project Link: [https://github.com/yourusername/storyweave](https://github.com/yourusername/storyweave)
+
+## 🙏 Acknowledgements
+
+- [Django](https://www.djangoproject.com/)
+- [HuggingFace](https://huggingface.co/)
+- [Unsplash](https://unsplash.com/)
+- [Google Translator](https://cloud.google.com/translate)
+- [gTTS](https://gtts.readthedocs.io/)
