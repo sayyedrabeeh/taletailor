@@ -153,7 +153,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'taletailor',   
-        'USER': 'postgres',  # Your PostgreSQL username 
+        'USER': 'postgres', # Your PostgreSQL username 
         'PASSWORD': '920728',  # Your PostgreSQL password 
         'HOST': 'localhost',  # Keep 'localhost' if running locally
         'PORT': '5432',  # Default PostgreSQL port

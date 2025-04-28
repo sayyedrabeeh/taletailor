@@ -6,10 +6,10 @@ from .views import signup,verify_otp,home,login_view,logout_view,users,toggle_bl
 app_name = 'authentication' 
 
 urlpatterns = [
-    path('',signup,name='signup'),
+    path('signup/',signup,name='signup'),
     path('login/',login_view,name='login'),
     path('logout/',logout_view,name='logout'),
-    path('home/',home,name='home'),
+    path('',home,name='home'),
     path('stories/',stories,name='stories'),
     path("stories/delete/<int:story_id>/", delete_story, name="delete_story"),
 

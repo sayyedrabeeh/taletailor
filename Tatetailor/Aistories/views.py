@@ -11,6 +11,7 @@ from Mystory.views import get_unsplash_image
 from deep_translator import GoogleTranslator
 from gtts import gTTS
 from django.contrib.auth.decorators import login_required
+import subprocess
 
 
 
@@ -195,7 +196,7 @@ def generate_story(prompt):
     API_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
 
     headers = {
-        "Authorization": f"Bearer {HUGGINGFACE_API_KEY}"
+        "Authorization": f"Bearer {access_token}"
     }
     payload = {
         "inputs": prompt,
@@ -216,6 +217,7 @@ def generate_story(prompt):
         return data[0]["generated_text"]
     else:
         return "Error: Couldn't generate story."
+    
     
 @login_required(login_url='authentication:login')  
 def post_private_story(request):
