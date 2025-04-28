@@ -1,12 +1,14 @@
 # 🌟 Tail Tailor: AI Story Generator + Story Social Media 🌟
 
-![Tail Tailor Banner](https://placeholder-image-url.com/tail-tailor-banner.jpg)
+![Tail Tailor Banner](/screenshots/home.png)
 
 ## ✨ Welcome to Tail Tailor
 
 Tail Tailor is a revolutionary full-stack platform that brings together cutting-edge AI story generation with vibrant social media features, creating a dynamic ecosystem for storytellers and readers alike. Create, collaborate, share, and experience stories in ways never before possible!
 
-![Story Generation Demo](https://placeholder-image-url.com/story-generation-demo.gif)
+![Story Generation Demo](/screenshots/createstory.png)
+
+## 🌟  VIDEO DEMO
 
 ## 🚀 Features
 
@@ -20,18 +22,17 @@ Transform your ideas into captivating narratives with our advanced AI engine:
 - **Character Development**: Specify number of characters and their relationships
 - **Situational Prompts**: Start with a specific scenario and watch the AI expand it into a full story
 
-![Emotion Selection Interface](https://placeholder-image-url.com/emotion-selection.jpg)
+![Emotion Selection Interface](/screenshots/createaigeneratestory.png)
+![Emotion Selection Interface](/screenshots/createaigenerete2.png)
 
 ### 📝 Story Creation & Management
 Express yourself through our intuitive story creation tools:
-
-- **Rich Text Editor**: Craft your stories with a powerful formatting toolkit
-- **Draft Saving**: Never lose your work with automatic saving
+ 
 - **Public/Private Options**: Choose whether to share your story with the world or keep it personal
 - **Word Count Tracking**: Monitor your story's length as you write
 - **Custom Cover Images**: Each story gets a unique cover image based on its title
 
-![Story Editor Interface](https://placeholder-image-url.com/story-editor.jpg)
+![Story Editor Interface](/screenshots/createcollabrtedstory.png)
 
 ### 👥 Collaborative Storytelling
 Create together with friends, family, or new connections:
@@ -42,7 +43,7 @@ Create together with friends, family, or new connections:
 - **Publication Control**: Once published, stories become read-only for collaborators
 - **Contribution Tracking**: See who wrote what in collaborative works
 
-![Collaboration Demo](https://placeholder-image-url.com/collaboration-demo.gif)
+![Collaboration Demo](/screenshots/createcollabretions.png)
 
 ### 🌈 Dynamic Emotional Theming
 Experience stories in a completely immersive way:
@@ -55,9 +56,9 @@ Experience stories in a completely immersive way:
 
 | Emotion | Theme Preview |
 |---------|---------------|
-| Romantic | ![Romantic Theme](https://placeholder-image-url.com/romantic-theme.jpg) |
-| Horror | ![Horror Theme](https://placeholder-image-url.com/horror-theme.jpg) |
-| Adventure | ![Adventure Theme](https://placeholder-image-url.com/adventure-theme.jpg) |
+| Romantic | ![Romantic Theme](/screenshots/angeremotionstory.png) |
+| Horror | ![Horror Theme](/screenshots/hororemotionstory.png) |
+| Adventure | ![Adventure Theme](/screenshots/adventereemotionalstory.png) |
 
 ### 🔍 Discover & Explore
 Find your next favorite story with our advanced discovery features:
@@ -68,7 +69,8 @@ Find your next favorite story with our advanced discovery features:
 - **Trending Section**: Discover the most popular stories on the platform
 - **Similar Stories**: Get recommendations based on your reading history
 
-![Discovery Interface](https://placeholder-image-url.com/discovery-interface.jpg)
+![Discovery Interface](/screenshots/explore1.png)
+![Discovery Interface](/screenshots/explore2.png)
 
 ### 💬 Social Engagement
 Connect with a community of storytellers and readers:
@@ -76,22 +78,19 @@ Connect with a community of storytellers and readers:
 - **Like System**: Show appreciation for stories you enjoy
 - **View Tracking**: See how many people have read your stories
 - **User Profiles**: Customize your profile with bio and profile picture
-- **Follow Authors**: Keep up with your favorite storytellers
-- **Story Stats**: Track engagement metrics for your published works
 
-![Social Features](https://placeholder-image-url.com/social-features.jpg)
+
+![Social Features](/screenshots/unemotionedstory.png)
 
 ### 🌐 Accessibility Features
 Make stories accessible to everyone:
 
 - **One-Click Translation**: Translate stories into multiple languages
 - **Text-to-Speech**: Listen to stories with natural-sounding narration
-- **Responsive Design**: Perfect experience on any device
 - **PDF Export**: Download stories as beautifully formatted documents
 - **Reading Time Estimates**: Know how long a story will take to read
 
-![Accessibility Features](https://placeholder-image-url.com/accessibility-features.jpg)
-
+![Accessibility Features](/screenshots/Happyemotionstory.png)
 ### 👤 User Authentication & Profiles
 Secure and personalized experience:
 
@@ -101,7 +100,8 @@ Secure and personalized experience:
 - **Activity Tracking**: See your interactions across the platform
 - **Account Settings**: Manage your preferences and privacy options
 
-![User Profile](https://placeholder-image-url.com/user-profile.jpg)
+![User Profile](/screenshots/login.png)
+![User Profile](/screenshots/Mystory.png)
 
 ### 👑 Administrative Tools
 Powerful tools for platform management:
@@ -112,7 +112,8 @@ Powerful tools for platform management:
 - **Story Management**: Feature exceptional stories or remove inappropriate content
 - **System Health Monitoring**: Keep the platform running smoothly
 
-![Admin Dashboard](https://placeholder-image-url.com/admin-dashboard.jpg)
+![Admin Dashboard](/screenshots/dashbord.png)
+![Admin Dashboard](/screenshots/users.png)
 
 ## 🛠️ Technology Stack
 
@@ -143,7 +144,7 @@ tail-tailor/
 - Python 3.8+
 - Django 4.0+
 - PostgreSQL
-- Node.js (for frontend build tools)
+ 
 
 ### Setup Instructions
 
@@ -156,7 +157,7 @@ tail-tailor/
 2. **Create and activate virtual environment**
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   venv\Scripts\activate
    ```
 
 3. **Install dependencies**
@@ -276,27 +277,8 @@ def emotion_theme(request):
     }
 ```
 
-## 📱 Mobile-Friendly Design
-
-Tail Tailor is designed with responsiveness in mind:
-
-- **Adaptive Layout**: Automatically adjusts to any screen size
-- **Touch-Friendly Controls**: Easy to use on mobile devices
-- **Optimized Reading Experience**: Comfortable story consumption on any device
-- **Consistent Theming**: Emotional themes work seamlessly across all devices
-
-![Mobile Interface](https://placeholder-image-url.com/mobile-interface.jpg)
-
-## 🔮 Future Enhancements
-
-We're continuously working to improve Tail Tailor with exciting new features:
-
-- **Audio Stories**: Record your voice for narrated stories
-- **Story Challenges**: Themed writing competitions
-- **Enhanced AI Models**: More powerful and nuanced story generation
-- **Community Groups**: Create writing circles and book clubs
-- **Interactive Stories**: Choose-your-own-adventure style narratives
-- **Merchandising**: Turn popular stories into physical books
+ 
+ 
 
 ## 👥 Contributing
 
@@ -308,9 +290,7 @@ We welcome contributions to make Tail Tailor even better!
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+ 
 
 ## 🙏 Acknowledgements
 
@@ -322,12 +302,12 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📬 Contact
 
-- Project Link: [https://github.com/yourusername/tail-tailor](https://github.com/yourusername/tail-tailor)
-- Website: [https://tailtailor.com](https://tailtailor.com)
-- Email: contact@tailtailor.com
+- Github: [https://github.com/sayyedrabeeh/](https://github.com/sayyedrabeeh)
+- linkdin: [http](https://www.linkedin.com/in/sayyed-rabeeh/)
+- Email: sayyedrabeeh240@gmail.com
 
 ---
 
-### 💫 "Where AI and Human Creativity Weave Tales Together" 💫
+### 💫 "HAPPY CODING ! " 💫
 
-![Footer Image](https://placeholder-image-url.com/tail-tailor-footer.jpg)
+ 
