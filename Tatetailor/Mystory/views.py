@@ -20,7 +20,7 @@ import requests
 from django.conf import settings
 import os
 from dotenv import load_dotenv
-
+from  .models import Follower
 import requests
 from django.core.files.base import ContentFile
 from django.db.models import Q
@@ -377,3 +377,19 @@ def delete_story(request, story_id):
         story.delete()
         messages.success(request, "Story deleted successfully.")
     return redirect("mystory:mystory1")
+
+def author_profile(request,username):
+    author = get_object_or_404(User,username=username)
+    stories = Story.objects.filter(user=author)
+    collabrated = Story.objects.filter(collaborators = author).exclude( user=author)
+    total_stories = stories.count()
+    total_collab =collabrated.count()
+    is_following = Follower.objects.filter(follower=request.user, following=author).exists() if request.user.is_authenticated else False
+    return render(request,'author_profile.html',{
+        "author": author,
+        "stories": stories,
+        "collaborated": collabrated,
+        "total_stories": total_stories,
+        "total_collab": total_collab,
+        "is_following": is_following,
+    })
