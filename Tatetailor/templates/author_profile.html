@@ -1,33 +1,682 @@
- 
-<div class="author-profile">
-  <div class="header">
-    <h1>{{ author.username }}</h1>
-    {% if request.user.is_authenticated and request.user != author %}
-      <form method="POST" action=" ">
-        {% csrf_token %}
-        <button type="submit" class="follow-btn">
-          {% if is_following %}Unfollow{% else %}Follow{% endif %}
-        </button>
-      </form>
-    {% endif %}
-  </div>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ author.username }} - Author Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            /* Root theme colors and styling */
+            --primary-color: #4a0e5c;
+            --secondary-color: #1fc55c;
+            --accent-color: #8a0e74;
+            --background-color: #121212;
+            --card-background: #1e1e1e;
+            --text-color: #e0e0e0;
+            --light-text: #a0aec0;
+            --border-color: #333333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            --border-radius: 8px;
+            --header-gradient: linear-gradient(135deg, #4a0e5c, #8a0e74);
+        }
 
-   
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-  <div class="story-section">
-    <h2>Stories by {{ author.username }}</h2>
-    <ul>
-      {% for story in stories %}
-        <li><a href="{% url 'mystory:edit_story' story.id %}">{{ story.title }}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
 
-  <div class="chatbot-container">
-    <h3>Ask about {{ author.username }}'s stories</h3>
-    <input type="text" id="chat-input" placeholder="Ask something..." />
-    <button  >Ask</button>
-    <div id="chat-response"></div>
-  </div>
-</div>
- 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Profile Header Section */
+        .profile-header {
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            position: relative;
+            border-top: 4px solid var(--primary-color);
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--header-gradient);
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--secondary-color);
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-info {
+            margin-left: 2rem;
+            flex-grow: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-username {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .profile-bio {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: var(--light-text);
+            line-height: 1.6;
+            max-width: 80%;
+        }
+
+        .follow-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background-color: var(--secondary-color);
+            color: #121212;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(31, 197, 92, 0.3);
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .follow-btn:hover {
+            background-color: #17a44a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(31, 197, 92, 0.5);
+        }
+
+        .following-btn {
+            background-color: var(--card-background);
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .following-btn:hover {
+            background-color: rgba(31, 197, 92, 0.1);
+        }
+
+        /* Main Content Section */
+        /* .profile-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        } */
+
+        .stories-section, .sidebar-section {
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            letter-spacing: 0.5px;
+            background-color: rgba(31, 197, 92, 0.08);
+        }
+
+        .section-title i {
+            margin-right: 0.8rem;
+            color: var(--secondary-color);
+        }
+
+        .section-content {
+            padding: 1.5rem;
+        }
+
+        /* Stories Grid */
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .story-card {
+            background-color: rgba(30, 30, 30, 0.8);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .story-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border-color: var(--secondary-color);
+        }
+        
+        .story-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+        
+        .story-card:hover::after {
+            width: 100%;
+        }
+
+        .story-card-img {
+            height: 160px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .story-card-content {
+            padding: 1rem;
+        }
+
+        .story-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .story-excerpt {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .story-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--light-text);
+        }
+
+        .meta-icon {
+            display: flex;
+            align-items: center;
+        }
+
+        .meta-icon i {
+            margin-right: 4px;
+            color: var(--secondary-color);
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .ai-badge {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .collab-badge {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .genre-badge {
+            background-color: rgba(31, 197, 92, 0.2);
+            color: var(--secondary-color);
+        }
+
+        /* Chat and Sidebar Sections */
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-block {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-block:last-child {
+            border-bottom: none;
+        }
+
+        .chat-input-group {
+            display: flex;
+            margin-top: 1rem;
+        }
+
+        #chat-input {
+            flex-grow: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 25px 0 0 25px;
+            font-size: 1rem;
+            outline: none;
+            background-color: rgba(30, 30, 30, 0.9);
+            color: var(--text-color);
+        }
+
+        #chat-input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        .ask-btn {
+            background-color: var(--secondary-color);
+            color: #121212;
+            border: none;
+            border-radius: 0 25px 25px 0;
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .ask-btn:hover {
+            background-color: #17a44a;
+        }
+
+        #chat-response {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: rgba(31, 197, 92, 0.08);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--secondary-color);
+            min-height: 60px;
+            display: none;
+            color: var(--text-color);
+        }
+
+        .interest-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .interest-tag {
+            background-color: rgba(31, 197, 92, 0.1);
+            color: var(--secondary-color);
+            padding: 0.4rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .popular-story {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .popular-story:last-child {
+            border-bottom: none;
+        }
+
+        .popular-story-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .popular-story-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--light-text);
+        }
+
+        .tab-container {
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            padding: 0 1.5rem;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--light-text);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .no-stories {
+            text-align: center;
+            padding: 2rem;
+            color: var(--light-text);
+            font-style: italic;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            /* .profile-content {
+                grid-template-columns: 1fr;
+            }
+             */
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-info {
+                margin-left: 0;
+                margin-top: 1.5rem;
+            }
+            
+            .profile-bio {
+                max-width: 100%;
+            }
+            
+            .follow-btn {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 1.5rem;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <img src="{{ author.profile.profile_picture.url|default:'/api/placeholder/400/400' }}" alt="{{ author.username }}" class="profile-avatar">
+                <div class="profile-info">
+                    <h1 class="profile-username">{{ author.username }}</h1>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">{{ total_stories }}</div>
+                            <div class="stat-label">Stories</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">{{ total_collab }}</div>
+                            <div class="stat-label">Collaborations</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">{{ author.followers.count }}</div>
+                            <div class="stat-label">Followers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">{{ author.following.count }}</div>
+                            <div class="stat-label">Following</div>
+                        </div>
+                    </div>
+                    <p class="profile-bio">{{ author.profile.bio|default:"Creative storyteller and avid reader." }} Joined on {{ author.date_joined|date:"M d, Y" }}</p>
+                </div>
+                {% if request.user.is_authenticated and request.user != author %}
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="follow-btn {% if is_following %}following-btn{% endif %}">
+                        {% if is_following %}
+                        <i class="fas fa-user-check"></i> Following
+                        {% else %}
+                        <i class="fas fa-user-plus"></i> Follow
+                        {% endif %}
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+
+            <!-- Main Content -->
+            <div class="profile-content">
+                <!-- Stories Section -->
+                <div class="stories-section">
+                    <div class="tab-container">
+                        <div class="tab active" data-tab="stories"><i class="fas fa-book"></i> Stories</div>
+                        <div class="tab" data-tab="collaborations"><i class="fas fa-users"></i> Collaborations</div>
+                    </div>
+                    
+                    <div id="stories-tab" class="tab-content active">
+                        <h2 class="section-title"><i class="fas fa-book"></i>Stories by {{ author.username }}</h2>
+                        <div class="section-content">
+                            {% if stories %}
+                            <div class="story-grid">
+                                {% for story in stories %}
+                                <div class="story-card">
+                                    {% if story.image %}
+                                    <img src="{{ story.image.url }}" alt="{{ story.title }}" class="story-card-img">
+                                    {% else %}
+                                    <img src="{% static 'images/logo4.webp' %}" alt="okkk" class="story-card-img">                                    {% endif %}
+                                    <div class="story-card-content">
+                                        {% if story.is_ai_generated %}
+                                        <span class="badge ai-badge">AI Created</span>
+                                        {% endif %}
+                                        {% if story.is_collaborated %}
+                                        <span class="badge collab-badge">Collaboration</span>
+                                        {% endif %}
+                                        {% if story.genre %}
+                                        <span class="badge genre-badge">{{ story.get_genre_display }}</span>
+                                        {% endif %}
+                                        <h3 class="story-card-title">{{ story.title }}</h3>
+                                        <p class="story-excerpt">{{ story.content|truncatechars:100 }}</p>
+                                        <div class="story-card-meta">
+                                            <span class="meta-icon"><i class="fas fa-calendar"></i> {{ story.created_at|date:"M d, Y" }}</span>
+                                            <span class="meta-icon"><i class="fas fa-heart"></i> {{ story.likes.count }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="no-stories">
+                                <p>No stories published yet.</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div id="collaborations-tab" class="tab-content">
+                        <h2 class="section-title"><i class="fas fa-users"></i>Collaborated Stories</h2>
+                        <div class="section-content">
+                            {% if collaborated %}
+                            <div class="story-grid">
+                                {% for story in collaborated %}
+                                <div class="story-card">
+                                    {% if story.image %}
+                                    <img src="{{ story.image.url }}" alt="{{ story.title }}" class="story-card-img">
+                                    {% else %}
+                                    <img src="{% static 'images/logo4.webp' %}" alt="okkk" class="story-card-img">                                     {% endif %}
+                                    <div class="story-card-content">
+                                        <span class="badge collab-badge">Collaboration</span>
+                                        {% if story.is_ai_generated %}
+                                        <span class="badge ai-badge">AI Created</span>
+                                        {% endif %}
+                                        {% if story.genre %}
+                                        <span class="badge genre-badge">{{ story.get_genre_display }}</span>
+                                        {% endif %}
+                                        <h3 class="story-card-title">{{ story.title }}</h3>
+                                        <p class="story-excerpt">{{ story.content|truncatechars:100 }}</p>
+                                        <div class="story-card-meta">
+                                            <span class="meta-icon"><i class="fas fa-calendar"></i> {{ story.created_at|date:"M d, Y" }}</span>
+                                            <span class="meta-icon"><i class="fas fa-heart"></i> {{ story.likes.count }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="no-stories">
+                                <p>No collaborations yet.</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+
+            // Chat functionality
+            const chatInput = document.getElementById('chat-input');
+            const askButton = document.getElementById('ask-button');
+            const chatResponse = document.getElementById('chat-response');
+
+            askButton.addEventListener('click', function() {
+                const question = chatInput.value.trim();
+                if (!question) return;
+
+                // Show loading state
+                chatResponse.style.display = 'block';
+                chatResponse.innerHTML = 'Thinking...';
+
+                // Send to backend API
+                fetch('/api/chat/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        author: '{{ author.username }}'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    chatResponse.innerHTML = data.response;
+                })
+                .catch(error => {
+                    // Fallback responses if API fails
+                    chatResponse.innerHTML = getResponseForQuestion(question);
+                });
+            });
+
+            // Fallback chat responses
+            function getResponseForQuestion(question) {
+                question = question.toLowerCase();
+                
+                if (question.includes('favorite') || question.includes('best')) {
+                    return "{{ author.username }}'s most popular story is {% if popular_stories.0 %}'{{ popular_stories.0.title }}' with {{ popular_stories.0.likes.count }} likes!{% else %}still being discovered by readers.{% endif %}";
+                } else if (question.includes('recent') || question.includes('latest')) {
+                    return "{{ author.username }}'s most recent story is {% if stories.0 %}'{{ stories.0.title }}' published on {{ stories.0.created_at|date:'M d, Y' }}.{% else %}coming soon.{% endif %}";
+                } else if (question.includes('how many') || question.includes('count')) {
+                    return "{{ author.username }} has published {{ total_stories }} stories and collaborated on {{ total_collab }} more.";
+                } else if (question.includes('genre') || question.includes('type')) {
+                    return "{{ author.username }} {% if genre_counts %}writes primarily {% for genre, count in genre_counts.items|slice:':2' %}{{ genre }}{% if not forloop.last %} and {% endif %}{% endfor %} stories.{% else %}explores various genres in their writing.{% endif %}";
+                } else {
+                    return "I'd be happy to help you learn more about {{ author.username }}'s stories. You can ask about popular stories, writing style, genres, or recent publications!";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
