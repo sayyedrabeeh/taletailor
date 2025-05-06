@@ -1,0 +1,33 @@
+ 
+<div class="author-profile">
+  <div class="header">
+    <h1>{{ author.username }}</h1>
+    {% if request.user.is_authenticated and request.user != author %}
+      <form method="POST" action=" ">
+        {% csrf_token %}
+        <button type="submit" class="follow-btn">
+          {% if is_following %}Unfollow{% else %}Follow{% endif %}
+        </button>
+      </form>
+    {% endif %}
+  </div>
+
+   
+
+  <div class="story-section">
+    <h2>Stories by {{ author.username }}</h2>
+    <ul>
+      {% for story in stories %}
+        <li><a href="{% url 'mystory:edit_story' story.id %}">{{ story.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="chatbot-container">
+    <h3>Ask about {{ author.username }}'s stories</h3>
+    <input type="text" id="chat-input" placeholder="Ask something..." />
+    <button  >Ask</button>
+    <div id="chat-response"></div>
+  </div>
+</div>
+ 

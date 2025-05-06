@@ -1447,7 +1447,11 @@ button:focus, a:focus {
     <div class="story-main">
       <div class="story-header">
         <h1 class="story-title">{{ story.title }}</h1>
-        <div class="story-author">By {{ story.user.username }}</div>
+        <div class="story-author">
+          By <a href="/Mystory/author/{{ story.user.username }}/">{{ story.user.username }}</a>
+        </div>
+        
+        
         {% if story.is_ai_generated %}
                 <span class="badge ai-badge">AI Created</span>
             {% endif %}
@@ -1754,58 +1758,49 @@ button:focus, a:focus {
     return synth.getVoices();
   }
 
-  // Map language codes to available voices
-  // This is a fallback map for languages without direct support
+   
   const languageFallbackMap = {
     'ar': 'en-US',    // Arabic falls back to English
     'fa': 'en-US',    // Persian falls back to English
     'ur': 'en-US',    // Urdu falls back to English
-    // Add more mappings as needed
+    
   };
-
-  // Determine if a language is directly supported
+ 
   function isLanguageDirectlySupported(langCode) {
     const voices = getVoices();
     return voices.some(voice => voice.lang.toLowerCase().includes(langCode.toLowerCase()));
   }
 
-  // Find the best voice for a language
-  function findBestVoice(langCode) {
+   function findBestVoice(langCode) {
     const voices = getVoices();
     
-    // Try to find direct match
-    let matchingVoice = voices.find(voice => 
+     let matchingVoice = voices.find(voice => 
       voice.lang.toLowerCase().startsWith(langCode.toLowerCase())
     );
     
-    // If no direct match, use fallback
-    if (!matchingVoice && languageFallbackMap[langCode]) {
+     if (!matchingVoice && languageFallbackMap[langCode]) {
       const fallbackCode = languageFallbackMap[langCode];
       matchingVoice = voices.find(voice => 
         voice.lang.toLowerCase().startsWith(fallbackCode.toLowerCase())
       );
     }
     
-    // If still no match, use any available voice (preferably Google)
-    if (!matchingVoice) {
+     if (!matchingVoice) {
       matchingVoice = voices.find(voice => voice.name.includes('Google')) || voices[0];
     }
     
     return matchingVoice;
   }
 
-  // Update button appearance based on language support
-  function updateVolumeButton() {
+   function updateVolumeButton() {
     const selectedLang = languageSelect?.value || "en";
     
-    // Always show the button
-    volumeBtn.style.display = "inline-block";
+     volumeBtn.style.display = "inline-block";
     
     if (!isLanguageDirectlySupported(selectedLang)) {
       volumeBtn.title = "Limited support for this language";
       volumeBtn.classList.add("limited-support");
-      // Add a warning indicator
-      volumeBtn.innerHTML = "🔊 ⚠️";
+       volumeBtn.innerHTML = "🔊 ⚠️";
     } else {
       volumeBtn.title = "Read aloud";
       volumeBtn.classList.remove("limited-support");
@@ -1813,17 +1808,17 @@ button:focus, a:focus {
     }
   }
 
-  // When voices are loaded, setup the system
+   
   if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = updateVolumeButton;
   }
   
-  // Initial setup
+ 
   setTimeout(updateVolumeButton, 1000);
 
-  // Handle click on the volume button
+ 
   volumeBtn.addEventListener("click", () => {
-    // Get the text at the time of clicking
+     
     const storyText = document.getElementById("story-text")?.innerText;
     
     if (!storyText) {
@@ -1833,28 +1828,28 @@ button:focus, a:focus {
 
     if (!isSpeaking) {
       try {
-        // Stop any ongoing speech
+        
         synth.cancel();
         
-        // Create a new utterance
+   
         utterance = new SpeechSynthesisUtterance(storyText);
         
-        // Set the language
+         
         const selectedLang = languageSelect?.value || "en";
         utterance.lang = selectedLang;
         
-        // Find the best voice
+         
         const bestVoice = findBestVoice(selectedLang);
         if (bestVoice) {
           console.log(`Using voice: ${bestVoice.name} (${bestVoice.lang}) for ${selectedLang}`);
           utterance.voice = bestVoice;
         }
 
-        // Adjust speech settings for better clarity
+         
         utterance.rate = 0.9;  // Slightly slower
         utterance.pitch = 1.0; // Normal pitch
         
-        // Handle when speech finishes
+         
         utterance.onend = () => {
           isSpeaking = false;
           updateVolumeButtonState(false);
@@ -1867,7 +1862,7 @@ button:focus, a:focus {
           updateVolumeButtonState(false);
         };
         
-        // Start speaking
+       
         synth.speak(utterance);
         isSpeaking = true;
         updateVolumeButtonState(true);
@@ -1877,14 +1872,13 @@ button:focus, a:focus {
         updateVolumeButtonState(false);
       }
     } else {
-      // Stop speaking if already in progress
-      synth.cancel();
+       synth.cancel();
       isSpeaking = false;
       updateVolumeButtonState(false);
     }
   });
 
-  // Update button state based on speaking status
+   
   function updateVolumeButtonState(speaking) {
     if (speaking) {
       volumeBtn.innerHTML = "⏹️";
@@ -1900,10 +1894,10 @@ button:focus, a:focus {
     }
   }
 
-  // Update button when language changes
+   
   if (languageSelect) {
     languageSelect.addEventListener("change", () => {
-      // Cancel any current speech
+  
       if (isSpeaking) {
         synth.cancel();
         isSpeaking = false;
@@ -1913,7 +1907,7 @@ button:focus, a:focus {
     });
   }
 
-  // Log available voices for debugging
+   
   console.log("Available voices:", getVoices().map((v, i) => `${i}: "${v.name} (${v.lang})"`));
 });
 function updateLanguageSupportNotification() {
@@ -1921,7 +1915,7 @@ function updateLanguageSupportNotification() {
     const notification = document.getElementById("language-support-notification");
     const message = document.getElementById("notification-message");
     
-    // Check if the language is directly supported
+     
     const isSupported = isLanguageDirectlySupported(selectedLang);
     
     if (!isSupported) {
@@ -1933,12 +1927,12 @@ function updateLanguageSupportNotification() {
     }
   }
   
-  // Call this function when language changes
+ 
   if (languageSelect) {
     languageSelect.addEventListener("change", updateLanguageSupportNotification);
   }
   
-  // Call it initially
+ 
   setTimeout(updateLanguageSupportNotification, 1000);
 
 
