@@ -184,6 +184,21 @@
         </div>
     {% endif %}
 </div>
+    {% if notifications %}
+    <div style="margin-bottom: 25px;">
+        <h3 style="color: var(--accent-color); border-bottom: 1px solid #444;">🔔 New Notifications</h3>
+        <ul style="list-style: none; padding: 0;">
+            {% for note in notifications %}
+                <li style="background: var(--item-bg); padding: 12px; border-radius: 6px; margin-bottom: 10px;">
+                    {{ note.message }}<br>
+                    <small style="color: #aaa;">{{ note.created_at|date:"M d, Y H:i"  }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+
 
 </body>
 </html>

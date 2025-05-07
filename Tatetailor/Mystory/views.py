@@ -7,7 +7,7 @@ from django.http import HttpResponseBadRequest
 from django.urls import reverse
 from django.core.paginator import Paginator
 from .models import CollaborationInvite, User
-from Mystory.models import CollaborationInvite
+from Mystory.models import CollaborationInvite, Notification
 from django.contrib.auth.decorators import login_required
 from PIL import Image, ImageDraw, ImageFont
 from django.core.files.base import ContentFile
@@ -18,12 +18,16 @@ import uuid
 from django.core.files.base import ContentFile
 import requests
 from django.conf import settings
+from django.templatetags.static import static
 import os
 from dotenv import load_dotenv
 from  .models import Follower
 import requests
 from django.core.files.base import ContentFile
 from django.db.models import Q
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+ 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from reportlab.pdfgen import canvas
@@ -78,19 +82,29 @@ def edit_story(request, story_id=None):
                 messages.error(request, f"Your story must have at least 300 words. (Currently {word_count} words)")
                 return render(request, "edityourownstory.html", {"title": new_title, "story11": new_content})
             if post_type in ["public", "private"]:
-                story= Story.objects.create(
+                    existing_story = Story.objects.filter(
                     user=request.user,
-                    title=new_title,
-                    content=new_content,
-                    status=post_type,
-                    length=story_length,
-                    emotions=", ".join(emotions),
-                )
-                img_file = get_unsplash_image(new_title)
-                story.image.save(f"{story.id}.jpg", img_file)
-                story.save()
-                messages.success(request, f"Story Created Successfully as {post_type.capitalize()}.")
-                return redirect("mystory:yourownstory")
+                    title=new_title.strip(),
+                    content=new_content.strip(),
+                    status=post_type
+                    ).last()
+            
+                    if existing_story:
+                         messages.warning(request, "You already posted this story recently.")
+                         return redirect("mystory:yourownstory")
+                    story= Story.objects.create(
+                       user=request.user,
+                       title=new_title,
+                       content=new_content,
+                       status=post_type,
+                       length=story_length,
+                       emotions=", ".join(emotions),
+                     )
+                    img_file = get_unsplash_image(new_title)
+                    story.image.save(f"{story.id}.jpg", img_file)
+                    story.save()
+                    messages.success(request, f"Story Created Successfully as {post_type.capitalize()}.")
+                    return redirect("mystory:yourownstory")
         return render(request, "edityourownstory.html", {})
     story = get_object_or_404(Story, id=story_id)
     if story.user != request.user and not story.collaborators.filter(id=request.user.id).exists():
@@ -326,7 +340,13 @@ def invite_collaborator(request):
 @login_required(login_url='authentication:login')
 def collaboration_requests(request):
     pending_invites = CollaborationInvite.objects.filter(receiver=request.user, status="pending")
-    return render(request, "collaboration_requests.html", {"pending_invites": pending_invites})
+    notifications = Notification.objects.filter(user=request.user,is_read=False)
+    Notification.objects.filter(id__in=[n.id for n in notifications]).update(is_read=True)
+    context = {
+        "pending_invites": pending_invites,
+        'notifications': notifications
+               }
+    return render(request, "collaboration_requests.html",context )
 
 @login_required(login_url='authentication:login') 
 def view_invites(request):
@@ -385,6 +405,10 @@ def author_profile(request,username):
     total_stories = stories.count()
     total_collab =collabrated.count()
     is_following = Follower.objects.filter(follower=request.user, following=author).exists() if request.user.is_authenticated else False
+    if hasattr(author, 'profile') and author.profile.profile_picture:
+        profile_pic_url = author.profile.profile_picture.url
+    else:
+        profile_pic_url = static('images/logo4.webp')
     return render(request,'author_profile.html',{
         "author": author,
         "stories": stories,
@@ -392,4 +416,18 @@ def author_profile(request,username):
         "total_stories": total_stories,
         "total_collab": total_collab,
         "is_following": is_following,
+        "profile_pic_url": profile_pic_url,
     })
+@login_required
+def follow_user(request, username):
+    target_user = get_object_or_404(User, username=username)
+    if request.user != target_user:
+        Follower.objects.get_or_create(follower=request.user, following=target_user)
+    return redirect('mystory:author_profile', username=username)
+
+@login_required
+def unfollow_user(request, username):
+    target_user = get_object_or_404(User, username=username)
+    if request.user != target_user:
+        Follower.objects.filter(follower=request.user, following=target_user).delete()
+    return redirect('mystory:author_profile', username=username)

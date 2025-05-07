@@ -476,8 +476,12 @@
         <div class="profile-container">
             <!-- Profile Header -->
             <div class="profile-header">
-                <img src="{{ author.profile.profile_picture.url|default:'/api/placeholder/400/400' }}" alt="{{ author.username }}" class="profile-avatar">
-                <div class="profile-info">
+                {% if author.profile.profile_picture %}
+                <img src="{{ author.profile.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'default_profile.jpg' %}" alt="Default Profile">
+            {% endif %}            
+       <div class="profile-info">
                     <h1 class="profile-username">{{ author.username }}</h1>
                     <div class="profile-stats">
                         <div class="stat-item">
@@ -500,17 +504,23 @@
                     <p class="profile-bio">{{ author.profile.bio|default:"Creative storyteller and avid reader." }} Joined on {{ author.date_joined|date:"M d, Y" }}</p>
                 </div>
                 {% if request.user.is_authenticated and request.user != author %}
-                <form method="post" action="">
-                    {% csrf_token %}
-                    <button type="submit" class="follow-btn {% if is_following %}following-btn{% endif %}">
-                        {% if is_following %}
-                        <i class="fas fa-user-check"></i> Following
-                        {% else %}
-                        <i class="fas fa-user-plus"></i> Follow
-                        {% endif %}
-                    </button>
-                </form>
+                {% if is_following %}
+                    <form method="post" action="{% url 'mystory:unfollow_user' author.username %}">
+                        {% csrf_token %}
+                        <button type="submit" class="follow-btn following-btn">
+                            <i class="fas fa-user-check"></i> Following
+                        </button>
+                    </form>
+                {% else %}
+                    <form method="post" action="{% url 'mystory:follow_user' author.username %}">
+                        {% csrf_token %}
+                        <button type="submit" class="follow-btn">
+                            <i class="fas fa-user-plus"></i> Follow
+                        </button>
+                    </form>
                 {% endif %}
+            {% endif %}
+            
             </div>
 
             <!-- Main Content -->
