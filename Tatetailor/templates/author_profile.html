@@ -469,6 +469,13 @@
                 justify-content: center;
             }
         }
+        .profile-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;    
+    border: 2px solid #ccc;  
+}
     </style>
 </head>
 <body>
@@ -477,9 +484,9 @@
             <!-- Profile Header -->
             <div class="profile-header">
                 {% if author.profile.profile_picture %}
-                <img src="{{ author.profile.profile_picture.url }}" alt="Profile Picture">
+                <img src="{{ author.profile.profile_picture.url }}" alt="Profile Picture" class="profile-img">
             {% else %}
-                <img src="{% static 'default_profile.jpg' %}" alt="Default Profile">
+                <img src="{% static 'images/logo4.webp' %}" alt="Default Profile" class="profile-img">
             {% endif %}            
        <div class="profile-info">
                     <h1 class="profile-username">{{ author.username }}</h1>
