@@ -82,16 +82,23 @@ def edit_story(request, story_id=None):
                 messages.error(request, f"Your story must have at least 300 words. (Currently {word_count} words)")
                 return render(request, "edityourownstory.html", {"title": new_title, "story11": new_content})
             if post_type in ["public", "private"]:
-                    existing_story = Story.objects.filter(
-                    user=request.user,
-                    title=new_title.strip(),
-                    content=new_content.strip(),
-                    status=post_type
-                    ).last()
-            
-                    if existing_story:
-                         messages.warning(request, "You already posted this story recently.")
-                         return redirect("mystory:yourownstory")
+                    normalized_title = new_title.strip().lower()
+                    normalized_content = new_content.strip().lower()
+                    
+                    duplicate_stories = Story.objects.filter(
+                         user=request.user,
+                         title__iexact=normalized_title,
+                         status=post_type
+                     )
+                     
+                    duplicate_exists = any(
+                         s.content.strip().lower() == normalized_content for s in duplicate_stories
+                     )
+                     
+                    print('duplicate_exists',duplicate_exists)
+                    if duplicate_exists:
+                        messages.warning(request, "You've already submitted this story.")
+                        return redirect("mystory:yourownstory")
                     story= Story.objects.create(
                        user=request.user,
                        title=new_title,
