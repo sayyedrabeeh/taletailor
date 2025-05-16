@@ -25,7 +25,7 @@ Tale Tailor is a revolutionary full-stack platform that brings together cutting-
 
 ![Story Generation Demo](/screenshots/createstory.png)
 
-## 🌟  VIDEO DEMO
+## 🌟  VIDEO DEMO  comming soon 
 
 ## 🚀 Features
 
