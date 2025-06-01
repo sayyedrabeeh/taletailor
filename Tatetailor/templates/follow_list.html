@@ -121,25 +121,46 @@
 
     <a href="{% url 'authentication:home' %}" class="home-btn">
     <i class="fas fa-home"></i> Home
-  </a>
-        <h2><i class="fas fa-user-friends"></i> Followers of {{ user.username }}</h2>
+        </a>
+            <h2>
+            {% if view_type == "followers" %}
+                <i class="fas fa-user-friends"></i> Followers of {{ user.username }}
+            {% else %}
+                <i class="fas fa-user-check"></i> {{ user.username }} is Following
+            {% endif %}
+        </h2>
 
-        {% if followers %}
+        {% if follows %}
             <ul class="user-list">
-                {% for f in followers %}
+                {% for f in follows %}
                     <li class="user-card">
                         <div class="user-info">
                             <i class="fas fa-user"></i>
-                            <a href="{% url 'mystory:author_profile' f.follower.username %}" class="user-name">
-                                {{ f.follower.username }}
+                            <a href="{% if view_type == 'followers' %}
+                                        {% url 'mystory:author_profile' f.follower.username %}
+                                    {% else %}
+                                        {% url 'mystory:author_profile' f.following.username %}
+                                    {% endif %}"
+                            class="user-name">
+                                {% if view_type == 'followers' %}
+                                    {{ f.follower.username }}
+                                {% else %}
+                                    {{ f.following.username }}
+                                {% endif %}
                             </a>
+
                         </div>
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
             <div class="no-followers">
-                <i class="fas fa-user-slash"></i> No followers yet.
+                <i class="fas fa-user-slash"></i>
+                {% if view_type == "followers" %}
+                    No followers yet.
+                {% else %}
+                    Not following anyone yet.
+                {% endif %}
             </div>
         {% endif %}
     </div>

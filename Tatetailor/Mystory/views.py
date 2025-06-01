@@ -457,12 +457,12 @@ def unfollow_user(request, username):
 def user_followers(request, username):
     user = get_object_or_404(User, username=username)
     followers = user.followers.select_related('follower')
-    return render(request, 'follow_list.html', {'user': user, 'followers': followers})
+    return render(request, 'follow_list.html', {'user': user, 'follows': followers,'view_type': 'followers'})
 
 def user_following(request, username):
     user = get_object_or_404(User, username=username)
     following = user.following.select_related('following')
-    return render(request, 'follow_list.html', {'user': user, 'following': following})
+    return render(request, 'follow_list.html', {'user': user, 'follows': following,'view_type': 'following'})
 
 def notify_followers(user, story):
     followers = Follower.objects.filter(following=user).select_related("follower")
