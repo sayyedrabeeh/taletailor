@@ -110,6 +110,8 @@ def edit_story(request, story_id=None):
                     img_file = get_unsplash_image(new_title)
                     story.image.save(f"{story.id}.jpg", img_file)
                     story.save()
+                    if post_type == "public":
+                          notify_followers(request.user, story)
                     messages.success(request, f"Story Created Successfully as {post_type.capitalize()}.")
                     return redirect("mystory:yourownstory")
         return render(request, "edityourownstory.html", {})
@@ -150,6 +152,8 @@ def edit_story(request, story_id=None):
             story.content = new_content
             story.status = post_type
             story.save()
+            if post_type == "public":
+                     notify_followers(request.user, story)
             img_file = get_unsplash_image(new_title)
             if img_file:
                story.image.save(f"{story.id}.jpg", img_file)
@@ -442,7 +446,7 @@ def follow_user(request, username):
                 message=f"{request.user.username} started following you."
             )
     return redirect('mystory:author_profile', username=username)
-    
+
 @login_required
 def unfollow_user(request, username):
     target_user = get_object_or_404(User, username=username)
@@ -459,3 +463,11 @@ def user_following(request, username):
     user = get_object_or_404(User, username=username)
     following = user.following.select_related('following')
     return render(request, 'follow_list.html', {'user': user, 'following': following})
+
+def notify_followers(user, story):
+    followers = Follower.objects.filter(following=user).select_related("follower")
+    for follower_relation in followers:
+        Notification.objects.create(
+            user=follower_relation.follower,
+            message=f"{user.username} posted a new story: '{story.title}'."
+        )
