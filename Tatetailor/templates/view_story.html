@@ -1711,13 +1711,13 @@ button:focus, a:focus {
     <div class="story-sidebar">
       <div class="action-card">
         <div class="card-header">Story Actions</div>
-        <div class="card-content">
+        <div class="">
            
           <div class="comments-section" style="
             max-height: 300px;
             overflow-y: auto;
             padding-right: 10px;
-            margin-bottom: 1rem;
+            margin-bottom: 10px;
             border-radius: 8px;
             background-color: var(--card-background);
             padding: 1rem;
@@ -1731,20 +1731,20 @@ button:focus, a:focus {
               <small style="color: #aaa;">{{ comment.created_at|date:"F j, Y" }}</small>
               </div>
              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 0.5rem;">
-  <p style="margin: 0;">{{ comment.content }}</p>
-  {% if user == comment.user %}
-    <form method="post" action="{% url 'aistory:delete_comment' comment.id %}">
-      {% csrf_token %}
-      <button type="submit" title="Delete" style="background: none; border: none; color: #ec1846; cursor: pointer;">
-        <i class="fas fa-trash-alt"></i>
-      </button>
-    </form>
-  {% endif %}
-</div>
+              <p style="margin: 0;">{{ comment.content }}</p>
+              {% if user == comment.user %}
+                <form method="post" action="{% url 'aistory:delete_comment' comment.id %}">
+                  {% csrf_token %}
+                  <button type="submit" title="Delete" style="background: none; border: none; color: #ec1846; cursor: pointer;">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </form>
+              {% endif %}
+            </div>
 
              
             </div>
-            <hr style="border: 1px solid #333;">
+            <hr style="border: 1px solid #9f9e9e;">
 
           {% empty %}
             <p>No comments yet. Be the first!</p>
