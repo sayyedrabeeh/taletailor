@@ -1450,11 +1450,45 @@ button:focus, a:focus {
   z-index: 1000;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+.homebtn {
+    display: inline-block;
+    padding: 6px 10px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 18px;
+    line-height: 1;
+    width: 70px;
+    font-weight: bold;
+  }
+
+  .homebtn:hover {
+    background-color: #0056b3;
+  }
 
 /* Add a fade-in animation */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+.home-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: var(--joker-purpl);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: var(--shadow);
+  transition: background-color 0.3s ease;
+  z-index: 1000;
+}
+
+.home-btn:hover {
+  background-color: var(--accent-color);
 }
 
 .volume-btn.limited-support:hover::after {
@@ -1463,8 +1497,13 @@ button:focus, a:focus {
   </style>
 </head>
 <body class="{{ theme_class }}">
+    <a href="{% url 'authentication:home' %}" class="home-btn">
+    <i class="fas fa-home"></i> Home
+  </a>
   <div class="story-container">
+    
     <div class="story-main">
+     
       <div class="story-header">
         <h1 class="story-title">{{ story.title }}</h1>
         <div class="story-author">

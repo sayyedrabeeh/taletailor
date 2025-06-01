@@ -496,14 +496,33 @@
   .stat-value{
     text-decoration: none;
   }
+  .home-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: var(--joker-purple);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: var(--shadow);
+  transition: background-color 0.3s ease;
+  z-index: 1000;
+}
+
+.home-btn:hover {
+  background-color: var(--accent-color);
+}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="profile-container">
             <!-- Profile Header -->
-             <a href="{% url 'authentication:home' %}" class="btn">Home</a>
-
+    <a href="{% url 'authentication:home' %}" class="home-btn">
+    <i class="fas fa-home"></i> Home
+  </a>
             <div class="profile-header">
                 {% if author.profile.profile_picture %}
                 <img src="{{ author.profile.profile_picture.url }}" alt="Profile Picture" class="profile-img">

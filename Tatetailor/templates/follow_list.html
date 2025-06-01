@@ -96,10 +96,32 @@
             color: var(--light-text);
             margin-top: 2rem;
         }
+      .home-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: var(--joker-purple);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: var(--shadow);
+  transition: background-color 0.3s ease;
+  z-index: 1000;
+}
+
+.home-btn:hover {
+  background-color: var(--accent-color);
+}
     </style>
 </head>
 <body>
     <div class="container">
+
+    <a href="{% url 'authentication:home' %}" class="home-btn">
+    <i class="fas fa-home"></i> Home
+  </a>
         <h2><i class="fas fa-user-friends"></i> Followers of {{ user.username }}</h2>
 
         {% if followers %}
