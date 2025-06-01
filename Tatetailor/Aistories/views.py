@@ -328,5 +328,9 @@ def translate_story(request, story_id):
         'is_liked': is_liked,
     })
 
-
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id, user=request.user)
+    story_id = comment.story.id   
+    comment.delete()
+    return redirect('aistory:view_story', story_id=story_id)
  

@@ -1691,7 +1691,19 @@ button:focus, a:focus {
               <a style="text-decoration: none;" href="/Mystory/author/{{ comment.user.username }}/"><strong>{{ comment.user.username|cut:"@gmail.com" }}</strong></a>
               <small style="color: #aaa;">{{ comment.created_at|date:"F j, Y" }}</small>
               </div>
-              <p style="margin-top: 0.5rem;">{{ comment.content }}</p>
+             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 0.5rem;">
+  <p style="margin: 0;">{{ comment.content }}</p>
+  {% if user == comment.user %}
+    <form method="post" action="{% url 'aistory:delete_comment' comment.id %}">
+      {% csrf_token %}
+      <button type="submit" title="Delete" style="background: none; border: none; color: #ec1846; cursor: pointer;">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+    </form>
+  {% endif %}
+</div>
+
+             
             </div>
             <hr style="border: 1px solid #333;">
 
