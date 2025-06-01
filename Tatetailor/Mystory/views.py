@@ -412,6 +412,9 @@ def author_profile(request,username):
     total_stories = stories.count()
     total_collab =collabrated.count()
     is_following = Follower.objects.filter(follower=request.user, following=author).exists() if request.user.is_authenticated else False
+    followers = author.followers.select_related('follower').all()
+    follower_users = [f.follower for f in followers]
+     
     if hasattr(author, 'profile') and author.profile.profile_picture:
         profile_pic_url = author.profile.profile_picture.url
     else:
@@ -424,6 +427,7 @@ def author_profile(request,username):
         "total_collab": total_collab,
         "is_following": is_following,
         "profile_pic_url": profile_pic_url,
+        'followers': follower_users,
     })
 @login_required
 def follow_user(request, username):

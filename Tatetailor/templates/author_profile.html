@@ -476,12 +476,30 @@
     border-radius: 50%;    
     border: 2px solid #ccc;  
 }
+.btn {
+    display: inline-block;
+    padding: 6px 10px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 18px;
+    line-height: 1;
+    width: 70px;
+    font-weight: bold;
+  }
+
+  .btn:hover {
+    background-color: #0056b3;
+  }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="profile-container">
             <!-- Profile Header -->
+             <a href="{% url 'authentication:home' %}" class="btn">Home</a>
+
             <div class="profile-header">
                 {% if author.profile.profile_picture %}
                 <img src="{{ author.profile.profile_picture.url }}" alt="Profile Picture" class="profile-img">
@@ -501,6 +519,13 @@
                         </div>
                         <div class="stat-item">
                             <div class="stat-value">{{ author.followers.count }}</div>
+                            <ul>
+                            {% for user in followers %}
+                                <li>{{ user.username }}</li>  <!-- or user.get_full_name or user.first_name -->
+                            {% empty %}
+                                <li>No followers yet.</li>
+                            {% endfor %}
+                            </ul>
                             <div class="stat-label">Followers</div>
                         </div>
                         <div class="stat-item">
