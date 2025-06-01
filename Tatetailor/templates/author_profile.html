@@ -213,6 +213,7 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border-color);
             position: relative;
+            text-decoration: none;
         }
 
         .story-card:hover {
@@ -519,13 +520,7 @@
                         </div>
                         <div class="stat-item">
                             <div class="stat-value">{{ author.followers.count }}</div>
-                            <ul>
-                            {% for user in followers %}
-                                <li>{{ user.username }}</li>  <!-- or user.get_full_name or user.first_name -->
-                            {% empty %}
-                                <li>No followers yet.</li>
-                            {% endfor %}
-                            </ul>
+                             
                             <div class="stat-label">Followers</div>
                         </div>
                         <div class="stat-item">
@@ -533,7 +528,7 @@
                             <div class="stat-label">Following</div>
                         </div>
                     </div>
-                    <p class="profile-bio">{{ author.profile.bio|default:"Creative storyteller and avid reader." }} Joined on {{ author.date_joined|date:"M d, Y" }}</p>
+                    <p class="profile-bio">{{ author.profile.bio|default:"Creative storyteller and smart reader." }} Joined on {{ author.date_joined|date:"M d, Y" }}</p>
                 </div>
                 {% if request.user.is_authenticated and request.user != author %}
                 {% if is_following %}
@@ -570,7 +565,8 @@
                             {% if stories %}
                             <div class="story-grid">
                                 {% for story in stories %}
-                                <div class="story-card">
+                                  
+                                <a href="{% url 'aistory:view_story' story.id %}" class="story-card">
                                     {% if story.image %}
                                     <img src="{{ story.image.url }}" alt="{{ story.title }}" class="story-card-img">
                                     {% else %}
@@ -592,7 +588,7 @@
                                             <span class="meta-icon"><i class="fas fa-heart"></i> {{ story.likes.count }}</span>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                                 {% endfor %}
                             </div>
                             {% else %}
