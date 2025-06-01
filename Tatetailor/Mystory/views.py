@@ -440,3 +440,13 @@ def unfollow_user(request, username):
     if request.user != target_user:
         Follower.objects.filter(follower=request.user, following=target_user).delete()
     return redirect('mystory:author_profile', username=username)
+
+def user_followers(request, username):
+    user = get_object_or_404(User, username=username)
+    followers = user.followers.select_related('follower')
+    return render(request, 'follow_list.html', {'user': user, 'followers': followers})
+
+def user_following(request, username):
+    user = get_object_or_404(User, username=username)
+    following = user.following.select_related('following')
+    return render(request, 'follow_list.html', {'user': user, 'following': following})

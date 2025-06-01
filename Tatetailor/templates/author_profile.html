@@ -493,6 +493,9 @@
   .btn:hover {
     background-color: #0056b3;
   }
+  .stat-value{
+    text-decoration: none;
+  }
     </style>
 </head>
 <body>
@@ -519,12 +522,12 @@
                             <div class="stat-label">Collaborations</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-value">{{ author.followers.count }}</div>
+                            <a href="{% url 'mystory:user-followers' author.username %}"class="stat-value">{{ author.followers.count }}</a>
                              
                             <div class="stat-label">Followers</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-value">{{ author.following.count }}</div>
+                            <a href="{% url 'mystory:user-following' author.username %}" class="stat-value">{{ author.following.count }}</a>
                             <div class="stat-label">Following</div>
                         </div>
                     </div>

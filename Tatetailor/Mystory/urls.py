@@ -4,7 +4,7 @@ from django.urls import path
 
 from .views import ( yourownstory  ,edit_story,download_story,share_story,
 story_detail_view,invite_collaborator,collaboration_requests, accept_invite, reject_invite, my_collaborations,
-view_invites ,mystory1,delete_story,author_profile,follow_user, unfollow_user )
+view_invites ,mystory1,delete_story,author_profile,follow_user, unfollow_user,user_following,user_followers )
 
 app_name = 'mystory' 
 
@@ -29,4 +29,6 @@ urlpatterns = [
 
     path('follow/<str:username>/', follow_user, name='follow_user'),
     path('unfollow/<str:username>/',  unfollow_user, name='unfollow_user'),
+    path('<str:username>/followers/', user_followers, name='user-followers'),
+    path('<str:username>/following/', user_following, name='user-following'),
 ]

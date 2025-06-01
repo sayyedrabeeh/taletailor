@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Followers - {{ user.username }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a0e5c;
+            --secondary-color: #1fc55c;
+            --accent-color: #8a0e74;
+            --background-color: #121212;
+            --card-background: #1e1e1e;
+            --text-color: #e0e0e0;
+            --light-text: #a0aec0;
+            --border-color: #333333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            --border-radius: 10px;
+            --header-gradient: linear-gradient(135deg, #4a0e5c, #8a0e74);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            background: var(--header-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .user-card {
+            background-color: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
+
+        .user-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info i {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+
+        .user-name {
+            font-size: 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .user-name:hover {
+            text-decoration: underline;
+            color: var(--secondary-color);
+        }
+
+        .no-followers {
+            text-align: center;
+            color: var(--light-text);
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2><i class="fas fa-user-friends"></i> Followers of {{ user.username }}</h2>
+
+        {% if followers %}
+            <ul class="user-list">
+                {% for f in followers %}
+                    <li class="user-card">
+                        <div class="user-info">
+                            <i class="fas fa-user"></i>
+                            <a href="{% url 'mystory:author_profile' f.follower.username %}" class="user-name">
+                                {{ f.follower.username }}
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="no-followers">
+                <i class="fas fa-user-slash"></i> No followers yet.
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
