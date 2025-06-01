@@ -12,7 +12,7 @@ from deep_translator import GoogleTranslator
 from gtts import gTTS
 from django.contrib.auth.decorators import login_required
 import subprocess
-
+from .models import Comment
 
 
 
@@ -82,6 +82,18 @@ def view_story(request,story_id):
 
         if not already_viewed:
              StoryView.objects.create(story=story, user=user, ip_address=ip)
+        comments = story.comments.select_related('user').order_by('-created_at')
+        for comment in comments:
+            print("comment content:", comment.content)
+        if request.method == "POST":
+            content = request.POST.get("content")
+            if request.user.is_authenticated and content:
+               Comment.objects.create(
+                 story=story,
+                 user=request.user,
+                 content=content
+                )
+            return redirect('aistory:view_story', story_id=story.id)
 
         view_count = story.views.count()
         like_count = story.likes.count()   
@@ -98,7 +110,8 @@ def view_story(request,story_id):
             'view_count': view_count,
             'like_count': like_count,
             'collaborators':collaborators,
-            'similar_stories':similar_stories,       
+            'similar_stories':similar_stories, 
+            'comments':comments,      
             })
     
 # @login_required(login_url='authentication:login') 

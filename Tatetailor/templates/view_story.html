@@ -947,6 +947,26 @@
     pointer-events: none;
     z-index: -1;
 }
+.comment-form {
+  background-color: var(--card-background);
+  border: 1px solid var(--light-gray);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-top: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.comment-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  resize: vertical;
+  margin-bottom: 1rem;
+}
+
 
 /* Apply theme variables to the elements */
 body {
@@ -1648,6 +1668,54 @@ button:focus, a:focus {
           
           
         </div>
+      </div>
+    <div class="story-sidebar">
+      <div class="action-card">
+        <div class="card-header">Story Actions</div>
+        <div class="card-content">
+           
+          <div class="comments-section" style="
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            background-color: var(--card-background);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+        ">
+
+          {% for comment in comments %}
+            <div style="  padding: 1rem;  border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between;">
+              <a style="text-decoration: none;" href="/Mystory/author/{{ comment.user.username }}/"><strong>{{ comment.user.username|cut:"@gmail.com" }}</strong></a>
+              <small style="color: #aaa;">{{ comment.created_at|date:"F j, Y" }}</small>
+              </div>
+              <p style="margin-top: 0.5rem;">{{ comment.content }}</p>
+            </div>
+            <hr style="border: 1px solid #333;">
+
+          {% empty %}
+            <p>No comments yet. Be the first!</p>
+          {% endfor %}
+        </div>
+
+        {% if user.is_authenticated %}
+          <form method="post" class="comment-form" style="background-color: var(--card-background); padding: 1rem; border-radius: 8px; box-shadow: var(--shadow);">
+            {% csrf_token %}
+            <textarea name="content" rows="3" placeholder="Write a comment..." style="width: 100%; padding: 10px; border-radius: 6px;  border: 1px solid #333;"></textarea>
+            <br><br>
+            <button type="submit" class="btn action-btn joker-purple">Post Comment</button>
+          </form>
+        {% else %}
+          <p><a href="{% url 'authentication:login' %}" style="color: var(--joker-green);">Login</a> to comment.</p>
+        {% endif %}
+
+
+          </a>
+          
+          
+        
       </div>
       
       <div class="action-card">
