@@ -346,9 +346,13 @@ def invite_collaborator(request):
 
 @login_required(login_url='authentication:login')
 def collaboration_requests(request):
+    print('hi')
     pending_invites = CollaborationInvite.objects.filter(receiver=request.user, status="pending")
     notifications = Notification.objects.filter(user=request.user,is_read=False)
     Notification.objects.filter(id__in=[n.id for n in notifications]).update(is_read=True)
+    print('notification:',notifications)
+    for i in notifications:
+        print('notification:',i)
     context = {
         "pending_invites": pending_invites,
         'notifications': notifications
@@ -431,9 +435,14 @@ def author_profile(request,username):
 def follow_user(request, username):
     target_user = get_object_or_404(User, username=username)
     if request.user != target_user:
-        Follower.objects.get_or_create(follower=request.user, following=target_user)
+        follow, created = Follower.objects.get_or_create(follower=request.user, following=target_user)
+        if created:
+            Notification.objects.create(
+                user=target_user,  
+                message=f"{request.user.username} started following you."
+            )
     return redirect('mystory:author_profile', username=username)
-
+    
 @login_required
 def unfollow_user(request, username):
     target_user = get_object_or_404(User, username=username)
