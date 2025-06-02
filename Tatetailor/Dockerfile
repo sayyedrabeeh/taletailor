@@ -19,4 +19,4 @@ COPY . .
 RUN python manage.py collectstatic --noinput
 
 # Run Daphne ASGI server
-CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "tale_tailor.asgi:application"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "Tatetailor.asgi:application"]

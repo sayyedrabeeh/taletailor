@@ -6,7 +6,7 @@ services:
     command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --noinput &&
-             daphne -b 0.0.0.0 -p 8000 tale_tailor.asgi:application"
+             daphne -b 0.0.0.0 -p 8000 Tatetailor.asgi:application"
     volumes:
       - .:/app
     ports:
