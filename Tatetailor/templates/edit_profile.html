@@ -1,9 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Your Profile</title>
+    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
+
     <style>
         :root {
             --primary-color: #6200ea;
@@ -334,46 +337,7 @@
              bubble.style.animationDuration = `${duration}s`;
          });
         
-        // // Add interactive elements
-        // document.addEventListener('DOMContentLoaded', () => {
-        //     // File input preview
-        //     const fileInput = document.getElementById('profile_picture');
-        //     const fileNameDisplay = document.getElementById('file-name');
-        //     const previewImage = document.getElementById('preview-image');
-        //     const previewPlaceholder = document.getElementById('preview-placeholder');
-            
-        //     fileInput.addEventListener('change', function() {
-        //         if (this.files && this.files[0]) {
-        //             const file = this.files[0];
-        //             fileNameDisplay.textContent = file.name;
-                    
-        //             const reader = new FileReader();
-        //             reader.onload = function(e) {
-        //                 previewImage.src = e.target.result;
-        //                 previewImage.style.display = 'block';
-        //                 previewPlaceholder.style.display = 'none';
-        //             }
-        //             reader.readAsDataURL(file);
-        //         } else {
-        //             fileNameDisplay.textContent = '';
-        //             previewImage.style.display = 'none';
-        //             previewPlaceholder.style.display = 'flex';
-        //         }
-        //     });
-            
-        //     // Add mousemove parallax effect
-        //     document.addEventListener('mousemove', (e) => {
-        //         const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-        //         const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-                
-        //         document.querySelectorAll('.bubble').forEach((bubble, index) => {
-        //             const factor = (index + 1) * 0.2;
-        //             bubble.style.transform = `translate(${moveX * factor}px, ${moveY * factor}px)`;
-        //         });
-        //     });
-            
-            
-        // });
+        
     </script>
 </body>
 </html>
