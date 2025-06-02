@@ -52,7 +52,7 @@ INSTALLED_APPS = [
 ]
 
 
-INSTALLED_APPS += ['channels', 'messaging']
+# INSTALLED_APPS += ['channels', 'messaging']
 ASGI_APPLICATION = 'Tatetailor.asgi.application'
 
 
