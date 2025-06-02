@@ -59,6 +59,24 @@
             border-radius: 8px;
             font-weight: bold;
         }
+         .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(138, 43, 226, 0.1);
+        }
 
         .user-actions {
             display: flex;
@@ -381,7 +399,118 @@
   font-weight: 500;
 }
 
-    
+  .empty-message {
+  text-align: center;
+  margin-top: 40px;
+  animation: fadeInUp 0.6s ease-out;
+  color: #555;
+}
+
+.empty-message h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.empty-message p {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 8px;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.no-stories-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.no-stories-box {
+  text-align: center;
+  background: #f9f9f9;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.no-stories-image {
+  width: 100px;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.no-stories-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.no-stories-text {
+  font-size: 1rem;
+  color: #666;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.add-button-link {
+  text-decoration: none;
+}
+
+/* Button styling */
+.add-button {
+  background-color: #4f46e5; /* Indigo */
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.add-button:hover {
+  background-color: #4338ca; /* Darker indigo */
+  transform: translateY(-2px);
+}
+
+.button-text {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
   </style>
 </head>
 <body>
@@ -395,7 +524,7 @@
             <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
             {% if user.is_superuser %}
             <br><br>
-            <a href="{% url 'authentication:users' %}">
+            <a style="text-decoration: none;" href="{% url 'authentication:users' %}">
                 <button  class="nav-link">
                     Admin Panel
                 </button>
@@ -404,7 +533,7 @@
         </div>
         <div class="user-actions">
             
-            <a href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
+            <a style="text-decoration: none;" href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
         
             <!-- Profile Icon to trigger the modal -->
             <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
@@ -415,8 +544,8 @@
   
   <main class="main-content">
     <h1 class="title">MY STORY</h1>
-    
-    <div class="search-container">
+    {% for story in stories %}
+       <div class="search-container">
         <form method="get">
           <input type="text" name="search" placeholder="Search for stories, authors, or genres..." class="search-bar" value="{{ query }}">
           <button type="button" class="search-clear" onclick="clearSearch()">×</button>
@@ -435,7 +564,7 @@
       </div>
     {% endif %}
     
-    {% for story in stories %}
+   
     <a style="text-decoration: none; color: #fff;" href="{% url 'aistory:view_story' story.id %}" class="draft-link">
     <div class="story-container">
       <div class="story-image">
@@ -471,8 +600,37 @@
       
     </div>
    </a>
+   <div class="pagination">
+        <span class="step-links">
+          {% if stories.has_previous %}
+            <a href="?search={{ query }}&page=1">&laquo; First</a>
+            <a href="?search={{ query }}&page={{ stories.previous_page_number }}">Previous</a>
+          {% endif %}
+      
+          <span class="current">
+            Page {{ stories.number }} of {{ stories.paginator.num_pages }}
+          </span>
+      
+          {% if stories.has_next %}
+            <a href="?search={{ query }}&page={{ stories.next_page_number }}">Next</a>
+            <a href="?search={{ query }}&page={{ stories.paginator.num_pages }}">Last &raquo;</a>
+          {% endif %}
+        </span>
+      </div>
     {% empty %}
-      <p>You haven’t created any stories yet.</p>
+     <div class="no-stories-container">
+    <div class="no-stories-box">
+      <img src="{% static 'images/empty-folder.jpeg' %}" alt="No Stories" class="no-stories-image">
+      <h2 class="no-stories-title">You haven’t created any stories yet.</h2>
+      <p class="no-stories-text">Click the “Create Story” button to get started.</p>
+       <a href="{% url 'mystory:yourownstory' %}" class="add-button-link">
+      <button class="add-button">
+        <span class="button-text">Start Creating</span>
+      </button>
+    </a>
+    </div>
+    
+  </div>
     {% endfor %}
 
     {% for story in stories %}
@@ -498,23 +656,7 @@
       </div>
       {% endfor %}  
 
-    <div class="pagination">
-        <span class="step-links">
-          {% if stories.has_previous %}
-            <a href="?search={{ query }}&page=1">&laquo; First</a>
-            <a href="?search={{ query }}&page={{ stories.previous_page_number }}">Previous</a>
-          {% endif %}
-      
-          <span class="current">
-            Page {{ stories.number }} of {{ stories.paginator.num_pages }}
-          </span>
-      
-          {% if stories.has_next %}
-            <a href="?search={{ query }}&page={{ stories.next_page_number }}">Next</a>
-            <a href="?search={{ query }}&page={{ stories.paginator.num_pages }}">Last &raquo;</a>
-          {% endif %}
-        </span>
-      </div>
+    
       
 
 

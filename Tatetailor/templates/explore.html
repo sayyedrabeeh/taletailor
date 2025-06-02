@@ -883,17 +883,16 @@
             <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
             <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
             {% if user.is_superuser %}
-            <br><br>
-            <a href="{% url 'authentication:users' %}">
-                <button  class="nav-link">
+            <a style="text-decoration: none;" href="{% url 'authentication:users' %}"
+                  class="nav-link">
                     Admin Panel
-                </button>
+                
             </a>
         {% endif %}
         </div>
         <div class="user-actions">
              
-            <a href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
+            <a style="text-decoration: none;" href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
         
             <!-- Profile Icon to trigger the modal -->
             <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">

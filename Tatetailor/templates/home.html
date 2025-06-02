@@ -61,6 +61,24 @@
             border-radius: 8px;
             font-weight: bold;
         }
+      .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(138, 43, 226, 0.1);
+        }
 
         .user-actions {
             display: flex;
@@ -710,8 +728,8 @@
             <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
             <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
             {% if user.is_superuser %}
-            <br><br>
-            <a href="{% url 'authentication:dashboard' %}">
+          
+            <a style="text-decoration: none;" href="{% url 'authentication:dashboard' %}">
                 <button  class="nav-link">
                     Admin Panel
                 </button>
@@ -720,7 +738,7 @@
         </div>
         <div class="user-actions">
              
-            <a href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
+            <a style="text-decoration: none;" href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
         
             <!-- Profile Icon to trigger the modal -->
             <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
