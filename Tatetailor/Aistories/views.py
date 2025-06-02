@@ -300,6 +300,7 @@ def translate_story(request, story_id):
     translated_text = None
     selected_language = None
     user = request.user if request.user.is_authenticated else None
+    comments = story.comments.select_related('user').order_by('-created_at')
     if request.method == 'POST':
         selected_language = request.POST.get('language')
 
@@ -326,6 +327,7 @@ def translate_story(request, story_id):
         'like_count': like_count,
         'similar_stories': similar_stories,
         'is_liked': is_liked,
+        'comments':comments,
     })
 
 def delete_comment(request, comment_id):
