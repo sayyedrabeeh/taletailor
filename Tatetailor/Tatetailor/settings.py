@@ -51,6 +51,20 @@ INSTALLED_APPS = [
      'Mystory',
 ]
 
+
+INSTALLED_APPS += ['channels', 'messaging']
+ASGI_APPLICATION = 'Tatetailor.asgi.application'
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
