@@ -14,7 +14,7 @@ from django.core.files.base import ContentFile
 from io import BytesIO
 import textwrap
 import uuid
- 
+from django.utils.html import escape
 from django.core.files.base import ContentFile
 import requests
 from django.conf import settings
@@ -441,11 +441,13 @@ def follow_user(request, username):
     if request.user != target_user:
         follow, created = Follower.objects.get_or_create(follower=request.user, following=target_user)
         if created:
+            username = escape(request.user.username)
+            user_link = f'<a href="/Mystory/author/{username}/">{username}</a>'
             Notification.objects.create(
-                user=target_user,  
-                message=f"{request.user.username} started following you."
+                user=target_user,
+                message=f"{user_link} started following you."
             )
-    return redirect('mystory:author_profile', username=username)
+    return redirect('mystory:author_profile', username=target_user)
 
 @login_required
 def unfollow_user(request, username):
@@ -464,10 +466,19 @@ def user_following(request, username):
     following = user.following.select_related('following')
     return render(request, 'follow_list.html', {'user': user, 'follows': following,'view_type': 'following'})
 
+
+
 def notify_followers(user, story):
     followers = Follower.objects.filter(following=user).select_related("follower")
+    username = escape(user.username)
+    story_title = escape(story.title)
+
+    user_link = f'<a href="/Mystory/author/{username}/">{username}</a>'
+    story_link = f'<a href="/Aistories/view_story/{story.id}/">{story_title}</a>'
+    message = f"{user_link} posted a new story: '{story_link}'."
+
     for follower_relation in followers:
         Notification.objects.create(
             user=follower_relation.follower,
-            message=f"{user.username} posted a new story: '{story.title}'."
+            message=message
         )

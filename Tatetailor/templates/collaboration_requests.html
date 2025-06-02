@@ -190,7 +190,7 @@
         <ul style="list-style: none; padding: 0;">
             {% for note in notifications %}
                 <li style="background: var(--item-bg); padding: 12px; border-radius: 6px; margin-bottom: 10px;">
-                    {{ note.message }}<br>
+                    {{ note.message|safe }}<br>
                     <small style="color: #aaa;">{{ note.created_at|date:"M d, Y H:i"  }}</small>
                 </li>
             {% endfor %}
