@@ -179,18 +179,27 @@
         }
 
         .chat-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 18px;
-            margin-right: 14px;
-            position: relative;
-        }
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 18px;
+        margin-right: 14px;
+        position: relative;
+        overflow: hidden; 
+    }
+
+    .chat-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 14px;
+    }
+
 
         .chat-avatar::after {
             content: '';
@@ -566,7 +575,11 @@
     {% for user in users %}
         <div class="chat-item {% if forloop.first %}active{% endif %}">
             <div class="chat-avatar">
-                {{ user.username|first|upper }}
+                {% if user.profile.profile_picture %}
+                    <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    {{ user.username|first|upper }}
+                {% endif %}
             </div>
             <div class="chat-info">
                 <div class="chat-name">{{ user.get_full_name|default:user.username }}</div>
