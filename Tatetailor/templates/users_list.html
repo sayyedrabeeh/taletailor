@@ -157,12 +157,24 @@
             <input type="text" class="search-box" placeholder="Search users..." id="searchInput">
         </div>
         
+       <div class="users-list">
+    {% for user in users %}
+        <a href="#" class="user-item">
+            <div class="user-avatar">{{ user.username|slice:":1"|upper }}</div>
+            <div class="user-info">
+                <div class="user-name">{{ user.username }}</div>
+                <div class="user-status {% if user.is_active %}online{% else %}offline{% endif %}">
+                    {% if user.is_active %}Online{% else %}Offline{% endif %}
+                </div>
+            </div>
+        </a>
+    {% empty %}
+        <div class="no-results">No users found matching your search</div>
+    {% endfor %}
+</div>
+
         
-        
-        
-        <div>
-            No users found matching your search
-        </div>
+       
     </div>
 
     <script>
