@@ -171,7 +171,32 @@
                 </svg>
                 <input type="text" class="search-input" placeholder="Search conversations...">
             </div>
-            
+
+            <div class="chat-list">
+                {% for user in users %}
+                    <div class="chat-item {% if forloop.first %}active{% endif %}"></div>
+                    <div class="chat-avatar">
+                        {{ user.username|first|upper }}
+                    </div>
+                    <div class="chat-info">
+                        <div class="chat-name">{{ user.get_full_name|default:user.username }}</div>
+                        <div class="chat-preview">
+                           {{ user.profile.last_message|default:"Start a conversation..." }}
+                        </div>
+                   </div>
+                   <div class="chat-meta">
+                        <div class="chat-time">
+                          {{ user.profile.last_seen|timesince }} ago
+                        </div>
+                        {% if user.profile.unread_count > 0 %}
+                            <div class="unread-badge">{{ user.profile.unread_count }}</div>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <div class="no-conversations">No users found</div>
+                {% endfor %}
+
+            </div>
          </div>
     </div>
 </div>
