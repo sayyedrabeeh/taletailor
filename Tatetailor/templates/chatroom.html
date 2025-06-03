@@ -223,6 +223,95 @@
             font-size: 11px;
             font-weight: 600;
         }
+.chat-area {
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #0f0f10 0%, #1a1a1b 100%);
+            position: relative;
+        }
+
+        .chat-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .chat-header {
+            padding: 24px;
+            border-bottom: 1px solid #27272a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(15, 15, 16, 0.8);
+            backdrop-filter: blur(20px);
+        }
+
+        .chat-user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+
+        .chat-user-details h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f4f4f5;
+        }
+
+        .chat-user-status {
+            font-size: 14px;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: #a1a1aa;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
 
 
   </style>
@@ -288,8 +377,41 @@
                 {% empty %}
                     <div class="no-conversations">No users found</div>
                 {% endfor %}
+            </div>
+         </div>
+            <div class="chat-header">
 
             </div>
+         <div class="chat-area">
+                 <div class="chat-user-info">
+                    <div class="chat-user-avatar">A</div>
+                        <div class="chat-user-details">
+                            <h3>Alice Johnson</h3>
+                            <div class="chat-user-status">
+                                <div class="status-dot"></div>
+                                Active now
+                            </div>
+                        </div>
+                 </div>
+
+                 <div class="chat-actions">
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                            </svg>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                            </svg>
+                        </button>
+                 </div>
+
          </div>
     </div>
 </div>
