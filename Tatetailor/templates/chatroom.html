@@ -572,8 +572,8 @@
                     </div>
                 </div>
              <div class="chat-list">
-    {% for user in users %}
-        <div class="chat-item {% if forloop.first %}active{% endif %}">
+         {% for user in users %}
+            <div class="chat-item {% if forloop.first %}active{% endif %}">
             <div class="chat-avatar">
                 {% if user.profile.profile_picture %}
                     <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
@@ -582,17 +582,21 @@
                 {% endif %}
             </div>
             <div class="chat-info">
-                <div class="chat-name">{{ user.get_full_name|default:user.username }}</div>
+                <div class="chat-name">{{  user.username|cut:"@gmail.com" }}</div>
                 <div class="chat-preview">
-                    {{ user.profile.last_message|default:"Start a conversation..." }}
+                       {{ user.last_message|default:"Start a conversation..." }}
                 </div>
             </div>
             <div class="chat-meta">
                 <div class="chat-time">
-                    {{ user.profile.last_seen|timesince }} ago
+                     {% if user.last_seen %}
+                        {{ user.last_seen|timesince }} ago
+                    {% else %}
+                        
+                    {% endif %}
                 </div>
-                {% if user.profile.unread_count > 0 %}
-                    <div class="unread-badge">{{ user.profile.unread_count }}</div>
+               {% if user.unread_count > 0 %}
+                    <div class="unread-badge">{{ user.unread_count }}</div>
                 {% endif %}
             </div>
         </div>
