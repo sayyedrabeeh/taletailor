@@ -208,11 +208,17 @@
             right: -2px;
             width: 14px;
             height: 14px;
-            background: #10b981;
+             
             border: 2px solid #0f0f10;
             border-radius: 50%;
         }
+        .chat-avatar.online::after {
+            background: #10b981; 
+        }
 
+        .chat-avatar.offline::after {
+            background: #8b5cf6; /* violet */
+        }
         .chat-info {
             flex: 1;
             min-width: 0;
@@ -530,6 +536,18 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(113, 113, 122, 0.8);
         }
+
+        .online-badge {
+    width: 12px;
+    height: 12px;
+    background-color: #22c55e; /* Tailwind green-500 */
+    border-radius: 50%;
+    position: absolute;
+    top: 16px; /* adjust as needed */
+    right: 16px; /* adjust as needed */
+    box-shadow: 0 0 6px #22c55e;
+}
+
     </style>
 </head>
 <body>
@@ -574,7 +592,7 @@
              <div class="chat-list">
          {% for user in users %}
             <div class="chat-item {% if forloop.first %}active{% endif %}">
-            <div class="chat-avatar">
+            <div class="chat-avatar {% if user.is_online %}online{% else %}offline{% endif %}">
                 {% if user.profile.profile_picture %}
                     <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
                 {% else %}
@@ -583,14 +601,15 @@
             </div>
             <div class="chat-info">
                 <div class="chat-name">{{  user.username|cut:"@gmail.com" }}</div>
+                 
                 <div class="chat-preview">
                        {{ user.last_message|default:"Start a conversation..." }}
                 </div>
             </div>
             <div class="chat-meta">
                 <div class="chat-time">
-                     {% if user.last_seen %}
-                        {{ user.last_seen|timesince }} ago
+                     {% if user.last_seen1 %}
+                        {{ user.last_seen1|timesince }} ago
                     {% else %}
                         
                     {% endif %}
