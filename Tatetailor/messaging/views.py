@@ -10,6 +10,6 @@ def chat_room(request, room_name):
 
 def chat(request):
     users= User.objects.all()
-    return render(request, 'users_list.html',{
+    return render(request, 'chatroom.html',{
         'users': users
     })
