@@ -87,6 +87,7 @@
             background: #0f0f10;
             position: relative;
             overflow: hidden;
+            height: 100vh;
         }
 
         /* Chat List Panel */
@@ -96,6 +97,8 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            height: 100vh;
+             min-height: 0; 
         }
 
         .chat-list-header {
@@ -150,6 +153,7 @@
             flex: 1;
             overflow-y: auto;
             padding: 12px;
+             min-height: 0;
         }
 
         .chat-item {
@@ -247,6 +251,7 @@
             flex-direction: column;
             background: linear-gradient(135deg, #0f0f10 0%, #1a1a1b 100%);
             position: relative;
+            height: 100vh;
         }
 
         .chat-area::before {
@@ -333,13 +338,14 @@
         }
 
         .messages-container {
-            flex: 1;
-            padding: 24px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+     }
+
 
         .message {
             display: flex;
