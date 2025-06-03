@@ -312,6 +312,78 @@
             background: rgba(59, 130, 246, 0.2);
             color: #3b82f6;
         }
+ .messages-container {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            max-width: 70%;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+
+        .message.received {
+            align-self: flex-start;
+            align-items: flex-start;
+        }
+
+        .message-bubble {
+            padding: 14px 18px;
+            border-radius: 20px;
+            font-size: 15px;
+            line-height: 1.4;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .message.sent .message-bubble {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-bottom-right-radius: 6px;
+        }
+
+        .message.received .message-bubble {
+            background: rgba(39, 39, 42, 0.8);
+            color: #e4e4e7;
+            border: 1px solid rgba(63, 63, 70, 0.3);
+            border-bottom-left-radius: 6px;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: #71717a;
+            margin-top: 6px;
+            margin-bottom: 2px;
+        }
+
+        .message-input-area {
+            padding: 20px 24px;
+            border-top: 1px solid #27272a;
+            background: rgba(15, 15, 16, 0.9);
+            backdrop-filter: blur(20px);
+        }
 
 
   </style>
@@ -410,6 +482,25 @@
                                 <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
                             </svg>
                         </button>
+                 </div>
+
+                 <div class="messages-container">
+                    <div class="message received">
+                        <div class="message-bubble">Hey! I just got back from that photography workshop I mentioned. The techniques they taught were incredible!</div>
+                        <div class="message-time">Today 2:15 PM</div>
+                    </div>
+                    <div class="message sent">
+                        <div class="message-bubble">That's awesome! I'd love to see some of the shots you took. Did you try any of the new techniques?</div>
+                        <div class="message-time">Today 2:18 PM</div>
+                    </div>
+                    <div class="message received">
+                        <div class="message-bubble">Absolutely! I experimented with long exposure and some creative lighting. The results were beyond my expectations. Let me share a few with you!</div>
+                        <div class="message-time">Today 2:20 PM</div>
+                    </div>
+                    <div class="message sent">
+                        <div class="message-bubble">Can't wait to see them! Your photography has been getting better and better lately.</div>
+                        <div class="message-time">Today 2:22 PM</div>
+                    </div>
                  </div>
 
          </div>
