@@ -45,12 +45,48 @@
             background: linear-gradient(180deg, transparent 0%, #3b82f6 50%, transparent 100%);
             opacity: 0.5;
         }
+        .nav-item {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-item:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: scale(1.1);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
 
   </style>
 </head>
 <body>
 <div class="app-container">
      <div class="nav-rail">
+         <a href="{% url 'authentication:home' %}" class="nav-item" title="Home">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+            </a>
 
      </div>
 </div>
