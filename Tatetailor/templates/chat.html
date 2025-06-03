@@ -1,26 +1,241 @@
- 
-<div id="chat-log"></div>
-<input id="chat-message-input" type="text" autocomplete="off">
-<button id="chat-message-submit">Send</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - {{ room_name }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<script>
-    const roomName = "{{ room_name }}";
-    const chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
-    );
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
 
-    chatSocket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        document.querySelector('#chat-log').innerHTML += ('<b>' + data.username + ':</b> ' + data.message + '<br>');
-    };
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(40, 40, 40, 0.95);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
 
-    document.querySelector('#chat-message-submit').onclick = function(e) {
-        const messageInputDom = document.querySelector('#chat-message-input');
-        const message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({
-            'message': message,
-            'username': '{{ request.user.username }}'
-        }));
-        messageInputDom.value = '';
-    };
-</script>
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #333 0%, #444 100%);
+            padding: 15px 20px;
+            border-bottom: 2px solid #555;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-right: 15px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 16px;
+        }
+
+        .chat-user-info {
+            flex: 1;
+        }
+
+        .chat-user-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .chat-user-status {
+            font-size: 14px;
+            color: #28a745;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: rgba(30, 30, 30, 0.5);
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .message.sent {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .message.received .message-bubble {
+            background: rgba(70, 70, 70, 0.8);
+            color: #fff;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.sent .message-bubble {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: #aaa;
+            margin: 5px 10px 0;
+        }
+
+        .message-sender {
+            font-size: 12px;
+            color: #bbb;
+            margin-bottom: 5px;
+            padding-left: 16px;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: rgba(40, 40, 40, 0.95);
+            border-top: 1px solid #555;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: rgba(60, 60, 60, 0.8);
+            border-radius: 25px;
+            padding: 5px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .chat-input::placeholder {
+            color: #aaa;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border: none;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+        }
+
+        .typing-indicator {
+            padding: 10px 20px;
+            font-style: italic;
+            color: #aaa;
+            font-size: 14px;
+            display: none;
+        }
+
+        .connection-status {
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 14px;
+            background: rgba(220, 53, 69, 0.8);
+            color: white;
+            display: none;
+        }
+
+        .connection-status.connected {
+            background: rgba(40, 167, 69, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                <a href="/messaging/users/" class="back-btn">←</a>
+                <div class="user-avatar" id="chatAvatar">{{ room_name|first|upper }}</div>
+                <div class="chat-user-info">
+                    <div class="chat-user-name" id="chatUserName">{{ room_name }}</div>
+                    <div class="chat-user-status" id="userStatus">Online</div>
+                </div>
+            </div>
+            
+            <div class="connection-status" id="connectionStatus">
+                Connecting...
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will be populated dynamically -->
+            </div>
+            
+            <div class="typing-indicator" id="typingIndicator">
+                Someone is typing...
+            </div>
+            
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <input type="text" class="chat-input" placeholder="Type a message..." id="messageInput">
+                    <button class="send-btn" id="sendBtn">➤</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+</html>

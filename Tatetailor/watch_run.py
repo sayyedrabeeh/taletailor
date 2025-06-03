@@ -14,5 +14,4 @@ def run():
 
 
 if __name__ == "__main__":
-    # Watch from this directory recursively (Tatetailor)
-    run_process(os.getcwd(), run, watcher_cls=TemplateWatcher)
+     run_process(os.getcwd(), run, watcher_cls=TemplateWatcher)
