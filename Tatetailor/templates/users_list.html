@@ -1,183 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messages - Users</title>
-    <style>
-        * {
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat - Taletailor </title>
+  <style>
+    * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: #e0e0e0;
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0b;
+            color: #e4e4e7;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background: rgba(40, 40, 40, 0.95);
-            min-height: 100vh;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        .app-container {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            grid-template-rows: 100vh;
+            height: 100vh;
         }
-
-        .header {
-            background: linear-gradient(135deg, #333 0%, #444 100%);
-            padding: 20px;
-            text-align: center;
-            border-bottom: 2px solid #555;
-        }
-
-        .header h1 {
-            color: #fff;
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .search-container {
-            padding: 20px;
-            background: rgba(50, 50, 50, 0.5);
-        }
-
-        .search-box {
-            width: 100%;
-            padding: 15px;
-            background: rgba(60, 60, 60, 0.8);
-            border: 2px solid #555;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .search-box:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
-        }
-
-        .search-box::placeholder {
-            color: #aaa;
-        }
-
-        .users-list {
-            padding: 0 20px;
-            overflow-y: auto;
-            max-height: calc(100vh - 180px);
-        }
-
-        .user-item {
+        .nav-rail {
+            background: linear-gradient(180deg, #1a1a1b 0%, #111111 100%);
+            border-right: 1px solid #27272a;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            padding: 15px;
-            margin: 10px 0;
-            background: rgba(70, 70, 70, 0.6);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-            text-decoration: none;
-            color: inherit;
+            padding: 20px 0;
+            position: relative;
         }
 
-        .user-item:hover {
-            background: rgba(80, 80, 80, 0.8);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            border-color: #007bff;
-            text-decoration: none;
-            color: inherit;
+        .nav-rail::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, #3b82f6 50%, transparent 100%);
+            opacity: 0.5;
         }
 
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #007bff, #0056b3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            margin-right: 15px;
-            font-size: 18px;
-        }
-
-        .user-info {
-            flex: 1;
-        }
-
-        .user-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 5px;
-        }
-
-        .user-status {
-            font-size: 14px;
-            color: #bbb;
-        }
-
-        .online {
-            color: #28a745;
-        }
-
-        .offline {
-            color: #6c757d;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 40px;
-            color: #aaa;
-            font-style: italic;
-            display: none;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #aaa;
-        }
-    </style>
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Messages</h1>
-        </div>
-        
-        <div class="search-container">
-            <input type="text" class="search-box" placeholder="Search users..." id="searchInput">
-        </div>
-        
-       <div class="users-list">
-    {% for user in users %}
-        <a href="#" class="user-item">
-            <div class="user-avatar">{{ user.username|slice:":1"|upper }}</div>
-            <div class="user-info">
-                <div class="user-name">{{ user.username }}</div>
-                <div class="user-status {% if user.is_active %}online{% else %}offline{% endif %}">
-                    {% if user.is_active %}Online{% else %}Offline{% endif %}
-                </div>
-            </div>
-        </a>
-    {% empty %}
-        <div class="no-results">No users found matching your search</div>
-    {% endfor %}
+<div class="app-container">
+     <div class="nav-rail">
+
+     </div>
 </div>
+  
 
-        
-       
-    </div>
-
-    <script>
-    </script>
+   
+  <script>
+    
+  </script>
+  
 </body>
 </html>
