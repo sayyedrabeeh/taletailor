@@ -38,3 +38,13 @@ def chat(request):
         user.is_online = profile.is_online()
 
     return render(request, 'chatroom.html', {'users': users})
+
+
+def chat_room(request, room_name):
+    room = get_object_or_404(ChatRoom, name=room_name)
+    messages = Message.objects.filter(room=room).order_by('timestamp')
+
+    return render(request, 'chat.html', {
+        'room_name': room_name,
+        'messages': messages,
+    })
