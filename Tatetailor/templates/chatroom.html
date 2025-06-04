@@ -713,7 +713,7 @@
                             <div class="no-messages">No messages yet. Start the conversation!</div>
                         {% endfor %}
                     </div>
-
+                
                <form method="POST" action="{% url 'messaging:send_message' room_name=room_name %}">
                         {% csrf_token %}
                         <div class="message-input-area">
