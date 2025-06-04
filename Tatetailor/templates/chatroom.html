@@ -714,7 +714,7 @@
                         {% endfor %}
                     </div>
 
-               <form method="POST" action="{% url 'send_message' room_name=room_name %}">
+               <form method="POST" action="{% url 'messaging:send_message' room_name=room_name %}">
                         {% csrf_token %}
                         <div class="message-input-area">
                             <div class="input-wrapper">
