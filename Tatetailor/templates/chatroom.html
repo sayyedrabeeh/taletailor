@@ -704,23 +704,16 @@
                     </div>
                 </div>
                 <div class="messages-container">
-                    <div class="message received">
-                        <div class="message-bubble">Hey! I just got back from that photography workshop I mentioned. The techniques they taught were incredible!</div>
-                        <div class="message-time">Today 2:15 PM</div>
+                        {% for message in messages %}
+                            <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                                <div class="message-bubble">{{ message.content }}</div>
+                                <div class="message-time">{{ message.timestamp|date:"M d, h:i A" }}</div>
+                            </div>
+                        {% empty %}
+                            <div class="no-messages">No messages yet. Start the conversation!</div>
+                        {% endfor %}
                     </div>
-                    <div class="message sent">
-                        <div class="message-bubble">That's awesome! I'd love to see some of the shots you took. Did you try any of the new techniques?</div>
-                        <div class="message-time">Today 2:18 PM</div>
-                    </div>
-                    <div class="message received">
-                        <div class="message-bubble">Absolutely! I experimented with long exposure and some creative lighting. The results were beyond my expectations. Let me share a few with you!</div>
-                        <div class="message-time">Today 2:20 PM</div>
-                    </div>
-                    <div class="message sent">
-                        <div class="message-bubble">Can't wait to see them! Your photography has been getting better and better lately.</div>
-                        <div class="message-time">Today 2:22 PM</div>
-                    </div>
-                </div>
+
                 <div class="message-input-area">
                     <div class="input-wrapper">
                         <textarea class="message-input" placeholder="Type your message..." rows="1"></textarea>
