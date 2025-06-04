@@ -48,3 +48,15 @@ def chat_room(request, room_name):
         'room_name': room_name,
         'messages': messages,
     })
+
+def send_message(request, room_name):
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            room = get_object_or_404(ChatRoom, name=room_name)
+            Message.objects.create(
+                room=room,
+                sender=request.user,
+                content=content
+            )
+    return redirect('chat_room', room_name=room_name)
