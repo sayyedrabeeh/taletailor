@@ -662,22 +662,25 @@
 
             <!-- Chat Area -->
 
-        {% for user in users %}
-            <div class="chat-area">
-                <div class="chat-header">
-                    <div class="chat-user-info">
+       {% if room %}
+<div class="chat-area">
+    <div class="chat-header">
+         {% for participant in room.participants.all %}
+            {% if participant != request.user %}
+                {% with user=participant %}
+                     <div class="chat-user-info">
                         <div class="chat-user-avatar">
-                           {% if user.profile.profile_picture %}
+                            {% if user.profile.profile_picture %}
                                 <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
                             {% else %}
                                 <div class="avatar-fallback">{{ user.username|first|upper }}</div>
                             {% endif %}
-                           </div>
+                        </div>
                         <div class="chat-user-details">
-                            <h3>{{  user.username|cut:"@gmail.com" }}</h3>
+                            <h3>{{ user.username|cut:"@gmail.com" }}</h3>
                             <div class="chat-user-status">
-                                 <div class="status-dot {% if user.is_online %}online{% else %}offline{% endif %}"></div>
-                                 {% if user.is_online %}
+                                <div class="status-dot {% if user.is_online %}online{% else %}offline{% endif %}"></div>
+                                {% if user.is_online %}
                                     Active now
                                 {% else %}
                                     Last seen {{ user.last_seen1|timesince }} ago
@@ -685,56 +688,42 @@
                             </div>
                         </div>
                     </div>
-                    <div class="chat-actions">
-                        <button class="action-btn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-                            </svg>
-                        </button>
-                        <button class="action-btn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                            </svg>
-                        </button>
-                        <button class="action-btn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="messages-container">
-                        {% for message in messages %}
-                            <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
-                                <div class="message-bubble">{{ message.content }}</div>
-                                <div class="message-time">{{ message.timestamp|date:"M d, h:i A" }}</div>
-                            </div>
-                        {% empty %}
-                            <div class="no-messages">No messages yet. Start the conversation!</div>
-                        {% endfor %}
-                    </div>
-                
-               <form method="POST" action="{% url 'messaging:send_message' room_name=room_name %}">
-                        {% csrf_token %}
-                        <div class="message-input-area">
-                            <div class="input-wrapper">
-                                <textarea class="message-input" name="content" placeholder="Type your message..." rows="1" required></textarea>
-                                <div class="input-actions">
-                                    <!-- You can keep icons/buttons here -->
-                                    <button class="input-btn send-btn" type="submit">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                {% endwith %}
+            {% endif %}
+        {% endfor %}
+    </div>
 
+    <!-- Messages -->
+    <div class="messages-container">
+        {% for message in messages %}
+            <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                <div class="message-bubble">{{ message.content }}</div>
+                <div class="message-time">{{ message.timestamp|date:"M d, h:i A" }}</div>
             </div>
         {% empty %}
-               <div class="no-conversations">No users found</div>
+            <div class="no-messages">No messages yet. Start the conversation!</div>
         {% endfor %}
+    </div>
+
+    <!-- Input Form -->
+    <form method="POST" action="{% url 'messaging:send_message' room_name=room.name %}">
+        {% csrf_token %}
+        <div class="message-input-area">
+            <div class="input-wrapper">
+                <textarea class="message-input" name="content" placeholder="Type your message..." rows="1" required></textarea>
+                <div class="input-actions">
+                    <button class="input-btn send-btn" type="submit">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endif %}
+
         </div>
     </div>
 
