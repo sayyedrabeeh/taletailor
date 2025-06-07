@@ -60,9 +60,11 @@ def chat(request):
         'room_name': room.name if room else None,
         'messages': messages,
     })
-    
+
 def send_message(request, room_name):
+    print('hii')
     if request.method == 'POST':
+        print('post:',room_name)
         content = request.POST.get('content')
         if content:
             room = get_object_or_404(ChatRoom, name=room_name)
