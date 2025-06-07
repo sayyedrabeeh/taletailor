@@ -728,6 +728,49 @@
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    const textarea = form.querySelector("textarea");
+    const messagesContainer = document.querySelector(".messages-container");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();  // Prevent page reload
+
+        const content = textarea.value.trim();
+        if (!content) return;
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const url = form.action;
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": csrfToken
+            },
+            body: new URLSearchParams({ content })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Network response was not ok.");
+            return response.text();
+        })
+        .then(() => {
+            // Optional: append the new message manually (quick)
+            const msgDiv = document.createElement("div");
+            msgDiv.className = "message sent";
+            msgDiv.innerHTML = `
+                <div class="message-bubble">${content}</div>
+                <div class="message-time">Just now</div>
+            `;
+            messagesContainer.appendChild(msgDiv);
+
+            textarea.value = "";
+            textarea.focus();
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        })
+        .catch(err => console.error("Message send failed:", err));
+    });
+});
     </script>
 </body>
 </html>
