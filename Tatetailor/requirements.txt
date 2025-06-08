@@ -2,3 +2,5 @@ Django>=4.0
 channels
 channels_redis
 daphne
+python-dotenv
+psycopg2-binary

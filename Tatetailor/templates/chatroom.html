@@ -625,8 +625,9 @@
                 </div>
              <div class="chat-list">
          {% for user in users %}
-            <a href="?room_name={{ user.chatroom_name }}" class="chat-item {% if room and user in room.participants.all %}active{% endif %}">
-               <div class="chat-avatar {% if user.is_online %}online{% else %}offline{% endif %}">
+            <div class="chat-item {% if room and user in room.participants.all %}active{% endif %}"
+                        data-room="{{ user.chatroom_name }}">
+                <div class="chat-avatar {% if user.is_online %}online{% else %}offline{% endif %}">
                     {% if user.profile.profile_picture %}
                            <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
                     {% else %}
@@ -652,7 +653,7 @@
                         <div class="unread-badge">{{ user.unread_count }}</div>
                     {% endif %}
                 </div>
-            </a>
+            </div>
     {% empty %}
         <div class="no-conversations">No users found</div>
     {% endfor %}
@@ -727,50 +728,129 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form");
-    const textarea = form.querySelector("textarea");
-    const messagesContainer = document.querySelector(".messages-container");
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const chatItems = document.querySelectorAll(".chat-item");
+        const chatAreaContainer = document.querySelector(".main-content");
+        let chatSocket = null;
 
-    form.addEventListener("submit", function (e) {
-        e.preventDefault();  // Prevent page reload
+        chatItems.forEach(item => {
+            item.addEventListener("click", function () {
+                const roomName = this.getAttribute("data-room");
 
-        const content = textarea.value.trim();
-        if (!content) return;
+                fetch(`/messaging/chat/?room_name=${roomName}`)
+                    .then(res => res.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, "text/html");
+                        const newChatArea = doc.querySelector(".chat-area");
 
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        const url = form.action;
+                        if (newChatArea) {
+                            const oldChatArea = document.querySelector(".chat-area");
+                            if (oldChatArea) {
+                                oldChatArea.replaceWith(newChatArea);
+                            } else {
+                                chatAreaContainer.appendChild(newChatArea);
+                            }
 
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-CSRFToken": csrfToken
-            },
-            body: new URLSearchParams({ content })
-        })
-        .then(response => {
-            if (!response.ok) throw new Error("Network response was not ok.");
-            return response.text();
-        })
-        .then(() => {
-            // Optional: append the new message manually (quick)
-            const msgDiv = document.createElement("div");
-            msgDiv.className = "message sent";
-            msgDiv.innerHTML = `
-                <div class="message-bubble">${content}</div>
-                <div class="message-time">Just now</div>
-            `;
-            messagesContainer.appendChild(msgDiv);
+                            setupWebSocket(roomName);
+                        }
+                    })
+                    .catch(err => console.error("Failed to load chat:", err));
+            });
+        });
 
-            textarea.value = "";
-            textarea.focus();
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        })
-        .catch(err => console.error("Message send failed:", err));
+        function setupWebSocket(roomName) {
+            if (chatSocket) {
+                chatSocket.close();
+            }
+
+            const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+            chatSocket = new WebSocket(`${protocol}://${window.location.host}/ws/chat/${roomName}/`);
+
+
+            chatSocket.onopen = function () {
+                console.log("✅ WebSocket connected to", roomName);
+                attachMessageFormHandler(); // attach only when socket is open
+            };
+
+            chatSocket.onmessage = function (e) {
+                const data = JSON.parse(e.data);
+                const message = data.message;
+                const sender = data.username;
+
+                const msgDiv = document.createElement("div");
+                msgDiv.className = sender === "{{ request.user.username }}" ? "message sent" : "message received";
+                msgDiv.innerHTML = `
+                    <div class="message-bubble">${message}</div>
+                    <div class="message-time">Just now</div>
+                `;
+                const messagesContainer = document.querySelector(".messages-container");
+                messagesContainer.appendChild(msgDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            };
+
+            chatSocket.onclose = function () {
+                console.warn("⚠️ WebSocket closed for", roomName);
+            };
+        }
+
+        function attachMessageFormHandler() {
+            const oldForm = document.querySelector("form");
+            if (!oldForm) return;
+
+            const newForm = oldForm.cloneNode(true); // remove any previous listeners
+            oldForm.parentNode.replaceChild(newForm, oldForm);
+
+            const textarea = newForm.querySelector("textarea");
+            const messagesContainer = document.querySelector(".messages-container");
+
+            newForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const content = textarea.value.trim();
+                if (!content) return;
+
+                if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) {
+                    console.warn("🚫 WebSocket not open. Message not sent.");
+                    return;
+                }
+
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                const url = newForm.action;
+
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": csrfToken
+                    },
+                    body: new URLSearchParams({ content })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Network response was not ok.");
+                    return response.text();
+                })
+                .then(() => {
+                    chatSocket.send(JSON.stringify({
+                        message: content,
+                        username: "{{ request.user.username }}"
+                    }));
+                    textarea.value = "";
+                    textarea.focus();
+                })
+                .catch(err => console.error("❌ Message send failed:", err));
+            });
+        }
+
+        // Automatically load the first chat
+        if (chatItems.length > 0) {
+            chatItems[0].click();
+        }
     });
-});
-    </script>
+</script>
+
+
+
 </body>
 </html>
