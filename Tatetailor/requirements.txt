@@ -4,3 +4,5 @@ channels_redis
 daphne
 python-dotenv
 psycopg2-binary
+requests
+Pillow

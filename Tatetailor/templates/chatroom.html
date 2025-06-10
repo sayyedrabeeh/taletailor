@@ -664,7 +664,7 @@
             <!-- Chat Area -->
 
        {% if room %}
-<div class="chat-area">
+<div class="chat-area" data-room="{{ room.name }}">
     <div class="chat-header">
          {% for participant in room.participants.all %}
             {% if participant != request.user %}
@@ -727,127 +727,119 @@
 
         </div>
     </div>
+<script>
+  window.CURRENT_USERNAME = "{{ request.user.username }}";
+</script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const chatItems = document.querySelectorAll(".chat-item");
-        const chatAreaContainer = document.querySelector(".main-content");
-        let chatSocket = null;
+document.addEventListener("DOMContentLoaded", () => {
+    let chatSocket;
+    const chatItems = document.querySelectorAll(".chat-item");
+    const chatArea = document.querySelector(".main-content");
 
-        chatItems.forEach(item => {
-            item.addEventListener("click", function () {
-                const roomName = this.getAttribute("data-room");
+    function setupWebSocket(roomName) {
+        if (chatSocket) chatSocket.close();
 
-                fetch(`/messaging/chat/?room_name=${roomName}`)
-                    .then(res => res.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, "text/html");
-                        const newChatArea = doc.querySelector(".chat-area");
+        const protocol = location.protocol === "https:" ? "wss" : "ws";
+        chatSocket = new WebSocket(`${protocol}://${location.host}/ws/chat/${roomName}/`);
 
-                        if (newChatArea) {
-                            const oldChatArea = document.querySelector(".chat-area");
-                            if (oldChatArea) {
-                                oldChatArea.replaceWith(newChatArea);
-                            } else {
-                                chatAreaContainer.appendChild(newChatArea);
-                            }
+        chatSocket.onopen = () => {
+            console.log("✅ WebSocket connected to room:", roomName);
+        };
 
-                            setupWebSocket(roomName);
-                        }
-                    })
-                    .catch(err => console.error("Failed to load chat:", err));
-            });
-        });
-
-        function setupWebSocket(roomName) {
-            if (chatSocket) {
-                chatSocket.close();
+        chatSocket.onmessage = e => {
+            const { message, username } = JSON.parse(e.data);
+            const container = document.querySelector(".chat-area .messages-container");
+            if (!container) {
+                console.warn("⚠️ .messages-container not found");
+                return;
             }
 
-            const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-            chatSocket = new WebSocket(`${protocol}://${window.location.host}/ws/chat/${roomName}/`);
+            const div = document.createElement("div");
+            div.className = username === window.CURRENT_USERNAME ? "message sent" : "message received";
+            div.innerHTML = `
+                <div class="message-bubble">${message}</div>
+                <div class="message-time">Just now</div>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        };
+    }
 
+    function attachFormHandler(roomName) {
+        const form = document.querySelector(".chat-area form");
+        if (!form) return;
 
-            chatSocket.onopen = function () {
-                console.log("✅ WebSocket connected to", roomName);
-                attachMessageFormHandler(); // attach only when socket is open
-            };
+        const textarea = form.querySelector("textarea");
+        const csrf = form.querySelector("[name=csrfmiddlewaretoken]").value;
 
-            chatSocket.onmessage = function (e) {
-                const data = JSON.parse(e.data);
-                const message = data.message;
-                const sender = data.username;
+        form.onsubmit = e => {
+            e.preventDefault();
+            const msg = textarea.value.trim();
+            if (!msg) return;
 
-                const msgDiv = document.createElement("div");
-                msgDiv.className = sender === "{{ request.user.username }}" ? "message sent" : "message received";
-                msgDiv.innerHTML = `
-                    <div class="message-bubble">${message}</div>
-                    <div class="message-time">Just now</div>
-                `;
-                const messagesContainer = document.querySelector(".messages-container");
-                messagesContainer.appendChild(msgDiv);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            };
-
-            chatSocket.onclose = function () {
-                console.warn("⚠️ WebSocket closed for", roomName);
-            };
-        }
-
-        function attachMessageFormHandler() {
-            const oldForm = document.querySelector("form");
-            if (!oldForm) return;
-
-            const newForm = oldForm.cloneNode(true); // remove any previous listeners
-            oldForm.parentNode.replaceChild(newForm, oldForm);
-
-            const textarea = newForm.querySelector("textarea");
-            const messagesContainer = document.querySelector(".messages-container");
-
-            newForm.addEventListener("submit", function (e) {
-                e.preventDefault();
-
-                const content = textarea.value.trim();
-                if (!content) return;
-
-                if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) {
-                    console.warn("🚫 WebSocket not open. Message not sent.");
-                    return;
+            // Send via HTTP to save to DB
+            fetch(form.action, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": csrf,
+                },
+                body: new URLSearchParams({ content: msg })
+            }).then(() => {
+                // Send via WebSocket for real-time display
+                if (chatSocket.readyState === WebSocket.OPEN) {
+                    chatSocket.send(JSON.stringify({
+                        message: msg,
+                        username: window.CURRENT_USERNAME
+                    }));
+                } else {
+                    console.error("❌ WebSocket is not open.");
                 }
 
-                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-                const url = newForm.action;
+                textarea.value = "";
 
-                fetch(url, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "X-CSRFToken": csrfToken
-                    },
-                    body: new URLSearchParams({ content })
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error("Network response was not ok.");
-                    return response.text();
-                })
-                .then(() => {
-                    chatSocket.send(JSON.stringify({
-                        message: content,
-                        username: "{{ request.user.username }}"
-                    }));
-                    textarea.value = "";
-                    textarea.focus();
-                })
-                .catch(err => console.error("❌ Message send failed:", err));
+                // Auto-scroll after small delay
+                setTimeout(() => {
+                    const container = document.querySelector(".chat-area .messages-container");
+                    if (container) {
+                        container.scrollTop = container.scrollHeight;
+                    }
+                }, 100);
             });
-        }
+        };
+    }
 
-        // Automatically load the first chat
-        if (chatItems.length > 0) {
-            chatItems[0].click();
-        }
+    function loadChat(roomName) {
+        fetch(`/messaging/chat/?room_name=${roomName}`)
+            .then(res => res.text())
+            .then(html => {
+                const doc = new DOMParser().parseFromString(html, "text/html");
+                const newChat = doc.querySelector(".chat-area");
+                const oldChat = document.querySelector(".chat-area");
+                if (oldChat) oldChat.replaceWith(newChat);
+                else chatArea.appendChild(newChat);
+
+                setupWebSocket(roomName);
+                attachFormHandler(roomName);
+            });
+    }
+
+    // Clicking chat user
+    chatItems.forEach(item => {
+        item.addEventListener("click", () => {
+            const roomName = item.dataset.room;
+            loadChat(roomName);
+        });
     });
+
+    // Load current room on first page load if already active
+    const currentRoom = document.querySelector(".chat-area")?.dataset?.room;
+    if (currentRoom) {
+        setupWebSocket(currentRoom);
+        attachFormHandler(currentRoom);
+    }
+});
 </script>
 
 
