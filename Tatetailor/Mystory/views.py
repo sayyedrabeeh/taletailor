@@ -203,7 +203,8 @@ def send_story_email_to_followers(story, followers, action="posted"):
     })
 
     for follower in followers:
-        msg = EmailMultiAlternatives(subject, "", from_email, [follower.email])
+        follower_user = follower.follower
+        msg = EmailMultiAlternatives(subject, "", from_email, [follower_user.email])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
