@@ -113,7 +113,7 @@ def edit_story(request, story_id=None):
                     story.image.save(f"{story.id}.jpg", img_file)
                     story.save()
                     if post_type == "public":
-                          notify_followers(request.user, story)
+                          notify_followers(request.user, story,action="posted")
                     messages.success(request, f"Story Created Successfully as {post_type.capitalize()}.")
                     return redirect("mystory:yourownstory")
         return render(request, "edityourownstory.html", {})
@@ -155,7 +155,7 @@ def edit_story(request, story_id=None):
             story.status = post_type
             story.save()
             if post_type == "public":
-                     notify_followers(request.user, story)
+                     notify_followers(request.user, story,action="Updated")
             img_file = get_unsplash_image(new_title)
             if img_file:
                story.image.save(f"{story.id}.jpg", img_file)
@@ -487,7 +487,7 @@ def user_following(request, username):
 
 
 
-def notify_followers(user, story):
+def notify_followers(user, story,action="posted"):
     followers = Follower.objects.filter(following=user).select_related("follower")
     username = escape(user.username)
     story_title = escape(story.title)
@@ -495,6 +495,7 @@ def notify_followers(user, story):
     user_link = f'<a href="/Mystory/author/{username}/">{username}</a>'
     story_link = f'<a href="/Aistories/view_story/{story.id}/">{story_title}</a>'
     message = f"{user_link} posted a new story: '{story_link}'."
+    send_story_email_to_followers(story, followers, action)
 
     for follower_relation in followers:
         Notification.objects.create(
