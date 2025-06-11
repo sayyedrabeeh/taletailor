@@ -27,7 +27,9 @@ from django.core.files.base import ContentFile
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
- 
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from reportlab.pdfgen import canvas
@@ -187,6 +189,23 @@ def edit_story(request, story_id=None):
         "is_owner": is_owner,
         "status": story.status,
     })
+
+def send_story_email_to_followers(story, followers, action="posted"):
+    subject = f"{story.user.username} has {action} a new story: {story.title}"
+    from_email = settings.EMAIL_HOST_USER
+    story_url = f"http://127.0.0.1:8000/Aistories/view_story/{story.id}/"  
+
+    html_content = render_to_string("email/story_notification.html", {
+        "author": story.user.username,
+        "story": story,
+        "story_url": story_url,
+        "action": action
+    })
+
+    for follower in followers:
+        msg = EmailMultiAlternatives(subject, "", from_email, [follower.email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
 
 @login_required(login_url='authentication:login') 
 def share_story(request, story_id):
