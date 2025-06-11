@@ -171,7 +171,6 @@
       display: flex;
       margin-bottom: 3rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 3rem;
       background: rgba(255, 255, 255, 0.05);
       border-radius: 1rem;
       overflow: hidden;
@@ -546,7 +545,7 @@
   
   <main class="main-content">
     <h1 class="title">MY STORY</h1>
-    {% for story in stories %}
+    
        <div class="search-container">
         <form method="get">
           <input type="text" name="search" placeholder="Search for stories, authors, or genres..." class="search-bar" value="{{ query }}">
@@ -554,7 +553,7 @@
           <button type="submit">Search</button>
         </form>
       </div>
-      
+    {% for story in stories %}
       {% if messages %}
       <div class="container mt-3">
         {% for message in messages %}
@@ -602,7 +601,23 @@
       
     </div>
    </a>
-   <div class="pagination">
+   
+    {% empty %}
+     <div class="no-stories-container">
+    <div class="no-stories-box">
+      <img src="{% static 'images/empty-folder.jpeg' %}" alt="No Stories" class="no-stories-image">
+      <h2 class="no-stories-title">You haven’t created any stories yet.</h2>
+      <p class="no-stories-text">Click the “Create Story” button to get started.</p>
+       <a href="{% url 'mystory:yourownstory' %}" class="add-button-link">
+      <button class="add-button">
+        <span class="button-text">Start Creating</span>
+      </button>
+    </a>
+    </div>
+    
+  </div>
+    {% endfor %}
+    <div class="pagination">
         <span class="step-links">
           {% if stories.has_previous %}
             <a href="?search={{ query }}&page=1">&laquo; First</a>
@@ -619,21 +634,6 @@
           {% endif %}
         </span>
       </div>
-    {% empty %}
-     <div class="no-stories-container">
-    <div class="no-stories-box">
-      <img src="{% static 'images/empty-folder.jpeg' %}" alt="No Stories" class="no-stories-image">
-      <h2 class="no-stories-title">You haven’t created any stories yet.</h2>
-      <p class="no-stories-text">Click the “Create Story” button to get started.</p>
-       <a href="{% url 'mystory:yourownstory' %}" class="add-button-link">
-      <button class="add-button">
-        <span class="button-text">Start Creating</span>
-      </button>
-    </a>
-    </div>
-    
-  </div>
-    {% endfor %}
 
     {% for story in stories %}
     <div class="modal fade" id="deleteModal{{ story.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ story.id }}" aria-hidden="true">
