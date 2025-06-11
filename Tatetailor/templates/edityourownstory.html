@@ -1030,7 +1030,7 @@ button.secondary:hover {
     </div>
   
   <main>
-    <form class="editor-container" method="POST" action="{% if story11 %}
+    <form class="editor-container" id="storyForm" method="POST" action="{% if story11 %}
     {% url 'mystory:edit_story' sid %}
   {% else %}
     {% url 'mystory:edit_story' %}
@@ -1334,7 +1334,10 @@ button.secondary:hover {
     </form>
   </main>
   
-
+<div id="loader" style="display:none;">
+    <p>Sending story to followers...</p>
+    <img src="{% static 'images/loader.gif' %}" alt="Loading..." />
+</div>
   
 </form>
   <!-- Collaboration Modal -->
@@ -1374,7 +1377,12 @@ button.secondary:hover {
 
 
   <script>
- 
+    const form = document.getElementById("storyForm");
+    const loader = document.getElementById("loader");
+
+    form.addEventListener("submit", () => {
+        loader.style.display = "block";
+    });
     const storyEditor = document.querySelector('.story-editor');
     const wordCount = document.querySelector('.word-count');
     
