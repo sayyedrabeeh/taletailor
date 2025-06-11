@@ -1,13 +1,294 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>New Story Notification</title>
+    <style type="text/css">
+        /* Reset styles */
+        #outlook a { padding: 0; }
+        body { width: 100% !important; min-width: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin: 0; padding: 0; }
+        .ExternalClass { width: 100%; }
+        .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div { line-height: 100%; }
+        #backgroundTable { margin: 0; padding: 0; width: 100% !important; line-height: 100% !important; }
+        
+        /* Main styles */
+        .email-wrapper {
+            background-color: #f4f4f4;
+            padding: 20px 0;
+        }
+        
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .header {
+            background-color: #4a90e2;
+            border-radius: 8px 8px 0 0;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+        }
+        
+        .header p {
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .notification-badge {
+            background-color: #28a745;
+            border-radius: 20px;
+            color: #ffffff;
+            display: inline-block;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+        }
+        
+        .author-section {
+            background-color: #f8f9fa;
+            border-left: 4px solid #4a90e2;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            padding: 20px;
+        }
+        
+        .author-name {
+            color: #333333;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+        }
+        
+        .author-action {
+            color: #666666;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        .story-section {
+            background-color: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .story-header {
+            background-color: #fff3cd;
+            border-bottom: 1px solid #ffeaa7;
+            padding: 20px;
+        }
+        
+        .story-title {
+            color: #333333;
+            font-family: Arial, sans-serif;
+            font-size: 22px;
+            font-weight: bold;
+            line-height: 1.3;
+            margin: 0 0 10px 0;
+        }
+        
+        .story-meta {
+            color: #666666;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        .story-body {
+            padding: 20px;
+        }
+        
+        .story-excerpt {
+            color: #555555;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 0 0 20px 0;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .cta-button {
+            background-color: #4a90e2;
+            border-radius: 25px;
+            color: #ffffff;
+            display: inline-block;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 30px;
+            text-decoration: none;
+        }
+        
+        .footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .footer p {
+            color: #666666;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin: 0 0 10px 0;
+        }
+        
+        .footer a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+        
+        .social-links {
+            margin-top: 15px;
+        }
+        
+        .social-link {
+            background-color: #e9ecef;
+            border-radius: 50%;
+            color: #666666;
+            display: inline-block;
+            font-size: 14px;
+            height: 35px;
+            line-height: 35px;
+            margin: 0 5px;
+            text-align: center;
+            text-decoration: none;
+            width: 35px;
+        }
+        
+        /* Mobile styles */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+            }
+            
+            .header {
+                border-radius: 0 !important;
+                padding: 20px 15px !important;
+            }
+            
+            .header h1 {
+                font-size: 24px !important;
+            }
+            
+            .content {
+                padding: 20px 15px !important;
+            }
+            
+            .story-title {
+                font-size: 20px !important;
+            }
+        }
+    </style>
 </head>
-<body>
-    <h2>{{ author }} has {{ action }} a story!</h2>
-    <p><strong>Title:</strong> {{ story.title }}</p>
-    <p><strong>Excerpt:</strong> {{ story.content|slice:":300" }}...</p>
-    <p><a href="{{ story_url }}">Read the full story</a></p>
+<body style="margin: 0; padding: 0; background-color: #f4f4f4;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f4f4f4;">
+        <tr>
+            <td style="padding: 20px 0;">
+                <!-- Email Container -->
+                <table role="presentation" class="email-container" cellspacing="0" cellpadding="0" border="0" align="center" style="background-color: #ffffff; border-radius: 8px; max-width: 600px; width: 100%;">
+                    
+                    <!-- Header Section -->
+                    <tr>
+                        <td class="header" style="background-color: #4a90e2; border-radius: 8px 8px 0 0; padding: 30px 20px; text-align: center;">
+                            <h1 style="color: #ffffff; font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; margin: 0 0 10px 0;">📚 New Story Alert!</h1>
+                            <p style="color: #ffffff; font-family: Arial, sans-serif; font-size: 16px; margin: 0; opacity: 0.9;">Fresh content just for you</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content Section -->
+                    <tr>
+                        <td class="content" style="padding: 30px 20px;">
+                            
+                            <!-- Notification Badge -->
+                            <div class="notification-badge" style="background-color: #28a745; border-radius: 20px; color: #ffffff; display: inline-block; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; margin-bottom: 20px; padding: 8px 16px;">
+                                ✨ New Story Published
+                            </div>
+                            
+                            <!-- Author Section -->
+                            <div class="author-section" style="background-color: #f8f9fa; border-left: 4px solid #4a90e2; border-radius: 4px; margin-bottom: 25px; padding: 20px;">
+                                <h3 class="author-name" style="color: #333333; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; margin: 0 0 5px 0;">{{ author }}</h3>
+                                <p class="author-action" style="color: #666666; font-family: Arial, sans-serif; font-size: 14px; margin: 0;">has {{ action }} a new story</p>
+                            </div>
+                            
+                            <!-- Story Section -->
+                            <div class="story-section" style="background-color: #ffffff; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 25px; overflow: hidden;">
+                                
+                                <!-- Story Header -->
+                                <div class="story-header" style="background-color: #fff3cd; border-bottom: 1px solid #ffeaa7; padding: 20px;">
+                                    <h2 class="story-title" style="color: #333333; font-family: Arial, sans-serif; font-size: 22px; font-weight: bold; line-height: 1.3; margin: 0 0 10px 0;">{{ story.title }}</h2>
+                                    <p class="story-meta" style="color: #666666; font-family: Arial, sans-serif; font-size: 14px; margin: 0;">📅 Just published • ⏱️ 5 min read</p>
+                                </div>
+                                
+                                <!-- Story Body -->
+                                <div class="story-body" style="padding: 20px;">
+                                    <p class="story-excerpt" style="color: #555555; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                        {{ story.content|slice:":300" }}...
+                                    </p>
+                                </div>
+                                
+                            </div>
+                            
+                            <!-- Call to Action -->
+                            <div class="cta-section" style="text-align: center; padding: 20px 0;">
+                                <a href="{{ story_url }}" class="cta-button" style="background-color: #4a90e2; border-radius: 25px; color: #ffffff; display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; padding: 12px 30px; text-decoration: none;">📖 Read the Full Story</a>
+                            </div>
+                            
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer Section -->
+                    <tr>
+                        <td class="footer" style="background-color: #f8f9fa; border-top: 1px solid #e9ecef; padding: 20px; text-align: center;">
+                            <p style="color: #666666; font-family: Arial, sans-serif; font-size: 14px; margin: 0 0 10px 0;">Thanks for being part of our reading community!</p>
+                            <p style="color: #666666; font-family: Arial, sans-serif; font-size: 14px; margin: 0 0 10px 0;">
+                                Don't want these notifications? <a href="#" style="color: #4a90e2; text-decoration: none;">Unsubscribe here</a>
+                            </p>
+                            
+                            <!-- Social Links -->
+                            <div class="social-links" style="margin-top: 15px;">
+                                <a href="#" class="social-link" style="background-color: #e9ecef; border-radius: 50%; color: #666666; display: inline-block; font-size: 14px; height: 35px; line-height: 35px; margin: 0 5px; text-align: center; text-decoration: none; width: 35px;">📧</a>
+                                <a href="#" class="social-link" style="background-color: #e9ecef; border-radius: 50%; color: #666666; display: inline-block; font-size: 14px; height: 35px; line-height: 35px; margin: 0 5px; text-align: center; text-decoration: none; width: 35px;">🐦</a>
+                                <a href="#" class="social-link" style="background-color: #e9ecef; border-radius: 50%; color: #666666; display: inline-block; font-size: 14px; height: 35px; line-height: 35px; margin: 0 5px; text-align: center; text-decoration: none; width: 35px;">📘</a>
+                                <a href="#" class="social-link" style="background-color: #e9ecef; border-radius: 50%; color: #666666; display: inline-block; font-size: 14px; height: 35px; line-height: 35px; margin: 0 5px; text-align: center; text-decoration: none; width: 35px;">📷</a>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
