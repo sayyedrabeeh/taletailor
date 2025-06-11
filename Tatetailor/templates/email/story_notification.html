@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>New Story Notification</title>
+</head>
+<body>
+    <h2>{{ author }} has {{ action }} a story!</h2>
+    <p><strong>Title:</strong> {{ story.title }}</p>
+    <p><strong>Excerpt:</strong> {{ story.content|slice:":300" }}...</p>
+    <p><a href="{{ story_url }}">Read the full story</a></p>
+</body>
+</html>
