@@ -755,7 +755,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         chatSocket.onopen = () => {
             console.log("✅ WebSocket connected to room:", roomName);
-            attachFormHandler(roomName); // Only attach form once WebSocket is ready
+            attachFormHandler(roomName);  
         };
 
         chatSocket.onmessage = e => {
@@ -816,7 +816,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     message: msg,
                     username: window.CURRENT_USERNAME
                 }));
-
+                
                 textarea.value = "";
                 setTimeout(() => {
                     const container = document.querySelector(".chat-area .messages-container");
