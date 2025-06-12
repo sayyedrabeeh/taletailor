@@ -874,6 +874,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Chat user click handler
     chatItems.forEach(item => {
         item.addEventListener("click", () => {
+           document.querySelectorAll(".chat-item.active").forEach(i => i.classList.remove("active"));
+           item.classList.add("active");
             const roomName = item.dataset.room;
             loadChat(roomName);
         });
