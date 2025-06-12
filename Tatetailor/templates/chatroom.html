@@ -866,6 +866,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 const oldChat = document.querySelector(".chat-area");
                 if (oldChat) oldChat.replaceWith(newChat);
                 else chatArea.appendChild(newChat);
+                 const chatItem = document.querySelector(`.chat-item[data-room="${roomName}"]`);
+                if (chatItem) {
+                  const unreadBadge = chatItem.querySelector(".unread-badge");
+                if (unreadBadge) unreadBadge.remove();  
+            }
 
                 setupWebSocket(roomName);  
             });
