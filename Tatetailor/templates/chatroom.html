@@ -733,9 +733,19 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    let chatSocket;
+    const searchInput = document.querySelector(".search-input");
     const chatItems = document.querySelectorAll(".chat-item");
-    const chatArea = document.querySelector(".main-content");
+
+    searchInput.addEventListener("input", () => {
+        const filter = searchInput.value.toLowerCase();
+        chatItems.forEach(item => {
+            const name = item.querySelector(".chat-name").textContent.toLowerCase();
+            item.style.display = name.includes(filter) ? "flex" : "none";
+        });
+    });
+  
+    let chatSocket;
+     const chatArea = document.querySelector(".main-content");
 
     function setupWebSocket(roomName) {
         if (chatSocket) chatSocket.close();
@@ -828,7 +838,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (oldChat) oldChat.replaceWith(newChat);
                 else chatArea.appendChild(newChat);
 
-                setupWebSocket(roomName); // now includes attachFormHandler
+                setupWebSocket(roomName);  
             });
     }
 
