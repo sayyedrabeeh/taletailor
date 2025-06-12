@@ -811,19 +811,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: new URLSearchParams({ content: msg })
             }).then(() => {
-           
+                // Send via WebSocket
                 chatSocket.send(JSON.stringify({
                     message: msg,
                     username: window.CURRENT_USERNAME
                 }));
                 const activeChatItem = document.querySelector(".chat-item.active");
-                if (activeChatItem) {
-                    const preview = activeChatItem.querySelector(".chat-preview");
-                    const time = activeChatItem.querySelector(".chat-time");
 
-                    if (preview) preview.textContent = msg;
-                    if (time) time.textContent = "Just now";
-                }
                 textarea.value = "";
                 setTimeout(() => {
                     const container = document.querySelector(".chat-area .messages-container");
