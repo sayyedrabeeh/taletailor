@@ -774,6 +774,21 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
+            const allChatItems = document.querySelectorAll(".chat-item");
+            allChatItems.forEach(item => {
+                const name = item.querySelector(".chat-name").textContent.trim().toLowerCase();
+                const cleanUsername = username.toLowerCase().replace("@gmail.com", "");
+                if (name === cleanUsername.toLowerCase()) {
+                    const preview = item.querySelector(".chat-preview");
+                    const time = item.querySelector(".chat-time");
+                    if (preview) preview.textContent = message;
+                   if (time) {
+                        const now = new Date();
+                        const formatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        time.textContent = formatted;  
+                    }
+                }
+            });
         };
 
         chatSocket.onclose = () => {
@@ -817,16 +832,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     username: window.CURRENT_USERNAME
                 }));
                 const activeChatItem = document.querySelector(".chat-item.active");
-const roomName = document.querySelector(".chat-area")?.dataset?.room;
+                const roomName = document.querySelector(".chat-area")?.dataset?.room;
 
-const targetChatItem = document.querySelector(`.chat-item[data-room="${roomName}"]`);
-if (targetChatItem) {
-    const preview = targetChatItem.querySelector(".chat-preview");
-    const time = targetChatItem.querySelector(".chat-time");
+                const targetChatItem = document.querySelector(`.chat-item[data-room="${roomName}"]`);
+                if (targetChatItem) {
+                    const preview = targetChatItem.querySelector(".chat-preview");
+                    const time = targetChatItem.querySelector(".chat-time");
 
-    if (preview) preview.textContent = msg;
-    if (time) time.textContent = "Just now";
-}
+                    if (preview) preview.textContent = msg;
+                    if (time) time.textContent = "Just now";
+                }
                 textarea.value = "";
                 setTimeout(() => {
                     const container = document.querySelector(".chat-area .messages-container");
