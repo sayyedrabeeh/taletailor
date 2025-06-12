@@ -7,7 +7,8 @@ from authentication.models import Profile
 
 def chat(request):
     users = User.objects.exclude(id=request.user.id)
-
+    if not request.user.is_authenticated or request.user.id is None:
+        return redirect('authentication:login') 
     for user in users:
         room_name = f"room-{min(request.user.id, user.id)}-{max(request.user.id, user.id)}"
         room = ChatRoom.objects.filter(name=room_name).first()
