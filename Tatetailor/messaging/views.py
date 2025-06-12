@@ -20,8 +20,11 @@ def chat(request):
         last_msg = Message.objects.filter(room=room).order_by('-timestamp').first()
         last_message = last_msg.content if last_msg else "Start a conversation..."
         last_seen1 = last_msg.timestamp if last_msg else None
-        unread_count = 0  
-
+        unread_count = Message.objects.filter(
+        room=room,
+        sender=user,   
+        ).exclude(read_by=request.user).count()
+      
         user.last_message = last_message
         user.last_seen1 = last_seen1
         user.unread_count = unread_count
@@ -54,7 +57,10 @@ def chat(request):
                     room = None 
         if room:
             messages = Message.objects.filter(room=room).order_by('timestamp')
-
+            unread_messages = messages.exclude(read_by=request.user).exclude(sender=request.user)
+            for msg in unread_messages:
+                msg.read_by.add(request.user)
+                
     return render(request, 'chatroom.html', {
         'users': users,
         'room': room,
