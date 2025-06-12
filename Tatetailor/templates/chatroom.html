@@ -817,7 +817,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     username: window.CURRENT_USERNAME
                 }));
                 const activeChatItem = document.querySelector(".chat-item.active");
+const roomName = document.querySelector(".chat-area")?.dataset?.room;
 
+const targetChatItem = document.querySelector(`.chat-item[data-room="${roomName}"]`);
+if (targetChatItem) {
+    const preview = targetChatItem.querySelector(".chat-preview");
+    const time = targetChatItem.querySelector(".chat-time");
+
+    if (preview) preview.textContent = msg;
+    if (time) time.textContent = "Just now";
+}
                 textarea.value = "";
                 setTimeout(() => {
                     const container = document.querySelector(".chat-area .messages-container");
