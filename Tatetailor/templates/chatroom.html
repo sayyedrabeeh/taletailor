@@ -759,12 +759,28 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         chatSocket.onmessage = e => {
-            const { message, username } = JSON.parse(e.data);
+            const { message, username,room_name  } = JSON.parse(e.data);
             const container = document.querySelector(".chat-area .messages-container");
-            if (!container) {
-                console.warn("⚠️ .messages-container not found");
-                return;
+            const currentRoom = document.querySelector(".chat-area")?.dataset.room;
+
+            if (!container || currentRoom !== room_name) {
+                console.warn("⚠️ .messages-container not found or message is for a different room");
+             
+            const chatItem = document.querySelector(`.chat-item[data-room="${room_name}"]`);
+            if (chatItem) {
+            let badge = chatItem.querySelector(".unread-badge");
+            if (badge) {
+                badge.textContent = parseInt(badge.textContent) + 1;
+            } else {
+                const newBadge = document.createElement("span");
+                newBadge.className = "unread-badge";
+                newBadge.textContent = "1";
+                chatItem.appendChild(newBadge);
             }
+        }
+             return;
+            }
+
 
             const div = document.createElement("div");
             div.className = username === window.CURRENT_USERNAME ? "message sent" : "message received";
