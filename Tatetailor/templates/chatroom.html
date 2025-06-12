@@ -745,6 +745,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         chatSocket.onopen = () => {
             console.log("✅ WebSocket connected to room:", roomName);
+            attachFormHandler(roomName); // Only attach form once WebSocket is ready
         };
 
         chatSocket.onmessage = e => {
@@ -764,6 +765,14 @@ document.addEventListener("DOMContentLoaded", () => {
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
         };
+
+        chatSocket.onclose = () => {
+            console.warn("❌ WebSocket connection closed.");
+        };
+
+        chatSocket.onerror = error => {
+            console.error("WebSocket error:", error);
+        };
     }
 
     function attachFormHandler(roomName) {
@@ -778,7 +787,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const msg = textarea.value.trim();
             if (!msg) return;
 
-            // Send via HTTP to save to DB
+            if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) {
+                console.error("❌ WebSocket is not open. Message not sent.");
+                return;
+            }
+
+            // Send to DB
             fetch(form.action, {
                 method: "POST",
                 headers: {
@@ -787,19 +801,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: new URLSearchParams({ content: msg })
             }).then(() => {
-                // Send via WebSocket for real-time display
-                if (chatSocket.readyState === WebSocket.OPEN) {
-                    chatSocket.send(JSON.stringify({
-                        message: msg,
-                        username: window.CURRENT_USERNAME
-                    }));
-                } else {
-                    console.error("❌ WebSocket is not open.");
-                }
+                // Send via WebSocket
+                chatSocket.send(JSON.stringify({
+                    message: msg,
+                    username: window.CURRENT_USERNAME
+                }));
 
                 textarea.value = "";
-
-                // Auto-scroll after small delay
                 setTimeout(() => {
                     const container = document.querySelector(".chat-area .messages-container");
                     if (container) {
@@ -820,12 +828,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (oldChat) oldChat.replaceWith(newChat);
                 else chatArea.appendChild(newChat);
 
-                setupWebSocket(roomName);
-                attachFormHandler(roomName);
+                setupWebSocket(roomName); // now includes attachFormHandler
             });
     }
 
-    // Clicking chat user
+    // Chat user click handler
     chatItems.forEach(item => {
         item.addEventListener("click", () => {
             const roomName = item.dataset.room;
@@ -833,11 +840,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Load current room on first page load if already active
+    // Load current room on first page load (if open)
     const currentRoom = document.querySelector(".chat-area")?.dataset?.room;
     if (currentRoom) {
         setupWebSocket(currentRoom);
-        attachFormHandler(currentRoom);
     }
 });
 </script>
