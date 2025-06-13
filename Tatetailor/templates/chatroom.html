@@ -588,27 +588,27 @@
     <div class="app-container">
         <!-- Navigation Rail -->
         <div class="nav-rail">
-         <a href="{% url 'authentication:home' %}" class="nav-item" title="Home">
+            <a href="{% url 'authentication:home' %}" class="nav-item" title="Home">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
                 </svg>
-        </a>
-        <a href="{% url 'aistory:explore' %}" class="nav-item" title="Explore">
-           <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+            </a>
+            <a href="{% url 'aistory:explore' %}" class="nav-item" title="Explore">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
                <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm3.94 6.06l-2.12 5.66a1 1 0 0 1-.62.62l-5.66 2.12a.25.25 0 0 1-.32-.32l2.12-5.66a1 1 0 0 1 .62-.62l5.66-2.12a.25.25 0 0 1 .32.32z"/>
-           </svg>
-        </a>
-        <a href="{% url 'mystory:mystory1' %}" class="nav-item" title="MyStory">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                </svg>
+            </a>
+            <a href="{% url 'mystory:mystory1' %}" class="nav-item" title="MyStory">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
                 <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm-1 14.5V7.5a1 1 0 0 1 1.54-.84l5 3.5a1 1 0 0 1 0 1.68l-5 3.5A1 1 0 0 1 11 16.5z"/>
-            </svg>
-        </a>
-        <a href="{% url 'mystory:yourownstory' %}" class="nav-item" title="Create Story">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                </svg>
+            </a>
+            <a href="{% url 'mystory:yourownstory' %}" class="nav-item" title="Create Story">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
                 <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
-            </svg>
-        </a>
-     </div>
+                </svg>
+            </a>
+        </div>
 
         <!-- Main Content -->
         <div class="main-content">
@@ -624,7 +624,7 @@
                     </div>
                 </div>
              <div class="chat-list">
-         {% for user in users %}
+            {% for user in users %}
             <div class="chat-item {% if room and user in room.participants.all %}active{% endif %}"
                         data-room="{{ user.chatroom_name }}">
                 <div class="chat-avatar {% if user.is_online %}online{% else %}offline{% endif %}">
@@ -761,25 +761,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chatSocket.onmessage = e => {
             const { message, username,room_name  } = JSON.parse(e.data);
             const container = document.querySelector(".chat-area .messages-container");
-             if (currentRoom !== room_name) {
-                console.warn("⚠️ Message is for a different room");
-
-                // Find the chat item for the correct room
-                const chatItem = document.querySelector(`.chat-item[data-room="${room_name}"]`);
-                if (chatItem) {
-                    let badge = chatItem.querySelector(".unread-badge");
-                    if (badge) {
-                        badge.textContent = parseInt(badge.textContent) + 1;
-                    } else {
-                        const newBadge = document.createElement("span");
-                        newBadge.className = "unread-badge";
-                        newBadge.textContent = "1";
-                        chatItem.appendChild(newBadge);
-                    }
-                }
-
-                
-            }
+             
             if (!container) {
                 console.warn("⚠️ .messages-container not found");
                 return;
@@ -808,6 +790,27 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
             });
+
+            if (currentRoom !== room_name) {
+                console.warn("⚠️ Message is for a different room");
+
+                // Find the chat item for the correct room
+                const chatItem = document.querySelector(`.chat-item[data-room="${room_name}"]`);
+                if (chatItem) {
+                    let badge = chatItem.querySelector(".unread-badge");
+                    if (badge) {
+                        badge.textContent = parseInt(badge.textContent) + 1;
+                    } else {
+                        const newBadge = document.createElement("span");
+                        newBadge.className = "unread-badge";
+                        newBadge.textContent = "1";
+                        chatItem.appendChild(newBadge);
+                    }
+                }
+
+                
+            }
+
         };
 
         chatSocket.onclose = () => {
@@ -890,7 +893,10 @@ document.addEventListener("DOMContentLoaded", () => {
                   const unreadBadge = chatItem.querySelector(".unread-badge");
                 if (unreadBadge) unreadBadge.remove();  
             }
-
+                const container = document.querySelector(".chat-area .messages-container");
+                if (container) {
+                    container.scrollTop = container.scrollHeight;
+                }
                 setupWebSocket(roomName);  
             });
     }
