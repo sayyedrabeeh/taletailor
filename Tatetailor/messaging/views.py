@@ -60,7 +60,7 @@ def chat(request):
             unread_messages = messages.exclude(read_by=request.user).exclude(sender=request.user)
             for msg in unread_messages:
                 msg.read_by.add(request.user)
-                
+
     return render(request, 'chatroom.html', {
         'users': users,
         'room': room,
@@ -81,3 +81,31 @@ def send_message(request, room_name):
                 content=content
             )
     return redirect(f'/messaging/chat/?room_name={room_name}')
+
+
+def get_last_message_data(request):
+    room_name = request.GET.get("room")
+    if not room_name:
+        return JsonResponse({'error': 'Missing room name'}, status=400)
+
+    try:
+        room = ChatRoom.objects.get(name=room_name)
+    except ChatRoom.DoesNotExist:
+        return JsonResponse({'error': 'Room not found'}, status=404)
+
+     
+    last_msg = Message.objects.filter(room=room).order_by("-timestamp").first()
+    last_message = last_msg.content if last_msg else "Start a conversation..."
+    timestamp = last_msg.timestamp if last_msg else None
+
+   
+    unread_count = Message.objects.filter(
+        room=room,
+        sender__ne=request.user   
+    ).exclude(read_by=request.user).count()
+
+    return JsonResponse({
+        'last_message': last_message,
+        'timestamp': timestamp,
+        'unread_count': unread_count,
+    })

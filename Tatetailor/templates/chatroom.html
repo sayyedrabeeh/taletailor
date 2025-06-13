@@ -759,43 +759,43 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
          
-       chatSocket.onmessage = e => {
+  chatSocket.onmessage = e => {
     const { message, username, room_name } = JSON.parse(e.data);
     const isCurrentUser = username === window.CURRENT_USERNAME;
     const isCurrentRoom = currentRoom === room_name;
 
-    // Update preview and time for corresponding chat item
     const chatItem = document.querySelector(`.chat-item[data-room="${room_name}"]`);
     if (chatItem) {
+        // ✅ Update preview
         const preview = chatItem.querySelector(".chat-preview");
         const time = chatItem.querySelector(".chat-time");
-
         if (preview) preview.textContent = message;
-
         if (time) {
             const now = new Date();
             const formatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             time.textContent = formatted;
         }
 
-        // Only show unread badge if:
-        // - Message is NOT sent by current user
-        // - That room is NOT currently open
+        // ✅ Update unread badge
         if (!isCurrentUser && !isCurrentRoom) {
             let badge = chatItem.querySelector(".unread-badge");
-
             if (badge) {
-                badge.textContent = parseInt(badge.textContent) + 1;
+                badge.textContent = parseInt(badge.textContent || "0") + 1;
             } else {
                 const newBadge = document.createElement("span");
                 newBadge.className = "unread-badge";
                 newBadge.textContent = "1";
-                chatItem.querySelector(".chat-meta").appendChild(newBadge);
+                chatItem.querySelector(".chat-meta")?.appendChild(newBadge);
             }
+        } else if (isCurrentRoom && !isCurrentUser) {
+            // ✅ If I'm viewing the room and receive a message from someone else,
+            // clear the unread count
+            const badge = chatItem.querySelector(".unread-badge");
+            if (badge) badge.remove();
         }
     }
 
-    // If it's the current room and not sent by me, render it in message area
+    // ✅ Append message in current open chat window
     if (isCurrentRoom) {
         const container = document.querySelector(".chat-area .messages-container");
         if (!container) return;
