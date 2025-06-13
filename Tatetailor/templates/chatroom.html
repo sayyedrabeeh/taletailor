@@ -893,10 +893,12 @@ document.addEventListener("DOMContentLoaded", () => {
                   const unreadBadge = chatItem.querySelector(".unread-badge");
                 if (unreadBadge) unreadBadge.remove();  
             }
+                     setTimeout(() => {
                 const container = document.querySelector(".chat-area .messages-container");
                 if (container) {
                     container.scrollTop = container.scrollHeight;
                 }
+            }, 50);
                 setupWebSocket(roomName);  
             });
     }
