@@ -910,6 +910,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (minutes > 0) return `${minutes}m`;
     return `${seconds}s`;
 }
+document.querySelectorAll(".chat-item").forEach(item => {
+    const room = item.dataset.room;
+    if (room) {
+        fetchChatMetadata(room);
+    }
+});
 
 function fetchChatMetadata(roomName) {
     fetch(`/api/last-message/?room=${roomName}`)
