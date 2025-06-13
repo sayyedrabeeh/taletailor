@@ -761,9 +761,8 @@ document.addEventListener("DOMContentLoaded", () => {
         chatSocket.onmessage = e => {
             const { message, username,room_name  } = JSON.parse(e.data);
             const container = document.querySelector(".chat-area .messages-container");
-             const activeRoom = document.querySelector(".chat-area")?.dataset?.room;
-                if (activeRoom !== room_name) {
-                
+             if (currentRoom !== room_name) {
+                console.warn("⚠️ Message is for a different room");
 
                 // Find the chat item for the correct room
                 const chatItem = document.querySelector(`.chat-item[data-room="${room_name}"]`);
