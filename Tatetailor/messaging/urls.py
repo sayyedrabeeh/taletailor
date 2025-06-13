@@ -6,6 +6,6 @@ app_name = 'messaging'
 urlpatterns = [
     path('chat/', views.chat, name='chat'),
     path('send/<str:room_name>/', views.send_message, name='send_message'),
-    path('api/last-message/', views.get_last_message_data, name='api-last-message'),
+    path('last-message/', views.get_last_message_data, name='api-last-message'),
 
 ]

@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from .models import Message, ChatRoom
 from authentication.models import Profile
-
+from django.http import JsonResponse
  
 
 def chat(request):
@@ -18,16 +18,16 @@ def chat(request):
             room.participants.set([request.user, user])
 
         last_msg = Message.objects.filter(room=room).order_by('-timestamp').first()
-        last_message = last_msg.content if last_msg else "Start a conversation..."
+        # last_message = last_msg.content if last_msg else "Start a conversation..."
         last_seen1 = last_msg.timestamp if last_msg else None
-        unread_count = Message.objects.filter(
-        room=room,
-        sender=user,   
-        ).exclude(read_by=request.user).count()
+        # unread_count = Message.objects.filter(
+        # room=room,
+        # sender=user,   
+        # ).exclude(read_by=request.user).count()
       
-        user.last_message = last_message
+        # user.last_message = last_message
         user.last_seen1 = last_seen1
-        user.unread_count = unread_count
+        # user.unread_count = unread_count
         user.chatroom_name = room_name   
 
         try:
@@ -84,28 +84,29 @@ def send_message(request, room_name):
 
 
 def get_last_message_data(request):
-    room_name = request.GET.get("room")
-    if not room_name:
-        return JsonResponse({'error': 'Missing room name'}, status=400)
+    user = request.user
+    data = []
 
-    try:
-        room = ChatRoom.objects.get(name=room_name)
-    except ChatRoom.DoesNotExist:
-        return JsonResponse({'error': 'Room not found'}, status=404)
+    # Get all rooms the user is part of
+    rooms = ChatRoom.objects.filter(participants=user)
 
-     
-    last_msg = Message.objects.filter(room=room).order_by("-timestamp").first()
-    last_message = last_msg.content if last_msg else "Start a conversation..."
-    timestamp = last_msg.timestamp if last_msg else None
+    for room in rooms:
+        other_user = room.participants.exclude(id=user.id).first()
 
-   
-    unread_count = Message.objects.filter(
-        room=room,
-        sender__ne=request.user   
-    ).exclude(read_by=request.user).count()
+        last_msg = Message.objects.filter(room=room).order_by("-timestamp").first()
+        last_message = last_msg.content if last_msg else "Start a conversation..."
+        timestamp = last_msg.timestamp.isoformat() if last_msg else None
 
-    return JsonResponse({
-        'last_message': last_message,
-        'timestamp': timestamp,
-        'unread_count': unread_count,
-    })
+        unread_count = Message.objects.filter(
+            room=room
+        ).exclude(sender=user).exclude(read_by=user).count()
+
+        data.append({
+            "room_name": room.name,
+            "other_user_id": other_user.id if other_user else None,
+            "last_message": last_message,
+            "timestamp": timestamp,
+            "unread_count": unread_count,
+        })
+
+    return JsonResponse({"chats": data})
