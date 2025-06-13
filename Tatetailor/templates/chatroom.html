@@ -901,6 +901,45 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
+
+    function timeSince(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    if (hours > 0) return `${hours}h`;
+    if (minutes > 0) return `${minutes}m`;
+    return `${seconds}s`;
+}
+
+function fetchChatMetadata(roomName) {
+    fetch(`/api/last-message/?room=${roomName}`)
+        .then(res => res.json())
+        .then(data => {
+            const chatItem = document.querySelector(`.chat-item[data-room="${roomName}"]`);
+            if (!chatItem) return;
+
+            const preview = chatItem.querySelector(".chat-preview");
+            const timeElem = chatItem.querySelector(".chat-time");
+            const meta = chatItem.querySelector(".chat-meta");
+
+            if (preview) preview.textContent = data.last_message || "Start a conversation...";
+            if (timeElem && data.timestamp) {
+                const ts = new Date(data.timestamp);
+                timeElem.textContent = timeSince(ts) + " ago";
+            }
+
+            if (data.unread_count > 0) {
+                const existingBadge = chatItem.querySelector(".unread-badge");
+                if (!existingBadge) {
+                    const badge = document.createElement("div");
+                    badge.className = "unread-badge";
+                    badge.textContent = data.unread_count;
+                    meta.appendChild(badge);
+                }
+            }
+        });
+}
+
     // Chat user click handler
     chatItems.forEach(item => {
         item.addEventListener("click", () => {
