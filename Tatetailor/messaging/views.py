@@ -6,16 +6,20 @@ from django.http import JsonResponse
  
 
 def chat(request):
-    users = User.objects.exclude(id=request.user.id)
+    # users = User.objects.exclude(id=request.user.id)
     if not request.user.is_authenticated or request.user.id is None:
-        return redirect('authentication:login') 
+        return redirect('authentication:login')
+    rooms = ChatRoom.objects.filter(
+        participants=request.user,
+        message__isnull=False
+    ).distinct()
+    users = User.objects.exclude(id=request.user.id).filter(chatroom__in=rooms)
+ 
     for user in users:
         room_name = f"room-{min(request.user.id, user.id)}-{max(request.user.id, user.id)}"
         room = ChatRoom.objects.filter(name=room_name).first()
-
         if not room:
-            room = ChatRoom.objects.create(name=room_name)
-            room.participants.set([request.user, user])
+            continue 
 
         last_msg = Message.objects.filter(room=room).order_by('-timestamp').first()
         # last_message = last_msg.content if last_msg else "Start a conversation..."
