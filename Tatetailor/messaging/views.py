@@ -12,7 +12,8 @@ from datetime import timedelta
  
 def chat(request):
     users = User.objects.exclude(id=request.user.id).select_related('profile')
-
+    if not request.user.is_authenticated or request.user.id is None:
+        return redirect('authentication:login')
     for user in users:
         try:
             profile = user.profile
