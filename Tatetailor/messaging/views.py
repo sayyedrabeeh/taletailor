@@ -5,12 +5,20 @@ from authentication.models import Profile
 from django.http import JsonResponse
  
 
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from datetime import timedelta
+
+ 
 def chat(request):
-    users = User.objects.exclude(id=request.user.id)
-    if not request.user.is_authenticated or request.user.id is None:
-        return redirect('authentication:login')   
-        
+    users = User.objects.exclude(id=request.user.id).select_related('profile')
+
     for user in users:
+        try:
+            profile = user.profile
+        except Profile.DoesNotExist:
+            profile = Profile.objects.create(user=user)
+        
         room_name = f"room-{min(request.user.id, user.id)}-{max(request.user.id, user.id)}"
         room = ChatRoom.objects.filter(name=room_name).first()
 
@@ -19,24 +27,11 @@ def chat(request):
             room.participants.set([request.user, user])
 
         last_msg = Message.objects.filter(room=room).order_by('-timestamp').first()
-        # last_message = last_msg.content if last_msg else "Start a conversation..."
-        last_seen1 = last_msg.timestamp if last_msg else None
-        # unread_count = Message.objects.filter(
-        # room=room,
-        # sender=user,   
-        # ).exclude(read_by=request.user).count()
-      
-        # user.last_message = last_message
-        user.last_seen1 = last_seen1
-        # user.unread_count = unread_count
-        user.chatroom_name = room_name   
-
-        try:
-            profile = user.profile
-        except Profile.DoesNotExist:
-            profile = Profile.objects.create(user=user)
+        user.last_seen1 = last_msg.timestamp if last_msg else None
+        user.chatroom_name = room_name
         user.profile = profile
         user.is_online = profile.is_online()
+        user.last_seen = profile.last_seen
 
     room = None
     messages = []
@@ -45,7 +40,6 @@ def chat(request):
     if selected_room_name:
         room = ChatRoom.objects.filter(name=selected_room_name).first()
         if not room:
-
             parts = selected_room_name.split('-')
             if len(parts) == 3:
                 _, uid1, uid2 = parts
@@ -56,11 +50,22 @@ def chat(request):
                     room.participants.set([user1, user2])
                 except:
                     room = None 
+
         if room:
             messages = Message.objects.filter(room=room).order_by('timestamp')
             unread_messages = messages.exclude(read_by=request.user).exclude(sender=request.user)
             for msg in unread_messages:
                 msg.read_by.add(request.user)
+
+            for participant in room.participants.all():
+                if participant != request.user:
+                    try:
+                        profile = participant.profile
+                    except Profile.DoesNotExist:
+                        profile = Profile.objects.create(user=participant)
+
+                    participant.is_online = profile.is_online()
+                    participant.last_seen = profile.last_seen
 
     return render(request, 'chatroom.html', {
         'users': users,
@@ -68,6 +73,7 @@ def chat(request):
         'room_name': room.name if room else None,
         'messages': messages,
     })
+
 
 def send_message(request, room_name):
     print('hii')

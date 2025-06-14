@@ -718,9 +718,10 @@
                                 {% if user.is_online %}
                                     Active now
                                 {% else %}
-                                    Last seen {{ user.last_seen1|timesince }} ago
+                                    Last seen {{ user.last_seen|timesince }} ago
                                 {% endif %}
                             </div>
+
                         </div>
                     </div>
                 {% endwith %}
