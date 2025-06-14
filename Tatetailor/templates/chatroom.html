@@ -1,9 +1,12 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Chat - Modern Interface</title>
+    <title>Tale Tailor  Chat -Interface</title>
+    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
     <style>
         * {
             margin: 0;
@@ -623,6 +626,29 @@
                         <input type="text" class="search-input" placeholder="Search conversations...">
                     </div>
                 </div>
+              <div id="search-results" style="display: none;" class="chat-list">
+                {% for user in all_users %}
+                    {% if user not in users %}
+                    <div class="chat-item search-result" data-room="room-{{ request.user.id }}-{{ user.id }}">
+                        <div class="chat-avatar {% if user.profile.is_online %}online{% else %}offline{% endif %}">
+                            {% if user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+                            {% else %}
+                                {{ user.username|first|upper }}
+                            {% endif %}
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-name">{{ user.username|cut:"@gmail.com" }}</div>
+                            <div class="chat-preview">Start a conversation...</div>
+                        </div>
+                        <div class="chat-meta">
+                            <div class="chat-time"></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
              <div class="chat-list">
             {% for user in users %}
             <div class="chat-item {% if room and user in room.participants.all %}active{% endif %}"
@@ -656,7 +682,7 @@
                 </div>
             </div>
     {% empty %}
-        <div class="no-conversations">No users found</div>
+        <div class="no-conversations">Serch users by username and Chat  </div>
     {% endfor %}
              </div>
 
@@ -737,18 +763,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchInput = document.querySelector(".search-input");
     const chatItems = document.querySelectorAll(".chat-item");
     const chatArea = document.querySelector(".main-content");
-    let chatSocket;
+    
 
- 
+    const chatList = document.querySelector(".chat-list");
+    const searchResults = document.getElementById("search-results");
+
     searchInput.addEventListener("input", () => {
-        const filter = searchInput.value.toLowerCase();
-        chatItems.forEach(item => {
-            const name = item.querySelector(".chat-name").textContent.toLowerCase();
-            item.style.display = name.includes(filter) ? "flex" : "none";
-        });
+        const filter = searchInput.value.toLowerCase().trim();
+
+        if (filter) {
+            chatList.style.display = "none";
+            searchResults.style.display = "block";
+
+            const searchItems = searchResults.querySelectorAll(".chat-item");
+            searchItems.forEach(item => {
+                const name = item.querySelector(".chat-name").textContent.toLowerCase();
+                item.style.display = name.includes(filter) ? "flex" : "none";
+            });
+        } else {
+            searchResults.style.display = "none";
+            chatList.style.display = "block";
+        }
     });
 
-   
+
+   let chatSocket;
     function setupWebSocket(roomName) {
         if (chatSocket) chatSocket.close();
 
