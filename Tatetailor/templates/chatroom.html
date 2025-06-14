@@ -241,8 +241,8 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .no-conversations {
-        display: none;
+        .no-conversations1 {
+        /* display: none; */
         padding: 2rem;
         text-align: center;
         color: #888;
@@ -604,14 +604,13 @@
         margin: 20px;
        
         }
-        .no-messages {
-        opacity: 0;
-        transition: opacity 0.4s ease;
-        }
-
-        .no-messages.show {
-        opacity: 1;
-        }
+        
+.message-bubble {
+    white-space: pre-wrap; 
+    word-wrap: break-word;  
+    overflow-wrap: break-word;   /* Break long words (better support) */
+    word-break: break-word; 
+}
 
 
     </style>
@@ -689,8 +688,9 @@
                 </div>
             </div>
     
-        <div class="no-conversations">Serch users by username and Chat  </div>
+        <!-- <div class="no-conversations">Serch users by username and Chat  </div> -->
     {% endfor %}
+    <div class="no-conversations1">Serch users by username and Chat  </div>
              </div>
 
             </div>
@@ -732,7 +732,7 @@
     <div class="messages-container">
         {% for message in messages %}
             <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
-                <div class="message-bubble">{{ message.content }}</div>
+                <div class="message-bubble">{{ message.content|linebreaksbr }}</div>
                 <div class="message-time">{{ message.timestamp|date:"M d, h:i A" }}</div>
             </div>
         {% empty %}
@@ -783,10 +783,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const hasChatted = preview !== "loading..." && preview !== "start a conversation...";
 
         if (isSearching) {
-            // Show all users that match search
+             
             item.style.display = name.includes(filter) ? "flex" : "none";
         } else {
-            // Show only users who have chatted
+           
             item.style.display = hasChatted ? "flex" : "none";
         }
     });
@@ -817,7 +817,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (chatItem) {
                 const preview = chatItem.querySelector(".chat-preview");
                 const time = chatItem.querySelector(".chat-time");
-                if (preview) preview.textContent = message;
+             if (preview) preview.textContent = formatPreviewText(message);
                 if (time) {
                     const now = new Date();
                     const formatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -866,13 +866,46 @@ document.addEventListener("DOMContentLoaded", () => {
         chatSocket.onerror = error => console.error("WebSocket error:", error);
     }
 
- 
+    function formatPreviewText(message, wordLimit = 3, charLimit = 15) {
+            if (!message) return "Start a conversation...";
+
+            let preview = "";
+
+            if (/\s/.test(message)) {
+            
+                preview = message.split(/\s+/).slice(0, wordLimit).join(" ");
+            } else {
+            
+                preview = message.slice(0, charLimit);
+            }
+
+        
+            if (message.length > preview.length) preview += "...";
+
+            return preview;
+        }
+
     function attachFormHandler(roomName) {
         const form = document.querySelector(".chat-area form");
         if (!form) return;
 
         const textarea = form.querySelector("textarea");
         const csrf = form.querySelector("[name=csrfmiddlewaretoken]").value;
+        textarea.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();  
+                form.dispatchEvent(new Event("submit"));  
+            }
+        });
+            textarea.addEventListener("input", () => {
+                textarea.style.height = "auto";  
+
+                const lineHeight = 24; 
+                const maxRows = 6;
+                const maxHeight = lineHeight * maxRows;
+
+                textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + "px";
+            });
 
         form.onsubmit = e => {
             e.preventDefault();
@@ -907,7 +940,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const preview = targetChatItem.querySelector(".chat-preview");
                     const time = targetChatItem.querySelector(".chat-time");
 
-                    if (preview) preview.textContent = msg;
+                    if (preview) preview.textContent = formatPreviewText(msg);
                     if (time) {
                         const now = new Date();
                         const formatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -976,12 +1009,12 @@ function fetchChatMetadata() {
                 const meta = chatItem.querySelector(".chat-meta");
 
                  
-                if (preview) preview.textContent = chat.last_message || "Start a conversation...";
+                if (preview) preview.textContent = formatPreviewText(chat.last_message);
                 if (timeElem && chat.timestamp) {
                     const ts = new Date(chat.timestamp);
                     timeElem.textContent = timeSince(ts) + " ago";
 
-                    //   Store timestamp for sorting
+                     
                     chatItem.dataset.timestamp = ts.getTime();
                 }
 
@@ -1017,12 +1050,12 @@ function fetchChatMetadata() {
                 return timeB - timeA;
             });
 
-            //   Move chats to reflect new order
+          
             items.forEach(item => chatList.appendChild(item));
 
            
 
-// Show only chatted users after metadata is loaded
+ 
            // Show only chatted users after metadata is loaded
             let anyVisible = false;
             chatItems.forEach(item => {
