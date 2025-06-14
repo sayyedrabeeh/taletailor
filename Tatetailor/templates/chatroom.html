@@ -967,7 +967,10 @@ document.addEventListener("DOMContentLoaded", () => {
             loadChat(roomName);
         });
     });
-
+        setInterval(() => {
+            fetchChatMetadata(); 
+            }, 10000);  
+            
     // 🔁 Load current room on page load
     const currentRoom = document.querySelector(".chat-area")?.dataset?.room;
     if (currentRoom) {
