@@ -241,6 +241,15 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .no-conversations {
+        display: none;
+        padding: 2rem;
+        text-align: center;
+        color: #888;
+        font-size: 1.2rem;
+        font-style: italic;
+    }
+
 
         .chat-meta {
             display: flex;
@@ -583,6 +592,18 @@
             text-align: center;
             line-height: 40px;  
         }
+        .no-messages {
+        text-align: center;
+        color: #999;
+        font-size: 1.1rem;
+        padding: 40px 20px;
+        font-style: italic;
+        border-radius: 12px;
+        background-color: rgba(255, 255, 255, 0.03); /* subtle glass effect */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+       
+        }
 
 
     </style>
@@ -659,7 +680,7 @@
                      
                 </div>
             </div>
-    {% empty %}
+    
         <div class="no-conversations">Serch users by username and Chat  </div>
     {% endfor %}
              </div>
@@ -990,6 +1011,25 @@ function fetchChatMetadata() {
 
             //   Move chats to reflect new order
             items.forEach(item => chatList.appendChild(item));
+
+           
+
+// Show only chatted users after metadata is loaded
+           // Show only chatted users after metadata is loaded
+            let anyVisible = false;
+            chatItems.forEach(item => {
+                const preview = item.querySelector(".chat-preview").textContent.trim().toLowerCase();
+                const hasChatted = preview !== "loading..." && preview !== "start a conversation...";
+                item.style.display = hasChatted ? "flex" : "none";
+                if (hasChatted) anyVisible = true;
+            });
+
+            const noConversations = document.querySelector(".no-conversations");
+            if (noConversations) {
+                noConversations.style.display = anyVisible ? "none" : "block";
+            }
+
+
         });
 
 
@@ -1020,11 +1060,7 @@ function fetchChatMetadata() {
         attachFormHandler(currentRoom);
     }
 
-chatItems.forEach(item => {
-    const preview = item.querySelector(".chat-preview").textContent.trim().toLowerCase();
-    const hasChatted = preview !== "loading..." && preview !== "start a conversation...";
-    item.style.display = hasChatted ? "flex" : "none";
-});
+ 
 
 
 });
