@@ -111,3 +111,4 @@ def get_last_message_data(request):
         })
 
     return JsonResponse({"chats": data})
+    

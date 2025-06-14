@@ -15,6 +15,7 @@ class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    audio = models.FileField(upload_to="audio/", blank=True, null=True)  
     read_by = models.ManyToManyField(User, related_name='read_messages', blank=True)
 
     def __str__(self):
