@@ -739,7 +739,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatArea = document.querySelector(".main-content");
     let chatSocket;
 
-    // 🔍 Search filter
+ 
     searchInput.addEventListener("input", () => {
         const filter = searchInput.value.toLowerCase();
         chatItems.forEach(item => {
@@ -748,7 +748,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 🌐 Setup WebSocket
+   
     function setupWebSocket(roomName) {
         if (chatSocket) chatSocket.close();
 
@@ -821,7 +821,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chatSocket.onerror = error => console.error("WebSocket error:", error);
     }
 
-    // ✉️ Attach form handler
+ 
     function attachFormHandler(roomName) {
         const form = document.querySelector(".chat-area form");
         if (!form) return;
@@ -879,7 +879,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // 📥 Load chat and WebSocket
+     
     function loadChat(roomName) {
         fetch(`/messaging/chat/?room_name=${roomName}`)
             .then(res => res.text())
@@ -907,7 +907,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-    //  Utility: Time since
+ 
     function timeSince(date) {
         const seconds = Math.floor((new Date() - date) / 1000);
         const minutes = Math.floor(seconds / 60);
@@ -917,45 +917,68 @@ document.addEventListener("DOMContentLoaded", () => {
         return `${seconds}s`;
     }
 
-    //  Fetch last message data
-    function fetchChatMetadata(roomName) {
-        fetch(`/messaging/last-message/`)
-            .then(res => res.json())
-            .then(data => {
-                data.chats.forEach(chat => {
-                     
+    
+function fetchChatMetadata() {
+    fetch(`/messaging/last-message/`)
+        .then(res => res.json())
+        .then(data => {
+            data.chats.forEach(chat => {
+                const chatItem = document.querySelector(`.chat-item[data-room="${chat.room_name}"]`);
+                if (!chatItem) return;
 
-                    const chatItem = document.querySelector(`.chat-item[data-room="${chat.room_name}"]`);
-                    if (!chatItem) return;
+                const preview = chatItem.querySelector(".chat-preview");
+                const timeElem = chatItem.querySelector(".chat-time");
+                const meta = chatItem.querySelector(".chat-meta");
 
-                    const preview = chatItem.querySelector(".chat-preview");
-                    const timeElem = chatItem.querySelector(".chat-time");
-                    const meta = chatItem.querySelector(".chat-meta");
+                 
+                if (preview) preview.textContent = chat.last_message || "Start a conversation...";
+                if (timeElem && chat.timestamp) {
+                    const ts = new Date(chat.timestamp);
+                    timeElem.textContent = timeSince(ts) + " ago";
 
-                    if (preview) preview.textContent = chat.last_message || "Start a conversation...";
-                    if (timeElem && chat.timestamp) {
-                        const ts = new Date(chat.timestamp);
-                        timeElem.textContent = timeSince(ts) + " ago";
+                    //   Store timestamp for sorting
+                    chatItem.dataset.timestamp = ts.getTime();
+                }
+
+                //   Manage unread badge and priority flag
+                const existingBadge = chatItem.querySelector(".unread-badge");
+                if (chat.unread_count > 0) {
+                    if (existingBadge) {
+                        existingBadge.textContent = chat.unread_count;
+                    } else {
+                        const badge = document.createElement("div");
+                        badge.className = "unread-badge";
+                        badge.textContent = chat.unread_count;
+                        meta.appendChild(badge);
                     }
-
-                    const existingBadge = chatItem.querySelector(".unread-badge");
-                    if (chat.unread_count > 0) {
-                        if (existingBadge) {
-                            existingBadge.textContent = chat.unread_count;
-                        } else {
-                            const badge = document.createElement("div");
-                            badge.className = "unread-badge";
-                            badge.textContent = chat.unread_count;
-                            meta.appendChild(badge);
-                        }
-                    } else if (existingBadge) {
-                        existingBadge.remove();
-                    }
-                });
+                    chatItem.dataset.priority = "1";
+                } else {
+                    if (existingBadge) existingBadge.remove();
+                    chatItem.dataset.priority = "0";
+                }
             });
-    }
 
-    // 📲 Chat item click
+            //   Sort chat items
+            const chatList = document.querySelector(".chat-list");
+            const items = Array.from(chatList.children);
+
+            items.sort((a, b) => {
+                const priorityA = parseInt(a.dataset.priority || "0");
+                const priorityB = parseInt(b.dataset.priority || "0");
+                if (priorityA !== priorityB) return priorityB - priorityA;
+
+                const timeA = parseInt(a.dataset.timestamp || "0");
+                const timeB = parseInt(b.dataset.timestamp || "0");
+                return timeB - timeA;
+            });
+
+            //   Move chats to reflect new order
+            items.forEach(item => chatList.appendChild(item));
+        });
+}
+
+
+    //   Chat item click
     chatItems.forEach(item => {
         const room = item.dataset.room;
         if (room) fetchChatMetadata(room);
@@ -970,8 +993,8 @@ document.addEventListener("DOMContentLoaded", () => {
         setInterval(() => {
             fetchChatMetadata(); 
             }, 10000);  
-            
-    // 🔁 Load current room on page load
+
+    //   Load current room on page load
     const currentRoom = document.querySelector(".chat-area")?.dataset?.room;
     if (currentRoom) {
         setupWebSocket(currentRoom);
