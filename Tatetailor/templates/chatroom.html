@@ -626,15 +626,7 @@
                         <input type="text" class="search-input" placeholder="Search conversations...">
                     </div>
                 </div>
-                <div id="search-results" style="display: none;">
-    {% for user in all_users %}
-        {% if user not in users %}
-        <div class="search-result" data-room="room-{{ request.user.id }}-{{ user.id }}">
-            {{ user.username|cut:"@gmail.com" }}
-        </div>
-        {% endif %}
-    {% endfor %}
-</div>
+                 
              <div class="chat-list">
             {% for user in users %}
             <div class="chat-item {% if room and user in room.participants.all %}active{% endif %}"
@@ -752,13 +744,25 @@ document.addEventListener("DOMContentLoaded", () => {
     let chatSocket;
 
  
-    searchInput.addEventListener("input", () => {
-        const filter = searchInput.value.toLowerCase();
-        chatItems.forEach(item => {
-            const name = item.querySelector(".chat-name").textContent.toLowerCase();
+   searchInput.addEventListener("input", () => {
+    const filter = searchInput.value.toLowerCase();
+    const isSearching = filter.length > 0;
+
+    chatItems.forEach(item => {
+        const name = item.querySelector(".chat-name").textContent.toLowerCase();
+        const preview = item.querySelector(".chat-preview").textContent.trim().toLowerCase();
+        const hasChatted = preview !== "loading..." && preview !== "start a conversation...";
+
+        if (isSearching) {
+            // Show all users that match search
             item.style.display = name.includes(filter) ? "flex" : "none";
-        });
+        } else {
+            // Show only users who have chatted
+            item.style.display = hasChatted ? "flex" : "none";
+        }
     });
+});
+
 
    
     function setupWebSocket(roomName) {
@@ -987,6 +991,9 @@ function fetchChatMetadata() {
             //   Move chats to reflect new order
             items.forEach(item => chatList.appendChild(item));
         });
+
+
+
 }
 
 
@@ -1012,6 +1019,14 @@ function fetchChatMetadata() {
         setupWebSocket(currentRoom);
         attachFormHandler(currentRoom);
     }
+
+chatItems.forEach(item => {
+    const preview = item.querySelector(".chat-preview").textContent.trim().toLowerCase();
+    const hasChatted = preview !== "loading..." && preview !== "start a conversation...";
+    item.style.display = hasChatted ? "flex" : "none";
+});
+
+
 });
 </script>
 
