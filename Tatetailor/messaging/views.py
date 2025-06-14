@@ -6,22 +6,31 @@ from django.http import JsonResponse
  
 
 def chat(request):
-    if not request.user.is_authenticated :
-        return redirect('authentication:login') 
-    all_users = User.objects.exclude(id=request.user.id)
-    chatted_rooms = ChatRoom.objects.filter(participants=request.user, message__isnull=False).distinct()
-    chatted_users = User.objects.filter(chatroom__in=chatted_rooms).exclude(id=request.user.id).distinct()
-    for user in chatted_users:
+    users = User.objects.exclude(id=request.user.id)
+    if not request.user.is_authenticated or request.user.id is None:
+        return redirect('authentication:login')   
+        
+    for user in users:
         room_name = f"room-{min(request.user.id, user.id)}-{max(request.user.id, user.id)}"
         room = ChatRoom.objects.filter(name=room_name).first()
-        user.chatroom_name = room_name
+
         if not room:
             room = ChatRoom.objects.create(name=room_name)
             room.participants.set([request.user, user])
 
         last_msg = Message.objects.filter(room=room).order_by('-timestamp').first()
+        # last_message = last_msg.content if last_msg else "Start a conversation..."
         last_seen1 = last_msg.timestamp if last_msg else None
+        # unread_count = Message.objects.filter(
+        # room=room,
+        # sender=user,   
+        # ).exclude(read_by=request.user).count()
+      
+        # user.last_message = last_message
         user.last_seen1 = last_seen1
+        # user.unread_count = unread_count
+        user.chatroom_name = room_name   
+
         try:
             profile = user.profile
         except Profile.DoesNotExist:
@@ -54,8 +63,7 @@ def chat(request):
                 msg.read_by.add(request.user)
 
     return render(request, 'chatroom.html', {
-        'users': chatted_users,
-        'all_users': all_users,
+        'users': users,
         'room': room,
         'room_name': room.name if room else None,
         'messages': messages,
