@@ -37,6 +37,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "type": "chat_message",
                 "message": message,
                 "username": username,
+                'room_name': self.room_name 
             }
         )
 
@@ -48,6 +49,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             "message": message,
             "username": username,
+            'room_name': room_name
         }))
 
 

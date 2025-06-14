@@ -766,7 +766,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const currentRoomElem = document.querySelector(".chat-area");
             const currentRoom = currentRoomElem?.dataset?.room;
             const isCurrentRoom = currentRoom === room_name;
-
+             console.log('isCurrentRoom:',isCurrentRoom)
             const chatItem = document.querySelector(`.chat-item[data-room="${room_name}"]`);
 
             if (chatItem) {
@@ -794,7 +794,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (badge) badge.remove();
                 }
             }
-
+            
             if (isCurrentRoom) {
                 const container = document.querySelector(".chat-area .messages-container");
                 if (!container) return;
@@ -810,7 +810,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
 
-        chatSocket.onclose = () => console.warn("❌ WebSocket closed.");
+        chatSocket.onclose = (event) => {
+    console.warn("❌ WebSocket closed.", event);
+    if (event.code !== 1000) {
+        alert(`WebSocket closed abnormally: ${event.code} - ${event.reason}`);
+    }
+};
+
         chatSocket.onerror = error => console.error("WebSocket error:", error);
     }
 
@@ -843,7 +849,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                     chatSocket.send(JSON.stringify({
                         message: msg,
-                        username: window.CURRENT_USERNAME
+                        username: window.CURRENT_USERNAME,
+                         room_name: roomName 
                     }));
                 } catch (err) {
                     console.error("❌ Failed to send via WebSocket:", err);
