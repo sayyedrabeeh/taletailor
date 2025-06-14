@@ -714,11 +714,11 @@
                         <div class="chat-user-details">
                             <h3>{{ user.username|cut:"@gmail.com" }}</h3>
                             <div class="chat-user-status">
-                                <div class="status-dot {% if user.is_online %}online{% else %}offline{% endif %}"></div>
-                                {% if user.is_online %}
+                                <div class="status-dot {% if user.profile.is_online %}online{% else %}offline{% endif %}"></div>
+                                {% if user.profile.is_online %}
                                     Active now
                                 {% else %}
-                                    Last seen {{ user.last_seen|timesince }} ago
+                                    Last seen {{ user.profile.last_seen|timesince }} ago
                                 {% endif %}
                             </div>
 
