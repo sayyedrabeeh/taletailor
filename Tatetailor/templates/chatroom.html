@@ -809,17 +809,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 container.scrollTop = container.scrollHeight;
             }
       
-            fetchChatMetadata(room_name);
+            fetchChatMetadata();
         
 
         };
 
-        chatSocket.onclose = (event) => {
-            console.warn("❌ WebSocket closed.", event);
-            if (event.code !== 1000) {
-                alert(`WebSocket closed abnormally: ${event.code} - ${event.reason}`);
-            }
-        };
+        chatSocket.onclose = () => 
+            console.warn("❌ WebSocket closed.");
+             
 
         chatSocket.onerror = error => console.error("WebSocket error:", error);
     }
@@ -910,7 +907,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-    // ⏱ Utility: Time since
+    //  Utility: Time since
     function timeSince(date) {
         const seconds = Math.floor((new Date() - date) / 1000);
         const minutes = Math.floor(seconds / 60);
@@ -920,13 +917,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return `${seconds}s`;
     }
 
-    // 🔄 Fetch last message data
+    //  Fetch last message data
     function fetchChatMetadata(roomName) {
         fetch(`/messaging/last-message/`)
             .then(res => res.json())
             .then(data => {
                 data.chats.forEach(chat => {
-                    if (chat.room_name !== roomName) return;
+                     
 
                     const chatItem = document.querySelector(`.chat-item[data-room="${chat.room_name}"]`);
                     if (!chatItem) return;
