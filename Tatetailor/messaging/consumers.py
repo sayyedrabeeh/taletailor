@@ -9,13 +9,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
              print("❌ No channel layer configured!")
              await self.close()
              return
-        # ✅ Join room group
+       
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
 
-        # ✅ Accept the connection
+        
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -44,6 +44,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event["message"]
         username = event.get("username", "Anonymous")
+        room_name = event.get("room_name")
 
         # ✅ Send message to WebSocket
         await self.send(text_data=json.dumps({

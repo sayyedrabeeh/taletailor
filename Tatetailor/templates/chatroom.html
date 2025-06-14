@@ -808,14 +808,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 container.appendChild(div);
                 container.scrollTop = container.scrollHeight;
             }
+      
+            fetchChatMetadata(room_name);
+        
+
         };
 
         chatSocket.onclose = (event) => {
-    console.warn("❌ WebSocket closed.", event);
-    if (event.code !== 1000) {
-        alert(`WebSocket closed abnormally: ${event.code} - ${event.reason}`);
-    }
-};
+            console.warn("❌ WebSocket closed.", event);
+            if (event.code !== 1000) {
+                alert(`WebSocket closed abnormally: ${event.code} - ${event.reason}`);
+            }
+        };
 
         chatSocket.onerror = error => console.error("WebSocket error:", error);
     }
