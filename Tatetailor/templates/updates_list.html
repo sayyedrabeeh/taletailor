@@ -50,7 +50,7 @@
             opacity: 0.5;
         }
 
-        .nav-item {
+       .nav-item {
             width: 50px;
             height: 50px;
             border-radius: 16px;
@@ -63,8 +63,6 @@
             position: relative;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
-            text-decoration: none;
-            color: #e4e4e7;
         }
 
         .nav-item:hover {
@@ -82,6 +80,7 @@
             height: 24px;
             fill: currentColor;
         }
+
 
         /* Main Content Area */
         .main-content {
@@ -343,6 +342,11 @@
             <a href="{% url 'mystory:yourownstory' %}" class="nav-item" title="Create Story">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
+                </svg>
+            </a>
+            <a href="{% url 'messaging:chat' %}" class="nav-item" title="Chat">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                    <path d="M20 2H4a2 2 0 0 0-2 2v14l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
                 </svg>
             </a>
             <a href="{% url 'messaging:updates_list' %}" class="nav-item active" title="Updates">
