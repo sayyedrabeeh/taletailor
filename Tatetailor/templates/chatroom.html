@@ -918,6 +918,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         chatSocket.onerror = error => console.error("WebSocket error:", error);
     }
+function formatPreviewText(message) {
+    return message.length > 40 ? message.slice(0, 40) + "..." : message;
+}
+
+function timeSince(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    const intervals = [
+        { label: 'year', seconds: 31536000 },
+        { label: 'month', seconds: 2592000 },
+        { label: 'day', seconds: 86400 },
+        { label: 'hour', seconds: 3600 },
+        { label: 'minute', seconds: 60 },
+        { label: 'second', seconds: 1 }
+    ];
+    for (const interval of intervals) {
+        const count = Math.floor(seconds / interval.seconds);
+        if (count > 0) return `${count} ${interval.label}${count > 1 ? 's' : ''}`;
+    }
+    return 'just now';
+}
 
     function formatPreviewText(message, wordLimit = 3, charLimit = 15) {
             if (!message) return "Start a conversation...";
@@ -1143,10 +1163,7 @@ function fetchChatMetadata() {
             loadChat(roomName);
         });
     });
-        setInterval(() => {
-            fetchChatMetadata(); 
-            }, 10000);  
-
+      
     //   Load current room on page load
     const currentRoom = document.querySelector(".chat-area")?.dataset?.room;
     if (currentRoom) {

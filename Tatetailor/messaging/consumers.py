@@ -42,7 +42,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def chat_metadata(self, event):
-    await self.send(text_data=json.dumps({
+       await self.send(text_data=json.dumps({
         "type": "metadata",
         "chat": event["chat"]
     }))
