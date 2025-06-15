@@ -1,7 +1,7 @@
  
 <div class="main-content">
     <h2>Post a New Update</h2>
-    <form method="POST">
+    <form method="POST" action="{% url 'messaging:post_update' %}">
         {% csrf_token %}
         <textarea name="content" rows="3" placeholder="What's on your mind?" required></textarea><br>
         <button type="submit">Post</button>

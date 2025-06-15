@@ -4,7 +4,7 @@ from .models import Message, ChatRoom
 from authentication.models import Profile
 from django.http import JsonResponse
  
-
+from .models import Update
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from datetime import timedelta
@@ -118,4 +118,22 @@ def get_last_message_data(request):
         })
 
     return JsonResponse({"chats": data})
-    
+
+@login_required
+def updates_list(request):
+    updates = Update.objects.filter(created_at__gte=timezone.now() - timezone.timedelta(hours=24))
+     
+    return render(request, 'updates_list.html', {'updates': updates})
+
+
+
+@login_required
+def post_update(request):
+    if request.method == 'POST':
+        content = request.POST.get('content', '').strip()
+        if content:
+            Update.objects.create(user=request.user, text=content)
+        return redirect('messaging:updates_list')
+    return render(request, 'post_update.html')
+
+
