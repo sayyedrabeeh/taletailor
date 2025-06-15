@@ -191,3 +191,9 @@ LOGGING = {
         "level": "DEBUG",
     },
 }
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+
+INSTALLED_APPS += ['django_celery_beat']
