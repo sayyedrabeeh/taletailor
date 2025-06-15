@@ -103,3 +103,13 @@ class Notification(models.Model):
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     
+class Update(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField(max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_expired(self):
+        return self.created_at < timezone.now() - timedelta(hours=24)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.content[:20]}"
