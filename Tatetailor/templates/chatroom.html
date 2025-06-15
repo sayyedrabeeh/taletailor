@@ -806,111 +806,60 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("✅ WebSocket connected to room:", roomName);
         };
 
-        chatSocket.onmessage = (e) => {
-            const data = JSON.parse(e.data);
+        chatSocket.onmessage = e => {
+            const { message, username, room_name } = JSON.parse(e.data);
+            const isCurrentUser = username === window.CURRENT_USERNAME;
 
-            if (data.type === "metadata") {
-                const chat = data.chat;
-                const chatItem = document.querySelector(`.chat-item[data-room="${chat.room_name}"]`);
-                if (!chatItem) return;
+            const currentRoomElem = document.querySelector(".chat-area");
+            const currentRoom = currentRoomElem?.dataset?.room;
+            const isCurrentRoom = currentRoom === room_name;
+             console.log('isCurrentRoom:',isCurrentRoom)
+            const chatItem = document.querySelector(`.chat-item[data-room="${room_name}"]`);
 
+            if (chatItem) {
                 const preview = chatItem.querySelector(".chat-preview");
-                const timeElem = chatItem.querySelector(".chat-time");
-                const meta = chatItem.querySelector(".chat-meta");
-
-                if (preview) preview.textContent = formatPreviewText(chat.last_message);
-                if (timeElem && chat.timestamp) {
-                    const ts = new Date(chat.timestamp);
-                    timeElem.textContent = timeSince(ts) + " ago";
-                    chatItem.dataset.timestamp = ts.getTime();
+                const time = chatItem.querySelector(".chat-time");
+             if (preview) preview.textContent = formatPreviewText(message);
+                if (time) {
+                    const now = new Date();
+                    const formatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    time.textContent = formatted;
                 }
 
-                // Update unread badge
-                let badge = chatItem.querySelector(".unread-badge");
-                if (chat.unread_count > 0) {
+                if (!isCurrentUser && !isCurrentRoom) {
+                    let badge = chatItem.querySelector(".unread-badge");
                     if (badge) {
-                        badge.textContent = chat.unread_count;
+                        badge.textContent = parseInt(badge.textContent || "0") + 1;
                     } else {
                         const newBadge = document.createElement("span");
                         newBadge.className = "unread-badge";
-                        newBadge.textContent = chat.unread_count;
-                        meta.appendChild(newBadge);
+                        newBadge.textContent = "1";
+                        chatItem.querySelector(".chat-meta")?.appendChild(newBadge);
                     }
-                } else {
+                } else if (isCurrentRoom && !isCurrentUser) {
+                    const badge = chatItem.querySelector(".unread-badge");
                     if (badge) badge.remove();
                 }
-
-                // Set priority for sorting
-                chatItem.dataset.priority = chat.unread_count > 0 ? "1" : "0";
-
-                // Re-sort chat list
-                const chatList = document.querySelector(".chat-list");
-                const items = Array.from(chatList.children);
-                items.sort((a, b) => {
-                    const priorityA = parseInt(a.dataset.priority || "0");
-                    const priorityB = parseInt(b.dataset.priority || "0");
-                    if (priorityA !== priorityB) return priorityB - priorityA;
-
-                    const timeA = parseInt(a.dataset.timestamp || "0");
-                    const timeB = parseInt(b.dataset.timestamp || "0");
-                    return timeB - timeA;
-                });
-                items.forEach(item => chatList.appendChild(item));
-
-            } else if (data.type === "chat_message" || data.message) {
-                const { message, username, room_name } = data;
-                const isCurrentUser = username === window.CURRENT_USERNAME;
-
-                const currentRoomElem = document.querySelector(".chat-area");
-                const currentRoom = currentRoomElem?.dataset?.room;
-                const isCurrentRoom = currentRoom === room_name;
-
-                const chatItem = document.querySelector(`.chat-item[data-room="${room_name}"]`);
-                if (chatItem) {
-                    const preview = chatItem.querySelector(".chat-preview");
-                    const time = chatItem.querySelector(".chat-time");
-
-                    if (preview) preview.textContent = formatPreviewText(message);
-                    if (time) {
-                        const now = new Date();
-                        const formatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                        time.textContent = formatted;
-                    }
-
-                    // Update unread badge if not viewing
-                    if (!isCurrentUser && !isCurrentRoom) {
-                        let badge = chatItem.querySelector(".unread-badge");
-                        if (badge) {
-                            badge.textContent = parseInt(badge.textContent || "0") + 1;
-                        } else {
-                            const newBadge = document.createElement("span");
-                            newBadge.className = "unread-badge";
-                            newBadge.textContent = "1";
-                            chatItem.querySelector(".chat-meta")?.appendChild(newBadge);
-                        }
-                    } else if (isCurrentRoom && !isCurrentUser) {
-                        const badge = chatItem.querySelector(".unread-badge");
-                        if (badge) badge.remove();
-                    }
-                }
-
-                // If user is in that room, append the message to chat
-                if (isCurrentRoom) {
-                    const container = document.querySelector(".chat-area .messages-container");
-                    if (!container) return;
-
-                    const div = document.createElement("div");
-                    div.className = isCurrentUser ? "message sent" : "message received";
-                    div.innerHTML = `
-                        <div class="message-bubble">${message}</div>
-                        <div class="message-time">Just now</div>
-                    `;
-                    container.appendChild(div);
-                    container.scrollTop = container.scrollHeight;
-                }
             }
-        };
+            
+            if (isCurrentRoom) {
+                const container = document.querySelector(".chat-area .messages-container");
+                if (!container) return;
 
+                const div = document.createElement("div");
+                div.className = isCurrentUser ? "message sent" : "message received";
+                div.innerHTML = `
+                    <div class="message-bubble">${message}</div>
+                    <div class="message-time">Just now</div>
+                `;
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+            }
+      
+            fetchChatMetadata();
+        
+
+        };
 
         chatSocket.onclose = () => 
             console.warn("❌ WebSocket closed.");
@@ -918,26 +867,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         chatSocket.onerror = error => console.error("WebSocket error:", error);
     }
-function formatPreviewText(message) {
-    return message.length > 40 ? message.slice(0, 40) + "..." : message;
-}
-
-function timeSince(date) {
-    const seconds = Math.floor((new Date() - date) / 1000);
-    const intervals = [
-        { label: 'year', seconds: 31536000 },
-        { label: 'month', seconds: 2592000 },
-        { label: 'day', seconds: 86400 },
-        { label: 'hour', seconds: 3600 },
-        { label: 'minute', seconds: 60 },
-        { label: 'second', seconds: 1 }
-    ];
-    for (const interval of intervals) {
-        const count = Math.floor(seconds / interval.seconds);
-        if (count > 0) return `${count} ${interval.label}${count > 1 ? 's' : ''}`;
-    }
-    return 'just now';
-}
 
     function formatPreviewText(message, wordLimit = 3, charLimit = 15) {
             if (!message) return "Start a conversation...";
@@ -1163,7 +1092,10 @@ function fetchChatMetadata() {
             loadChat(roomName);
         });
     });
-      
+        setInterval(() => {
+            fetchChatMetadata(); 
+            }, 10000);  
+
     //   Load current room on page load
     const currentRoom = document.querySelector(".chat-area")?.dataset?.room;
     if (currentRoom) {
