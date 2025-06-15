@@ -806,60 +806,111 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("✅ WebSocket connected to room:", roomName);
         };
 
-        chatSocket.onmessage = e => {
-            const { message, username, room_name } = JSON.parse(e.data);
-            const isCurrentUser = username === window.CURRENT_USERNAME;
+        chatSocket.onmessage = (e) => {
+            const data = JSON.parse(e.data);
 
-            const currentRoomElem = document.querySelector(".chat-area");
-            const currentRoom = currentRoomElem?.dataset?.room;
-            const isCurrentRoom = currentRoom === room_name;
-             console.log('isCurrentRoom:',isCurrentRoom)
-            const chatItem = document.querySelector(`.chat-item[data-room="${room_name}"]`);
+            if (data.type === "metadata") {
+                const chat = data.chat;
+                const chatItem = document.querySelector(`.chat-item[data-room="${chat.room_name}"]`);
+                if (!chatItem) return;
 
-            if (chatItem) {
                 const preview = chatItem.querySelector(".chat-preview");
-                const time = chatItem.querySelector(".chat-time");
-             if (preview) preview.textContent = formatPreviewText(message);
-                if (time) {
-                    const now = new Date();
-                    const formatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    time.textContent = formatted;
+                const timeElem = chatItem.querySelector(".chat-time");
+                const meta = chatItem.querySelector(".chat-meta");
+
+                if (preview) preview.textContent = formatPreviewText(chat.last_message);
+                if (timeElem && chat.timestamp) {
+                    const ts = new Date(chat.timestamp);
+                    timeElem.textContent = timeSince(ts) + " ago";
+                    chatItem.dataset.timestamp = ts.getTime();
                 }
 
-                if (!isCurrentUser && !isCurrentRoom) {
-                    let badge = chatItem.querySelector(".unread-badge");
+                // Update unread badge
+                let badge = chatItem.querySelector(".unread-badge");
+                if (chat.unread_count > 0) {
                     if (badge) {
-                        badge.textContent = parseInt(badge.textContent || "0") + 1;
+                        badge.textContent = chat.unread_count;
                     } else {
                         const newBadge = document.createElement("span");
                         newBadge.className = "unread-badge";
-                        newBadge.textContent = "1";
-                        chatItem.querySelector(".chat-meta")?.appendChild(newBadge);
+                        newBadge.textContent = chat.unread_count;
+                        meta.appendChild(newBadge);
                     }
-                } else if (isCurrentRoom && !isCurrentUser) {
-                    const badge = chatItem.querySelector(".unread-badge");
+                } else {
                     if (badge) badge.remove();
                 }
-            }
-            
-            if (isCurrentRoom) {
-                const container = document.querySelector(".chat-area .messages-container");
-                if (!container) return;
 
-                const div = document.createElement("div");
-                div.className = isCurrentUser ? "message sent" : "message received";
-                div.innerHTML = `
-                    <div class="message-bubble">${message}</div>
-                    <div class="message-time">Just now</div>
-                `;
-                container.appendChild(div);
-                container.scrollTop = container.scrollHeight;
-            }
-      
-            fetchChatMetadata();
-        
+                // Set priority for sorting
+                chatItem.dataset.priority = chat.unread_count > 0 ? "1" : "0";
 
+                // Re-sort chat list
+                const chatList = document.querySelector(".chat-list");
+                const items = Array.from(chatList.children);
+                items.sort((a, b) => {
+                    const priorityA = parseInt(a.dataset.priority || "0");
+                    const priorityB = parseInt(b.dataset.priority || "0");
+                    if (priorityA !== priorityB) return priorityB - priorityA;
+
+                    const timeA = parseInt(a.dataset.timestamp || "0");
+                    const timeB = parseInt(b.dataset.timestamp || "0");
+                    return timeB - timeA;
+                });
+                items.forEach(item => chatList.appendChild(item));
+
+            } else if (data.type === "chat_message" || data.message) {
+                const { message, username, room_name } = data;
+                const isCurrentUser = username === window.CURRENT_USERNAME;
+
+                const currentRoomElem = document.querySelector(".chat-area");
+                const currentRoom = currentRoomElem?.dataset?.room;
+                const isCurrentRoom = currentRoom === room_name;
+
+                const chatItem = document.querySelector(`.chat-item[data-room="${room_name}"]`);
+                if (chatItem) {
+                    const preview = chatItem.querySelector(".chat-preview");
+                    const time = chatItem.querySelector(".chat-time");
+
+                    if (preview) preview.textContent = formatPreviewText(message);
+                    if (time) {
+                        const now = new Date();
+                        const formatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        time.textContent = formatted;
+                    }
+
+                    // Update unread badge if not viewing
+                    if (!isCurrentUser && !isCurrentRoom) {
+                        let badge = chatItem.querySelector(".unread-badge");
+                        if (badge) {
+                            badge.textContent = parseInt(badge.textContent || "0") + 1;
+                        } else {
+                            const newBadge = document.createElement("span");
+                            newBadge.className = "unread-badge";
+                            newBadge.textContent = "1";
+                            chatItem.querySelector(".chat-meta")?.appendChild(newBadge);
+                        }
+                    } else if (isCurrentRoom && !isCurrentUser) {
+                        const badge = chatItem.querySelector(".unread-badge");
+                        if (badge) badge.remove();
+                    }
+                }
+
+                // If user is in that room, append the message to chat
+                if (isCurrentRoom) {
+                    const container = document.querySelector(".chat-area .messages-container");
+                    if (!container) return;
+
+                    const div = document.createElement("div");
+                    div.className = isCurrentUser ? "message sent" : "message received";
+                    div.innerHTML = `
+                        <div class="message-bubble">${message}</div>
+                        <div class="message-time">Just now</div>
+                    `;
+                    container.appendChild(div);
+                    container.scrollTop = container.scrollHeight;
+                }
+            }
         };
+
 
         chatSocket.onclose = () => 
             console.warn("❌ WebSocket closed.");
