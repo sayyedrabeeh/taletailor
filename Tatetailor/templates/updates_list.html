@@ -1,0 +1,17 @@
+ 
+<div class="main-content">
+    <h2>Latest Updates (Past 24 Hours)</h2>
+    <a href="{% url 'messaging:post_update' %}">+ New Update</a>
+    <div class="updates-list">
+        {% for update in updates %}
+            <div class="update-item">
+                <strong>{{ update.user.username|cut:"@gmail.com" }}</strong><br>
+                <p>{{ update.content|linebreaks }}</p>
+                <small>{{ update.timestamp|timesince }} ago</small>
+            </div>
+        {% empty %}
+            <p>No updates from others yet.</p>
+        {% endfor %}
+    </div>
+</div>
+ 
