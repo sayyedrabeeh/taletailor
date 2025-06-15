@@ -41,6 +41,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
+    async def chat_metadata(self, event):
+    await self.send(text_data=json.dumps({
+        "type": "metadata",
+        "chat": event["chat"]
+    }))
+
+
     async def chat_message(self, event):
         message = event["message"]
         username = event.get("username", "Anonymous")
