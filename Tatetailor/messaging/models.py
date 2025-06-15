@@ -1,6 +1,9 @@
  
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+from datetime import timedelta
+
 
 class ChatRoom(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -24,3 +27,17 @@ class Message(models.Model):
 
     class Meta:
         ordering = ['-timestamp'] 
+
+
+
+ 
+class Update(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="updates")
+    text = models.TextField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_expired(self):
+        return timezone.now() > self.created_at + timedelta(hours=24)
+
+    class Meta:
+        ordering = ['-created_at']
