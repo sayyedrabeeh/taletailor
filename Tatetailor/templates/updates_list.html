@@ -459,14 +459,9 @@
                                             <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.41l-2.34-2.34a1.003 1.003 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
                                         </svg>
                                     </a>
-                                    <form action=" " method="POST" class="icon-form" onsubmit="return confirm('Are you sure you want to delete this update?')">
-                                        {% csrf_token %}
-                                        <button type="submit" title="Delete">
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                                            </svg>
+                                    <button type="button" class="btn btn-sm btn-outline-danger ms-auto" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ update.id }}">
+                                            <i class="bi bi-trash"></i>  
                                         </button>
-                                    </form>
                                 </div>
                             {% endif %}
                                 </div>
@@ -484,6 +479,36 @@
                     {% endfor %}
                 </div>
             </div>
+
+
+
+
+            <div class="modal fade" id="deleteModal-{{ update.id }}" tabindex="-1" aria-labelledby="deleteModalLabel-{{ update.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel-{{ update.id }}">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    Are you sure you want to delete this update?
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form method="POST" action="{% url 'messaging:delete_update' update.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </form>
+                </div>
+
+                </div>
+            </div>
+            </div>
+
+
         </div>
     </div>
 </body>

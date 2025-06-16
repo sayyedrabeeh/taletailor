@@ -148,3 +148,5 @@ def edit_update(request, update_id):
             messages.success(request, "Update successfully edited!")
         return redirect('messaging:updates_list')
     return render(request, 'post_update.html', {'update': update})
+
+
