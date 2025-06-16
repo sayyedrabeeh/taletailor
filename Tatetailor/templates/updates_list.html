@@ -464,12 +464,12 @@
                                     </div>
                                   </div>
                                 {% if update.user == request.user %}
-                  <div class="update-actions d-flex justify-content-end align-items-center gap-2 mt-2">
-     
-                        <a href="{% url 'messaging:edit_update' update.id %}" 
-                        class="btn btn-sm btn-outline-secondary d-flex align-items-center" 
-                        title="Edit this update">
-                            <i class="bi bi-pencil-square me-1"></i>
+                            <div class="update-actions d-flex justify-content-end align-items-center gap-2 mt-2">
+        
+                            <a href="{% url 'messaging:edit_update' update.id %}" 
+                            class="btn btn-sm btn-outline-secondary d-flex align-items-center" 
+                            title="Edit this update">
+                                <i class="bi bi-pencil-square me-1"></i>
                             Edit
                         </a>
 
@@ -489,6 +489,29 @@
                                 </div>
                             </div>
                             <div class="update-content">{{ update.text|linebreaks }}</div>
+                            <div class="update-interactions d-flex gap-3 mt-2">
+                        <!-- Like Button -->
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <input type="hidden" name="reaction_type" value="like">
+                            <button type="submit" class="btn btn-outline-success btn-sm">
+                                👍 Like ({{ update.likes_count }})
+                            </button>
+                        </form>
+
+                        <!-- Dislike Button -->
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <input type="hidden" name="reaction_type" value="dislike">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                👎 Dislike ({{ update.dislikes_count }})
+                            </button>
+                        </form>
+
+                        <!-- Comments -->
+                        <span class="text-muted">💬 {{ update.comments_count }} Comments</span>
+                    </div>
+                                    
                         </div>
 
                     <div class="modal fade" id="deleteModal-{{ update.id }}" tabindex="-1" aria-labelledby="deleteModalLabel-{{ update.id }}" aria-hidden="true">
@@ -521,8 +544,7 @@
                             </button>
                             </form>
                         </div>
-
-                        </div>
+                     </div>
                     </div>
                     </div>
 

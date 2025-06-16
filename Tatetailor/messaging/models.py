@@ -69,7 +69,7 @@ class Reaction(models.Model):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messaging_comments')
     update = models.ForeignKey(Update, on_delete=models.CASCADE, related_name='comments')
     text = models.TextField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
