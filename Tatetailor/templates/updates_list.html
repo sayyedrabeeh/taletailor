@@ -222,6 +222,7 @@
 
         .user-info {
             flex: 1;
+            display:flex;
         }
 
         .username {
@@ -318,6 +319,38 @@
                 padding: 20px;
             }
         }
+        .update-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .update-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .icon-btn,
+        .icon-form button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            transition: transform 0.2s ease;
+        }
+
+        .icon-btn:hover svg,
+        .icon-form button:hover svg {
+            transform: scale(1.1);
+            fill: #ff4d4f; /* highlight on hover */
+        }
+
+        .icon-form {
+            display: inline;
+        }
+
     </style>
 </head>
 <body>
@@ -388,6 +421,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="user-info">
+                                  <div>
                                     <div class="username">{{ update.user.username|cut:"@gmail.com" }}</div>
                                     <div class="update-time">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -395,7 +429,7 @@
                                         </svg>
                                         <span class="time-badge">{{ update.created_at|timesince }} ago</span>
                                     </div>
-
+                                  </div>
                                 {% if update.user == request.user %}
                                 <div class="update-actions">
                                     <a href=" " class="icon-btn" title="Edit">
