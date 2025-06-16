@@ -41,3 +41,18 @@ class Update(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
+
+class Reaction(models.Model):
+    REACTION_CHOICES = [
+        ('like', 'Like'),
+        ('dislike', 'Dislike'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    update = models.ForeignKey(Update, on_delete=models.CASCADE, related_name='reactions')
+    reaction_type = models.CharField(max_length=7, choices=REACTION_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'update') 
