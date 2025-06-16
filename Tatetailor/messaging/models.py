@@ -39,6 +39,16 @@ class Update(models.Model):
     def is_expired(self):
         return timezone.now() > self.created_at + timedelta(hours=24)
 
+
+    def likes_count(self):
+        return self.reactions.filter(reaction_type='like').count()
+
+    def dislikes_count(self):
+        return self.reactions.filter(reaction_type='dislike').count()
+
+    def comments_count(self):
+        return self.comments.count()
+
     class Meta:
         ordering = ['-created_at']
 
