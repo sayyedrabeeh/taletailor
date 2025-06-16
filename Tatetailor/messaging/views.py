@@ -150,3 +150,10 @@ def edit_update(request, update_id):
     return render(request, 'post_update.html', {'update': update})
 
 
+@login_required
+def delete_update(request, update_id):
+    update = get_object_or_404(Update, id=update_id, user=request.user)
+    if request.method == 'POST':
+        update.delete()
+        messages.success(request, 'Your update was deleted.')
+    return redirect('messaging:updates_list')
