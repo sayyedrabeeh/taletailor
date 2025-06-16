@@ -350,6 +350,18 @@
         .icon-form {
             display: inline;
         }
+        .alert {
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 6px;
+        font-size: 14px;
+        }
+
+        .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        }
+
 
     </style>
 </head>
@@ -410,6 +422,16 @@
             <!-- Updates Container -->
             <div class="updates-container">
                 <div class="updates-list">
+                    {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
                     {% for update in updates %}
                         <div class="update-item">
                             <div class="update-header">

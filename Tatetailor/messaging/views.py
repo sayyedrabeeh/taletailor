@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import Message, ChatRoom
 from authentication.models import Profile
 from django.http import JsonResponse
- 
+from django.contrib import messages
 from .models import Update
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -145,5 +145,6 @@ def edit_update(request, update_id):
         if new_text:
             update.text = new_text
             update.save()
+            messages.success(request, "Update successfully edited!")
         return redirect('messaging:updates_list')
     return render(request, 'post_update.html', {'update': update})

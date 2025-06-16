@@ -377,6 +377,18 @@
                 justify-content: center;
             }
         }
+        .alert {
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 6px;
+        font-size: 14px;
+        }
+
+        .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        }
+
     </style>
 </head>
 <body>
@@ -437,6 +449,16 @@
             <!-- Form Container -->
             <div class="form-container">
                 <div class="form-wrapper">
+                    {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
                     <h2 class="form-title">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
@@ -463,7 +485,6 @@
                                 <span id="charCount">0</span>/500 characters
                             </div>
                         </div>
-
                         <div class="form-actions">
                             <a href="{% url 'messaging:updates_list' %}" class="btn-cancel">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
