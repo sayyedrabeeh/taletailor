@@ -372,7 +372,177 @@
         background-color: #d4edda;
         color: #155724;
         }
+.update-wrapper {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    margin-bottom: 20px;
+}
 
+.update-item {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+/* Comments section - Fixed styling */
+.comments {
+    background: rgba(39, 39, 42, 0.5);
+    border: 1px solid rgba(63, 63, 70, 0.3);
+    border-radius: 16px;
+    padding: 16px;
+    width: 400px;
+    max-height: 500px;
+    overflow-y: auto;
+    flex-shrink: 0;
+    backdrop-filter: blur(10px);
+    color: #e4e4e7;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Show comments when active */
+.comments.show {
+    display: block !important;
+}
+
+/* Comment styling */
+.comment {
+    background: rgba(63, 63, 70, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-left: 3px solid rgba(59, 130, 246, 0.5);
+}
+
+.comment:last-child {
+    margin-bottom: 0;
+}
+
+.comment strong {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+.comment .text-muted {
+    color: #a1a1aa !important;
+    font-size: 0.875rem;
+}
+
+/* Reply styling */
+.comment .ms-4 {
+    background: rgba(63, 63, 70, 0.1);
+    border-radius: 6px;
+    padding: 8px;
+    border-left: 2px solid rgba(139, 92, 246, 0.4);
+}
+
+/* Form styling in comments */
+.comments .form-control {
+    background: rgba(63, 63, 70, 0.3);
+    border: 1px solid rgba(82, 82, 91, 0.3);
+    color: #e4e4e7;
+    border-radius: 8px;
+}
+
+.comments .form-control:focus {
+    background: rgba(63, 63, 70, 0.5);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+    color: #e4e4e7;
+}
+
+.comments .form-control::placeholder {
+    color: #a1a1aa;
+}
+
+.comments .btn {
+    border-radius: 6px;
+    font-size: 0.875rem;
+}
+
+.comments .btn-primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.comments .btn-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+.comments .btn-outline-primary {
+    color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.comments .btn-outline-primary:hover {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .update-wrapper {
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .comments {
+        width: 100%;
+        max-height: 400px;
+    }
+}
+
+/* Animation for comment reveal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scrollbar styling for comments */
+.comments::-webkit-scrollbar {
+    width: 6px;
+}
+
+.comments::-webkit-scrollbar-track {
+    background: rgba(63, 63, 70, 0.2);
+    border-radius: 3px;
+}
+
+.comments::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.4);
+    border-radius: 3px;
+}
+
+.comments::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.6);
+}
+
+/* Update interactions styling */
+.update-interactions .btn {
+    border-radius: 20px;
+    font-size: 0.875rem;
+    padding: 6px 12px;
+}
+
+.toggle-comments-btn {
+    transition: all 0.2s ease;
+}
+
+.toggle-comments-btn.active {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
 
     </style>
 </head>
@@ -442,19 +612,20 @@
                             {% endfor %}
                         </div>
                         {% endif %}
-
-                    {% for update in updates %}
-                        <div class="update-item">
-                            <div class="update-header">
-                                <div class="user-avatar">
-                                    {% if update.user.profile.profile_picture %}
-                                        <img src="{{ update.user.profile.profile_picture.url }}" alt="Profile Picture">
-                                    {% else %}
-                                        {{ update.user.username|first|upper }}
-                                    {% endif %}
-                                </div>
-                                <div class="user-info">
-                                  <div>
+                {% for update in updates %}
+                <div class="update-wrapper">
+                    <!-- Left Side: Update -->
+                    <div class="update-item flex-grow-1">
+                        <div class="update-header">
+                            <div class="user-avatar">
+                                {% if update.user.profile.profile_picture %}
+                                    <img src="{{ update.user.profile.profile_picture.url }}" alt="Profile Picture">
+                                {% else %}
+                                    {{ update.user.username|first|upper }}
+                                {% endif %}
+                            </div>
+                            <div class="user-info">
+                                <div>
                                     <div class="username">{{ update.user.username|cut:"@gmail.com" }}</div>
                                     <div class="update-time">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -462,104 +633,119 @@
                                         </svg>
                                         <span class="time-badge">{{ update.created_at|timesince }} ago</span>
                                     </div>
-                                  </div>
-                                {% if update.user == request.user %}
-                            <div class="update-actions d-flex justify-content-end align-items-center gap-2 mt-2">
-        
-                            <a href="{% url 'messaging:edit_update' update.id %}" 
-                            class="btn btn-sm btn-outline-secondary d-flex align-items-center" 
-                            title="Edit this update">
-                                <i class="bi bi-pencil-square me-1"></i>
-                            Edit
-                        </a>
-
-                        
-                        <button type="button" 
-                                class="btn btn-sm btn-outline-danger d-flex align-items-center" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#deleteModal-{{ update.id }}" 
-                                title="Delete this update">
-                            <i class="bi bi-trash me-1"></i>
-                            Delete
-                        </button>
-                    </div>
-
-
-                            {% endif %}
                                 </div>
+
+                                {% if update.user == request.user %}
+                                <div class="update-actions d-flex justify-content-end align-items-center gap-2 mt-2">
+                                    <a href="{% url 'messaging:edit_update' update.id %}" 
+                                    class="btn btn-sm btn-outline-secondary d-flex align-items-center" 
+                                    title="Edit this update">
+                                        <i class="bi bi-pencil-square me-1"></i>Edit
+                                    </a>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-danger d-flex align-items-center" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#deleteModal-{{ update.id }}" 
+                                            title="Delete this update">
+                                        <i class="bi bi-trash me-1"></i>Delete
+                                    </button>
+                                </div>
+                                {% endif %}
                             </div>
-                            <div class="update-content">{{ update.text|linebreaks }}</div>
-                            <div class="update-interactions d-flex gap-3 mt-2">
-                        <!-- Like Button -->
-                        <form method="POST" action="">
-                            {% csrf_token %}
-                            <input type="hidden" name="reaction_type" value="like">
-                            <button type="submit" class="btn btn-outline-success btn-sm">
-                                👍 Like ({{ update.likes_count }})
-                            </button>
-                        </form>
-
-                        <!-- Dislike Button -->
-                        <form method="POST" action="">
-                            {% csrf_token %}
-                            <input type="hidden" name="reaction_type" value="dislike">
-                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                👎 Dislike ({{ update.dislikes_count }})
-                            </button>
-                        </form>
-
-                        <!-- Comments -->
-                        <span class="text-muted">💬 {{ update.comments_count }} Comments</span>
-                    </div>
-                                    
                         </div>
 
-                    <div class="modal fade" id="deleteModal-{{ update.id }}" tabindex="-1" aria-labelledby="deleteModalLabel-{{ update.id }}" aria-hidden="true">
+                        <div class="update-content">{{ update.text|linebreaks }}</div>
+
+                        <div class="update-interactions d-flex gap-3 mt-2">
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <input type="hidden" name="reaction_type" value="like">
+                                <button type="submit" class="btn btn-outline-success btn-sm">👍 Like ({{ update.likes_count }})</button>
+                            </form>
+
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <input type="hidden" name="reaction_type" value="dislike">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">👎 Dislike ({{ update.dislikes_count }})</button>
+                            </form>
+
+                            <button type="button" class="btn btn-sm btn-outline-secondary toggle-comments-btn" data-update-id="{{ update.id }}">
+                                💬 {{ update.comments_count }} Comments
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Comments -->
+                    <div class="comments d-none" id="comments-{{ update.id }}">
+                        {% for comment in update.comments.all %}
+                            <div class="comment mb-2">
+                                <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
+                                <small class="text-muted ms-2">{{ comment.created_at|timesince }} ago</small>
+                                <form method="POST" action="" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                    <input type="text" name="text" placeholder="Reply..." class="form-control form-control-sm d-inline w-auto mt-1" required>
+                                    <button type="submit" class="btn btn-sm btn-outline-primary mt-1">Reply</button>
+                                </form>
+
+                                {% for reply in comment.replies.all %}
+                                    <div class="ms-4 mt-1">
+                                        <strong>{{ reply.user.username }}</strong>: {{ reply.text }}
+                                        <small class="text-muted ms-2">{{ reply.created_at|timesince }} ago</small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% empty %}
+                            <p class="">No comments yet. Be the first!</p>
+                        {% endfor %}
+
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <input type="text" name="text" placeholder="Add a comment..." class="form-control mt-2" required>
+                            <button type="submit" class="btn btn-primary btn-sm mt-1">Post Comment</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="deleteModal-{{ update.id }}" tabindex="-1" aria-labelledby="deleteModalLabel-{{ update.id }}" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content border-0 shadow-lg">
-
-                        <!-- Header -->
-                        <div class="modal-header bg-light border-0">
-                            <h5 class="modal-title text-black fw-semibold" id="deleteModalLabel-{{ update.id }}">
-                            <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
-                            Confirm Deletion
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="modal-header bg-light border-0">
+                                <h5 class="modal-title text-black fw-semibold">
+                                    <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i> Confirm Deletion
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body text-muted">
+                                Are you sure you want to <strong>permanently delete</strong> this update?
+                            </div>
+                            <div class="modal-footer bg-light border-0">
+                                <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">
+                                    <i class="bi bi-x-circle me-1"></i> Cancel
+                                </button>
+                                <form method="POST" action="{% url 'messaging:delete_update' update.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash me-1"></i> Yes, Delete
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-
-                        <!-- Body -->
-                        <div class="modal-body text-muted">
-                            Are you sure you want to <strong>permanently delete</strong> this update? This action cannot be undone.
-                        </div>
-
-                        <!-- Footer -->
-                        <div class="modal-footer bg-light border-0">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">
-                            <i class="bi bi-x-circle me-1"></i> Cancel
-                            </button>
-                            <form method="POST" action="{% url 'messaging:delete_update' update.id %}" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash me-1"></i> Yes, Delete
-                            </button>
-                            </form>
-                        </div>
-                     </div>
                     </div>
-                    </div>
-
-
-                    {% empty %}
-                        <div class="no-updates">
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="margin-bottom: 16px; opacity: 0.5;">
-                                <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/>
-                            </svg>
-                            <p>No updates from others yet.</p>
-                            <p style="margin-top: 8px; font-size: 14px;">Be the first to share an update!</p>
-                        </div>
-                    {% endfor %}
                 </div>
-            </div>
+                {% empty %}
+                <div class="no-updates">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="margin-bottom: 16px; opacity: 0.5;">
+                        <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/>
+                    </svg>
+                    <p>No updates from others yet.</p>
+                    <p style="margin-top: 8px; font-size: 14px;">Be the first to share an update!</p>
+                </div>
+                {% endfor %}
+
+                                </div>
+                            </div>
 
 
 
@@ -569,5 +755,19 @@
 
         </div>
     </div>
+
+   <script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".toggle-comments-btn").forEach(button => {
+        button.addEventListener("click", () => {
+            const updateId = button.getAttribute("data-update-id");
+            const commentBox = document.getElementById(`comments-${updateId}`);
+            commentBox.classList.toggle("d-none");
+        });
+    });
+});
+</script>
+
+
 </body>
 </html>
