@@ -447,7 +447,7 @@
                         Share what's on your mind with the Tale Tailor community. Your update will be visible to all users.
                     </p>
 
-                    <form method="POST" action="{% url 'messaging:post_update' %}" id="updateForm">
+                    <form method="POST" action="{% if update  %}{% url 'messaging:edit_update' update.id %}{% else %}{% url 'messaging:post_update' %}{% endif %}" id="updateForm">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="content" class="form-label">Your Update</label>
@@ -458,7 +458,7 @@
                                 placeholder="What's on your mind? Share your thoughts, progress, or anything interesting..."
                                 required
                                 maxlength="500"
-                            ></textarea>
+                            >{% if update %}{{ update.text}}{% endif %}</textarea>
                             <div class="char-counter">
                                 <span id="charCount">0</span>/500 characters
                             </div>
@@ -475,7 +475,11 @@
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
                                 </svg>
+                                {% if update %}
+                                   update Post
+                                  {% else %} 
                                 Post Update
+                                {% endif %}
                             </button>
                         </div>
                     </form>

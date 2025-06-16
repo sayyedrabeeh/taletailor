@@ -137,3 +137,13 @@ def post_update(request):
     return render(request, 'post_update.html')
 
 
+@login_required
+def edit_update(request, update_id):
+    update = get_object_or_404(Update, id=update_id, user=request.user)
+    if request.method == 'POST':
+        new_text = request.POST.get('content', '').strip()
+        if new_text:
+            update.text = new_text
+            update.save()
+        return redirect('messaging:updates_list')
+    return render(request, 'post_update.html', {'update': update})
