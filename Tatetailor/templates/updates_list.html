@@ -699,7 +699,7 @@
                             <p class="">No comments yet. Be the first!</p>
                         {% endfor %}
 
-                        <form method="POST" action="">
+                        <form method="POST" action="{% url 'messaging:post_comment' update.id %}">
                             {% csrf_token %}
                             <input type="text" name="text" placeholder="Add a comment..." class="form-control mt-2" required>
                             <button type="submit" class="btn btn-primary btn-sm mt-1">Post Comment</button>

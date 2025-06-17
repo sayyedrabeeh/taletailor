@@ -171,3 +171,15 @@ def react_to_update(request, update_id):
             defaults={'reaction_type': reaction_type}
         )
     return redirect('messaging:updates_list')
+
+
+@login_required
+def post_comment(request, update_id):
+    update = get_object_or_404(Update, id=update_id)
+    if request.method == 'POST':
+        text = request.POST.get('text', '').strip()
+        parent_id = request.POST.get('parent_id')
+        parent = Comment.objects.filter(id=parent_id).first() if parent_id else None
+        if text:
+            Comment.objects.create(user=request.user, update=update, text=text, parent=parent)
+    return redirect('messaging:updates_list')
