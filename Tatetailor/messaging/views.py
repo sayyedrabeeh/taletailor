@@ -4,7 +4,7 @@ from .models import Message, ChatRoom
 from authentication.models import Profile
 from django.http import JsonResponse
 from django.contrib import messages
-from .models import Update,Reaction
+from .models import Update,Reaction,Comment
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from datetime import timedelta
