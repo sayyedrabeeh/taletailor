@@ -11,7 +11,7 @@ urlpatterns = [
     path('updates/post/', views.post_update, name='post_update'),
     path('updates/edit/<int:update_id>/', views.edit_update, name='edit_update'),
     path('updates/delete/<int:update_id>/', views.delete_update, name='delete_update'),
-    # path('updates/<int:update_id>/react/', views.react_to_update, name='react_to_update'),
+    path('updates/<int:update_id>/react/', views.react_to_update, name='react_to_update'),
     # path('updates/<int:update_id>/comment/', views.post_comment, name='post_comment'),
 
 ]

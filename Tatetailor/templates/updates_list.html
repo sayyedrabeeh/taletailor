@@ -657,7 +657,7 @@
                         <div class="update-content">{{ update.text|linebreaks }}</div>
 
                         <div class="update-interactions d-flex gap-3 mt-2">
-                            <form method="POST" action="">
+                            <form method="POST" action="{% url 'messaging:react_to_update' update.id %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="reaction_type" value="like">
                                 <button type="submit" class="btn btn-outline-success btn-sm">👍 Like ({{ update.likes_count }})</button>

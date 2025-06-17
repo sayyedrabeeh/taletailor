@@ -157,3 +157,17 @@ def delete_update(request, update_id):
         update.delete()
         messages.success(request, 'Your update was deleted.')
     return redirect('messaging:updates_list')
+
+
+
+@login_required
+def react_to_update(request, update_id):
+    update = get_object_or_404(Update, id=update_id)
+    reaction_type = request.POST.get('reaction_type')
+
+    if reaction_type in ['like', 'dislike']:
+        reaction, created = Reaction.objects.update_or_create(
+            user=request.user, update=update,
+            defaults={'reaction_type': reaction_type}
+        )
+    return redirect('messaging:updates_list')
