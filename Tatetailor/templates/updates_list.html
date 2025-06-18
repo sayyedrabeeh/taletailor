@@ -14,6 +14,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Optionally, Bootstrap Icons -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
@@ -30,6 +32,7 @@
             height: 100vh;
             overflow: hidden;
         }
+        
 
         .app-container {
             display: grid;
@@ -390,7 +393,7 @@
     background: rgba(39, 39, 42, 0.5);
     border: 1px solid rgba(63, 63, 70, 0.3);
     border-radius: 16px;
-    padding: 16px;
+    padding: 16px 16px 0 16px;
     width: 400px;
     max-height: 500px;
     overflow-y: auto;
@@ -439,7 +442,7 @@
 
 /* Form styling in comments */
 .comments .form-control {
-    background: rgba(63, 63, 70, 0.3);
+    background: transparent;
     border: 1px solid rgba(82, 82, 91, 0.3);
     color: #e4e4e7;
     border-radius: 8px;
@@ -543,6 +546,28 @@
     border-color: #3b82f6;
     color: #3b82f6;
 }
+.comment-form {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    background: #1f2022;
+    z-index: 1000;
+    display: flex;
+}
+.comment-form button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 10px;
+    transition: color 0.2s ease;
+}
+
+.comment-form button:hover {
+    color: #1e90ff;
+}
+  
 
     </style>
 </head>
@@ -679,7 +704,7 @@
                     <div class="comments d-none" id="comments-{{ update.id }}">
                         {% for comment in update.top_level_comments %}
                             <div class="comment mb-2">
-                                <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
+                                <strong>{{ comment.user.username|cut:"@gmail.com" }}</strong>: {{ comment.text }}
                                 <small class="text-muted ms-2">{{ comment.created_at|timesince }} ago</small>
                                 <form method="POST" action="{% url 'messaging:like_comment' comment.id %}" class="d-inline">
                                     {% csrf_token %}
@@ -690,13 +715,13 @@
                                 <form method="POST" action="{% url 'messaging:post_comment' update.id %}" class="d-inline">
                                     {% csrf_token %}
                                     <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                                    <input type="text" name="text" placeholder="Reply..." class="form-control form-control-sm d-inline w-auto mt-1" required>
+                                    <input type="text" name="text" placeholder="Reply..." class="form-control form-control-sm d-inline w-auto mt-1"style="border: none; border-bottom: 1px solid #ccc; border-radius: 0;" required>
                                     <button type="submit" class="btn btn-sm btn-outline-primary mt-1">Reply</button>
                                 </form>
 
                                 {% for reply in comment.replies.all %}
                                     <div class="ms-4 mt-1">
-                                        <strong>{{ reply.user.username }}</strong>: {{ reply.text }}
+                                        <strong>{{ reply.user.username|cut:"@gmail.com" }}</strong>: {{ reply.text }}
                                         <small class="text-muted ms-2">{{ reply.created_at|timesince }} ago</small>
                                     </div>
                                 {% endfor %}
@@ -705,11 +730,13 @@
                             <p class="">No comments yet. Be the first!</p>
                         {% endfor %}
 
-                        <form method="POST" action="{% url 'messaging:post_comment' update.id %}">
+                        <form method="POST" action="{% url 'messaging:post_comment' update.id %}" class="comment-form" >
+
                             {% csrf_token %}
                             <input type="text" name="text" placeholder="Add a comment..." class="form-control mt-2" required>
-                            <button type="submit" class="btn btn-primary btn-sm mt-1">Post Comment</button>
-                        </form>
+                            <button type="submit" title="Send">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>                        </form>
                     </div>
                 </div>
 
