@@ -681,6 +681,12 @@
                             <div class="comment mb-2">
                                 <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
                                 <small class="text-muted ms-2">{{ comment.created_at|timesince }} ago</small>
+                                <form method="POST" action="{% url 'messaging:like_comment' comment.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-link btn-sm p-0" style="text-decoration: none;">
+                                        👍 {{ comment.like_count }}
+                                    </button>
+                                </form>
                                 <form method="POST" action="{% url 'messaging:post_comment' update.id %}" class="d-inline">
                                     {% csrf_token %}
                                     <input type="hidden" name="parent_id" value="{{ comment.id }}">
