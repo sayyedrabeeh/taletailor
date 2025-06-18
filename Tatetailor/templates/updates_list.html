@@ -677,11 +677,11 @@
 
                     <!-- Right Side: Comments -->
                     <div class="comments d-none" id="comments-{{ update.id }}">
-                        {% for comment in update.comments.all %}
+                        {% for comment in update.top_level_comments %}
                             <div class="comment mb-2">
                                 <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
                                 <small class="text-muted ms-2">{{ comment.created_at|timesince }} ago</small>
-                                <form method="POST" action="" class="d-inline">
+                                <form method="POST" action="{% url 'messaging:post_comment' update.id %}" class="d-inline">
                                     {% csrf_token %}
                                     <input type="hidden" name="parent_id" value="{{ comment.id }}">
                                     <input type="text" name="text" placeholder="Reply..." class="form-control form-control-sm d-inline w-auto mt-1" required>

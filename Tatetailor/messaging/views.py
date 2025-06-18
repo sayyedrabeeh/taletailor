@@ -122,7 +122,9 @@ def get_last_message_data(request):
 @login_required
 def updates_list(request):
     updates = Update.objects.filter(created_at__gte=timezone.now() - timezone.timedelta(hours=24))
-     
+    for update in updates:
+        update.top_level_comments = update.comments.filter(parent__isnull=True)
+        
     return render(request, 'updates_list.html', {'updates': updates})
 
 
