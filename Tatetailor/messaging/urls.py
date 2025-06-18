@@ -13,5 +13,5 @@ urlpatterns = [
     path('updates/delete/<int:update_id>/', views.delete_update, name='delete_update'),
     path('updates/<int:update_id>/react/', views.react_to_update, name='react_to_update'),
     path('updates/<int:update_id>/comment/', views.post_comment, name='post_comment'),
-
+    path('comments/<int:comment_id>/like/', views.like_comment, name='like_comment'),       
 ]

@@ -124,7 +124,7 @@ def updates_list(request):
     updates = Update.objects.filter(created_at__gte=timezone.now() - timezone.timedelta(hours=24))
     for update in updates:
         update.top_level_comments = update.comments.filter(parent__isnull=True)
-        
+
     return render(request, 'updates_list.html', {'updates': updates})
 
 
@@ -184,4 +184,12 @@ def post_comment(request, update_id):
         parent = Comment.objects.filter(id=parent_id).first() if parent_id else None
         if text:
             Comment.objects.create(user=request.user, update=update, text=text, parent=parent)
+    return redirect('messaging:updates_list')
+
+@login_required
+def like_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    like, created = CommentLike.objects.get_or_create(user=request.user, comment=comment)
+    if not created:
+        like.delete()  
     return redirect('messaging:updates_list')
