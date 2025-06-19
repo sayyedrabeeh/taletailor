@@ -179,6 +179,9 @@ DATABASES = {
         'PORT': '5432',  # Default PostgreSQL port
     }
 }
+# settings.py
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
+
 
 LOGGING = {
     "version": 1,
