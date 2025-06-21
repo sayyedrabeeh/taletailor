@@ -790,8 +790,9 @@
         </div>
     </div>
 
-   <script>
+<script>
 document.addEventListener("DOMContentLoaded", function () {
+    // Toggle comment visibility
     document.querySelectorAll(".toggle-comments-btn").forEach(button => {
         button.addEventListener("click", () => {
             const updateId = button.getAttribute("data-update-id");
@@ -800,6 +801,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    // Get CSRF token
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -816,9 +818,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     const csrftoken = getCookie('csrftoken');
 
-    // Handle like/dislike reaction
-    document.querySelectorAll(".like-form, .dislike-form").forEach(form => {
-        form.addEventListener("submit", function (e) {
+    // Event delegation for like, dislike, comment, reply
+    document.addEventListener("submit", function (e) {
+        const form = e.target;
+
+        // Like/dislike post
+        if (form.classList.contains("like-form") || form.classList.contains("dislike-form")) {
             e.preventDefault();
             const updateId = form.dataset.updateId;
             const formData = new FormData(form);
@@ -837,88 +842,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 container.querySelector(".dislike-count").textContent = data.dislikes_count;
             })
             .catch(console.error);
-        });
-    });
-
-
-
- // Post new comment or reply
-    document.querySelectorAll(".comment-form").forEach(form => {
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-            const formData = new FormData(form);
-            const updateId = form.closest("[id^='comments-']").id.split("-")[1];
-
-            fetch(`/messaging/updates/${updateId}/comment/`, {
-                method: "POST",
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                body: formData
-            })
-            .then(response => response.ok ? response.json() : Promise.reject("Failed"))
-            .then(data => {
-            const updateId = form.closest("[id^='comments-']").id.split("-")[1];
-            const commentsContainer = document.getElementById(`comments-${updateId}`);
-
-            const newComment = document.createElement("div");
-            const isReply = !!data.comment.parent_id;
-            newComment.className = isReply ? "ms-4 mt-1" : "comment mb-2";
-
-            // 👇 Top-level comment has like & reply, reply does not
-            if (!isReply) {
-                newComment.innerHTML = `
-                    <strong>${data.comment.username}</strong>: ${data.comment.text}
-                    <small class="text-muted ms-2 time-elapsed" data-created-at="${data.comment.created_at_iso}">just now</small>
-
-                    <form method="POST" class="like-comment-form d-inline" data-comment-id="${data.comment.id}">
-                        <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
-                        <button type="submit" class="btn btn-link btn-sm p-0" style="text-decoration: none;">👍 0</button>
-                    </form>
-
-                    <form method="POST" class="comment-form d-inline">
-                        <input type="hidden" name="parent_id" value="${data.comment.id}">
-                        <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
-                        <input type="text" name="text" placeholder="Reply..." class="form-control form-control-sm d-inline w-auto mt-1" style="border: none; border-bottom: 1px solid #ccc; border-radius: 0;" required>
-                        <button type="submit" class="btn btn-sm btn-outline-primary mt-1">Reply</button>
-                    </form>
-                `;
-            } else {
-                newComment.innerHTML = `
-                    <strong>${data.comment.username}</strong>: ${data.comment.text}
-                    <small class="text-muted ms-2 time-elapsed" data-created-at="${data.comment.created_at_iso}">just now</small>
-                `;
-            }
-
-            if (isReply) {
-                // Append under parent comment
-                const parentComment = commentsContainer.querySelector(`[name="parent_id"][value="${data.comment.parent_id}"]`).closest(".comment");
-                parentComment.appendChild(newComment);
-            } else {
-                commentsContainer.prepend(newComment);
-            }
-
-            form.reset();
-            updateAllTimestamps();
-
-            // ⬆️ Update the comment count for top-level comments only
-           if (!isReply) {
-            const countSpan = document.getElementById(`comment-count-${updateId}`);
-            if (countSpan) {
-                countSpan.textContent = parseInt(countSpan.textContent) + 1;
-            }
         }
 
-        })
-
-            .catch(console.error);
-        });
-    });
-
-
-    // Like comment toggle
-    document.querySelectorAll(".like-comment-form").forEach(form => {
-        form.addEventListener("submit", function (e) {
+        // Like a comment
+        if (form.classList.contains("like-comment-form")) {
             e.preventDefault();
             const commentId = form.dataset.commentId;
 
@@ -933,36 +860,95 @@ document.addEventListener("DOMContentLoaded", function () {
                 form.querySelector("button").textContent = `👍 ${data.like_count}`;
             })
             .catch(console.error);
-        });
+        }
+
+        // Post a new comment or reply
+        if (form.classList.contains("comment-form")) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const updateId = form.closest("[id^='comments-']").id.split("-")[1];
+
+            fetch(`/messaging/updates/${updateId}/comment/`, {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                body: formData
+            })
+            .then(response => response.ok ? response.json() : Promise.reject("Failed"))
+            .then(data => {
+                const commentsContainer = document.getElementById(`comments-${updateId}`);
+                const newComment = document.createElement("div");
+                const isReply = !!data.comment.parent_id;
+                newComment.className = isReply ? "ms-4 mt-1" : "comment mb-2";
+
+                if (!isReply) {
+                    newComment.innerHTML = `
+                        <strong>${data.comment.username}</strong>: ${data.comment.text}
+                        <small class="text-muted ms-2 time-elapsed" data-created-at="${data.comment.created_at_iso}">just now</small>
+
+                        <form method="POST" class="like-comment-form d-inline" data-comment-id="${data.comment.id}">
+                            <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+                            <button type="submit" class="btn btn-link btn-sm p-0" style="text-decoration: none;">👍 0</button>
+                        </form>
+
+                        <form method="POST" class="comment-form d-inline">
+                            <input type="hidden" name="parent_id" value="${data.comment.id}">
+                            <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+                            <input type="text" name="text" placeholder="Reply..." class="form-control form-control-sm d-inline w-auto mt-1" style="border: none; border-bottom: 1px solid #ccc; border-radius: 0;" required>
+                            <button type="submit" class="btn btn-sm btn-outline-primary mt-1">Reply</button>
+                        </form>
+                    `;
+                } else {
+                    newComment.innerHTML = `
+                        <strong>${data.comment.username}</strong>: ${data.comment.text}
+                        <small class="text-muted ms-2 time-elapsed" data-created-at="${data.comment.created_at_iso}">just now</small>
+                    `;
+                }
+
+                if (isReply) {
+                    const parent = commentsContainer.querySelector(`[name="parent_id"][value="${data.comment.parent_id}"]`).closest(".comment");
+                    parent.appendChild(newComment);
+                } else {
+                    commentsContainer.prepend(newComment);
+                    const countSpan = document.getElementById(`comment-count-${updateId}`);
+                    if (countSpan) countSpan.textContent = parseInt(countSpan.textContent) + 1;
+                }
+
+                form.reset();
+                updateAllTimestamps();
+            })
+            .catch(console.error);
+        }
     });
-  function timeSince(date) {
-    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-    if (seconds < 60) return "just now";
-    const intervals = {
-        year: 31536000, month: 2592000, day: 86400,
-        hour: 3600, minute: 60
-    };
-    for (let [unit, value] of Object.entries(intervals)) {
-        const count = Math.floor(seconds / value);
-        if (count > 0) return `${count} ${unit}${count > 1 ? 's' : ''} ago`;
+
+    // Update time ago texts
+    function timeSince(date) {
+        const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+        if (seconds < 60) return "just now";
+        const intervals = {
+            year: 31536000, month: 2592000, day: 86400,
+            hour: 3600, minute: 60
+        };
+        for (let [unit, value] of Object.entries(intervals)) {
+            const count = Math.floor(seconds / value);
+            if (count > 0) return `${count} ${unit}${count > 1 ? 's' : ''} ago`;
+        }
+        return "just now";
     }
-    return "just now";
-}
-function updateAllTimestamps() {
-    document.querySelectorAll('.time-elapsed').forEach(el => {
-        const iso = el.dataset.createdAt;
-        el.textContent = timeSince(iso);
-    });
-}
 
- 
-updateAllTimestamps();
-setInterval(updateAllTimestamps, 60000);
+    function updateAllTimestamps() {
+        document.querySelectorAll('.time-elapsed').forEach(el => {
+            const iso = el.dataset.createdAt;
+            el.textContent = timeSince(iso);
+        });
+    }
 
-
-
+    updateAllTimestamps();
+    setInterval(updateAllTimestamps, 60000);
 });
 </script>
+
 
 
 </body>
