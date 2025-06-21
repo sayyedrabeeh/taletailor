@@ -878,6 +878,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     <form method="POST" class="comment-form d-inline">
                         <input type="hidden" name="parent_id" value="${data.comment.id}">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
                         <input type="text" name="text" placeholder="Reply..." class="form-control form-control-sm d-inline w-auto mt-1" style="border: none; border-bottom: 1px solid #ccc; border-radius: 0;" required>
                         <button type="submit" class="btn btn-sm btn-outline-primary mt-1">Reply</button>
                     </form>
