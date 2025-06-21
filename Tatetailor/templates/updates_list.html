@@ -706,13 +706,13 @@
                             <div class="comment mb-2">
                                 <strong>{{ comment.user.username|cut:"@gmail.com" }}</strong>: {{ comment.text }}
                                 <small class="text-muted ms-2">{{ comment.created_at|timesince }} ago</small>
-                                <form method="POST" action="{% url 'messaging:like_comment' comment.id %}" class="d-inline">
+                                <form method="POST" class="like-comment-form d-inline" data-comment-id="{{ comment.id }}" >
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-link btn-sm p-0" style="text-decoration: none;">
                                         👍 {{ comment.like_count }}
                                     </button>
                                 </form>
-                                <form method="POST" action="{% url 'messaging:post_comment' update.id %}" class="d-inline">
+                                <form method="POST"  class="d-inline">
                                     {% csrf_token %}
                                     <input type="hidden" name="parent_id" value="{{ comment.id }}">
                                     <input type="text" name="text" placeholder="Reply..." class="form-control form-control-sm d-inline w-auto mt-1"style="border: none; border-bottom: 1px solid #ccc; border-radius: 0;" required>
@@ -730,13 +730,14 @@
                             <p class="">No comments yet. Be the first!</p>
                         {% endfor %}
 
-                        <form method="POST" action="{% url 'messaging:post_comment' update.id %}" class="comment-form" >
+                        <form method="POST"  class="comment-form" >
 
                             {% csrf_token %}
                             <input type="text" name="text" placeholder="Add a comment..." class="form-control mt-2" required>
                             <button type="submit" title="Send">
-                                        <i class="fas fa-paper-plane"></i>
-                                    </button>                        </form>
+                                <i class="fas fa-paper-plane"></i>
+                            </button>                      
+                        </form>
                     </div>
                 </div>
 
