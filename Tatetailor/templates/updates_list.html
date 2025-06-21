@@ -916,6 +916,26 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
+    // Like comment toggle
+    document.querySelectorAll(".like-comment-form").forEach(form => {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const commentId = form.dataset.commentId;
+
+            fetch(`/messaging/comments/${commentId}/like/`, {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                form.querySelector("button").textContent = `👍 ${data.like_count}`;
+            })
+            .catch(console.error);
+        });
+    });
+
 
 
 
