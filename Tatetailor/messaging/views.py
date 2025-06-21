@@ -168,11 +168,16 @@ def react_to_update(request, update_id):
     reaction_type = request.POST.get('reaction_type')
 
     if reaction_type in ['like', 'dislike']:
-        reaction, created = Reaction.objects.update_or_create(
-            user=request.user, update=update,
+        Reaction.objects.update_or_create(
+            user=request.user,
+            update=update,
             defaults={'reaction_type': reaction_type}
         )
-    return redirect('messaging:updates_list')
+    return JsonResponse({
+        'likes_count': update.likes_count(),
+        'dislikes_count': update.dislikes_count()
+    })
+
 
 
 @login_required
