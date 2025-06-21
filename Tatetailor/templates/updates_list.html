@@ -947,6 +947,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     return "just now";
 }
+function updateAllTimestamps() {
+    document.querySelectorAll('.time-elapsed').forEach(el => {
+        const iso = el.dataset.createdAt;
+        el.textContent = timeSince(iso);
+    });
+}
+
+ 
+updateAllTimestamps();
+setInterval(updateAllTimestamps, 60000);
 
 
 
