@@ -182,14 +182,31 @@ def react_to_update(request, update_id):
 
 @login_required
 def post_comment(request, update_id):
-    update = get_object_or_404(Update, id=update_id)
     if request.method == 'POST':
+        update = get_object_or_404(Update, id=update_id)
         text = request.POST.get('text', '').strip()
         parent_id = request.POST.get('parent_id')
+
+        if not text:
+            return JsonResponse({'error': 'Comment cannot be empty'}, status=400)
+
         parent = Comment.objects.filter(id=parent_id).first() if parent_id else None
-        if text:
-            Comment.objects.create(user=request.user, update=update, text=text, parent=parent)
-    return redirect('messaging:updates_list')
+        comment = Comment.objects.create(user=request.user, update=update, text=text, parent=parent)
+
+        return JsonResponse({
+            'message': 'Comment created successfully',
+            'comment': {
+                'id': comment.id,
+                'username': request.user.username.split('@')[0],
+                'text': comment.text,
+                'created_at_iso': comment.created_at.isoformat(),
+                'like_count': comment.like_count(),
+                'parent_id': parent.id if parent else None
+            }
+        })
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 
 @login_required
 def like_comment(request, comment_id):
