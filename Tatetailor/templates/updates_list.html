@@ -901,14 +901,13 @@ document.addEventListener("DOMContentLoaded", function () {
             updateAllTimestamps();
 
             // ⬆️ Update the comment count for top-level comments only
-            if (!isReply) {
-                const toggleBtn = document.querySelector(`.toggle-comments-btn[data-update-id="${updateId}"]`);
-                if (toggleBtn) {
-                    let match = toggleBtn.textContent.match(/\d+/);
-                    let count = match ? parseInt(match[0]) + 1 : 1;
-                    toggleBtn.textContent = `💬 ${count} Comments`;
-                }
+           if (!isReply) {
+            const countSpan = document.getElementById(`comment-count-${updateId}`);
+            if (countSpan) {
+                countSpan.textContent = parseInt(countSpan.textContent) + 1;
             }
+        }
+
         })
 
             .catch(console.error);
