@@ -935,7 +935,19 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(console.error);
         });
     });
-
+  function timeSince(date) {
+    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+    if (seconds < 60) return "just now";
+    const intervals = {
+        year: 31536000, month: 2592000, day: 86400,
+        hour: 3600, minute: 60
+    };
+    for (let [unit, value] of Object.entries(intervals)) {
+        const count = Math.floor(seconds / value);
+        if (count > 0) return `${count} ${unit}${count > 1 ? 's' : ''} ago`;
+    }
+    return "just now";
+}
 
 
 
