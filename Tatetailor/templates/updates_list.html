@@ -712,7 +712,7 @@
                                         👍 {{ comment.like_count }}
                                     </button>
                                 </form>
-                                <form method="POST"  class="d-inline">
+                                <form method="POST"  class="comment-form d-inline">
                                     {% csrf_token %}
                                     <input type="hidden" name="parent_id" value="{{ comment.id }}">
                                     <input type="text" name="text" placeholder="Reply..." class="form-control form-control-sm d-inline w-auto mt-1"style="border: none; border-bottom: 1px solid #ccc; border-radius: 0;" required>
