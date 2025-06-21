@@ -682,16 +682,16 @@
                         <div class="update-content">{{ update.text|linebreaks }}</div>
 
                         <div class="update-interactions d-flex gap-3 mt-2">
-                            <form method="POST" action="{% url 'messaging:react_to_update' update.id %}">
+                            <form method="POST" class="like-form" data-update-id="{{ update.id }}">
                                 {% csrf_token %}
                                 <input type="hidden" name="reaction_type" value="like">
-                                <button type="submit" class="btn btn-outline-success btn-sm">👍 Like ({{ update.likes_count }})</button>
+                                <button type="submit" class="btn btn-outline-success btn-sm">👍 Like (<span class="like-count">{{ update.likes_count }}</span>)</button>
                             </form>
 
-                            <form method="POST" action="{% url 'messaging:react_to_update' update.id %}">
+                            <form method="POST" class="dislike-form" data-update-id="{{ update.id }}">
                                 {% csrf_token %}
                                 <input type="hidden" name="reaction_type" value="dislike">
-                                <button type="submit" class="btn btn-outline-danger btn-sm">👎 Dislike ({{ update.dislikes_count }})</button>
+                                <button type="submit" class="btn btn-outline-danger btn-sm">👎 Dislike (<span class="dislike-count">{{ update.dislikes_count }}</span>)</button>
                             </form>
 
                             <button type="button" class="btn btn-sm btn-outline-secondary toggle-comments-btn" data-update-id="{{ update.id }}">
@@ -798,6 +798,53 @@ document.addEventListener("DOMContentLoaded", function () {
             commentBox.classList.toggle("d-none");
         });
     });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const trimmed = cookie.trim();
+                if (trimmed.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(trimmed.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // Handle like/dislike reaction
+    document.querySelectorAll(".like-form, .dislike-form").forEach(form => {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const updateId = form.dataset.updateId;
+            const formData = new FormData(form);
+
+            fetch(`/messaging/updates/${updateId}/react/`, {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                body: formData
+            })
+            .then(response => response.ok ? response.json() : Promise.reject("Failed"))
+            .then(data => {
+                const container = form.closest(".update-item");
+                container.querySelector(".like-count").textContent = data.likes_count;
+                container.querySelector(".dislike-count").textContent = data.dislikes_count;
+            })
+            .catch(console.error);
+        });
+    });
+
+
+
+
+
+
+
 });
 </script>
 
