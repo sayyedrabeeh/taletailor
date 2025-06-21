@@ -842,6 +842,79 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+ // Post new comment or reply
+    document.querySelectorAll(".comment-form").forEach(form => {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const updateId = form.closest("[id^='comments-']").id.split("-")[1];
+
+            fetch(`/messaging/updates/${updateId}/comment/`, {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                body: formData
+            })
+            .then(response => response.ok ? response.json() : Promise.reject("Failed"))
+            .then(data => {
+            const updateId = form.closest("[id^='comments-']").id.split("-")[1];
+            const commentsContainer = document.getElementById(`comments-${updateId}`);
+
+            const newComment = document.createElement("div");
+            const isReply = !!data.comment.parent_id;
+            newComment.className = isReply ? "ms-4 mt-1" : "comment mb-2";
+
+            // 👇 Top-level comment has like & reply, reply does not
+            if (!isReply) {
+                newComment.innerHTML = `
+                    <strong>${data.comment.username}</strong>: ${data.comment.text}
+                    <small class="text-muted ms-2 time-elapsed" data-created-at="${data.comment.created_at_iso}">just now</small>
+
+                    <form method="POST" class="like-comment-form d-inline" data-comment-id="${data.comment.id}">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+                        <button type="submit" class="btn btn-link btn-sm p-0" style="text-decoration: none;">👍 0</button>
+                    </form>
+
+                    <form method="POST" class="comment-form d-inline">
+                        <input type="hidden" name="parent_id" value="${data.comment.id}">
+                        <input type="text" name="text" placeholder="Reply..." class="form-control form-control-sm d-inline w-auto mt-1" style="border: none; border-bottom: 1px solid #ccc; border-radius: 0;" required>
+                        <button type="submit" class="btn btn-sm btn-outline-primary mt-1">Reply</button>
+                    </form>
+                `;
+            } else {
+                newComment.innerHTML = `
+                    <strong>${data.comment.username}</strong>: ${data.comment.text}
+                    <small class="text-muted ms-2 time-elapsed" data-created-at="${data.comment.created_at_iso}">just now</small>
+                `;
+            }
+
+            if (isReply) {
+                // Append under parent comment
+                const parentComment = commentsContainer.querySelector(`[name="parent_id"][value="${data.comment.parent_id}"]`).closest(".comment");
+                parentComment.appendChild(newComment);
+            } else {
+                commentsContainer.prepend(newComment);
+            }
+
+            form.reset();
+            updateAllTimestamps();
+
+            // ⬆️ Update the comment count for top-level comments only
+            if (!isReply) {
+                const toggleBtn = document.querySelector(`.toggle-comments-btn[data-update-id="${updateId}"]`);
+                if (toggleBtn) {
+                    let match = toggleBtn.textContent.match(/\d+/);
+                    let count = match ? parseInt(match[0]) + 1 : 1;
+                    toggleBtn.textContent = `💬 ${count} Comments`;
+                }
+            }
+        })
+
+            .catch(console.error);
+        });
+    });
+
 
 
 
