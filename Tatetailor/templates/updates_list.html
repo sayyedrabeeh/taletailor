@@ -694,8 +694,8 @@
                                 <button type="submit" class="btn btn-outline-danger btn-sm">👎 Dislike (<span class="dislike-count">{{ update.dislikes_count }}</span>)</button>
                             </form>
 
-                            <button type="button" class="btn btn-sm btn-outline-secondary toggle-comments-btn" data-update-id="{{ update.id }}">
-                                💬 {{ update.comments_count }} Comments
+                           <button type="button" class="btn btn-sm btn-outline-secondary toggle-comments-btn" data-update-id="{{ update.id }}">
+                                💬 <span class="comment-count" id="comment-count-{{ update.id }}">{{ update.comments_count }}</span> Comments
                             </button>
                         </div>
                     </div>
