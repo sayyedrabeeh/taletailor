@@ -344,10 +344,34 @@
         {% endfor %}
     </div>
     {% endif %}
-    <form method="GET" action="" class="mb-3" style="display: flex; gap: 10px;">
-  <input type="text" name="q" placeholder="Search your stories..." class="form-control" value="{{ query }}">
-  <button type="submit" class="btn btn-primary">Search</button>
-</form>
+       <form method="GET" action="" style="display: flex; gap: 10px; margin-bottom: 1rem; align-items: center;">
+        <input 
+          type="text" 
+          name="q" 
+          id="searchInput"
+          placeholder="Search your stories..." 
+          value="{{ query }}"
+          style="background-color: #222; color: #eee; border: 1px solid #444; padding: 6px 10px; border-radius: 4px; flex: 1;">
+        
+        <button 
+          type="submit" 
+          style="background-color: #555; color: white; border: none; padding: 6px 12px; border-radius: 4px;">
+          🔍 Search
+        </button>
+
+        <button 
+          type="button" 
+          id="clearBtn" 
+          style="display: none; background-color: #333; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer;">
+          ❌
+        </button>
+      </form>
+
+
+    {% if query %}
+        <p>Showing results for "<strong>{{ query }}</strong>"</p>
+    {% endif %} 
+
 
     <div class="section-container">
      
@@ -442,6 +466,24 @@
     </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const input = document.getElementById('searchInput');
+  const clearBtn = document.getElementById('clearBtn');
 
+  input.addEventListener('input', () => {
+    clearBtn.style.display = input.value.trim() ? 'inline-block' : 'none';
+  });
+
+  clearBtn.addEventListener('click', () => {
+    window.location.href = window.location.pathname;  
+  });
+
+  
+  window.addEventListener('DOMContentLoaded', () => {
+    if (input.value.trim()) {
+      clearBtn.style.display = 'inline-block';
+    }
+  });
+</script>
 </body>
 </html>
