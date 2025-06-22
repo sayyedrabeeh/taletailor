@@ -1453,19 +1453,26 @@ document.addEventListener("DOMContentLoaded", function () {
             suppressBroadcast = false;
         }
 
-        // Handle soft lock (disable textarea if someone else is typing)
-          if (data.type === "user_typing") {
-            if (data.user_id !== currentUserId && data.is_typing) {
-                editorTextarea.disabled = true;
-                titleInput.disabled = true;
+        
+         const typingIndicator = document.querySelector(".typing-indicator");
 
-                clearTimeout(typingTimeout);
-                typingTimeout = setTimeout(() => {
-                    editorTextarea.disabled = false;
-                    titleInput.disabled = false;
-                }, 3000);
-            }
-        }
+          console.log('currentUserId :',currentUserId)
+          if (data.type === "user_typing") {
+              if (data.user_id !== currentUserId && data.is_typing) {
+                   
+                  typingIndicator.style.display = "block";
+                  editorTextarea.disabled = true;
+                  titleInput.disabled = true;
+
+                  clearTimeout(typingTimeout);
+                  typingTimeout = setTimeout(() => {
+                      typingIndicator.style.display = "none";
+                      editorTextarea.disabled = false;
+                      titleInput.disabled = false;
+                  }, 3000);
+              }
+          }
+
 
         if (data.type === "error") {
             alert(data.message);

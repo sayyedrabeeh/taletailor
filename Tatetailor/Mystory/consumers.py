@@ -70,6 +70,7 @@ class StoryEditorConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             "type": "user_typing",
             "is_typing": event["is_typing"],
+            "user_id": event["user_id"]
         }))
 
     async def broadcast_edit(self, event):
