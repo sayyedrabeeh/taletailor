@@ -1077,9 +1077,7 @@ button.secondary:hover {
                      <h2 class="section-title">Story Management</h2>
                      <div class="button-grou">
                       {% if status != "public" and status != "private" %}
-                      <button class="btn update-btn" name="update" type="submit">
-                        🔄 Update
-                    </button>   
+                        
                    {% else %}
                    <a href="{% url 'mystory:download_story' sid %}" class="btn download-btn">
                     <span class="btn-icon">📥</span> Download
@@ -1102,14 +1100,10 @@ button.secondary:hover {
                     <span class="btn-icon">📤</span> Share
                 </a>
                 
-                <button class="btn update-btn" name="update" type="submit">
-                    🔄 Update
-                </button>
+                
                 {% endif %}
               {% if status != "public" and status != "private" %}
-                <button class="btn update-btn" name="update" type="submit">
-                  🔄 Update
-              </button>
+                
               <div class="preference-group">
                 <label class="preference-label">Story Length:</label>
                 <div class="option-list">
@@ -1387,7 +1381,7 @@ button.secondary:hover {
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
-  <script>
+<script>
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("storyForm");
     const loader = document.getElementById("loader");
@@ -1396,63 +1390,81 @@ document.addEventListener("DOMContentLoaded", function () {
         loader.style.display = "block";
     });
 
-    const storyEditor = document.querySelector('.story-editor');
-    const wordCount = document.querySelector('.word-count');
-    const titleInput = document.querySelector("input[name='title']");
     const editorTextarea = document.querySelector("textarea[name='story']");
+    const titleInput = document.querySelector("input[name='title']");
+    const wordCount = document.querySelector(".word-count");
 
-    // 📝 Word count updater
+    let suppressBroadcast = false;
+    let typingTimeout;
+
     function updateWordCount() {
-        const text = storyEditor.value;
+        const text = editorTextarea.value;
         const words = text.trim() ? text.trim().split(/\s+/).length : 0;
         const characters = text.length;
         wordCount.textContent = `Words: ${words} | Characters: ${characters}`;
     }
 
     updateWordCount();
-    storyEditor.addEventListener('input', updateWordCount);
+    editorTextarea.addEventListener('input', updateWordCount);
 
     // Modal cleanup
     document.querySelectorAll(".btn-close, .btn-secondary").forEach(button => {
         button.addEventListener("click", function () {
-            let modal = document.getElementById("collaborationModal");
-            let modalInstance = bootstrap.Modal.getInstance(modal);
+            const modal = document.getElementById("collaborationModal");
+            const modalInstance = bootstrap.Modal.getInstance(modal);
             modalInstance.hide();
-            document.querySelectorAll(".modal-backdrop").forEach(backdrop => backdrop.remove());
+            document.querySelectorAll(".modal-backdrop").forEach(b => b.remove());
             document.body.classList.remove("modal-open");
             document.body.style.overflow = "";
         });
     });
 
-    // 🧠 WebSocket setup
     const storyId = "{{ sid }}";
     const roomName = `story-${storyId}`;
     const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
     const socket = new WebSocket(`${wsProtocol}://127.0.0.1:9000/ws/story/${roomName}/`);
+    console.log("Room name:", roomName);
 
-    // 📡 WebSocket events
-    socket.onopen = () => {
-        console.log("✅ WebSocket connection established");
-    };
+    socket.onopen = () => console.log("✅ WebSocket connected");
+    socket.onerror = (e) => console.error("❌ WebSocket error:", e);
+    socket.onclose = () => console.warn("⚠️ WebSocket closed");
 
-    socket.onerror = (error) => {
-        console.error("❌ WebSocket error:", error);
-    };
-
-    socket.onclose = () => {
-        console.warn("⚠️ WebSocket connection closed");
-    };
-
-    socket.onmessage = function(e) {
+    socket.onmessage = function (e) {
         const data = JSON.parse(e.data);
+        console.log("📩 Message received:", data);
 
         if (data.type === "initial" || data.type === "broadcast_edit") {
-            if (data.content !== undefined && editorTextarea !== document.activeElement) {
-                editorTextarea.value = data.content;
-                updateWordCount();
+            suppressBroadcast = true;
+
+            if (data.content !== undefined && data.content !== editorTextarea.value) {
+                if (document.activeElement !== editorTextarea) {
+                    editorTextarea.value = data.content;
+                    updateWordCount();
+                } else {
+                    console.warn("⚠️ Skipped update while typing");
+                }
             }
-            if (data.title && titleInput !== document.activeElement) {
+
+            if (data.title !== undefined && data.title !== titleInput.value && document.activeElement !== titleInput) {
                 titleInput.value = data.title;
+            }
+
+            suppressBroadcast = false;
+        }
+
+        // Handle soft lock (disable textarea if someone else is typing)
+        if (data.type === "user_typing") {
+            if (data.is_typing) {
+                editorTextarea.disabled = true;
+                titleInput.disabled = true;
+                console.log("✋ Editing locked (other user is typing)");
+
+                clearTimeout(typingTimeout);
+                typingTimeout = setTimeout(() => {
+                    editorTextarea.disabled = false;
+                    titleInput.disabled = false;
+                    console.log("✅ Editing re-enabled (timeout)");
+                }, 3000);
             }
         }
 
@@ -1461,7 +1473,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    // 🔁 Debounce function
     function debounce(func, wait) {
         let timeout;
         return function () {
@@ -1470,20 +1481,38 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }
 
-    // 📨 Send update to server
     const sendUpdate = debounce(() => {
-        if (socket.readyState === WebSocket.OPEN) {
-            socket.send(JSON.stringify({
-                title: titleInput.value,
-                content: editorTextarea.value
-            }));
-        }
+        if (suppressBroadcast || socket.readyState !== WebSocket.OPEN) return;
+
+        socket.send(JSON.stringify({
+            type: "broadcast_edit",
+            title: titleInput.value,
+            content: editorTextarea.value
+        }));
     }, 300);
 
-    editorTextarea.addEventListener("input", sendUpdate);
-    titleInput.addEventListener("input", sendUpdate);
+    //  Detect user is typing and broadcast typing event
+    function sendTyping() {
+        if (socket.readyState === WebSocket.OPEN) {
+            socket.send(JSON.stringify({ type: "user_typing", is_typing: true }));
+        }
+    }
+
+    const notifyTyping = debounce(sendTyping, 300);
+
+    editorTextarea.addEventListener("input", () => {
+        sendUpdate();
+        notifyTyping();
+    });
+
+    titleInput.addEventListener("input", () => {
+        sendUpdate();
+        notifyTyping();
+    });
 });
 </script>
+
+
 
       
 </body>

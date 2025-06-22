@@ -552,7 +552,7 @@
           <button type="submit">Search</button>
         </form>
       </div>
-    {% for story in stories %}
+   
       {% if messages %}
       <div class="container mt-3">
         {% for message in messages %}
@@ -563,7 +563,7 @@
         {% endfor %}
       </div>
     {% endif %}
-    
+     {% for story in stories %}
    
     <a style="text-decoration: none; color: #fff;" href="{% url 'aistory:view_story' story.id %}" class="draft-link">
     <div class="story-container">
