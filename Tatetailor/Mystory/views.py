@@ -35,23 +35,42 @@ from django.shortcuts import get_object_or_404
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from io import BytesIO
- 
+from django.db.models import Q 
 
 load_dotenv()
 
 
+
 @login_required(login_url='authentication:login') 
 def yourownstory(request):
-    my_stories = Story.objects.filter(user=request.user, is_collaborated=False).order_by('-id')[:3]
+    query = request.GET.get("q", "")
+
+    stories = Story.objects.filter(user=request.user)
+    if stories.exists():
+        story = stories.first()
+    else:
+        story = None 
+
+    
+    my_stories = Story.objects.filter(user=request.user, is_collaborated=False)
+
+    if query:
+        my_stories = my_stories.filter(Q(title__icontains=query) | Q(content__icontains=query))
+
+    my_stories = my_stories.order_by('-id')[:3]
+
+ 
     you_created_and_collaborated = Story.objects.filter(user=request.user, is_collaborated=True)
     you_were_invited = Story.objects.filter(collaborators=request.user)
     collaborated_stories = (you_created_and_collaborated | you_were_invited).distinct().order_by('-id')[:3]
-    stories = Story.objects.filter(user=request.user)   
-    if stories.exists():
-        story = stories.first()   
-    else:
-        story = None 
-    return render(request, "yourownstory.html", {"my_stories": my_stories,"stories": stories, "story": story,'colla_stories':collaborated_stories})
+
+    return render(request, "yourownstory.html", {
+        "my_stories": my_stories,
+        "stories": stories,
+        "story": story,
+        "colla_stories": collaborated_stories,
+        "query": query
+    })
 
 # @login_required(login_url='authentication:login') 
 def get_unsplash_image(query):
