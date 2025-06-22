@@ -1426,7 +1426,43 @@ button.secondary:hover {
     });
 });
 
-  </script>
-  
+
+    const storyId = "{{ sid }}";
+    const roomName = `story-${storyId}`;
+    const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+    const socket = new WebSocket(`${wsProtocol}://127.0.0.1:9000/ws/chat/${roomName}/`);
+
+    const titleInput = document.querySelector("input[name='title']");
+    const editorTextarea = document.querySelector("textarea[name='story']");
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        if (data.content !== undefined && editorTextarea !== document.activeElement) {
+            editorTextarea.value = data.content;
+        }
+        if (data.title && titleInput !== document.activeElement) {
+            titleInput.value = data.title;
+        }
+    };
+
+    function debounce(func, wait) {
+        let timeout;
+        return function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(func, wait);
+        };
+    }
+
+    const sendUpdate = debounce(() => {
+        socket.send(JSON.stringify({
+            title: titleInput.value,
+            content: editorTextarea.value
+        }));
+    }, 300);
+
+    editorTextarea.addEventListener("input", sendUpdate);
+    titleInput.addEventListener("input", sendUpdate);
+      </script>
+      
 </body>
 </html>
