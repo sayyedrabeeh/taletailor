@@ -1064,9 +1064,8 @@ button.secondary:hover {
         {% if story.image %}
           <img src="{{ story.image.url }}" alt="Story Image"class="story-image" >
         {% endif %}
-        <textarea class="story-editor" name="story" placeholder="Start writing your story here...">
-          {{ story11|default:''  }} 
-      </textarea>
+        <textarea class="story-editor" name="story" placeholder="Start writing your story here...">{{ story11|default:'' }}</textarea>
+
       
 
             </div>
@@ -1444,6 +1443,17 @@ button.secondary:hover {
             titleInput.value = data.title;
         }
     };
+    socket.onopen = () => {
+    console.log("✅ WebSocket connection established");
+};
+
+socket.onerror = (error) => {
+    console.error("❌ WebSocket error:", error);
+};
+
+socket.onclose = () => {
+    console.warn("⚠️ WebSocket connection closed");
+};
 
     function debounce(func, wait) {
         let timeout;
