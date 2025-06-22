@@ -996,7 +996,8 @@ button.secondary:hover {
 
   </style>
 </head>
-<body>
+<body   data-is-owner="{{ is_owner|yesno:'true,false' }}" 
+  data-status="{{ status }}" >
     <header>
         <div class="logo-container">
             <div class="logo irish-grover-regular">TALETAILOR</div>
@@ -1065,6 +1066,10 @@ button.secondary:hover {
           <img src="{{ story.image.url }}" alt="Story Image"class="story-image" >
         {% endif %}
         <div class="typing-indicator" style="display: none; color: #888; font-style: italic;">✍️ Someone is typing...</div>
+
+        <div class="alert alert-warning text-center mt-2" id="edit-warning" style="display:none;">
+  ✋ You cannot edit this story. Only the owner can edit published stories.
+</div>
         <textarea class="story-editor" name="story" placeholder="Start writing your story here...">{{ story11|default:'' }}</textarea>
 
       
@@ -1395,7 +1400,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const titleInput = document.querySelector("input[name='title']");
     const wordCount = document.querySelector(".word-count");
     const currentUserId = "{{ request.user.id }}";    
-    const currentUsername = "{{ request.user.username }}"
+    const currentUsername = "{{ request.user.username }}";
 
     let suppressBroadcast = false;
     let typingTimeout;
@@ -1410,17 +1415,18 @@ document.addEventListener("DOMContentLoaded", function () {
     updateWordCount();
     editorTextarea.addEventListener('input', updateWordCount);
 
-    // Modal cleanup
-    document.querySelectorAll(".btn-close, .btn-secondary").forEach(button => {
-        button.addEventListener("click", function () {
-            const modal = document.getElementById("collaborationModal");
-            const modalInstance = bootstrap.Modal.getInstance(modal);
-            modalInstance.hide();
-            document.querySelectorAll(".modal-backdrop").forEach(b => b.remove());
-            document.body.classList.remove("modal-open");
-            document.body.style.overflow = "";
-        });
-    });
+    // Get story status & owner info
+    const isOwner = document.body.dataset.isOwner === "true";
+    const status = document.body.dataset.status;
+    const isPosted = ["public", "private"].includes(status);
+    const canEdit = isOwner || (!isPosted);
+
+    if (!canEdit) {
+        editorTextarea.disabled = true;
+        titleInput.disabled = true;
+        const warning = document.getElementById("edit-warning");
+        if (warning) warning.style.display = "block";
+    }
 
     const storyId = "{{ sid }}";
     const roomName = `story-${storyId}`;
@@ -1443,8 +1449,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (document.activeElement !== editorTextarea) {
                     editorTextarea.value = data.content;
                     updateWordCount();
-                } else {
-                    console.warn("⚠️ Skipped update while typing");
                 }
             }
 
@@ -1455,26 +1459,25 @@ document.addEventListener("DOMContentLoaded", function () {
             suppressBroadcast = false;
         }
 
-        
-         const typingIndicator = document.querySelector(".typing-indicator");
+        const typingIndicator = document.querySelector(".typing-indicator");
 
-          console.log('currentUserId :',currentUserId)
-          if (data.type === "user_typing") {
-              if (data.user_id !== currentUserId && data.is_typing) {
-                    typingIndicator.textContent = `✍️ ${data.username} is typing...`;
-                  typingIndicator.style.display = "block";
-                  editorTextarea.disabled = true;
-                  titleInput.disabled = true;
+        if (data.type === "user_typing") {
+            if (data.user_id !== currentUserId && data.is_typing) {
+                typingIndicator.textContent = `✍️ ${data.username} is typing...`;
+                typingIndicator.style.display = "block";
+                editorTextarea.disabled = true;
+                titleInput.disabled = true;
 
-                  clearTimeout(typingTimeout);
-                  typingTimeout = setTimeout(() => {
-                      typingIndicator.style.display = "none";
-                      editorTextarea.disabled = false;
-                      titleInput.disabled = false;
-                  }, 3000);
-              }
-          }
-
+                clearTimeout(typingTimeout);
+                typingTimeout = setTimeout(() => {
+                    typingIndicator.style.display = "none";
+                    if (canEdit) {
+                        editorTextarea.disabled = false;
+                        titleInput.disabled = false;
+                    }
+                }, 3000);
+            }
+        }
 
         if (data.type === "error") {
             alert(data.message);
@@ -1490,20 +1493,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const sendUpdate = debounce(() => {
-        if (suppressBroadcast || socket.readyState !== WebSocket.OPEN) return;
+        if (!canEdit || suppressBroadcast || socket.readyState !== WebSocket.OPEN) return;
 
         socket.send(JSON.stringify({
             type: "broadcast_edit",
             title: titleInput.value,
-            content: editorTextarea.value
+            content: editorTextarea.value,
+            user_id: currentUserId
         }));
     }, 300);
 
-    //  Detect user is typing and broadcast typing event
     function sendTyping() {
-        if (socket.readyState === WebSocket.OPEN) {
-            socket.send(JSON.stringify({ type: "user_typing", is_typing: true,user_id: currentUserId,username: currentUsername   }));
-        }
+        if (!canEdit || socket.readyState !== WebSocket.OPEN) return;
+
+        socket.send(JSON.stringify({
+            type: "user_typing",
+            is_typing: true,
+            user_id: currentUserId,
+            username: currentUsername
+        }));
     }
 
     const notifyTyping = debounce(sendTyping, 300);
@@ -1519,15 +1527,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
- 
-{% if status in ("public", "private") and not is_owner %}
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector("textarea[name='story']").disabled = true;
-    document.querySelector("input[name='title']").disabled = true;
-});
-</script>
-{% endif %}
+
 
       
 </body>
