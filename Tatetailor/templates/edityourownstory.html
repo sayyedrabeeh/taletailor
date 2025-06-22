@@ -1429,7 +1429,8 @@ button.secondary:hover {
     const storyId = "{{ sid }}";
     const roomName = `story-${storyId}`;
     const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-    const socket = new WebSocket(`${wsProtocol}://127.0.0.1:9000/ws/chat/${roomName}/`);
+    const socket = new WebSocket(`${wsProtocol}://127.0.0.1:9000/ws/story/${roomName}/`);
+
 
     const titleInput = document.querySelector("input[name='title']");
     const editorTextarea = document.querySelector("textarea[name='story']");

@@ -9,7 +9,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Tatetailor.settings')
 django.setup()
 
 import messaging.routing
-import mystory.routing  # ✅ Add this
+import Mystory.routing   
 
 from django.urls import path
 
@@ -18,7 +18,7 @@ application = ProtocolTypeRouter({
     "websocket": AuthMiddlewareStack(
         URLRouter(
             messaging.routing.websocket_urlpatterns +
-            mystory.routing.websocket_urlpatterns   
+            Mystory.routing.websocket_urlpatterns   
         )
     ),
 })

@@ -1,6 +1,7 @@
 from django.urls import re_path
 from . import consumers
 
+# mystory/routing.py
 websocket_urlpatterns = [
-    re_path(r"ws/story/(?P<room_name>\w+)/$", consumers.StoryEditorConsumer.as_asgi()),
+    re_path(r"ws/story/(?P<room_name>[\w\-]+)/$", consumers.StoryEditorConsumer.as_asgi()),
 ]
