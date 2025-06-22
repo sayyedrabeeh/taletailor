@@ -344,6 +344,11 @@
         {% endfor %}
     </div>
     {% endif %}
+    <form method="GET" action="" class="mb-3" style="display: flex; gap: 10px;">
+  <input type="text" name="q" placeholder="Search your stories..." class="form-control" value="{{ query }}">
+  <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
     <div class="section-container">
      
       <section class="section">
