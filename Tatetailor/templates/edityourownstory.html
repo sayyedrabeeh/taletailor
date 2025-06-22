@@ -1437,9 +1437,10 @@ button.secondary:hover {
 
     socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        if (data.content !== undefined && editorTextarea !== document.activeElement) {
-            editorTextarea.value = data.content;
-        }
+        if (data.content !== undefined) {
+    editorTextarea.value = data.content;
+}
+
         if (data.title && titleInput !== document.activeElement) {
             titleInput.value = data.title;
         }
