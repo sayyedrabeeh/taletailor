@@ -1520,6 +1520,14 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
  
+{% if status in ("public", "private") and not is_owner %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector("textarea[name='story']").disabled = true;
+    document.querySelector("input[name='title']").disabled = true;
+});
+</script>
+{% endif %}
 
       
 </body>
