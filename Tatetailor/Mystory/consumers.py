@@ -36,31 +36,40 @@ class StoryEditorConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
 
-        # Handle typing indicator
+        # Typing indicator
         if data.get("type") == "user_typing":
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     "type": "user_typing_event",
                     "is_typing": data.get("is_typing", False),
-                    "user_id": data.get("user_id") ,
-                    "username": data.get("username") , 
+                    "user_id": data.get("user_id"),
+                    "username": data.get("username"),
                 }
             )
             return
 
-        # Save and broadcast edit
-        content = data.get("content", "")
-        title = data.get("title", "")
+        # Save and broadcast edits
         story_id = self.room_name.split('-')[-1]
-
         try:
             story = await sync_to_async(Story.objects.get)(id=story_id)
-            story.title = title
-            story.content = content
-            await sync_to_async(story.save)()
         except Story.DoesNotExist:
             return
+
+        user_id = data.get("user_id")
+        if story.status in ["public", "private"] and str(story.user.id) != str(user_id):
+            await self.send(text_data=json.dumps({
+                "type": "error",
+                "message": "Only the story owner can edit a published story."
+            }))
+            return
+
+        content = data.get("content", "")
+        title = data.get("title", "")
+
+        story.title = title
+        story.content = content
+        await sync_to_async(story.save)()
 
         await self.channel_layer.group_send(
             self.room_group_name,
