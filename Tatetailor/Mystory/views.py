@@ -38,31 +38,29 @@ from io import BytesIO
 from django.db.models import Q 
 
 load_dotenv()
-
-
+ 
 
 @login_required(login_url='authentication:login') 
 def yourownstory(request):
     query = request.GET.get("q", "")
 
     stories = Story.objects.filter(user=request.user)
-    if stories.exists():
-        story = stories.first()
-    else:
-        story = None 
+    story = stories.first() if stories.exists() else None
 
-    
+     
     my_stories = Story.objects.filter(user=request.user, is_collaborated=False)
-
     if query:
         my_stories = my_stories.filter(Q(title__icontains=query) | Q(content__icontains=query))
-
     my_stories = my_stories.order_by('-id')[:3]
 
- 
+     
     you_created_and_collaborated = Story.objects.filter(user=request.user, is_collaborated=True)
     you_were_invited = Story.objects.filter(collaborators=request.user)
-    collaborated_stories = (you_created_and_collaborated | you_were_invited).distinct().order_by('-id')[:3]
+    collaborated_stories = (you_created_and_collaborated | you_were_invited).distinct()
+
+    if query:
+        collaborated_stories = collaborated_stories.filter(Q(title__icontains=query) | Q(content__icontains=query))
+    collaborated_stories = collaborated_stories.order_by('-id')[:3]
 
     return render(request, "yourownstory.html", {
         "my_stories": my_stories,
@@ -71,6 +69,7 @@ def yourownstory(request):
         "colla_stories": collaborated_stories,
         "query": query
     })
+
 
 # @login_required(login_url='authentication:login') 
 def get_unsplash_image(query):
