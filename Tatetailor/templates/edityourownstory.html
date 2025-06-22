@@ -1106,7 +1106,6 @@ button.secondary:hover {
                     <span class="btn-icon">📤</span> Share
                 </a>
                 
-                
                 {% endif %}
               {% if status != "public" and status != "private" %}
                 
@@ -1483,8 +1482,7 @@ document.addEventListener("DOMContentLoaded", function () {
             alert(data.message);
         }
     };
-
-    function debounce(func, wait) {
+      function debounce(func, wait) {
         let timeout;
         return function () {
             clearTimeout(timeout);
@@ -1499,7 +1497,8 @@ document.addEventListener("DOMContentLoaded", function () {
             type: "broadcast_edit",
             title: titleInput.value,
             content: editorTextarea.value,
-            user_id: currentUserId
+            user_id: currentUserId,
+            username: currentUsername ,
         }));
     }, 300);
 

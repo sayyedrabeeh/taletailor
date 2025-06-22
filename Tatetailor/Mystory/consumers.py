@@ -57,7 +57,9 @@ class StoryEditorConsumer(AsyncWebsocketConsumer):
             return
 
         user_id = data.get("user_id")
-        if story.status in ["public", "private"] and str(story.user.id) != str(user_id):
+        story_owner_id = await sync_to_async(lambda s: s.user.id)(story)
+        if story.status in ["public", "private"] and str(story_owner_id) != str(user_id):
+
             await self.send(text_data=json.dumps({
                 "type": "error",
                 "message": "Only the story owner can edit a published story."
