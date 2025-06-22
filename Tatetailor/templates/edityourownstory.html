@@ -1064,6 +1064,7 @@ button.secondary:hover {
         {% if story.image %}
           <img src="{{ story.image.url }}" alt="Story Image"class="story-image" >
         {% endif %}
+        <div class="typing-indicator" style="display: none; color: #888; font-style: italic;">✍️ Someone is typing...</div>
         <textarea class="story-editor" name="story" placeholder="Start writing your story here...">{{ story11|default:'' }}</textarea>
 
       
@@ -1393,7 +1394,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const editorTextarea = document.querySelector("textarea[name='story']");
     const titleInput = document.querySelector("input[name='title']");
     const wordCount = document.querySelector(".word-count");
-
+    const currentUserId = "{{ request.user.id }}";    
     let suppressBroadcast = false;
     let typingTimeout;
 
@@ -1453,17 +1454,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Handle soft lock (disable textarea if someone else is typing)
-        if (data.type === "user_typing") {
-            if (data.is_typing) {
+          if (data.type === "user_typing") {
+            if (data.user_id !== currentUserId && data.is_typing) {
                 editorTextarea.disabled = true;
                 titleInput.disabled = true;
-                console.log("✋ Editing locked (other user is typing)");
 
                 clearTimeout(typingTimeout);
                 typingTimeout = setTimeout(() => {
                     editorTextarea.disabled = false;
                     titleInput.disabled = false;
-                    console.log("✅ Editing re-enabled (timeout)");
                 }, 3000);
             }
         }
@@ -1494,7 +1493,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //  Detect user is typing and broadcast typing event
     function sendTyping() {
         if (socket.readyState === WebSocket.OPEN) {
-            socket.send(JSON.stringify({ type: "user_typing", is_typing: true }));
+            socket.send(JSON.stringify({ type: "user_typing", is_typing: true,user_id: currentUserId  }));
         }
     }
 

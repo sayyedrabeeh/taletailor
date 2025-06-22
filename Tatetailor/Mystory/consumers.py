@@ -39,6 +39,7 @@ class StoryEditorConsumer(AsyncWebsocketConsumer):
                 {
                     "type": "user_typing_event",
                     "is_typing": data.get("is_typing", False),
+                    "user_id": data.get("user_id")  
                 }
             )
             return
