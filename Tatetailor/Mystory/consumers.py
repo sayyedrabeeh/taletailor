@@ -2,7 +2,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from mystory.models import Story  # Update path based on your app name
+from .models import Story 
 
 class StoryEditorConsumer(AsyncWebsocketConsumer):
     async def connect(self):

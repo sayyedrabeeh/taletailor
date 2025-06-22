@@ -1388,75 +1388,80 @@ button.secondary:hover {
 
 
   <script>
+document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("storyForm");
     const loader = document.getElementById("loader");
 
     form.addEventListener("submit", () => {
         loader.style.display = "block";
     });
+
     const storyEditor = document.querySelector('.story-editor');
     const wordCount = document.querySelector('.word-count');
-    
+    const titleInput = document.querySelector("input[name='title']");
+    const editorTextarea = document.querySelector("textarea[name='story']");
+
+    // 📝 Word count updater
     function updateWordCount() {
-      const text = storyEditor.value;
-      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-      const characters = text.length;
-      wordCount.textContent = `Words: ${words} | Characters: ${characters}`;
+        const text = storyEditor.value;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        const characters = text.length;
+        wordCount.textContent = `Words: ${words} | Characters: ${characters}`;
     }
-    
- 
+
     updateWordCount();
-    
- 
     storyEditor.addEventListener('input', updateWordCount);
 
-    document.addEventListener("DOMContentLoaded", function () {
+    // Modal cleanup
     document.querySelectorAll(".btn-close, .btn-secondary").forEach(button => {
         button.addEventListener("click", function () {
             let modal = document.getElementById("collaborationModal");
             let modalInstance = bootstrap.Modal.getInstance(modal);
-            modalInstance.hide(); // Properly hides the modal
-
-            // Remove any leftover modal-backdrop
+            modalInstance.hide();
             document.querySelectorAll(".modal-backdrop").forEach(backdrop => backdrop.remove());
-            document.body.classList.remove("modal-open"); // Remove the extra scroll lock
-            document.body.style.overflow = ""; // Restore scrolling
+            document.body.classList.remove("modal-open");
+            document.body.style.overflow = "";
         });
     });
-});
 
-
+    // 🧠 WebSocket setup
     const storyId = "{{ sid }}";
     const roomName = `story-${storyId}`;
     const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
     const socket = new WebSocket(`${wsProtocol}://127.0.0.1:9000/ws/story/${roomName}/`);
 
+    // 📡 WebSocket events
+    socket.onopen = () => {
+        console.log("✅ WebSocket connection established");
+    };
 
-    const titleInput = document.querySelector("input[name='title']");
-    const editorTextarea = document.querySelector("textarea[name='story']");
+    socket.onerror = (error) => {
+        console.error("❌ WebSocket error:", error);
+    };
+
+    socket.onclose = () => {
+        console.warn("⚠️ WebSocket connection closed");
+    };
 
     socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        if (data.content !== undefined) {
-    editorTextarea.value = data.content;
-}
 
-        if (data.title && titleInput !== document.activeElement) {
-            titleInput.value = data.title;
+        if (data.type === "initial" || data.type === "broadcast_edit") {
+            if (data.content !== undefined && editorTextarea !== document.activeElement) {
+                editorTextarea.value = data.content;
+                updateWordCount();
+            }
+            if (data.title && titleInput !== document.activeElement) {
+                titleInput.value = data.title;
+            }
+        }
+
+        if (data.type === "error") {
+            alert(data.message);
         }
     };
-    socket.onopen = () => {
-    console.log("✅ WebSocket connection established");
-};
 
-socket.onerror = (error) => {
-    console.error("❌ WebSocket error:", error);
-};
-
-socket.onclose = () => {
-    console.warn("⚠️ WebSocket connection closed");
-};
-
+    // 🔁 Debounce function
     function debounce(func, wait) {
         let timeout;
         return function () {
@@ -1465,16 +1470,21 @@ socket.onclose = () => {
         };
     }
 
+    // 📨 Send update to server
     const sendUpdate = debounce(() => {
-        socket.send(JSON.stringify({
-            title: titleInput.value,
-            content: editorTextarea.value
-        }));
+        if (socket.readyState === WebSocket.OPEN) {
+            socket.send(JSON.stringify({
+                title: titleInput.value,
+                content: editorTextarea.value
+            }));
+        }
     }, 300);
 
     editorTextarea.addEventListener("input", sendUpdate);
     titleInput.addEventListener("input", sendUpdate);
-      </script>
+});
+</script>
+
       
 </body>
 </html>
