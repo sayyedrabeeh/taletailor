@@ -1,3 +1,4 @@
 daphne: python watch_run.py
 celery: celery -A Tatetailor worker --loglevel=info
 beat: celery -A Tatetailor beat --loglevel=info
+ 

@@ -811,7 +811,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (chatSocket) chatSocket.close();
 
         const protocol = location.protocol === "https:" ? "wss" : "ws";
-        chatSocket = new WebSocket(`${protocol}://${location.host}/ws/chat/${roomName}/`);
+        const port = 9000;
+        chatSocket = new WebSocket(`${protocol}://127.0.0.1:${port}/ws/chat/${roomName}/`);
 
         chatSocket.onopen = () => {
             console.log("✅ WebSocket connected to room:", roomName);

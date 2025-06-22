@@ -4,6 +4,6 @@ def main():
     cli = CommandLineInterface()
     cli.run([
         '-b', '127.0.0.1',
-        '-p', '8000',
+        '-p', '9000',
         'Tatetailor.asgi:application'
     ])
