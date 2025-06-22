@@ -1395,6 +1395,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const titleInput = document.querySelector("input[name='title']");
     const wordCount = document.querySelector(".word-count");
     const currentUserId = "{{ request.user.id }}";    
+    const currentUsername = "{{ request.user.username }}"
+
     let suppressBroadcast = false;
     let typingTimeout;
 
@@ -1459,7 +1461,7 @@ document.addEventListener("DOMContentLoaded", function () {
           console.log('currentUserId :',currentUserId)
           if (data.type === "user_typing") {
               if (data.user_id !== currentUserId && data.is_typing) {
-                   
+                    typingIndicator.textContent = `✍️ ${data.username} is typing...`;
                   typingIndicator.style.display = "block";
                   editorTextarea.disabled = true;
                   titleInput.disabled = true;
@@ -1500,7 +1502,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //  Detect user is typing and broadcast typing event
     function sendTyping() {
         if (socket.readyState === WebSocket.OPEN) {
-            socket.send(JSON.stringify({ type: "user_typing", is_typing: true,user_id: currentUserId  }));
+            socket.send(JSON.stringify({ type: "user_typing", is_typing: true,user_id: currentUserId,username: currentUsername   }));
         }
     }
 

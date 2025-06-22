@@ -3,6 +3,10 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from .models import Story
 
+
+
+
+
 class StoryEditorConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
@@ -39,7 +43,8 @@ class StoryEditorConsumer(AsyncWebsocketConsumer):
                 {
                     "type": "user_typing_event",
                     "is_typing": data.get("is_typing", False),
-                    "user_id": data.get("user_id")  
+                    "user_id": data.get("user_id") ,
+                    "username": data.get("username") , 
                 }
             )
             return
@@ -70,7 +75,8 @@ class StoryEditorConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             "type": "user_typing",
             "is_typing": event["is_typing"],
-            "user_id": event["user_id"]
+            "user_id": event["user_id"],
+            "username": event["username"]  
         }))
 
     async def broadcast_edit(self, event):
