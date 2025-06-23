@@ -4,9 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaleTailor - Professional Story Generator</title>
+  <title>TaleTailor -  Story Generator</title>
   <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
-
+      <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
     
@@ -295,9 +297,12 @@
         </div>
         <div class="user-actions">
        
-            <a href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
+            <a style="text-decoration: none;" href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
         
-             
+             <a href="{% url 'messaging:chat' %}" style="text-decoration: none;" class="message-icon">
+            <i class="fas fa-comments" style="font-size: 20px; color: #25D366;"></i> 
+            </a>
+
             <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
                 👤
             </div>

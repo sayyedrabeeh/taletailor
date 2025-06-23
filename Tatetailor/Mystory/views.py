@@ -211,7 +211,7 @@ def edit_story(request, story_id=None):
 def send_story_email_to_followers(story, followers, action="posted"):
     subject = f"{story.user.username} has {action} a new story: {story.title}"
     from_email = settings.EMAIL_HOST_USER
-    story_url = f"http://127.0.0.1:8000/Aistories/view_story/{story.id}/"  
+    story_url = f"http://127.0.0.1:9000/Aistories/view_story/{story.id}/"  
 
     html_content = render_to_string("email/story_notification.html", {
         "author": story.user.username,
