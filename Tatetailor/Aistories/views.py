@@ -13,7 +13,7 @@ from gtts import gTTS
 from django.contrib.auth.decorators import login_required
 import subprocess
 from .models import Comment
-
+import google.generativeai as genai
 
 
  
@@ -176,19 +176,26 @@ def aimake2(request):
 
         
         prompt = f"""
-        Write a {length} story with emotion '{emotion}', twists: {twists}, and this theme:
-        {theme}
+        Write a complete, engaging  story of exactly around {length} words.
+        The story must have a clear beginning, middle, and end.
+        Include detailed descriptions, character development, dialogue, and build tension throughout.
 
-        Situation: {situation}
-        Characters: {char_names} (Count: {char_count})
-        Places: {locations}
+        Emotion/tone: {emotion}
+        Include twists: {'yes' if twists else 'no'}
+        Theme: {theme}
+
+        Situation/plot starter: {situation}
+        Characters ({char_count} total): {char_names}
+        Locations/places: {locations}
+
+        Do not summarize – write the full story in narrative form.
+        Word count goal: {length.replace('word', '').strip()} words. Count your words and continue until you reach it.
         """
 
         story = generate_story(prompt)
         word_count = len(story.split())
         
         request.session.pop("story_step1", None)
-        print('story:',story)
         return render(request, "story_output.html", {
             "story": story,
             "emotion": emotion,
@@ -202,33 +209,24 @@ def aimake2(request):
     return render(request, "aimake2.html")
 
 
-access_token = os.getenv("HUGGINGFACE_API_KEY")
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 def generate_story(prompt):
-    import requests
+    try:
+        model = genai.GenerativeModel(
+            model_name="gemini-2.5-flash", 
+            generation_config={
+           "temperature": 0.9,
+        "top_p": 0.95,
+        "max_output_tokens": 8192,
+            }
+        )
 
-    API_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
+        response = model.generate_content(prompt)
 
-    headers = {
-        "Authorization": f"Bearer {access_token}"
-    }
-    payload = {
-        "inputs": prompt,
-        "parameters": {
-            "max_length": 700,
-            "temperature": 0.9,
-            "top_p": 0.95,
-            "repetition_penalty": 1.2,
-        }
-    }
+        return response.text
 
-    response = requests.post(API_URL, headers=headers, json=payload)
-    print("Response status:", response.status_code)
-    print("Response text:", response.text)  
-
-    if response.status_code == 200:
-        data = response.json()
-        return data[0]["generated_text"]
-    else:
+    except Exception as e:
+        print("Gemini error:", e)
         return "Error: Couldn't generate story."
     
     

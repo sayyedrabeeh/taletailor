@@ -611,7 +611,17 @@
     overflow-wrap: break-word;   /* Break long words (better support) */
     word-break: break-word; 
 }
-
+.clear-btn {
+    background: #ff4444;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+.clear-btn:hover { background: #cc0000; }
+.clear-btn:disabled { background: #aaa; cursor: not-allowed; }
 
     </style>
 </head>
@@ -677,6 +687,7 @@
                         {{ user.username|first|upper }}
                     {% endif %}
                 </div>
+
                 <div class="chat-info">
                     <div class="chat-name">{{  user.username|cut:"@gmail.com" }}</div>
                  
@@ -735,6 +746,7 @@
 
                         </div>
                     </div>
+                    <button id="clear-chat-btn" class="clear-btn" data-room="{{ room_name }}">Clear Chat</button>
                 {% endwith %}
             {% endif %}
         {% endfor %}
@@ -873,8 +885,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         };
 
-        chatSocket.onclose = () => 
-            console.warn("❌ WebSocket closed.");
+chatSocket.onclose = (event) => {
+    console.warn("❌ WebSocket closed:", event.code, event.reason);
+    if (event.code !== 1000) { // Not a normal close—retry in 3s
+        setTimeout(() => setupWebSocket(roomName), 3000);
+    }
+};
              
 
         chatSocket.onerror = error => console.error("WebSocket error:", error);
@@ -899,77 +915,110 @@ document.addEventListener("DOMContentLoaded", () => {
             return preview;
         }
 
-    function attachFormHandler(roomName) {
-        const form = document.querySelector(".chat-area form");
-        if (!form) return;
+   function attachFormHandler(roomName) {
+    const form = document.querySelector(".chat-area form");
+    if (!form) return;
+    const textarea = form.querySelector("textarea");
+    const submitBtn = form.querySelector("button[type='submit']"); // Optional: if you have a send button
+    const csrf = form.querySelector("[name=csrfmiddlewaretoken]").value;
 
-        const textarea = form.querySelector("textarea");
-        const csrf = form.querySelector("[name=csrfmiddlewaretoken]").value;
-        textarea.addEventListener("keydown", function (e) {
-            if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();  
-                form.dispatchEvent(new Event("submit"));  
-            }
-        });
-            textarea.addEventListener("input", () => {
-                textarea.style.height = "auto";  
-
-                const lineHeight = 24; 
-                const maxRows = 6;
-                const maxHeight = lineHeight * maxRows;
-
-                textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + "px";
-            });
-
-        form.onsubmit = e => {
+    // Existing keydown and input listeners...
+    textarea.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            const msg = textarea.value.trim();
-            if (!msg) return;
+            form.dispatchEvent(new Event("submit"));
+        }
+    });
+    textarea.addEventListener("input", () => {
+        textarea.style.height = "auto";
+        const lineHeight = 24;
+        const maxRows = 6;
+        const maxHeight = lineHeight * maxRows;
+        textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + "px";
+    });
 
-            if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) {
-                console.error("❌ WebSocket not open. Message not sent.");
-                return;
+    form.onsubmit = e => {
+        e.preventDefault();
+        const msg = textarea.value.trim();
+        if (!msg) return;
+
+        // Optional: Disable submit during send to prevent duplicates
+        if (submitBtn) submitBtn.disabled = true;
+        textarea.disabled = true;
+
+        // Always send via HTTP to create in DB
+        fetch(form.action, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": csrf,
+            },
+            body: new URLSearchParams({ content: msg })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            // HTTP success: Immediately add to sender's UI (mimic onmessage)
+            const container = document.querySelector(".chat-area .messages-container");
+            if (container && roomName === document.querySelector(".chat-area")?.dataset?.room) {
+                const div = document.createElement("div");
+                div.className = "message sent"; // Sender's message
+                div.innerHTML = `
+                    <div class="message-bubble">${msg}</div>
+                    <div class="message-time">Just now</div>
+                `;
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
             }
 
-            fetch(form.action, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "X-CSRFToken": csrf,
-                },
-                body: new URLSearchParams({ content: msg })
-            }).then(() => {
+            // Update chat list preview/time (as you do elsewhere)
+            const targetChatItem = document.querySelector(`.chat-item[data-room="${roomName}"]`);
+            if (targetChatItem) {
+                const preview = targetChatItem.querySelector(".chat-preview");
+                const time = targetChatItem.querySelector(".chat-time");
+                if (preview) preview.textContent = formatPreviewText(msg);
+                if (time) {
+                    const now = new Date();
+                    const formatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    time.textContent = formatted;
+                }
+            }
+
+            // Clear input
+            textarea.value = "";
+
+            // Try WS send for real-time notify to others (non-blocking)
+            if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
                 try {
                     chatSocket.send(JSON.stringify({
                         message: msg,
                         username: window.CURRENT_USERNAME,
-                         room_name: roomName 
+                        room_name: roomName
                     }));
                 } catch (err) {
-                    console.error("❌ Failed to send via WebSocket:", err);
+                    console.warn("⚠️ WS send failed (others will see via poll):", err);
                 }
+            } else {
+                console.warn("⚠️ WS not open—skipping real-time notify (others will see via poll)");
+            }
 
-                const targetChatItem = document.querySelector(`.chat-item[data-room="${roomName}"]`);
-                if (targetChatItem) {
-                    const preview = targetChatItem.querySelector(".chat-preview");
-                    const time = targetChatItem.querySelector(".chat-time");
-
-                    if (preview) preview.textContent = formatPreviewText(msg);
-                    if (time) {
-                        const now = new Date();
-                        const formatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                        time.textContent = formatted;
-                    }
-                }
-
-                textarea.value = "";
-                setTimeout(() => {
-                    const container = document.querySelector(".chat-area .messages-container");
-                    if (container) container.scrollTop = container.scrollHeight;
-                }, 100);
-            });
-        };
-    }
+            // Refresh metadata to catch any missed updates
+            fetchChatMetadata();
+        })
+        .catch(err => {
+            console.error("❌ Failed to send message:", err);
+            // Optional: Re-enable and show user toast/error
+            alert("Failed to send message. Please try again.");
+        })
+        .finally(() => {
+            // Re-enable
+            if (submitBtn) submitBtn.disabled = false;
+            textarea.disabled = false;
+            textarea.style.height = "auto"; // Reset height
+        });
+    };
+}
 
      
     function loadChat(roomName) {
