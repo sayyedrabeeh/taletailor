@@ -360,584 +360,7 @@
 }
 
 /* Theme Classes */
-.theme-neutral {
-    --primary-color: #4a0e5c;
-    --secondary-color: #1fc55c;
-    --accent-color: #8a0e74;
-    --background-color: #121212;
-    --card-background: #1e1e1e;
-    --text-color: #e0e0e0;
-    --light-gray: #333333;
-    --header-gradient: linear-gradient(135deg, #4a0e5c, #8a0e74);
-    --button-hover: #17a44a;
-    --button-glow: rgba(31, 197, 92, 0.4);
-}
-
-.theme-happy {
-    --primary-color: #FF9800;
-    --secondary-color: #FFEB3B;
-    --accent-color: #FF5722;
-    --background-color: #FFF9C4;
-    --card-background: #FFFDE7;
-    --text-color: #5D4037;
-    --light-gray: #E6EE9C;
-    --header-gradient: linear-gradient(135deg, #FFD54F, #FF9800);
-    --button-hover: #FFB300;
-    --button-glow: rgba(255, 152, 0, 0.4);
-    position: relative;
-    
-}
-
-.theme-happy::after {
-    content: "🎈 🎊 🌞 🌈";
-    position: fixed;
-    font-size: 20px;
-    opacity: 0.1;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    animation: float-around 30s linear infinite;
-}
-
-.theme-happy .story-header::before {
-    content: "😄 🎉 ✨";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: bounce 2s infinite;
-}
-
-.theme-sad {
-    --primary-color: #78909C;
-    --secondary-color: #90A4AE;
-    --accent-color: #607D8B;
-    --background-color: #ECEFF1;
-    --card-background: #CFD8DC;
-    --text-color: #263238;
-    --light-gray: #B0BEC5;
-    --header-gradient: linear-gradient(135deg, #78909C, #546E7A);
-    --button-hover: #546E7A;
-    --button-glow: rgba(96, 125, 139, 0.4);
-}
-
-.theme-sad .story-header::before {
-    content: "😢 💧 🌧️";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: float 3s ease-in-out infinite;
-}
-
-.theme-sad::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(0deg, rgba(0,0,0,0) 80%, rgba(176, 190, 197, 0.2) 100%);
-    pointer-events: none;
-    animation: sad-mist 10s ease-in-out infinite;
-}
-
-.theme-romantic {
-    --primary-color: #E91E63;
-    --secondary-color: #F48FB1;
-    --accent-color: #C2185B;
-    --background-color: #FCE4EC;
-    --card-background: #F8BBD0;
-    --text-color: #880E4F;
-    --light-gray: #F8BBD0;
-    --header-gradient: linear-gradient(135deg, #EC407A, #AD1457);
-    --button-hover: #D81B60;
-    --button-glow: rgba(233, 30, 99, 0.4);
-}
-
-.theme-romantic .story-header::before {
-    content: "❤️ 💕 💖";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: pulse 1.5s ease-in-out infinite;
-}
-
-.theme-romantic::after {
-    content: "💘 💝 💗";
-    position: fixed;
-    font-size: 24px;
-    opacity: 0.1;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    animation: float-hearts 20s linear infinite;
-}
-
-.theme-thriller {
-    --primary-color: #37474F;
-    --secondary-color: #546E7A;
-    --accent-color: #263238;
-    --background-color: #1A2327;
-    --card-background: #263238;
-    --text-color: #ECEFF1;
-    --light-gray: #455A64;
-    --header-gradient: linear-gradient(135deg, #263238, #000000);
-    --button-hover: #1A2327;
-    --button-glow: rgba(38, 50, 56, 0.4);
-}
-
-.theme-thriller .story-header::before {
-    content: "😱 🔪 🩸";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: shake 0.5s ease-in-out infinite;
-}
-
-.theme-thriller .story-main::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: repeating-linear-gradient(
-        45deg,
-        rgba(0, 0, 0, 0.1),
-        rgba(0, 0, 0, 0.1) 10px,
-        rgba(0, 0, 0, 0) 10px,
-        rgba(0, 0, 0, 0) 20px
-    );
-    pointer-events: none;
-    animation: thriller-bg 30s linear infinite;
-}
-
-.theme-adventure {
-    --primary-color: #43A047;
-    --secondary-color: #66BB6A;
-    --accent-color: #2E7D32;
-    --background-color: #E8F5E9;
-    --card-background: #C8E6C9;
-    --text-color: #1B5E20;
-    --light-gray: #A5D6A7;
-    --header-gradient: linear-gradient(135deg, #43A047, #1B5E20);
-    --button-hover: #388E3C;
-    --button-glow: rgba(67, 160, 71, 0.4);
-}
-
-.theme-adventure .story-header::before {
-    content: "🏔️ 🧗 🌄";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: scale 2s ease-in-out infinite;
-}
-
-.theme-adventure::after {
-    content: "🏕️ 🌲 🍃";
-    position: fixed;
-    font-size: 24px;
-    opacity: 0.1;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    pointer-events: none;
-    animation: adventure-elements 20s linear infinite;
-}
-
-.theme-mystery {
-    --primary-color: #5E35B1;
-    --secondary-color: #7E57C2;
-    --accent-color: #4527A0;
-    --background-color: #EDE7F6;
-    --card-background: #D1C4E9;
-    --text-color: #311B92;
-    --light-gray: #B39DDB;
-    --header-gradient: linear-gradient(135deg, #5E35B1, #311B92);
-    --button-hover: #512DA8;
-    --button-glow: rgba(94, 53, 177, 0.4);
-}
-
-.theme-mystery .story-header::before {
-    content: "🔍 🕵️ 🔎";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: rotate 3s linear infinite;
-}
-
-.theme-mystery::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: radial-gradient(circle at 50% 50%, rgba(94, 53, 177, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
-    pointer-events: none;
-    animation: mystery-fog 15s ease-in-out infinite alternate;
-}
-
-.theme-comedy {
-    --primary-color: #FFCA28;
-    --secondary-color: #FFD54F;
-    --accent-color: #FFC107;
-    --background-color: #FFF8E1;
-    --card-background: #FFECB3;
-    --text-color: #FF6F00;
-    --light-gray: #FFE082;
-    --header-gradient: linear-gradient(135deg, #FFCA28, #FF6F00);
-    --button-hover: #FFB300;
-    --button-glow: rgba(255, 202, 40, 0.4);
-}
-
-.theme-comedy .story-header::before {
-    content: "😂 🤣 😆";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: bounce 1s ease-in-out infinite;
-}
-
-.theme-comedy::after {
-    content: "🎭 🎪 🤹";
-    position: fixed;
-    font-size: 24px;
-    opacity: 0.1;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    animation: comedy-elements 25s linear infinite;
-}
-
-.theme-horror {
-    --primary-color: #212121;
-    --secondary-color: #424242;
-    --accent-color: #000000;
-    --background-color: #121212;
-    --card-background: #1E1E1E;
-    --text-color: #F5F5F5;
-    --light-gray: #303030;
-    --header-gradient: linear-gradient(135deg, #212121, #000000);
-    --button-hover: #000000;
-    --button-glow: rgba(33, 33, 33, 0.4);
-}
-
-.theme-horror .story-header::before {
-    content: "👻 💀 🧟";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: float 2s ease-in-out infinite alternate;
-}
-
-.theme-horror::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23333' stroke-width='1' stroke-dasharray='5,5'/%3E%3C/svg%3E"),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 100 100'%3E%3Cpath d='M20,20 L80,80 M80,20 L20,80' stroke='%23333' stroke-width='1'/%3E%3C/svg%3E");
-    background-position: center;
-    background-size: 300px 300px, 200px 200px;
-    opacity: 0.05;
-    pointer-events: none;
-    animation: horror-bg 60s linear infinite;
-}
-
-.theme-fantasy {
-    --primary-color: #7B1FA2;
-    --secondary-color: #9C27B0;
-    --accent-color: #6A1B9A;
-    --background-color: #F3E5F5;
-    --card-background: #E1BEE7;
-    --text-color: #4A148C;
-    --light-gray: #CE93D8;
-    --header-gradient: linear-gradient(-45deg, #7B1FA2, #9C27B0, #6A1B9A, #4A148C);
-    --button-hover: #8E24AA;
-    --button-glow: rgba(123, 31, 162, 0.4);
-    background-size: 400% 400%;
-    animation: gradient-shift 15s ease infinite;
-}
-
-.theme-fantasy .story-header::before {
-    content: "🧙 🐉 ✨";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: sparkle 2s ease-in-out infinite;
-}
-
-.theme-fantasy::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        radial-gradient(2px 2px at 40px 60px, #FFF, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 100px 120px, #FFF, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 200px 50px, #FFF, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 300px 200px, #FFF, rgba(0,0,0,0));
-    background-repeat: repeat;
-    background-size: 400px 400px;
-    pointer-events: none;
-    opacity: 0.2;
-    animation: twinkle 4s ease-in-out infinite alternate;
-}
-
-.theme-scifi {
-    --primary-color: #00BCD4;
-    --secondary-color: #4DD0E1;
-    --accent-color: #0097A7;
-    --background-color: #E0F7FA;
-    --card-background: #B2EBF2;
-    --text-color: #006064;
-    --light-gray: #80DEEA;
-    --header-gradient: linear-gradient(135deg, #00BCD4, #006064);
-    --button-hover: #00ACC1;
-    --button-glow: rgba(0, 188, 212, 0.4);
-}
-
-.theme-scifi .story-header::before {
-    content: "🚀 👽 🛸";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: rocket 3s ease-in-out infinite;
-}
-
-.theme-scifi::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        radial-gradient(1px 1px at 40px 60px, #4DD0E1, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 100px 120px, #4DD0E1, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 200px 50px, #4DD0E1, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 300px 200px, #4DD0E1, rgba(0,0,0,0));
-    background-repeat: repeat;
-    background-size: 400px 400px;
-    pointer-events: none;
-    opacity: 0.2;
-    animation: scifi-stars 10s linear infinite;
-}
-
-.theme-scifi .story-main::before {
-    content: "";
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 80px;
-    height: 80px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 L90 90 L10 90 Z' fill='none' stroke='%2300BCD4' stroke-width='2'%3E%3Canimate attributeName='stroke-dasharray' from='0,300' to='300,0' dur='3s' repeatCount='indefinite' /%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    opacity: 0.3;
-    pointer-events: none;
-}
-
-.theme-inspirational {
-    --primary-color: #FFC107;
-    --secondary-color: #FFD54F;
-    --accent-color: #FFA000;
-    --background-color: #FFF8E1;
-    --card-background: #FFECB3;
-    --text-color: #FF6F00;
-    --light-gray: #FFE082;
-    --header-gradient: linear-gradient(135deg, #FFC107, #FF6F00);
-    --button-hover: #FFB300;
-    --button-glow: rgba(255, 193, 7, 0.4);
-}
-
-.theme-inspirational .story-header::before {
-    content: "✨ 🌟 💫";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: sparkle 1.5s ease-in-out infinite;
-}
-
-.theme-inspirational::after {
-    content: "🙌 💪 🌈";
-    position: fixed;
-    font-size: 24px;
-    opacity: 0.1;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    animation: inspiration-elements 20s linear infinite;
-}
-
-.theme-melancholy {
-    --primary-color: #78909C;
-    --secondary-color: #90A4AE;
-    --accent-color: #607D8B;
-    --background-color: #ECEFF1;
-    --card-background: #CFD8DC;
-    --text-color: #263238;
-    --light-gray: #B0BEC5;
-    --header-gradient: linear-gradient(135deg, #78909C, #546E7A);
-    --button-hover: #546E7A;
-    --button-glow: rgba(96, 125, 139, 0.4);
-}
-
-.theme-melancholy .story-header::before {
-    content: "🌧️ 🍂 🌫️";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: rain 2s ease-in-out infinite;
-}
-
-.theme-melancholy::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(180deg, 
-        rgba(176, 190, 197, 0) 0%,
-        rgba(176, 190, 197, 0.05) 75%,
-        rgba(176, 190, 197, 0.1) 100%);
-    pointer-events: none;
-    animation: melancholy-mist 10s ease-in-out infinite;
-}
-
-.theme-anger {
-    --primary-color: #F44336;
-    --secondary-color: #EF5350;
-    --accent-color: #D32F2F;
-    --background-color: #FFEBEE;
-    --card-background: #FFCDD2;
-    --text-color: #B71C1C;
-    --light-gray: #EF9A9A;
-    --header-gradient: linear-gradient(135deg, #F44336, #B71C1C);
-    --button-hover: #E53935;
-    --button-glow: rgba(244, 67, 54, 0.4);
-}
-
-.theme-anger .story-header::before {
-    content: "😠 🔥 💢";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: pulse 0.5s ease-in-out infinite;
-}
-
-.theme-anger::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at bottom right, rgba(244, 67, 54, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
-    pointer-events: none;
-    animation: anger-glow 4s ease-in-out infinite alternate;
-}
-
-.theme-surprise {
-    --primary-color: #26C6DA;
-    --secondary-color: #4DD0E1;
-    --accent-color: #00ACC1;
-    --background-color: #E0F7FA;
-    --card-background: #B2EBF2;
-    --text-color: #006064;
-    --light-gray: #80DEEA;
-    --header-gradient: linear-gradient(135deg, #26C6DA, #00ACC1);
-    --button-hover: #00BCD4;
-    --button-glow: rgba(38, 198, 218, 0.4);
-}
-
-.theme-surprise .story-header::before {
-    content: "😲 🎁 ✨";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: jump 1s ease-in-out infinite;
-}
-
-.theme-surprise::after {
-    content: "🎉 🎊 🎈";
-    position: fixed;
-    font-size: 24px;
-    opacity: 0.1;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    animation: surprise-elements 15s linear infinite;
-}
-
-.theme-fear {
-    --primary-color: #455A64;
-    --secondary-color: #607D8B;
-    --accent-color: #37474F;
-    --background-color: #263238;
-    --card-background: #37474F;
-    --text-color: #ECEFF1;
-    --light-gray: #546E7A;
-    --header-gradient: linear-gradient(135deg, #455A64, #263238);
-    --button-hover: #37474F;
-    --button-glow: rgba(69, 90, 100, 0.4);
-}
-
-.theme-fear .story-header::before {
-    content: "😨 🕸️ 🌑";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 2rem;
-    animation: shake 0.8s ease-in-out infinite;
-}
-
-
-.theme-fear::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M30,30 C50,10 70,30 70,30 C70,30 90,50 70,70 C70,70 50,90 30,70 C30,70 10,50 30,30 Z' fill='none' stroke='%23455A64' stroke-width='0.5'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 100px 100px;
-    opacity: 0.05;
-    pointer-events: none;
-    animation: fear-bg 60s linear infinite;
-}
-
+ 
 /* Particles container */
 .particles-container {
     position: fixed;
@@ -1501,7 +924,514 @@ a:visited {
   color: inherit;            
   text-decoration: none;   
 }
+/* ===========================
+   EXTRAORDINARY PROFESSIONAL THEMES
+   Advanced Gradient & Visual Effects
+   =========================== */
 
+/* Enhanced Theme Variables with Advanced Gradients */
+.theme-happy {
+    --primary-color: #FF9800;
+    --secondary-color: #FFEB3B;
+    --accent-color: #FF5722;
+    --background-color: #FFF9C4;
+    --card-background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
+    --text-color: #5D4037;
+    --light-gray: #E6EE9C;
+    --header-gradient: linear-gradient(135deg, #FFD54F 0%, #FF9800 50%, #F57C00 100%);
+    --glow-color: rgba(255, 152, 0, 0.6);
+    --particle-color: #FFB300;
+}
+
+.theme-sad {
+    --primary-color: #546E7A;
+    --secondary-color: #78909C;
+    --accent-color: #455A64;
+    --background-color: linear-gradient(180deg, #ECEFF1 0%, #CFD8DC 100%);
+    --card-background: linear-gradient(135deg, #CFD8DC 0%, #B0BEC5 100%);
+    --text-color: #263238;
+    --light-gray: #90A4AE;
+    --header-gradient: linear-gradient(135deg, #78909C 0%, #546E7A 50%, #37474F 100%);
+    --glow-color: rgba(96, 125, 139, 0.4);
+    --particle-color: #607D8B;
+}
+
+.theme-romantic {
+    --primary-color: #E91E63;
+    --secondary-color: #F48FB1;
+    --accent-color: #C2185B;
+    --background-color: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);
+    --card-background: linear-gradient(135deg, #F8BBD0 0%, #F48FB1 50%, #FCE4EC 100%);
+    --text-color: #880E4F;
+    --light-gray: #F8BBD0;
+    --header-gradient: linear-gradient(135deg, #EC407A 0%, #D81B60 50%, #AD1457 100%);
+    --glow-color: rgba(233, 30, 99, 0.6);
+    --particle-color: #F06292;
+}
+
+.theme-thriller {
+    --primary-color: #263238;
+    --secondary-color: #37474F;
+    --accent-color: #000000;
+    --background-color: linear-gradient(180deg, #1A2327 0%, #0D1214 100%);
+    --card-background: linear-gradient(135deg, #263238 0%, #1C2629 100%);
+    --text-color: #ECEFF1;
+    --light-gray: #37474F;
+    --header-gradient: linear-gradient(135deg, #37474F 0%, #263238 50%, #000000 100%);
+    --glow-color: rgba(255, 0, 0, 0.3);
+    --particle-color: #455A64;
+}
+
+.theme-adventure {
+    --primary-color: #43A047;
+    --secondary-color: #66BB6A;
+    --accent-color: #2E7D32;
+    --background-color: linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%);
+    --card-background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+    --text-color: #1B5E20;
+    --light-gray: #81C784;
+    --header-gradient: linear-gradient(135deg, #66BB6A 0%, #43A047 50%, #2E7D32 100%);
+    --glow-color: rgba(67, 160, 71, 0.6);
+    --particle-color: #4CAF50;
+}
+
+.theme-mystery {
+    --primary-color: #5E35B1;
+    --secondary-color: #7E57C2;
+    --accent-color: #4527A0;
+    --background-color: linear-gradient(180deg, #EDE7F6 0%, #D1C4E9 100%);
+    --card-background: linear-gradient(135deg, #D1C4E9 0%, #B39DDB 100%);
+    --text-color: #311B92;
+    --light-gray: #9575CD;
+    --header-gradient: linear-gradient(135deg, #7E57C2 0%, #5E35B1 50%, #4527A0 100%);
+    --glow-color: rgba(94, 53, 177, 0.6);
+    --particle-color: #673AB7;
+}
+
+.theme-fantasy {
+    --primary-color: #7B1FA2;
+    --secondary-color: #9C27B0;
+    --accent-color: #6A1B9A;
+    --background-color: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #CE93D8 100%);
+    --card-background: linear-gradient(135deg, #E1BEE7 0%, #CE93D8 50%, #BA68C8 100%);
+    --text-color: #4A148C;
+    --light-gray: #AB47BC;
+    --header-gradient: linear-gradient(-45deg, #7B1FA2 0%, #9C27B0 25%, #6A1B9A 50%, #8E24AA 75%, #4A148C 100%);
+    --glow-color: rgba(156, 39, 176, 0.7);
+    --particle-color: #BA68C8;
+    background-size: 400% 400%;
+    animation: gradient-flow 15s ease infinite;
+}
+
+.theme-scifi {
+    --primary-color: #00BCD4;
+    --secondary-color: #00E5FF;
+    --accent-color: #0097A7;
+    --background-color: linear-gradient(180deg, #E0F7FA 0%, #B2EBF2 100%);
+    --card-background: linear-gradient(135deg, #B2EBF2 0%, #80DEEA 100%);
+    --text-color: #006064;
+    --light-gray: #4DD0E1;
+    --header-gradient: linear-gradient(135deg, #00E5FF 0%, #00BCD4 50%, #0097A7 100%);
+    --glow-color: rgba(0, 229, 255, 0.8);
+    --particle-color: #18FFFF;
+}
+
+.theme-horror {
+    --primary-color: #212121;
+    --secondary-color: #424242;
+    --accent-color: #000000;
+    --background-color: linear-gradient(180deg, #121212 0%, #000000 100%);
+    --card-background: linear-gradient(135deg, #1E1E1E 0%, #0D0D0D 100%);
+    --text-color: #F5F5F5;
+    --light-gray: #303030;
+    --header-gradient: linear-gradient(135deg, #424242 0%, #212121 50%, #000000 100%);
+    --glow-color: rgba(139, 0, 0, 0.5);
+    --particle-color: #424242;
+}
+
+.theme-inspirational {
+    --primary-color: #FFC107;
+    --secondary-color: #FFD54F;
+    --accent-color: #FFA000;
+    --background-color: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+    --card-background: linear-gradient(135deg, #FFECB3 0%, #FFE082 50%, #FFD54F 100%);
+    --text-color: #FF6F00;
+    --light-gray: #FFCA28;
+    --header-gradient: linear-gradient(135deg, #FFD54F 0%, #FFC107 50%, #FFA000 100%);
+    --glow-color: rgba(255, 193, 7, 0.7);
+    --particle-color: #FFEB3B;
+}
+
+/* Advanced Card Styling with Gradients */
+.story-main {
+    background: var(--card-background);
+    border-top: 4px solid transparent;
+    border-image: var(--header-gradient) 1;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.story-main::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 100%);
+    animation: shine 3s infinite;
+}
+
+.story-main:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+        0 0 40px var(--glow-color);
+}
+
+/* Extraordinary Header with Multiple Gradient Layers */
+.story-header {
+    background: var(--header-gradient);
+    position: relative;
+    overflow: hidden;
+    padding: 3rem 2rem;
+}
+
+.story-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%);
+    animation: float-orbs 8s ease-in-out infinite;
+}
+
+.story-header::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(180deg, transparent 0%, var(--background-color) 100%);
+}
+
+/* Animated Gradient Border Effect */
+.action-card {
+    background: var(--card-background);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+.action-card::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--header-gradient);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0.8;
+    animation: rotate-border 4s linear infinite;
+}
+
+.action-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--card-background);
+    border-radius: inherit;
+    z-index: -1;
+}
+
+/* Glassmorphism Effect for Buttons */
+.btn {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.2) 0%, 
+        rgba(255, 255, 255, 0.05) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 12px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+        0 0 30px var(--glow-color);
+}
+
+/* Particle Background System */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 10% 20%, var(--particle-color) 0px, transparent 1px),
+        radial-gradient(circle at 90% 80%, var(--particle-color) 0px, transparent 1px),
+        radial-gradient(circle at 50% 50%, var(--particle-color) 0px, transparent 1px),
+        radial-gradient(circle at 30% 70%, var(--particle-color) 0px, transparent 1px),
+        radial-gradient(circle at 70% 30%, var(--particle-color) 0px, transparent 1px);
+    background-size: 200px 200px;
+    opacity: 0.3;
+    animation: particle-drift 60s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Mesh Gradient Background for Body */
+body {
+    background: var(--background-color);
+    position: relative;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(ellipse at top left, var(--glow-color) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, var(--glow-color) 0%, transparent 50%),
+        radial-gradient(ellipse at top right, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: -1;
+    animation: mesh-flow 20s ease-in-out infinite;
+}
+
+/* Advanced Tag Styling */
+.tag {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(255, 255, 255, 0.05) 100%);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 3px solid var(--primary-color);
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    position: relative;
+    overflow: hidden;
+}
+
+.tag::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.2) 50%, 
+        transparent 100%);
+    transition: left 0.5s;
+}
+
+.tag:hover::before {
+    left: 100%;
+}
+
+.tag:hover {
+    background: var(--header-gradient);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px var(--glow-color);
+}
+
+/* Animated Info Icons with Gradient */
+.info-icon {
+    background: var(--header-gradient);
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        0 0 0 2px rgba(255, 255, 255, 0.1) inset;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-icon::before {
+    content: "";
+    position: absolute;
+    inset: -100%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(255, 255, 255, 0.3) 90deg,
+        transparent 180deg
+    );
+    animation: icon-spin 3s linear infinite;
+}
+
+/* Holographic Effect for Images */
+.story-image {
+    position: relative;
+    filter: saturate(1.2) contrast(1.1);
+}
+
+.story-image::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        transparent 50%, 
+        rgba(255, 255, 255, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+}
+
+.story-main:hover .story-image::before {
+    opacity: 1;
+}
+
+/* Dynamic Shadow System */
+.similar-story {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.similar-story::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--header-gradient);
+    transform: scaleY(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.similar-story:hover::before {
+    transform: scaleY(1);
+}
+
+.similar-story:hover {
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.05) 0%, 
+        transparent 100%);
+    transform: translateX(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Extraordinary Animations */
+@keyframes gradient-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes shine {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+@keyframes float-orbs {
+    0%, 100% { 
+        transform: translate(0, 0) scale(1);
+        opacity: 0.6;
+    }
+    50% { 
+        transform: translate(20px, -20px) scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+@keyframes rotate-border {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes particle-drift {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+@keyframes mesh-flow {
+    0%, 100% { 
+        transform: scale(1) translate(0, 0);
+        opacity: 0.3;
+    }
+    50% { 
+        transform: scale(1.1) translate(20px, 20px);
+        opacity: 0.5;
+    }
+}
+
+@keyframes icon-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .story-header {
+        padding: 2rem 1.5rem;
+    }
+    
+    .story-main::before {
+        animation: shine 5s infinite;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
   </style>
 </head>
 <body class="{{ theme_class }}">
@@ -2064,6 +1994,343 @@ function updateLanguageSupportNotification() {
 
 
    
+</script>
+<script>
+ 
+class ThemeAudioSystem {
+  constructor() {
+    this.bgMusic = null;
+    this.sfxAudio = [];
+    this.currentTheme = null;
+    this.volume = 0.4;
+    this.isMusicMuted = false;
+    this.isSFXMuted = false;
+    this.isPlaying = false;
+
+    this.audioLibrary = {
+happy: {
+    bg: 'https://www.bensound.com/bensound-music/bensound-ukulele.mp3',   
+    sfx: [
+      'https://assets.mixkit.co/active_storage/sfx/600/600-preview.mp3',  
+      'https://assets.mixkit.co/active_storage/sfx/466/466-preview.mp3',  
+      'https://assets.mixkit.co/active_storage/sfx/1113/1113-preview.mp3'  
+    ]
+  }
+
+,
+      sad: {
+        bg: 'https://cdn.pixabay.com/download/audio/2023/01/18/audio_8c2d0f8f8f.mp3?filename=sad-piano-background-118458.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/08/02/audio_5c6e6f8f8f.mp3?filename=rain-sounds-8002.mp3'
+        ]
+      },
+      romantic: {
+        bg: 'https://cdn.pixabay.com/download/audio/2023/02/24/audio_3e3c1f8f8f.mp3?filename=romantic-piano-121947.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/05/18/audio_9f8e7d6c5b.mp3?filename=heart-beat-112493.mp3'
+        ]
+      },
+      thriller: {
+        bg: 'https://cdn.pixabay.com/download/audio/2023/06/20/audio_4f5g6h7i8j.mp3?filename=tense-suspense-background-music-145997.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/11/11/audio_8j9k0l1m2n.mp3?filename=heartbeat-108696.mp3'
+        ]
+      },
+      adventure: {
+        bg: 'https://cdn.pixabay.com/download/audio/2022/08/09/audio_1a2b3c4d5e.mp3?filename=epic-cinematic-background-music-112790.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/07/27/audio_6f7g8h9i0j.mp3?filename=sword-clash-109400.mp3'
+        ]
+      },
+      mystery: {
+        bg: 'https://cdn.pixabay.com/download/audio/2023/04/12/audio_5u6v7w8x9y.mp3?filename=mystery-mystic-mystical-music-142783.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2023/01/30/audio_8e9f0g1h2i.mp3?filename=door-creak-119089.mp3'
+        ]
+      },
+      fantasy: {
+        bg: 'https://cdn.pixabay.com/download/audio/2023/08/15/audio_2j3k4l5m6n.mp3?filename=enchanted-fantasy-147892.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/12/20/audio_7o8p9q0r1s.mp3?filename=magic-spell-111138.mp3'
+        ]
+      },
+      scifi: {
+        bg: 'https://cdn.pixabay.com/download/audio/2023/07/05/audio_9y0z1a2b3c.mp3?filename=sci-fi-ambient-146789.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/09/14/audio_5d6e7f8g9h.mp3?filename=laser-shot-105331.mp3'
+        ]
+      },
+      horror: {
+        bg: 'https://cdn.pixabay.com/download/audio/2023/10/10/audio_6n7o8p9q0r.mp3?filename=horror-background-music-151234.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/10/31/audio_1s2t3u4v5w.mp3?filename=scream-horror-108678.mp3'
+        ]
+      },
+      inspirational: {
+        bg: 'https://cdn.pixabay.com/download/audio/2023/05/20/audio_3h4i5j6k7l.mp3?filename=inspirational-motivational-145678.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
+        ]
+      }
+    };
+
+    this.init();
+  }
+
+  init() {
+    this.createAudioControls();
+    this.detectAndLoadTheme();
+    this.setupEventListeners();
+  }
+
+  createAudioControls() {
+    const controlsHTML = `
+      <style>
+        .audio-controls {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          background: rgba(30, 30, 30, 0.95);
+          padding: 15px;
+          border-radius: 10px;
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+        }
+        .audio-btn {
+          background: rgba(255, 255, 255, 0.1);
+          border: none;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s;
+          position: relative;
+        }
+        .audio-btn:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: scale(1.1);
+        }
+        .audio-indicator {
+          position: absolute;
+          top: -2px;
+          right: -2px;
+          width: 8px;
+          height: 8px;
+          background: #1fc55c;
+          border-radius: 50%;
+          animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        .volume-control {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .volume-slider {
+          width: 100px;
+          height: 4px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 2px;
+          outline: none;
+          cursor: pointer;
+        }
+        .volume-slider::-webkit-slider-thumb {
+          appearance: none;
+          width: 12px;
+          height: 12px;
+          background: #1fc55c;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+        .volume-level {
+          color: white;
+          font-size: 12px;
+          min-width: 35px;
+        }
+      </style>
+      <div class="audio-controls">
+        <button class="audio-btn" id="musicToggle" title="Toggle Background Music">
+          <span id="musicIcon">🎵</span>
+          <span class="audio-indicator" id="musicIndicator" style="display: none;"></span>
+        </button>
+        <button class="audio-btn" id="sfxToggle" title="Toggle Sound Effects">
+          <span id="sfxIcon">🔊</span>
+          <span class="audio-indicator" id="sfxIndicator" style="display: none;"></span>
+        </button>
+        <div class="volume-control">
+          <span style="color: white;">🔉</span>
+          <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="40">
+          <span class="volume-level" id="volumeLevel">40%</span>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', controlsHTML);
+  }
+
+  detectAndLoadTheme() {
+    // Detect theme from body class
+    const bodyClasses = document.body.className.split(' ');
+    const themeClass = bodyClasses.find(cls => cls.startsWith('theme-'));
+    
+    if (themeClass) {
+      const theme = themeClass.replace('theme-', '');
+      this.loadThemeAudio(theme);
+    } else {
+      console.log('No theme detected');
+    }
+  }
+
+  loadThemeAudio(theme) {
+    if (!this.audioLibrary[theme]) {
+      console.log(`No audio for theme: ${theme}`);
+      return;
+    }
+
+    this.currentTheme = theme;
+    const themeAudio = this.audioLibrary[theme];
+
+    // Load background music
+    if (this.bgMusic) {
+      this.bgMusic.pause();
+      this.bgMusic = null;
+    }
+
+    this.bgMusic = new Audio(themeAudio.bg);
+    this.bgMusic.loop = true;
+    this.bgMusic.volume = this.volume;
+
+    // Load sound effects
+    this.sfxAudio = themeAudio.sfx.map(url => {
+      const audio = new Audio(url);
+      audio.volume = this.volume;
+      return audio;
+    });
+
+    console.log(`Loaded audio for theme: ${theme}`);
+  }
+
+  setupEventListeners() {
+    const musicToggle = document.getElementById('musicToggle');
+    const sfxToggle = document.getElementById('sfxToggle');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeLevel = document.getElementById('volumeLevel');
+
+    if (musicToggle) {
+      musicToggle.addEventListener('click', () => this.toggleMusic());
+    }
+
+    if (sfxToggle) {
+      sfxToggle.addEventListener('click', () => this.toggleSFX());
+    }
+
+    if (volumeSlider) {
+      volumeSlider.addEventListener('input', (e) => {
+        const value = e.target.value;
+        this.setVolume(value / 100);
+        if (volumeLevel) {
+          volumeLevel.textContent = `${value}%`;
+        }
+      });
+    }
+
+    // Add SFX triggers to interactive elements
+    document.querySelectorAll('.btn, .action-card, .similar-story').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        if (Math.random() > 0.7) { // 30% chance
+          this.playRandomSFX();
+        }
+      });
+    });
+  }
+
+  toggleMusic() {
+    if (!this.bgMusic) {
+      console.log('No background music loaded');
+      return;
+    }
+
+    const icon = document.getElementById('musicIcon');
+    const indicator = document.getElementById('musicIndicator');
+
+    if (this.isPlaying) {
+      this.bgMusic.pause();
+      this.isPlaying = false;
+      this.isMusicMuted = true;
+      if (icon) icon.textContent = '🔇';
+      if (indicator) indicator.style.display = 'none';
+      console.log('Music paused');
+    } else {
+      this.bgMusic.play().then(() => {
+        this.isPlaying = true;
+        this.isMusicMuted = false;
+        if (icon) icon.textContent = '🎵';
+        if (indicator) indicator.style.display = 'block';
+        console.log('Music playing');
+      }).catch(err => {
+        console.error('Failed to play music:', err);
+      });
+    }
+  }
+
+  toggleSFX() {
+    this.isSFXMuted = !this.isSFXMuted;
+    const icon = document.getElementById('sfxIcon');
+    const indicator = document.getElementById('sfxIndicator');
+    
+    if (icon) icon.textContent = this.isSFXMuted ? '🔇' : '🔊';
+    if (indicator) indicator.style.display = this.isSFXMuted ? 'none' : 'block';
+    
+    console.log('SFX:', this.isSFXMuted ? 'muted' : 'unmuted');
+  }
+
+  setVolume(level) {
+    this.volume = level;
+    if (this.bgMusic) {
+      this.bgMusic.volume = level;
+    }
+    this.sfxAudio.forEach(sfx => {
+      sfx.volume = level;
+    });
+  }
+
+  playRandomSFX() {
+    if (this.isSFXMuted || !this.sfxAudio || this.sfxAudio.length === 0) {
+      return;
+    }
+    
+    const randomIndex = Math.floor(Math.random() * this.sfxAudio.length);
+    const sfx = this.sfxAudio[randomIndex].cloneNode();
+    sfx.volume = this.volume;
+    sfx.play().catch(err => {
+      console.log('SFX play failed:', err);
+    });
+  }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  window.themeAudio = new ThemeAudioSystem();
+  
+  // Auto-start music on first user interaction
+  const startAudio = () => {
+    if (window.themeAudio && window.themeAudio.bgMusic && !window.themeAudio.isPlaying) {
+      window.themeAudio.toggleMusic();
+    }
+    document.removeEventListener('click', startAudio);
+  };
+  
+  document.addEventListener('click', startAudio, { once: true });
+});
 </script>
 
 </body>

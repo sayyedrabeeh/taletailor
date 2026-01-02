@@ -36,7 +36,7 @@ class StoryEditorConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
 
-        # Typing indicator
+     
         if data.get("type") == "user_typing":
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -49,7 +49,7 @@ class StoryEditorConsumer(AsyncWebsocketConsumer):
             )
             return
 
-        # Save and broadcast edits
+        
         story_id = self.room_name.split('-')[-1]
         try:
             story = await sync_to_async(Story.objects.get)(id=story_id)

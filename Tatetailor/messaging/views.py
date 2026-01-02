@@ -8,8 +8,8 @@ from .models import Update,Reaction,Comment,CommentLike
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from datetime import timedelta
+from django.views.decorators.http import require_http_methods
 
- 
 def chat(request):
     users = User.objects.exclude(id=request.user.id).select_related('profile')
     if not request.user.is_authenticated or request.user.id is None:
