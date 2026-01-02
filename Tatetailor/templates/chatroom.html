@@ -919,7 +919,7 @@ chatSocket.onclose = (event) => {
     const form = document.querySelector(".chat-area form");
     if (!form) return;
     const textarea = form.querySelector("textarea");
-    const submitBtn = form.querySelector("button[type='submit']"); // Optional: if you have a send button
+    const submitBtn = form.querySelector("button[type='submit']");  
     const csrf = form.querySelector("[name=csrfmiddlewaretoken]").value;
 
     // Existing keydown and input listeners...
@@ -942,11 +942,11 @@ chatSocket.onclose = (event) => {
         const msg = textarea.value.trim();
         if (!msg) return;
 
-        // Optional: Disable submit during send to prevent duplicates
+        
         if (submitBtn) submitBtn.disabled = true;
         textarea.disabled = true;
 
-        // Always send via HTTP to create in DB
+       
         fetch(form.action, {
             method: "POST",
             headers: {
@@ -959,7 +959,7 @@ chatSocket.onclose = (event) => {
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
-            // HTTP success: Immediately add to sender's UI (mimic onmessage)
+         
             const container = document.querySelector(".chat-area .messages-container");
             if (container && roomName === document.querySelector(".chat-area")?.dataset?.room) {
                 const div = document.createElement("div");
@@ -972,7 +972,7 @@ chatSocket.onclose = (event) => {
                 container.scrollTop = container.scrollHeight;
             }
 
-            // Update chat list preview/time (as you do elsewhere)
+            
             const targetChatItem = document.querySelector(`.chat-item[data-room="${roomName}"]`);
             if (targetChatItem) {
                 const preview = targetChatItem.querySelector(".chat-preview");
@@ -988,7 +988,7 @@ chatSocket.onclose = (event) => {
             // Clear input
             textarea.value = "";
 
-            // Try WS send for real-time notify to others (non-blocking)
+             
             if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
                 try {
                     chatSocket.send(JSON.stringify({
@@ -1003,21 +1003,72 @@ chatSocket.onclose = (event) => {
                 console.warn("⚠️ WS not open—skipping real-time notify (others will see via poll)");
             }
 
-            // Refresh metadata to catch any missed updates
+            
             fetchChatMetadata();
         })
         .catch(err => {
             console.error("❌ Failed to send message:", err);
-            // Optional: Re-enable and show user toast/error
+            
             alert("Failed to send message. Please try again.");
         })
         .finally(() => {
             // Re-enable
             if (submitBtn) submitBtn.disabled = false;
             textarea.disabled = false;
-            textarea.style.height = "auto"; // Reset height
+            textarea.style.height = "auto";  
         });
     };
+}
+
+function setupClearButton(roomName) {
+    const clearBtn = document.getElementById('clear-chat-btn');
+    if (!clearBtn) return;
+
+    const csrf = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+    clearBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!confirm('Are you sure you want to clear all messages in this chat? This cannot be undone.')) {
+            return;
+        }
+
+        clearBtn.disabled = true;
+        clearBtn.textContent = 'Clearing...';
+
+        fetch(`/messaging/clear-chat/${roomName}/`, {  
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrf,
+            },
+            body: new URLSearchParams({})   
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log(data.message);
+                 
+                const container = document.querySelector('.chat-area .messages-container');
+                if (container) {
+                    container.innerHTML = '';   
+                }
+                
+                fetchChatMetadata();
+                 
+                loadChat(roomName);
+            } else {
+                alert(data.error || 'Failed to clear chat.');
+            }
+        })
+        .catch(err => {
+            console.error('Clear chat error:', err);
+            alert('Failed to clear chat. Please try again.');
+        })
+        .finally(() => {
+            clearBtn.disabled = false;
+            clearBtn.textContent = 'Clear Chat';
+        });
+    });
 }
 
      
@@ -1045,6 +1096,7 @@ chatSocket.onclose = (event) => {
 
                 setupWebSocket(roomName);
                 attachFormHandler(roomName);
+                setupClearButton(roomName);
             });
     }
 

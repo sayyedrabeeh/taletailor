@@ -216,3 +216,17 @@ def like_comment(request, comment_id):
     if not created:
         like.delete()
     return JsonResponse({'like_count': comment.like_count()})
+
+
+@login_required
+@require_http_methods(["POST"])
+def clear_chat(request, room_name):
+    room = get_object_or_404(ChatRoom, name=room_name)
+    if request.user not in room.participants.all():
+        return JsonResponse({'error': 'You are not authorized to clear this chat.'}, status=403)
+    deleted_count, _ = Message.objects.filter(room=room).delete()
+    return JsonResponse({
+        'success': True,
+        'deleted_count': deleted_count,
+        'message': f'Cleared {deleted_count} messages.'
+    })
