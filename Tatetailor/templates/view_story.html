@@ -1,144 +1,210 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Story Viewer - TALETAILOR</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+    rel="stylesheet">
 
   <style>
     :root {
-      --primary-color: #4a0e5c;
-      --secondary-color: #1fc55c;
-      --accent-color: #8a0e74;
-      --background-color: #121212;
-      --card-background: #1e1e1e;
-      --text-color: #e0e0e0;
-      --light-gray: #333333;
-      --joker-purple: #5f2585;
-      --joker-green: #1fc55c;
-      --joker-red: #ec1846;
-      --white: #f5f5f5;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-      --border-radius: 6px;
+      /* Base Colors */
+      --primary-color: #6d28d9;
+      --secondary-color: #10b981;
+      --accent-color: #db2777;
+      --background-color: #0f172a;
+      --card-background: #1e293b;
+      --text-color: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+
+      /* Gradients */
+      --header-gradient: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      --glass-bg: rgba(30, 41, 59, 0.7);
+
+      /* Legacy support & Animations */
+      --glow-color: rgba(109, 40, 217, 0.5);
+      --particle-color: #a855f7;
+      --button-hover: #7c3aed;
+      --button-glow: rgba(124, 58, 237, 0.5);
+
+      /* Spacing & Layout */
+      --border-radius: 16px;
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-glow: 0 0 20px rgba(109, 40, 217, 0.3);
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Outfit', sans-serif;
     }
 
     body {
       background-color: var(--background-color);
       color: var(--text-color);
+      line-height: 1.6;
+      background-image:
+        radial-gradient(circle at 15% 50%, rgba(109, 40, 217, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(219, 39, 119, 0.15), transparent 25%);
+      background-attachment: fixed;
     }
 
+    /* Layout Containers */
     .story-container {
-      max-width: 1200px;
-      margin: 2rem auto;
+      max-width: 1280px;
+      margin: 3rem auto;
       display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 2rem;
-      padding: 0 1rem;
+      grid-template-columns: 1fr 340px;
+      gap: 2.5rem;
+      padding: 0 1.5rem;
     }
 
+    /* Main Story Card */
     .story-main {
       background-color: var(--card-background);
       border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-lg);
       overflow: hidden;
-      border-top: 4px solid var(--joker-purple);
-    }
-
-    .story-header {
-      background: linear-gradient(135deg, var(--joker-purple), var(--accent-color));
-      color: var(--white);
-      padding: 2rem;
+      border: 1px solid var(--border-color);
       position: relative;
     }
 
-    .story-header::after {
-      content: "";
+    /* Header Section */
+    .story-header {
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.8), var(--card-background)),
+      url('{% static "images/pattern.png" %}');
+      padding: 3rem;
+      position: relative;
+    }
+
+    .story-header::before {
+      content: '';
       position: absolute;
-      bottom: -20px;
+      top: 0;
       left: 0;
-      right: 0;
-      height: 20px;
-      background: linear-gradient(135deg, var(--joker-purple), var(--accent-color));
-      filter: blur(10px);
-      opacity: 0.4;
+      width: 100%;
+      height: 4px;
+      background: var(--header-gradient);
     }
 
     .story-title {
-      font-size: 2.2rem;
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.5px;
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #fff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .story-author {
-      opacity: 0.9;
-      font-weight: 500;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
+    .story-author a {
+      color: var(--secondary-color);
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .story-author a:hover {
+      color: #34d399;
+    }
+
+    /* Meta Info Grid */
     .story-meta {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1.5rem;
     }
 
     .meta-item {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      background-color: rgba(255, 255, 255, 0.08);
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
+      gap: 0.6rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
       font-size: 0.9rem;
-      border-left: 3px solid var(--joker-green);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
     }
 
+    .meta-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .meta-item i {
+      color: var(--secondary-color);
+    }
+
+    /* Story Content */
     .story-image {
       width: 100%;
-      height: 500px;
+      height: 450px;
       object-fit: cover;
-      filter: saturate(1.1) contrast(1.05);
+      display: block;
     }
 
     .story-content {
-      padding: 2rem;
-      line-height: 1.8;
-      font-size: 1.05rem;
+      padding: 3rem 3rem 4rem;
+      font-size: 1.15rem;
+      line-height: 1.9;
+      color: #e2e8f0;
     }
 
+    .story-content p {
+      margin-bottom: 1.5rem;
+    }
+
+    /* Sidebar Components */
     .story-sidebar {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 2rem;
     }
 
     .action-card {
-      background-color: var(--card-background);
+      background: var(--card-background);
       border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
       overflow: hidden;
-      border-top: 4px solid var(--joker-green);
+      box-shadow: var(--shadow-sm);
     }
 
     .card-header {
-      padding: 1rem;
-      background-color: rgba(31, 197, 92, 0.1);
-      color: var(--joker-green);
+      padding: 1.2rem 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-color);
       font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      font-size: 0.9rem;
-      border-bottom: 1px solid rgba(31, 197, 92, 0.2);
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .card-content {
@@ -148,64 +214,63 @@
       gap: 1rem;
     }
 
+    /* Buttons */
     .btn {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      padding: 0.8rem 1.5rem;
-      border-radius: 4px;
-      border: none;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      font-size: 0.85rem;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn i {
+      font-size: 1.1em;
     }
 
     .download-btn {
-      background-color: var(--joker-green);
-      color: #121212;
+      background: var(--secondary-color);
+      color: #000;
     }
 
     .download-btn:hover {
-      background-color: #17a44a;
-      box-shadow: 0 0 15px rgba(31, 197, 92, 0.4);
+      filter: brightness(110%);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
     }
 
     .share-btn {
-      background-color: var(--joker-purple);
-      color: var(--white);
+      background: var(--primary-color);
+      color: white;
     }
 
     .share-btn:hover {
-      background-color: #3f0b4e;
-      box-shadow: 0 0 15px rgba(95, 37, 133, 0.4);
+      filter: brightness(110%);
+      box-shadow: 0 0 15px rgba(109, 40, 217, 0.4);
     }
 
     .like-btn {
-      background-color: var(--joker-red);
-      color: var(--white);
+      background: #dc2626;
+      color: white;
     }
 
     .like-btn:hover {
-      background-color: #cf0f3a;
-      box-shadow: 0 0 15px rgba(236, 24, 70, 0.4);
+      background: #ef4444;
+      box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
     }
 
-    .story-info-card {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
+    /* Info List */
     .info-item {
       display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--light-gray);
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .info-item:last-child {
@@ -213,23 +278,34 @@
     }
 
     .info-icon {
-      width: 36px;
-      height: 36px;
+      width: 42px;
+      height: 42px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
       display: grid;
       place-items: center;
-      background-color: rgba(31, 197, 92, 0.1);
-      border-radius: 4px;
-      color: var(--joker-green);
+      color: var(--secondary-color);
+      flex-shrink: 0;
+    }
+
+    .info-content {
+      display: flex;
+      flex-direction: column;
     }
 
     .info-label {
-      color: #969696;
-      font-size: 0.8rem;
-      margin-bottom: 0.25rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
     }
 
+    .info-value {
+      font-weight: 500;
+    }
+
+    /* Tags */
     .tags-container {
       display: flex;
       flex-wrap: wrap;
@@ -238,572 +314,76 @@
     }
 
     .tag {
-      background-color: rgba(95, 37, 133, 0.15);
-      color: #c087e0;
+      background: rgba(109, 40, 217, 0.15);
+      color: #d8b4fe;
       padding: 0.25rem 0.75rem;
-      border-radius: 3px;
-      font-size: 0.8rem;
-      border-left: 2px solid var(--joker-purple);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: 1px solid rgba(109, 40, 217, 0.3);
+      transition: all 0.2s;
     }
 
-    .similar-stories {
-      margin-top: 0.5rem;
+    .tag:hover {
+      background: var(--primary-color);
+      color: white;
     }
 
+    /* Similar Stories */
     .similar-story {
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--light-gray);
-      transition: all 0.2s ease;
+      padding: 0.75rem;
+      border-radius: 10px;
+      transition: background 0.2s;
     }
 
     .similar-story:hover {
-      padding-left: 0.5rem;
-      background-color: rgba(31, 197, 92, 0.05);
-    }
-
-    .similar-story:last-child {
-      border-bottom: none;
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .similar-story-img {
-      width: 48px;
-      height: 48px;
-      border-radius: 4px;
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
       object-fit: cover;
     }
 
-    .similar-story-title {
-      font-weight: 500;
-      font-size: 0.9rem;
+    .similar-story-info h5 {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--text-color);
     }
 
-    @media (max-width: 768px) {
+    .similar-story-info span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
       .story-container {
         grid-template-columns: 1fr;
       }
-    }
-    
-    
-    .like-btn {
-  transition: all 0.3s ease;
-}
 
-.like-btn .fa-heart {
-  color: gray;
-}
+      .story-header,
+      .story-content {
+        padding: 2rem;
+      }
 
-.like-btn.liked .fa-heart {
-  color: red;
-}
-.ai-badge {
-    background-color: #f39c12;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 5px;
-    font-size: 0.85rem;
-    margin-left: 10px;
-}
-/* .translation-box {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background-color: #f3f3f3;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-} */
-.translation-box {
-      background-color: rgba(31, 197, 92, 0.05);
-      border-radius: var(--border-radius);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-left: 4px solid var(--joker-green);
+      .story-title {
+        font-size: 2.25rem;
+      }
     }
 
-    .translation-box form {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      align-items: center;
-    }
 
-    .translation-box label {
-      font-weight: 600;
-      color: var(--joker-green);
-    }
 
-    .translation-box button {
-      background-color: var(--joker-green);
-      color: #121212;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 4px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
+    /* Dark mode preference */
+    @media (prefers-color-scheme: dark) {
 
-    .translation-box button:hover {
-      background-color: #17a44a;
-      transform: translateY(-2px);
-    }
-
-    /* Base Theme Variables */
-    :root {
-    --transition-speed: 0.3s;
-    --header-height: 60px;
-    --shadow-standard: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --border-radius: 8px;
-}
-
-/* Theme Classes */
- 
-/* Particles container */
-.particles-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: -1;
-}
-.comment-form {
-  background-color: var(--card-background);
-  border: 1px solid var(--light-gray);
-  padding: 1rem;
-  border-radius: var(--border-radius);
-  margin-top: 1rem;
-  box-shadow: var(--shadow);
-}
-
-.comment-form textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid var(--light-gray);
-  border-radius: var(--border-radius);
-  background-color: var(--background-color);
-  color: var(--text-color);
-  resize: vertical;
-  margin-bottom: 1rem;
-}
-
-
-/* Apply theme variables to the elements */
-body {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    transition: background-color var(--transition-speed), color var(--transition-speed);
-}
-
-.story-main {
-    background-color: var(--card-background);
-    border-top: 4px solid var(--primary-color);
-    transition: background-color var(--transition-speed), border-color var(--transition-speed), transform 0.3s ease;
-    position: relative;
-    animation: fade-in 0.8s ease-in-out;
-}
-
-.story-main:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-standard);
-}
-
-.story-header {
-    background: var(--header-gradient);
-    transition: background var(--transition-speed);
-    position: relative;
-}
-
-.story-header::after {
-    background: var(--header-gradient);
-    transition: background var(--transition-speed);
-}
-
-.story-title {
-    position: relative;
-    display: inline-block;
-    transition: transform 0.3s ease;
-}
-
-.meta-item {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-left: 3px solid var(--secondary-color);
-    transition: border-color var(--transition-speed), transform 0.3s ease;
-}
-
-.meta-item:hover {
-    transform: translateX(5px);
-}
-
-.action-card {
-    background-color: var(--card-background);
-    border-top: 4px solid var(--secondary-color);
-    transition: background-color var(--transition-speed), border-color var(--transition-speed);
-    animation: fade-in 0.8s ease-in-out;
-}
-
-.card-header {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--secondary-color);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transition: color var(--transition-speed), background-color var(--transition-speed), border-color var(--transition-speed);
-}
-
-.download-btn, .share-btn, .like-btn {
-    transform: scale(1);
-    transition: transform 0.2s ease, background-color var(--transition-speed), box-shadow var(--transition-speed);
-}
-
-.download-btn:hover, .share-btn:hover, .like-btn:hover {
-    transform: scale(1.1);
-}
-
-.download-btn:active, .share-btn:active, .like-btn:active {
-    transform: scale(0.95);
-}
-
-.download-btn {
-    background-color: var(--secondary-color);
-    color: var(--background-color);
-    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
-}
-
-.download-btn:hover {
-    background-color: var(--button-hover);
-    box-shadow: 0 0 15px var(--button-glow);
-}
-
-.share-btn {
-    background-color: var(--primary-color);
-    color: var(--text-color);
-    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
-}
-
-.share-btn:hover {
-    background-color: var(--button-hover);
-    box-shadow: 0 0 15px var(--button-glow);
-}
-
-.like-btn {
-    background-color: var(--accent-color);
-    color: var(--text-color);
-    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
-}
-
-.like-btn:hover {
-    background-color: var(--button-hover);
-    box-shadow: 0 0 15px var(--button-glow);
-}
-
-.info-icon {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--secondary-color);
-    transition: background-color var(--transition-speed), color var(--transition-speed), transform 0.3s ease;
-}
-
-.info-icon:hover {
-    transform: rotate(15deg);
-}
-
-.info-item {
-    border-bottom: 1px solid var(--light-gray);
-    transition: border-color var(--transition-speed), transform 0.3s ease;
-    opacity: 0;
-    animation: item-appear 0.5s ease-in-out forwards;
-}
-
-.info-item:nth-child(1) { animation-delay: 0.2s; }
-.info-item:nth-child(2) { animation-delay: 0.4s; }
-.info-item:nth-child(3) { animation-delay: 0.6s; }
-.info-item:nth-child(4) { animation-delay: 0.8s; }
-.info-item:nth-child(5) { animation-delay: 1s; }
-
-.info-item:hover {
-    transform: translateX(5px);
-}
-
-.tag {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--secondary-color);
-    border-left: 2px solid var(--primary-color);
-    transition: all 0.3s ease;
-    opacity: 0;
-    animation: item-appear 0.5s ease-in-out forwards;
-}
-
-.tag:nth-child(1) { animation-delay: 0.3s; }
-.tag:nth-child(2) { animation-delay: 0.5s; }
-.tag:nth-child(3) { animation-delay: 0.7s; }
-.tag:nth-child(4) { animation-delay: 0.9s; }
-
-.tag:hover {
-    transform: scale(1.05);
-    background-color: var(--secondary-color);
-    color: var(--background-color);
-}
-
-.similar-story {
-    border-bottom: 1px solid var(--light-gray);
-    transition: border-color var(--transition-speed), background-color var(--transition-speed), transform 0.3s ease;
-    opacity: 0;
-    animation: item-appear 0.5s ease-in-out forwards;
-}
-
-.similar-story {
-    border-bottom: 1px solid var(--light-gray);
-    transition: border-color var(--transition-speed), background-color var(--transition-speed), transform 0.3s ease;
-    opacity: 0;
-    animation: item-appear 0.5s ease-in-out forwards;
-}
-
-.similar-story:nth-child(1) { animation-delay: 0.2s; }
-.similar-story:nth-child(2) { animation-delay: 0.4s; }
-.similar-story:nth-child(3) { animation-delay: 0.6s; }
-
-.similar-story:hover {
-    transform: translateX(5px);
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.theme-toggle {
-    background-color: var(--primary-color);
-    color: var(--text-color);
-    border: 2px solid var(--secondary-color);
-    transition: all 0.3s ease;
-}
-
-.theme-toggle:hover {
-    background-color: var(--secondary-color);
-    transform: scale(1.05);
-    box-shadow: 0 0 10px var(--button-glow);
-}
-
-/* Animation Keyframes */
-@keyframes fade-in {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes item-appear {
-    from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes float-around {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    50% { transform: translate(5%, 5%) rotate(180deg); }
-    100% { transform: translate(0, 0) rotate(360deg); }
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-2px); }
-    75% { transform: translateX(2px); }
-}
-
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes scale {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-
-@keyframes sparkle {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-}
-
-@keyframes rocket {
-    0% { transform: translateX(0) translateY(0) rotate(0deg); }
-    50% { transform: translateX(10px) translateY(-10px) rotate(5deg); }
-    100% { transform: translateX(0) translateY(0) rotate(0deg); }
-}
-
-@keyframes jump {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-}
-
-@keyframes twinkle {
-    0% { opacity: 0.1; }
-    100% { opacity: 0.3; }
-}
-
-@keyframes rain {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(5px); }
-}
-
-@keyframes sad-mist {
-    0%, 100% { opacity: 0.2; }
-    50% { opacity: 0.3; }
-}
-
-@keyframes melancholy-mist {
-    0%, 100% { opacity: 0.1; }
-    50% { opacity: 0.2; }
-}
-
-@keyframes float-hearts {
-    0% { transform: translateY(0) rotate(0deg); }
-    100% { transform: translateY(-100vh) rotate(360deg); }
-}
-
-@keyframes comedy-elements {
-    0% { transform: translateY(100vh) rotate(0deg); }
-    100% { transform: translateY(-100vh) rotate(360deg); }
-}
-
-@keyframes adventure-elements {
-    0% { transform: translateX(-100vw); }
-    100% { transform: translateX(100vw); }
-}
-
-@keyframes inspiration-elements {
-    0% { transform: translateY(100vh) rotate(0deg); }
-    100% { transform: translateY(-100vh) rotate(360deg); }
-}
-
-@keyframes surprise-elements {
-    0% { transform: scale(0) translateY(100vh); }
-    100% { transform: scale(1) translateY(-100vh); }
-}
-
-@keyframes horror-bg {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 100% 100%; }
-}
-
-@keyframes thriller-bg {
-    0% { opacity: 0.1; }
-    50% { opacity: 0.15; }
-    100% { opacity: 0.1; }
-}
-
-@keyframes mystery-fog {
-    0% { opacity: 0.1; transform: translateX(0); }
-    100% { opacity: 0.2; transform: translateX(10px); }
-}
-
-@keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-@keyframes scifi-stars {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-400px); }
-}
-
-@keyframes anger-glow {
-    0% { opacity: 0.1; }
-    100% { opacity: 0.2; }
-}
-
-@keyframes fear-bg {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Media Queries */
-@media (max-width: 768px) {
-    :root {
-        --header-height: 50px;
-    }
-    
-    .story-container {
-        flex-direction: column;
-    }
-    
-    .story-main, .action-card {
-        width: 100%;
-        margin-bottom: 1rem;
-    }
-    
-    .story-header {
-        padding: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .meta-info {
-        flex-direction: column;
-    }
-    
-    .meta-item {
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
-    
-    .tag-container {
-        flex-wrap: wrap;
-    }
-    
-    .tag {
-        margin-bottom: 0.5rem;
-    }
-}
-
-/* Accessibility */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation: none !important;
-        transition: none !important;
-    }
-}
-
-/* Print styles */
-@media print {
-    .action-card {
-        display: none;
-    }
-    
-    .story-main {
-        width: 100%;
-        box-shadow: none;
-        border: 1px solid #ccc;
-    }
-    
-    body {
-        background-color: white;
-        color: black;
-    }
-}
-
-/* Focus states for accessibility */
-button:focus, a:focus {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
-}
-
-/* Dark mode preference */
-@media (prefers-color-scheme: dark) {
-    /* Default to dark theme if user prefers dark mode and no theme is selected */
-    body:not([class*="theme-"]) {
+      /* Default to dark theme if user prefers dark mode and no theme is selected */
+      body:not([class*="theme-"]) {
         --primary-color: #4a0e5c;
         --secondary-color: #1fc55c;
         --accent-color: #8a0e74;
@@ -814,644 +394,1272 @@ button:focus, a:focus {
         --header-gradient: linear-gradient(135deg, #4a0e5c, #8a0e74);
         --button-hover: #17a44a;
         --button-glow: rgba(31, 197, 92, 0.4);
+      }
     }
-}
-.volume-btn {
-  background-color: #f3f3f3;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 18px;
-  border-radius: 5px;
-}
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-.volume-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 38px;
-  height: 38px;
-  padding: 0 10px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-}
 
-.volume-btn:hover {
-  background-color: #e0e0e0;
-}
+    .volume-btn {
+      background-color: #f3f3f3;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 5px;
+    }
 
-.volume-btn.speaking {
-  background-color: #ffecec;
-  border-color: #ff6b6b;
-}
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
 
-.volume-btn.limited-support {
-  background-color: #fff9e6;
-  border-color: #ffc107;
-}
+      100% {
+        transform: rotate(360deg);
+      }
+    }
 
-.volume-btn.limited-support:hover::after {
-  content: "This language has limited support. Text may not be read correctly.";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 5px;
-  width: 200px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 8px;
-  font-size: 12px;
-  color: #333;
-  text-align: center;
-  z-index: 1000;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-.homebtn {
-    display: inline-block;
-    padding: 6px 10px;
-    background-color: #007BFF;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 18px;
-    line-height: 1;
-    width: 70px;
-    font-weight: bold;
-  }
+    .volume-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      height: 38px;
+      padding: 0 10px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
 
-  .homebtn:hover {
-    background-color: #0056b3;
-  }
+    .volume-btn:hover {
+      background-color: #e0e0e0;
+    }
 
-/* Add a fade-in animation */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.home-btn {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background-color: var(--joker-purpl);
-  color: white;
-  padding: 10px 16px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  box-shadow: var(--shadow);
-  transition: background-color 0.3s ease;
-  z-index: 1000;
-}
+    .volume-btn.speaking {
+      background-color: #ffecec;
+      border-color: #ff6b6b;
+    }
 
-.home-btn:hover {
-  background-color: var(--accent-color);
-}
+    .volume-btn.limited-support {
+      background-color: #fff9e6;
+      border-color: #ffc107;
+    }
 
-.volume-btn.limited-support:hover::after {
-  animation: fadeIn 0.2s ease-out;
-}
-a,
-a:visited {
-  color: inherit;            
-  text-decoration: none;   
-}
-/* ===========================
+    .volume-btn.limited-support:hover::after {
+      content: "This language has limited support. Text may not be read correctly.";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 5px;
+      width: 200px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 8px;
+      font-size: 12px;
+      color: #333;
+      text-align: center;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .homebtn {
+      display: inline-block;
+      padding: 6px 10px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 18px;
+      line-height: 1;
+      width: 70px;
+      font-weight: bold;
+    }
+
+    .homebtn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Add a fade-in animation */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .home-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: var(--joker-purpl);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: var(--shadow);
+      transition: background-color 0.3s ease;
+      z-index: 1000;
+    }
+
+    .home-btn:hover {
+      background-color: var(--accent-color);
+    }
+
+    .volume-btn.limited-support:hover::after {
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    a,
+    a:visited {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ===========================
    EXTRAORDINARY PROFESSIONAL THEMES
    Advanced Gradient & Visual Effects
    =========================== */
 
-/* Enhanced Theme Variables with Advanced Gradients */
-.theme-happy {
-    --primary-color: #FF9800;
-    --secondary-color: #FFEB3B;
-    --accent-color: #FF5722;
-    --background-color: #FFF9C4;
-    --card-background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
-    --text-color: #5D4037;
-    --light-gray: #E6EE9C;
-    --header-gradient: linear-gradient(135deg, #FFD54F 0%, #FF9800 50%, #F57C00 100%);
-    --glow-color: rgba(255, 152, 0, 0.6);
-    --particle-color: #FFB300;
-}
+    /* Enhanced Theme Variables with Advanced Gradients */
+    .theme-happy {
+      --primary-color: #FF9800;
+      --secondary-color: #FFEB3B;
+      --accent-color: #FF5722;
+      --background-color: #FFF9C4;
+      --card-background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
+      --text-color: #5D4037;
+      --light-gray: #E6EE9C;
+      --header-gradient: linear-gradient(135deg, #FFD54F 0%, #FF9800 50%, #F57C00 100%);
+      --glow-color: rgba(255, 152, 0, 0.6);
+      --particle-color: #FFB300;
+    }
 
-.theme-sad {
-    --primary-color: #546E7A;
-    --secondary-color: #78909C;
-    --accent-color: #455A64;
-    --background-color: linear-gradient(180deg, #ECEFF1 0%, #CFD8DC 100%);
-    --card-background: linear-gradient(135deg, #CFD8DC 0%, #B0BEC5 100%);
-    --text-color: #263238;
-    --light-gray: #90A4AE;
-    --header-gradient: linear-gradient(135deg, #78909C 0%, #546E7A 50%, #37474F 100%);
-    --glow-color: rgba(96, 125, 139, 0.4);
-    --particle-color: #607D8B;
-}
+    .theme-sad {
+      --primary-color: #546E7A;
+      --secondary-color: #78909C;
+      --accent-color: #455A64;
+      --background-color: linear-gradient(180deg, #ECEFF1 0%, #CFD8DC 100%);
+      --card-background: linear-gradient(135deg, #CFD8DC 0%, #B0BEC5 100%);
+      --text-color: #263238;
+      --light-gray: #90A4AE;
+      --header-gradient: linear-gradient(135deg, #78909C 0%, #546E7A 50%, #37474F 100%);
+      --glow-color: rgba(96, 125, 139, 0.4);
+      --particle-color: #607D8B;
+    }
 
-.theme-romantic {
-    --primary-color: #E91E63;
-    --secondary-color: #F48FB1;
-    --accent-color: #C2185B;
-    --background-color: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);
-    --card-background: linear-gradient(135deg, #F8BBD0 0%, #F48FB1 50%, #FCE4EC 100%);
-    --text-color: #880E4F;
-    --light-gray: #F8BBD0;
-    --header-gradient: linear-gradient(135deg, #EC407A 0%, #D81B60 50%, #AD1457 100%);
-    --glow-color: rgba(233, 30, 99, 0.6);
-    --particle-color: #F06292;
-}
+    .theme-romantic {
+      --primary-color: #E91E63;
+      --secondary-color: #F48FB1;
+      --accent-color: #C2185B;
+      --background-color: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);
+      --card-background: linear-gradient(135deg, #F8BBD0 0%, #F48FB1 50%, #FCE4EC 100%);
+      --text-color: #880E4F;
+      --light-gray: #F8BBD0;
+      --header-gradient: linear-gradient(135deg, #EC407A 0%, #D81B60 50%, #AD1457 100%);
+      --glow-color: rgba(233, 30, 99, 0.6);
+      --particle-color: #F06292;
+    }
 
-.theme-thriller {
-    --primary-color: #263238;
-    --secondary-color: #37474F;
-    --accent-color: #000000;
-    --background-color: linear-gradient(180deg, #1A2327 0%, #0D1214 100%);
-    --card-background: linear-gradient(135deg, #263238 0%, #1C2629 100%);
-    --text-color: #ECEFF1;
-    --light-gray: #37474F;
-    --header-gradient: linear-gradient(135deg, #37474F 0%, #263238 50%, #000000 100%);
-    --glow-color: rgba(255, 0, 0, 0.3);
-    --particle-color: #455A64;
-}
+    .theme-thriller {
+      --primary-color: #263238;
+      --secondary-color: #37474F;
+      --accent-color: #000000;
+      --background-color: linear-gradient(180deg, #1A2327 0%, #0D1214 100%);
+      --card-background: linear-gradient(135deg, #263238 0%, #1C2629 100%);
+      --text-color: #ECEFF1;
+      --light-gray: #37474F;
+      --header-gradient: linear-gradient(135deg, #37474F 0%, #263238 50%, #000000 100%);
+      --glow-color: rgba(255, 0, 0, 0.3);
+      --particle-color: #455A64;
+    }
 
-.theme-adventure {
-    --primary-color: #43A047;
-    --secondary-color: #66BB6A;
-    --accent-color: #2E7D32;
-    --background-color: linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%);
-    --card-background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
-    --text-color: #1B5E20;
-    --light-gray: #81C784;
-    --header-gradient: linear-gradient(135deg, #66BB6A 0%, #43A047 50%, #2E7D32 100%);
-    --glow-color: rgba(67, 160, 71, 0.6);
-    --particle-color: #4CAF50;
-}
+    .theme-adventure {
+      --primary-color: #43A047;
+      --secondary-color: #66BB6A;
+      --accent-color: #2E7D32;
+      --background-color: linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%);
+      --card-background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+      --text-color: #1B5E20;
+      --light-gray: #81C784;
+      --header-gradient: linear-gradient(135deg, #66BB6A 0%, #43A047 50%, #2E7D32 100%);
+      --glow-color: rgba(67, 160, 71, 0.6);
+      --particle-color: #4CAF50;
+    }
 
-.theme-mystery {
-    --primary-color: #5E35B1;
-    --secondary-color: #7E57C2;
-    --accent-color: #4527A0;
-    --background-color: linear-gradient(180deg, #EDE7F6 0%, #D1C4E9 100%);
-    --card-background: linear-gradient(135deg, #D1C4E9 0%, #B39DDB 100%);
-    --text-color: #311B92;
-    --light-gray: #9575CD;
-    --header-gradient: linear-gradient(135deg, #7E57C2 0%, #5E35B1 50%, #4527A0 100%);
-    --glow-color: rgba(94, 53, 177, 0.6);
-    --particle-color: #673AB7;
-}
+    .theme-mystery {
+      --primary-color: #5E35B1;
+      --secondary-color: #7E57C2;
+      --accent-color: #4527A0;
+      --background-color: linear-gradient(180deg, #EDE7F6 0%, #D1C4E9 100%);
+      --card-background: linear-gradient(135deg, #D1C4E9 0%, #B39DDB 100%);
+      --text-color: #311B92;
+      --light-gray: #9575CD;
+      --header-gradient: linear-gradient(135deg, #7E57C2 0%, #5E35B1 50%, #4527A0 100%);
+      --glow-color: rgba(94, 53, 177, 0.6);
+      --particle-color: #673AB7;
+    }
 
-.theme-fantasy {
-    --primary-color: #7B1FA2;
-    --secondary-color: #9C27B0;
-    --accent-color: #6A1B9A;
-    --background-color: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #CE93D8 100%);
-    --card-background: linear-gradient(135deg, #E1BEE7 0%, #CE93D8 50%, #BA68C8 100%);
-    --text-color: #4A148C;
-    --light-gray: #AB47BC;
-    --header-gradient: linear-gradient(-45deg, #7B1FA2 0%, #9C27B0 25%, #6A1B9A 50%, #8E24AA 75%, #4A148C 100%);
-    --glow-color: rgba(156, 39, 176, 0.7);
-    --particle-color: #BA68C8;
-    background-size: 400% 400%;
-    animation: gradient-flow 15s ease infinite;
-}
+    .theme-fantasy {
+      --primary-color: #7B1FA2;
+      --secondary-color: #9C27B0;
+      --accent-color: #6A1B9A;
+      --background-color: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #CE93D8 100%);
+      --card-background: linear-gradient(135deg, #E1BEE7 0%, #CE93D8 50%, #BA68C8 100%);
+      --text-color: #4A148C;
+      --light-gray: #AB47BC;
+      --header-gradient: linear-gradient(-45deg, #7B1FA2 0%, #9C27B0 25%, #6A1B9A 50%, #8E24AA 75%, #4A148C 100%);
+      --glow-color: rgba(156, 39, 176, 0.7);
+      --particle-color: #BA68C8;
+      background-size: 400% 400%;
+      animation: gradient-flow 15s ease infinite;
+    }
 
-.theme-scifi {
-    --primary-color: #00BCD4;
-    --secondary-color: #00E5FF;
-    --accent-color: #0097A7;
-    --background-color: linear-gradient(180deg, #E0F7FA 0%, #B2EBF2 100%);
-    --card-background: linear-gradient(135deg, #B2EBF2 0%, #80DEEA 100%);
-    --text-color: #006064;
-    --light-gray: #4DD0E1;
-    --header-gradient: linear-gradient(135deg, #00E5FF 0%, #00BCD4 50%, #0097A7 100%);
-    --glow-color: rgba(0, 229, 255, 0.8);
-    --particle-color: #18FFFF;
-}
+    .theme-scifi {
+      --primary-color: #00BCD4;
+      --secondary-color: #00E5FF;
+      --accent-color: #0097A7;
+      --background-color: linear-gradient(180deg, #E0F7FA 0%, #B2EBF2 100%);
+      --card-background: linear-gradient(135deg, #B2EBF2 0%, #80DEEA 100%);
+      --text-color: #006064;
+      --light-gray: #4DD0E1;
+      --header-gradient: linear-gradient(135deg, #00E5FF 0%, #00BCD4 50%, #0097A7 100%);
+      --glow-color: rgba(0, 229, 255, 0.8);
+      --particle-color: #18FFFF;
+    }
 
-.theme-horror {
-    --primary-color: #212121;
-    --secondary-color: #424242;
-    --accent-color: #000000;
-    --background-color: linear-gradient(180deg, #121212 0%, #000000 100%);
-    --card-background: linear-gradient(135deg, #1E1E1E 0%, #0D0D0D 100%);
-    --text-color: #F5F5F5;
-    --light-gray: #303030;
-    --header-gradient: linear-gradient(135deg, #424242 0%, #212121 50%, #000000 100%);
-    --glow-color: rgba(139, 0, 0, 0.5);
-    --particle-color: #424242;
-}
+    .theme-horror {
+      --primary-color: #212121;
+      --secondary-color: #424242;
+      --accent-color: #000000;
+      --background-color: linear-gradient(180deg, #121212 0%, #000000 100%);
+      --card-background: linear-gradient(135deg, #1E1E1E 0%, #0D0D0D 100%);
+      --text-color: #F5F5F5;
+      --light-gray: #303030;
+      --header-gradient: linear-gradient(135deg, #424242 0%, #212121 50%, #000000 100%);
+      --glow-color: rgba(139, 0, 0, 0.5);
+      --particle-color: #424242;
+    }
 
-.theme-inspirational {
-    --primary-color: #FFC107;
-    --secondary-color: #FFD54F;
-    --accent-color: #FFA000;
-    --background-color: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
-    --card-background: linear-gradient(135deg, #FFECB3 0%, #FFE082 50%, #FFD54F 100%);
-    --text-color: #FF6F00;
-    --light-gray: #FFCA28;
-    --header-gradient: linear-gradient(135deg, #FFD54F 0%, #FFC107 50%, #FFA000 100%);
-    --glow-color: rgba(255, 193, 7, 0.7);
-    --particle-color: #FFEB3B;
-}
+    .theme-inspirational {
+      --primary-color: #FFC107;
+      --secondary-color: #FFD54F;
+      --accent-color: #FFA000;
+      --background-color: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+      --card-background: linear-gradient(135deg, #FFECB3 0%, #FFE082 50%, #FFD54F 100%);
+      --text-color: #FF6F00;
+      --light-gray: #FFCA28;
+      --header-gradient: linear-gradient(135deg, #FFD54F 0%, #FFC107 50%, #FFA000 100%);
+      --glow-color: rgba(255, 193, 7, 0.7);
+      --particle-color: #FFEB3B;
+    }
 
-/* Advanced Card Styling with Gradients */
-.story-main {
-    background: var(--card-background);
-    border-top: 4px solid transparent;
-    border-image: var(--header-gradient) 1;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 
+    /* Advanced Card Styling with Gradients */
+    .story-main {
+      background: var(--card-background);
+      border-top: 4px solid transparent;
+      border-image: var(--header-gradient) 1;
+      position: relative;
+      overflow: hidden;
+      box-shadow:
         0 10px 40px rgba(0, 0, 0, 0.2),
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-.story-main::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        transparent 0%, 
-        rgba(255, 255, 255, 0.1) 50%, 
-        transparent 100%);
-    animation: shine 3s infinite;
-}
+    .story-main::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.1) 50%,
+          transparent 100%);
+      animation: shine 3s infinite;
+    }
 
-.story-main:hover {
-    transform: translateY(-8px) scale(1.01);
-    box-shadow: 
+    .story-main:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.3),
         0 0 0 1px rgba(255, 255, 255, 0.2) inset,
         0 0 40px var(--glow-color);
-}
+    }
 
-/* Extraordinary Header with Multiple Gradient Layers */
-.story-header {
-    background: var(--header-gradient);
-    position: relative;
-    overflow: hidden;
-    padding: 3rem 2rem;
-}
+    /* Extraordinary Header with Multiple Gradient Layers */
+    .story-header {
+      background: var(--header-gradient);
+      position: relative;
+      overflow: hidden;
+      padding: 3rem 2rem;
+    }
 
-.story-header::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
+    .story-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
         radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
         radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%);
-    animation: float-orbs 8s ease-in-out infinite;
-}
+      animation: float-orbs 8s ease-in-out infinite;
+    }
 
-.story-header::after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 100px;
-    background: linear-gradient(180deg, transparent 0%, var(--background-color) 100%);
-}
+    .story-header::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: linear-gradient(180deg, transparent 0%, var(--background-color) 100%);
+    }
 
-/* Animated Gradient Border Effect */
-.action-card {
-    background: var(--card-background);
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 
+    /* Animated Gradient Border Effect */
+    .action-card {
+      background: var(--card-background);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+      overflow: hidden;
+      box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.2),
         0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-}
+    }
 
-.action-card::before {
-    content: "";
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: var(--header-gradient);
-    border-radius: inherit;
-    z-index: -1;
-    opacity: 0.8;
-    animation: rotate-border 4s linear infinite;
-}
+    .action-card::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: var(--header-gradient);
+      border-radius: inherit;
+      z-index: -1;
+      opacity: 0.8;
+      animation: rotate-border 4s linear infinite;
+    }
 
-.action-card::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: var(--card-background);
-    border-radius: inherit;
-    z-index: -1;
-}
+    .action-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--card-background);
+      border-radius: inherit;
+      z-index: -1;
+    }
 
-/* Glassmorphism Effect for Buttons */
-.btn {
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.2) 0%, 
-        rgba(255, 255, 255, 0.05) 100%);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
+    /* Glassmorphism Effect for Buttons */
+    .btn {
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 0.2) 0%,
+          rgba(255, 255, 255, 0.05) 100%);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow:
         0 4px 16px rgba(0, 0, 0, 0.2),
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-.btn::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-}
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
 
-.btn:hover::before {
-    width: 300px;
-    height: 300px;
-}
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
 
-.btn:hover {
-    transform: translateY(-4px);
-    box-shadow: 
+    .btn:hover {
+      transform: translateY(-4px);
+      box-shadow:
         0 12px 32px rgba(0, 0, 0, 0.3),
         0 0 0 1px rgba(255, 255, 255, 0.2) inset,
         0 0 30px var(--glow-color);
-}
+    }
 
-/* Particle Background System */
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
+    /* Particle Background System */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
         radial-gradient(circle at 10% 20%, var(--particle-color) 0px, transparent 1px),
         radial-gradient(circle at 90% 80%, var(--particle-color) 0px, transparent 1px),
         radial-gradient(circle at 50% 50%, var(--particle-color) 0px, transparent 1px),
         radial-gradient(circle at 30% 70%, var(--particle-color) 0px, transparent 1px),
         radial-gradient(circle at 70% 30%, var(--particle-color) 0px, transparent 1px);
-    background-size: 200px 200px;
-    opacity: 0.3;
-    animation: particle-drift 60s linear infinite;
-    pointer-events: none;
-    z-index: -1;
-}
+      background-size: 200px 200px;
+      opacity: 0.3;
+      animation: particle-drift 60s linear infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
 
-/* Mesh Gradient Background for Body */
-body {
-    background: var(--background-color);
-    position: relative;
-}
+    /* Mesh Gradient Background for Body */
+    body {
+      background: var(--background-color);
+      position: relative;
+    }
 
-body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
         radial-gradient(ellipse at top left, var(--glow-color) 0%, transparent 50%),
         radial-gradient(ellipse at bottom right, var(--glow-color) 0%, transparent 50%),
         radial-gradient(ellipse at top right, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
-    opacity: 0.4;
-    pointer-events: none;
-    z-index: -1;
-    animation: mesh-flow 20s ease-in-out infinite;
-}
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: -1;
+      animation: mesh-flow 20s ease-in-out infinite;
+    }
 
-/* Advanced Tag Styling */
-.tag {
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.1) 0%, 
-        rgba(255, 255, 255, 0.05) 100%);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 3px solid var(--primary-color);
-    box-shadow: 
+    /* Advanced Tag Styling */
+    .tag {
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0.05) 100%);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-left: 3px solid var(--primary-color);
+      box-shadow:
         0 2px 8px rgba(0, 0, 0, 0.15),
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-    position: relative;
-    overflow: hidden;
-}
+      position: relative;
+      overflow: hidden;
+    }
 
-.tag::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        transparent 0%, 
-        rgba(255, 255, 255, 0.2) 50%, 
-        transparent 100%);
-    transition: left 0.5s;
-}
+    .tag::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.2) 50%,
+          transparent 100%);
+      transition: left 0.5s;
+    }
 
-.tag:hover::before {
-    left: 100%;
-}
+    .tag:hover::before {
+      left: 100%;
+    }
 
-.tag:hover {
-    background: var(--header-gradient);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px var(--glow-color);
-}
+    .tag:hover {
+      background: var(--header-gradient);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px var(--glow-color);
+    }
 
-/* Animated Info Icons with Gradient */
-.info-icon {
-    background: var(--header-gradient);
-    box-shadow: 
+    /* Animated Info Icons with Gradient */
+    .info-icon {
+      background: var(--header-gradient);
+      box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.2),
         0 0 0 2px rgba(255, 255, 255, 0.1) inset;
-    position: relative;
-    overflow: hidden;
-}
+      position: relative;
+      overflow: hidden;
+    }
 
-.info-icon::before {
-    content: "";
-    position: absolute;
-    inset: -100%;
-    background: conic-gradient(
-        from 0deg,
-        transparent 0deg,
-        rgba(255, 255, 255, 0.3) 90deg,
-        transparent 180deg
-    );
-    animation: icon-spin 3s linear infinite;
-}
+    .info-icon::before {
+      content: "";
+      position: absolute;
+      inset: -100%;
+      background: conic-gradient(from 0deg,
+          transparent 0deg,
+          rgba(255, 255, 255, 0.3) 90deg,
+          transparent 180deg);
+      animation: icon-spin 3s linear infinite;
+    }
 
-/* Holographic Effect for Images */
-.story-image {
-    position: relative;
-    filter: saturate(1.2) contrast(1.1);
-}
+    /* Holographic Effect for Images */
+    .story-image {
+      position: relative;
+      filter: saturate(1.2) contrast(1.1);
+    }
 
-.story-image::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.1) 0%, 
-        transparent 50%, 
-        rgba(255, 255, 255, 0.1) 100%);
-    opacity: 0;
-    transition: opacity 0.4s;
-    pointer-events: none;
-}
+    .story-image::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.1) 100%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
 
-.story-main:hover .story-image::before {
-    opacity: 1;
-}
+    .story-main:hover .story-image::before {
+      opacity: 1;
+    }
 
-/* Dynamic Shadow System */
-.similar-story {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-}
+    /* Dynamic Shadow System */
+    .similar-story {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
 
-.similar-story::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: var(--header-gradient);
-    transform: scaleY(0);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+    .similar-story::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--header-gradient);
+      transform: scaleY(0);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-.similar-story:hover::before {
-    transform: scaleY(1);
-}
+    .similar-story:hover::before {
+      transform: scaleY(1);
+    }
 
-.similar-story:hover {
-    background: linear-gradient(90deg, 
-        rgba(255, 255, 255, 0.05) 0%, 
-        transparent 100%);
-    transform: translateX(10px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+    .similar-story:hover {
+      background: linear-gradient(90deg,
+          rgba(255, 255, 255, 0.05) 0%,
+          transparent 100%);
+      transform: translateX(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-/* Extraordinary Animations */
-@keyframes gradient-flow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+    /* Extraordinary Animations */
+    @keyframes gradient-flow {
+      0% {
+        background-position: 0% 50%;
+      }
 
-@keyframes shine {
-    0% { left: -100%; }
-    100% { left: 200%; }
-}
+      50% {
+        background-position: 100% 50%;
+      }
 
-@keyframes float-orbs {
-    0%, 100% { 
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes shine {
+      0% {
+        left: -100%;
+      }
+
+      100% {
+        left: 200%;
+      }
+    }
+
+    @keyframes float-orbs {
+
+      0%,
+      100% {
         transform: translate(0, 0) scale(1);
         opacity: 0.6;
-    }
-    50% { 
+      }
+
+      50% {
         transform: translate(20px, -20px) scale(1.1);
         opacity: 0.8;
+      }
     }
-}
 
-@keyframes rotate-border {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+    @keyframes rotate-border {
+      0% {
+        transform: rotate(0deg);
+      }
 
-@keyframes particle-drift {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(50px, 50px); }
-}
+      100% {
+        transform: rotate(360deg);
+      }
+    }
 
-@keyframes mesh-flow {
-    0%, 100% { 
+    @keyframes particle-drift {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      100% {
+        transform: translate(50px, 50px);
+      }
+    }
+
+    @keyframes mesh-flow {
+
+      0%,
+      100% {
         transform: scale(1) translate(0, 0);
         opacity: 0.3;
-    }
-    50% { 
+      }
+
+      50% {
         transform: scale(1.1) translate(20px, 20px);
         opacity: 0.5;
+      }
     }
-}
 
-@keyframes icon-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+    @keyframes icon-spin {
+      0% {
+        transform: rotate(0deg);
+      }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .story-header {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .story-header {
         padding: 2rem 1.5rem;
-    }
-    
-    .story-main::before {
-        animation: shine 5s infinite;
-    }
-}
+      }
 
-/* Accessibility */
-@media (prefers-reduced-motion: reduce) {
-    * {
+      .story-main::before {
+        animation: shine 5s infinite;
+      }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      * {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+      }
     }
-}
+
+    /* ===========================
+       TRANSLATION BAR & FORM ELEMENTS
+       =========================== */
+
+    .translation-box {
+      background: var(--card-background);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .translation-box label {
+      font-weight: 600;
+      color: var(--text-color);
+      font-size: 0.95rem;
+    }
+
+    .translation-box select,
+    .select-language {
+      flex: 1;
+      min-width: 250px;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--card-background);
+      color: var(--text-color);
+      font-size: 0.95rem;
+      font-family: 'Outfit', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .translation-box select:focus,
+    .select-language:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+    }
+
+    .translation-box button[type="submit"] {
+      padding: 0.75rem 2rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .translation-box button[type="submit"]:hover {
+      background: var(--button-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--button-glow);
+    }
+
+    /* Select2 Overrides */
+    .select2-container--default .select2-selection--single {
+      background: var(--card-background) !important;
+      border: 1px solid var(--border-color) !important;
+      border-radius: 8px !important;
+      height: 45px !important;
+      padding: 0.5rem !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      color: var(--text-color) !important;
+      line-height: 30px !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 43px !important;
+    }
+
+    .select2-dropdown {
+      background: var(--card-background) !important;
+      border: 1px solid var(--border-color) !important;
+      border-radius: 8px !important;
+    }
+
+    .select2-results__option {
+      color: var(--text-color) !important;
+      padding: 0.75rem 1rem !important;
+    }
+
+    .select2-results__option--highlighted {
+      background: var(--primary-color) !important;
+      color: white !important;
+    }
+
+    /* ===========================
+       COMMENT SECTION
+       =========================== */
+
+    .comments-section {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 1rem;
+      background: var(--card-background);
+      border-radius: var(--border-radius);
+      margin-bottom: 1.5rem;
+    }
+
+    .comments-section::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .comments-section::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    .comments-section::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+
+    .comment-item {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+    }
+
+    .comment-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--primary-color);
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .comment-author {
+      font-weight: 600;
+      color: var(--secondary-color);
+      text-decoration: none;
+      transition: color 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .comment-author:hover {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+
+    .comment-date {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .comment-content {
+      color: var(--text-color);
+      line-height: 1.6;
+      margin: 0.5rem 0;
+    }
+
+    .comment-form {
+      background: var(--card-background);
+      border: 1px solid var(--border-color);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .comment-form textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-color);
+      resize: vertical;
+      min-height: 100px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .comment-form textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .comment-form textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .comment-form button[type="submit"] {
+      background: var(--primary-color);
+      color: white;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .comment-form button[type="submit"]:hover {
+      background: var(--button-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--button-glow);
+    }
+
+    .delete-comment-btn {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .delete-comment-btn:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #dc2626;
+    }
+
+    /* AI Badge */
+    .ai-badge {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 1rem;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    }
+
+    /* ===========================
+       ULTRA PROFESSIONAL THEMES
+       High-End Visual Experiences
+       =========================== */
+
+    /* Happy: "Sunrise Gold" - Warm, Optimistic, Premium */
+    .theme-happy {
+      --primary-color: #d97706;
+      /* Amber 600 */
+      --secondary-color: #fbbf24;
+      /* Amber 400 */
+      --accent-color: #78350f;
+      /* Amber 900 */
+
+      --background-color: #fffbeb;
+      /* Amber 50 */
+      --card-background: rgba(255, 255, 255, 0.85);
+      /* White Glass */
+
+      --text-color: #451a03;
+      /* Amber 950 */
+      --text-muted: #92400e;
+      /* Amber 700 */
+      --border-color: rgba(217, 119, 6, 0.15);
+
+      --header-gradient: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      --glass-bg: rgba(255, 255, 255, 0.6);
+      --glow-color: rgba(251, 191, 36, 0.3);
+      --particle-color: #d97706;
+
+      --button-hover: #b45309;
+      --button-glow: rgba(245, 158, 11, 0.2);
+    }
+
+    /* Sad: "Storm Slate" - Professional, Serious, Muted */
+    .theme-sad {
+      --primary-color: #475569;
+      /* Slate 600 */
+      --secondary-color: #94a3b8;
+      /* Slate 400 */
+      --accent-color: #0f172a;
+      /* Slate 900 */
+
+      --background-color: #f8fafc;
+      /* Slate 50 */
+      --card-background: rgba(255, 255, 255, 0.9);
+
+      --text-color: #1e293b;
+      /* Slate 800 */
+      --text-muted: #64748b;
+      /* Slate 500 */
+      --border-color: rgba(71, 85, 105, 0.1);
+
+      --header-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      --glass-bg: rgba(248, 250, 252, 0.8);
+      --glow-color: rgba(51, 65, 85, 0.1);
+      --particle-color: #94a3b8;
+
+      --button-hover: #334155;
+      --button-glow: rgba(71, 85, 105, 0.2);
+    }
+
+    .theme-melancholy {
+      --primary-color: #57534e;
+      /* Stone 600 */
+      --secondary-color: #a8a29e;
+      /* Stone 400 */
+      --accent-color: #292524;
+      /* Stone 900 */
+
+      --background-color: #fafaf9;
+      /* Stone 50 */
+      --card-background: rgba(255, 255, 255, 0.9);
+
+      --text-color: #44403c;
+      /* Stone 700 */
+      --text-muted: #78716c;
+      /* Stone 500 */
+      --border-color: rgba(87, 83, 78, 0.1);
+
+      --header-gradient: linear-gradient(to bottom, #f5f5f4, #e7e5e4);
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glow-color: rgba(168, 162, 158, 0.15);
+      --particle-color: #a8a29e;
+    }
+
+    /* Romantic: "Rose Quartz" - Elegant, Soft, Boutique */
+    .theme-romantic {
+      --primary-color: #be185d;
+      /* Pink 700 */
+      --secondary-color: #f472b6;
+      /* Pink 400 */
+      --accent-color: #831843;
+      /* Pink 900 */
+
+      --background-color: #fff1f2;
+      /* Rose 50 */
+      --card-background: rgba(255, 255, 255, 0.85);
+
+      --text-color: #881337;
+      /* Rose 900 */
+      --text-muted: #be123c;
+      /* Rose 700 */
+      --border-color: rgba(190, 24, 93, 0.1);
+
+      --header-gradient: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+      --glass-bg: rgba(255, 255, 255, 0.6);
+      --glow-color: rgba(244, 114, 182, 0.2);
+      --particle-color: #f9a8d4;
+
+      --button-hover: #9d174d;
+      --button-glow: rgba(219, 39, 119, 0.25);
+    }
+
+    /* Thriller: "Noir Crimson" - Cinematic, High Contrast, Edgy */
+    .theme-thriller {
+      --primary-color: #dc2626;
+      /* Red 600 */
+      --secondary-color: #f87171;
+      /* Red 400 */
+      --accent-color: #7f1d1d;
+      /* Red 900 */
+
+      --background-color: #0f0505;
+      /* Black/Red Tint */
+      --card-background: rgba(20, 10, 10, 0.95);
+
+      --text-color: #fef2f2;
+      /* Red 50 */
+      --text-muted: #fca5a5;
+      /* Red 300 */
+      --border-color: rgba(220, 38, 38, 0.3);
+
+      --header-gradient: linear-gradient(135deg, #1a0505 0%, #450a0a 100%);
+      --glass-bg: rgba(0, 0, 0, 0.6);
+      --glow-color: rgba(220, 38, 38, 0.4);
+      --particle-color: #ef4444;
+
+      --button-hover: #b91c1c;
+      --button-glow: rgba(220, 38, 38, 0.5);
+    }
+
+    /* Horror: "Abyss" - Deep, Dark, Immersive */
+    .theme-horror {
+      --primary-color: #7f1d1d;
+      /* Red 900 */
+      --secondary-color: #3f0909;
+      /* Darker Red */
+      --accent-color: #000000;
+
+      --background-color: #000000;
+      --card-background: rgba(10, 10, 10, 0.95);
+
+      --text-color: #e5e5e5;
+      --text-muted: #991b1b;
+      --border-color: rgba(127, 29, 29, 0.3);
+
+      --header-gradient: linear-gradient(to bottom, #111, #000);
+      --glass-bg: rgba(0, 0, 0, 0.9);
+      --glow-color: rgba(185, 28, 28, 0.6);
+      --particle-color: #450a0a;
+
+      --button-hover: #450a0a;
+      --button-glow: rgba(153, 27, 27, 0.5);
+    }
+
+    /* Adventure: "Forest Expedition" - Natural, Clean, Fresh */
+    .theme-adventure {
+      --primary-color: #059669;
+      /* Emerald 600 */
+      --secondary-color: #34d399;
+      /* Emerald 400 */
+      --accent-color: #064e3b;
+      /* Emerald 900 */
+
+      --background-color: #ecfdf5;
+      /* Emerald 50 */
+      --card-background: rgba(255, 255, 255, 0.9);
+
+      --text-color: #022c22;
+      /* Emerald 950 */
+      --text-muted: #047857;
+      /* Emerald 700 */
+      --border-color: rgba(5, 150, 105, 0.15);
+
+      --header-gradient: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glow-color: rgba(52, 211, 153, 0.25);
+      --particle-color: #10b981;
+
+      --button-hover: #047857;
+      --button-glow: rgba(5, 150, 105, 0.3);
+    }
+
+    /* Mystery: "Nightshade" - Sophisticated, Deep, Luxurious */
+    .theme-mystery {
+      --primary-color: #7c3aed;
+      /* Violet 600 */
+      --secondary-color: #a78bfa;
+      /* Violet 400 */
+      --accent-color: #4c1d95;
+      /* Violet 900 */
+
+      --background-color: #0f172a;
+      /* Slate 900 (Dark) */
+      --card-background: rgba(30, 41, 59, 0.9);
+
+      --text-color: #f1f5f9;
+      /* Slate 100 */
+      --text-muted: #a78bfa;
+      --border-color: rgba(124, 58, 237, 0.25);
+
+      --header-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      --glass-bg: rgba(15, 23, 42, 0.8);
+      --glow-color: rgba(139, 92, 246, 0.3);
+      --particle-color: #8b5cf6;
+
+      --button-hover: #6d28d9;
+      --button-glow: rgba(124, 58, 237, 0.4);
+    }
+
+    /* Fantasy: "Ethereal Dream" - Soft, Magical, Light */
+    .theme-fantasy {
+      --primary-color: #9333ea;
+      /* Purple 600 */
+      --secondary-color: #c084fc;
+      /* Purple 400 */
+      --accent-color: #581c87;
+      /* Purple 900 */
+
+      --background-color: #faf5ff;
+      /* Purple 50 */
+      --card-background: rgba(253, 244, 255, 0.9);
+
+      --text-color: #3b0764;
+      /* Purple 950 */
+      --text-muted: #7e22ce;
+      /* Purple 700 */
+      --border-color: rgba(147, 51, 234, 0.15);
+
+      --header-gradient: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+      --glass-bg: rgba(255, 255, 255, 0.6);
+      --glow-color: rgba(192, 132, 252, 0.25);
+      --particle-color: #d8b4fe;
+
+      --button-hover: #7e22ce;
+      --button-glow: rgba(147, 51, 234, 0.3);
+    }
+
+    /* Sci-Fi: "Cyber Future" - Clean, Tech, Neon */
+    .theme-scifi {
+      --primary-color: #0891b2;
+      /* Cyan 600 */
+      --secondary-color: #22d3ee;
+      /* Cyan 400 */
+      --accent-color: #164e63;
+      /* Cyan 900 */
+
+      --background-color: #083344;
+      /* Cyan 950 */
+      --card-background: rgba(8, 51, 68, 0.95);
+
+      --text-color: #ecfeff;
+      /* Cyan 50 */
+      --text-muted: #67e8f9;
+      /* Cyan 300 */
+      --border-color: rgba(34, 211, 238, 0.3);
+
+      --header-gradient: linear-gradient(135deg, #164e63 0%, #083344 100%);
+      --glass-bg: rgba(8, 51, 68, 0.8);
+      --glow-color: rgba(6, 182, 212, 0.5);
+      --particle-color: #06b6d4;
+
+      --button-hover: #0e7490;
+      --button-glow: rgba(34, 211, 238, 0.6);
+    }
+
+    /* Inspirational: "Success Gold" - Professional, Bright */
+    .theme-inspirational {
+      --primary-color: #d97706;
+      /* Amber 600 */
+      --secondary-color: #fbbf24;
+      /* Amber 400 */
+      --accent-color: #b45309;
+      /* Amber 700 */
+
+      --background-color: #fffbef;
+      /* Amber 50 (light) */
+      --card-background: rgba(255, 255, 255, 0.95);
+
+      --text-color: #292524;
+      --text-muted: #78350f;
+      --border-color: rgba(217, 119, 6, 0.2);
+
+      --header-gradient: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glow-color: rgba(245, 158, 11, 0.3);
+      --particle-color: #fbbf24;
+
+      --button-hover: #b45309;
+      --button-glow: rgba(245, 158, 11, 0.4);
+    }
+
+    /* Comedy: "Playful Pop" - Vivid but Clean */
+    .theme-comedy {
+      --primary-color: #f97316;
+      /* Orange 500 */
+      --secondary-color: #fb923c;
+      /* Orange 400 */
+      --accent-color: #c2410c;
+      /* Orange 700 */
+
+      --background-color: #fff7ed;
+      /* Orange 50 */
+      --card-background: rgba(255, 255, 255, 0.9);
+
+      --text-color: #431407;
+      /* Orange 950 */
+      --text-muted: #c2410c;
+      --border-color: rgba(249, 115, 22, 0.2);
+
+      --header-gradient: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+      --glass-bg: rgba(255, 255, 255, 0.8);
+      --glow-color: rgba(249, 115, 22, 0.5);
+      --particle-color: #fdba74;
+
+      --button-hover: #ea580c;
+      --button-glow: rgba(249, 115, 22, 0.4);
+    }
   </style>
 </head>
+
 <body class="{{ theme_class }}">
-    <a href="{% url 'authentication:home' %}" class="home-btn">
+  <a href="{% url 'authentication:home' %}" class="home-btn">
     <i class="fas fa-home"></i> Home
   </a>
   <div class="story-container">
-    
+
     <div class="story-main">
-     
+
       <div class="story-header">
         <h1 class="story-title">{{ story.title }}</h1>
         <div class="story-author">
           By <a href="/Mystory/author/{{ story.user.username }}/">{{ story.user.username }}</a>
         </div>
-        
-        
+
+
         {% if story.is_ai_generated %}
-                <span class="badge ai-badge">AI Created</span>
-            {% endif %}
+        <span class="badge ai-badge">AI Created</span>
+        {% endif %}
 
         <div class="story-meta">
           <div class="meta-item">
@@ -1464,7 +1672,7 @@ body::after {
           </div>
           <div class="meta-item">
             <i class="fas fa-heart"></i>
-            <span>{{  like_count }} likes</span>
+            <span>{{ like_count }} likes</span>
           </div>
           <div class="meta-item">
             <i class="fas fa-calendar"></i>
@@ -1472,130 +1680,132 @@ body::after {
           </div>
         </div>
       </div>
-      
+
       {% if story.image %}
       <img src="{{ story.image.url }}" alt="{{ story.title }}" class="story-image">
       {% endif %}
       <div class="translation-box" style="display: flex; justify-content: space-between;">
         <form method="post" action="{% url 'aistory:translate_story' story.id %}">
-            {% csrf_token %}
-            <label for="language">Translate to:</label>
-            <select class="select-language" name="language" id="language" style="width: 300px;">
-                <option value="en">English</option>
-                <option value="af">Afrikaans</option>
-                <option value="sq">Albanian</option>
-                <option value="am">Amharic</option>
-                <option value="ar">Arabic</option>
-                <option value="hy">Armenian</option>
-                <option value="az">Azerbaijani</option>
-                <option value="eu">Basque</option>
-                <option value="be">Belarusian</option>
-                <option value="bn">Bengali</option>
-                <option value="bs">Bosnian</option>
-                <option value="bg">Bulgarian</option>
-                <option value="ca">Catalan</option>
-                <option value="ceb">Cebuano</option>
-                <option value="ny">Chichewa</option>
-                <option value="zh-cn">Chinese (Simplified)</option>
-                <option value="zh-tw">Chinese (Traditional)</option>
-                <option value="co">Corsican</option>
-                <option value="hr">Croatian</option>
-                <option value="cs">Czech</option>
-                <option value="da">Danish</option>
-                <option value="nl">Dutch</option>
-                <option value="en">English</option>
-                <option value="eo">Esperanto</option>
-                <option value="et">Estonian</option>
-                <option value="tl">Filipino</option>
-                <option value="fi">Finnish</option>
-                <option value="fr">French</option>
-                <option value="fy">Frisian</option>
-                <option value="gl">Galician</option>
-                <option value="ka">Georgian</option>
-                <option value="de">German</option>
-                <option value="el">Greek</option>
-                <option value="gu">Gujarati</option>
-                <option value="ht">Haitian Creole</option>
-                <option value="ha">Hausa</option>
-                <option value="haw">Hawaiian</option>
-                <option value="iw">Hebrew</option>
-                <option value="hi">Hindi</option>
-                <option value="hmn">Hmong</option>
-                <option value="hu">Hungarian</option>
-                <option value="is">Icelandic</option>
-                <option value="ig">Igbo</option>
-                <option value="id">Indonesian</option>
-                <option value="ga">Irish</option>
-                <option value="it">Italian</option>
-                <option value="ja">Japanese</option>
-                <option value="jw">Javanese</option>
-                <option value="kn">Kannada</option>
-                <option value="kk">Kazakh</option>
-                <option value="km">Khmer</option>
-                <option value="ko">Korean</option>
-                <option value="ku">Kurdish (Kurmanji)</option>
-                <option value="ky">Kyrgyz</option>
-                <option value="lo">Lao</option>
-                <option value="la">Latin</option>
-                <option value="lv">Latvian</option>
-                <option value="lt">Lithuanian</option>
-                <option value="lb">Luxembourgish</option>
-                <option value="mk">Macedonian</option>
-                <option value="mg">Malagasy</option>
-                <option value="ms">Malay</option>
-                <option value="ml">Malayalam</option>
-                <option value="mt">Maltese</option>
-                <option value="mi">Maori</option>
-                <option value="mr">Marathi</option>
-                <option value="mn">Mongolian</option>
-                <option value="my">Myanmar (Burmese)</option>
-                <option value="ne">Nepali</option>
-                <option value="no">Norwegian</option>
-                <option value="ps">Pashto</option>
-                <option value="fa">Persian</option>
-                <option value="pl">Polish</option>
-                <option value="pt">Portuguese</option>
-                <option value="pa">Punjabi</option>
-                <option value="ro">Romanian</option>
-                <option value="ru">Russian</option>
-                <option value="sm">Samoan</option>
-                <option value="gd">Scots Gaelic</option>
-                <option value="sr">Serbian</option>
-                <option value="st">Sesotho</option>
-                <option value="sn">Shona</option>
-                <option value="sd">Sindhi</option>
-                <option value="si">Sinhala</option>
-                <option value="sk">Slovak</option>
-                <option value="sl">Slovenian</option>
-                <option value="so">Somali</option>
-                <option value="es">Spanish</option>
-                <option value="su">Sundanese</option>
-                <option value="sw">Swahili</option>
-                <option value="sv">Swedish</option>
-                <option value="tg">Tajik</option>
-                <option value="ta">Tamil</option>
-                <option value="te">Telugu</option>
-                <option value="th">Thai</option>
-                <option value="tr">Turkish</option>
-                <option value="uk">Ukrainian</option>
-                <option value="ur">Urdu</option>
-                <option value="uz">Uzbek</option>
-                <option value="vi">Vietnamese</option>
-                <option value="cy">Welsh</option>
-                <option value="xh">Xhosa</option>
-                <option value="yi">Yiddish</option>
-                <option value="yo">Yoruba</option>
-                <option value="zu">Zulu</option>
-            </select>
-            <button type="submit">Translate</button>
+          {% csrf_token %}
+          <label for="language">Translate to:</label>
+          <select class="select-language" name="language" id="language" style="width: 300px;">
+            <option value="en">English</option>
+            <option value="af">Afrikaans</option>
+            <option value="sq">Albanian</option>
+            <option value="am">Amharic</option>
+            <option value="ar">Arabic</option>
+            <option value="hy">Armenian</option>
+            <option value="az">Azerbaijani</option>
+            <option value="eu">Basque</option>
+            <option value="be">Belarusian</option>
+            <option value="bn">Bengali</option>
+            <option value="bs">Bosnian</option>
+            <option value="bg">Bulgarian</option>
+            <option value="ca">Catalan</option>
+            <option value="ceb">Cebuano</option>
+            <option value="ny">Chichewa</option>
+            <option value="zh-cn">Chinese (Simplified)</option>
+            <option value="zh-tw">Chinese (Traditional)</option>
+            <option value="co">Corsican</option>
+            <option value="hr">Croatian</option>
+            <option value="cs">Czech</option>
+            <option value="da">Danish</option>
+            <option value="nl">Dutch</option>
+            <option value="en">English</option>
+            <option value="eo">Esperanto</option>
+            <option value="et">Estonian</option>
+            <option value="tl">Filipino</option>
+            <option value="fi">Finnish</option>
+            <option value="fr">French</option>
+            <option value="fy">Frisian</option>
+            <option value="gl">Galician</option>
+            <option value="ka">Georgian</option>
+            <option value="de">German</option>
+            <option value="el">Greek</option>
+            <option value="gu">Gujarati</option>
+            <option value="ht">Haitian Creole</option>
+            <option value="ha">Hausa</option>
+            <option value="haw">Hawaiian</option>
+            <option value="iw">Hebrew</option>
+            <option value="hi">Hindi</option>
+            <option value="hmn">Hmong</option>
+            <option value="hu">Hungarian</option>
+            <option value="is">Icelandic</option>
+            <option value="ig">Igbo</option>
+            <option value="id">Indonesian</option>
+            <option value="ga">Irish</option>
+            <option value="it">Italian</option>
+            <option value="ja">Japanese</option>
+            <option value="jw">Javanese</option>
+            <option value="kn">Kannada</option>
+            <option value="kk">Kazakh</option>
+            <option value="km">Khmer</option>
+            <option value="ko">Korean</option>
+            <option value="ku">Kurdish (Kurmanji)</option>
+            <option value="ky">Kyrgyz</option>
+            <option value="lo">Lao</option>
+            <option value="la">Latin</option>
+            <option value="lv">Latvian</option>
+            <option value="lt">Lithuanian</option>
+            <option value="lb">Luxembourgish</option>
+            <option value="mk">Macedonian</option>
+            <option value="mg">Malagasy</option>
+            <option value="ms">Malay</option>
+            <option value="ml">Malayalam</option>
+            <option value="mt">Maltese</option>
+            <option value="mi">Maori</option>
+            <option value="mr">Marathi</option>
+            <option value="mn">Mongolian</option>
+            <option value="my">Myanmar (Burmese)</option>
+            <option value="ne">Nepali</option>
+            <option value="no">Norwegian</option>
+            <option value="ps">Pashto</option>
+            <option value="fa">Persian</option>
+            <option value="pl">Polish</option>
+            <option value="pt">Portuguese</option>
+            <option value="pa">Punjabi</option>
+            <option value="ro">Romanian</option>
+            <option value="ru">Russian</option>
+            <option value="sm">Samoan</option>
+            <option value="gd">Scots Gaelic</option>
+            <option value="sr">Serbian</option>
+            <option value="st">Sesotho</option>
+            <option value="sn">Shona</option>
+            <option value="sd">Sindhi</option>
+            <option value="si">Sinhala</option>
+            <option value="sk">Slovak</option>
+            <option value="sl">Slovenian</option>
+            <option value="so">Somali</option>
+            <option value="es">Spanish</option>
+            <option value="su">Sundanese</option>
+            <option value="sw">Swahili</option>
+            <option value="sv">Swedish</option>
+            <option value="tg">Tajik</option>
+            <option value="ta">Tamil</option>
+            <option value="te">Telugu</option>
+            <option value="th">Thai</option>
+            <option value="tr">Turkish</option>
+            <option value="uk">Ukrainian</option>
+            <option value="ur">Urdu</option>
+            <option value="uz">Uzbek</option>
+            <option value="vi">Vietnamese</option>
+            <option value="cy">Welsh</option>
+            <option value="xh">Xhosa</option>
+            <option value="yi">Yiddish</option>
+            <option value="yo">Yoruba</option>
+            <option value="zu">Zulu</option>
+          </select>
+          <button type="submit">Translate</button>
         </form>
-        <div id="language-support-notification" style="display: none; margin-top: 10px; padding: 8px; background-color: #fff9e6; border: 1px solid #ffc107; border-radius: 4px; font-size: 14px;">
+        <div id="language-support-notification"
+          style="display: none; margin-top: 10px; padding: 8px; background-color: #fff9e6; border: 1px solid #ffc107; border-radius: 4px; font-size: 14px;">
           <p style="margin: 0; color: #856404;">
-            <strong>Note:</strong> <span id="notification-message">Text-to-speech may have limited support for this language.</span>
+            <strong>Note:</strong> <span id="notification-message">Text-to-speech may have limited support for this
+              language.</span>
           </p>
         </div>
       </div>
-       
+
       <div id="loaderOverlay" style="
       position: fixed;
       top: 0; left: 0;
@@ -1608,10 +1818,12 @@ body::after {
       justify-content: center;
       flex-direction: column;
   ">
-      <div style="border: 5px solid #eee; border-top: 5px solid #1e90ff; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite;"></div>
-      <p style="margin-top: 20px; font-family: sans-serif; color: #333;">Loading your magical story...</p>
-  </div>
-      
+        <div
+          style="border: 5px solid #eee; border-top: 5px solid #1e90ff; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite;">
+        </div>
+        <p style="margin-top: 20px; font-family: sans-serif; color: #333;">Loading your magical story...</p>
+      </div>
+
       <div class="story-content">
         {% if translated_content %}
         <hr>
@@ -1620,503 +1832,499 @@ body::after {
         <button type="button" class="volume-btn" id="volume-btn" style="margin-left: 10px; display: none;">🔊</button>
 
         {% else %}
-               <p id="story-text" >{{ story.content|linebreaks }}</p>
+        <p id="story-text">{{ story.content|linebreaks }}</p>
         {% endif %}
       </div>
     </div>
-    
+
     <div class="story-sidebar">
       <div class="action-card">
         <div class="card-header">Story Actions</div>
         <div class="card-content">
-          <a style="text-decoration: none;"  href="{% url 'mystory:download_story' story.id %}" class="btn download-btn">
+          <a style="text-decoration: none;" href="{% url 'mystory:download_story' story.id %}" class="btn download-btn">
             <i class="fas fa-download"></i> Download Story
           </a>
           <a style="text-decoration: none;" href="{% url 'mystory:share_story' story.id %}" class="btn share-btn">
             <i class="fas fa-share-alt"></i> Share Story
           </a>
-          <a  style="text-decoration: none;"  href="{% url 'aistory:like_story' story.id %}" class="btn like-btn">
+          <a style="text-decoration: none;" href="{% url 'aistory:like_story' story.id %}" class="btn like-btn">
             {% if is_liked %}
-              <i class="fas fa-heart text-red-500"></i> Liked
+            <i class="fas fa-heart text-red-500"></i> Liked
             {% else %}
-              <i class="far fa-heart"></i> Like Story
+            <i class="far fa-heart"></i> Like Story
             {% endif %}
           </a>
-          
-          
+
+
         </div>
       </div>
-    <div class="story-sidebar">
-      <div class="action-card">
-        <div class="card-header">Comments</div>
-        <div class="">
-           
-          <div class="comments-section" style="
-            max-height: 300px;
-            overflow-y: auto;
-            padding-right: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            background-color: var(--card-background);
-            padding: 1rem;
-            box-shadow: var(--shadow);
-        ">
+      <div class="story-sidebar">
+        <div class="action-card">
+          <div class="card-header">Comments</div>
+          <div class="">
 
-          {% for comment in comments %}
-            <div style="  padding: 1rem;  border-radius: 8px;">
-              <div style="display: flex; justify-content: space-between;">
-              <a style="text-decoration: none;" href="/Mystory/author/{{ comment.user.username }}/"><strong>{{ comment.user.username|cut:"@gmail.com" }}</strong></a>
-              <small style="color: #aaa;">{{ comment.created_at|date:"F j, Y" }}</small>
+            <div class="comments-section">
+
+              {% for comment in comments %}
+              <div class="comment-item">
+                <div class="comment-header">
+                  <a class="comment-author" href="/Mystory/author/{{ comment.user.username }}/">
+                    {{ comment.user.username|cut:"@gmail.com" }}
+                  </a>
+                  <span class="comment-date">{{ comment.created_at|date:"F j, Y" }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <p class="comment-content">{{ comment.content }}</p>
+                  {% if user == comment.user %}
+                  <form method="post" action="{% url 'aistory:delete_comment' comment.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-comment-btn" title="Delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </form>
+                  {% endif %}
+                </div>
               </div>
-             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 0.5rem;">
-              <p style="margin: 0;">{{ comment.content }}</p>
-              {% if user == comment.user %}
-                <form method="post" action="{% url 'aistory:delete_comment' comment.id %}">
-                  {% csrf_token %}
-                  <button type="submit" title="Delete" style="background: none; border: none; color: #ec1846; cursor: pointer;">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
-                </form>
-              {% endif %}
+
+
+              {% empty %}
+              <p>No comments yet. Be the first!</p>
+              {% endfor %}
             </div>
 
-             
-            </div>
-            <hr style="border: 1px solid #9f9e9e;">
-
-          {% empty %}
-            <p>No comments yet. Be the first!</p>
-          {% endfor %}
-        </div>
-
-        {% if user.is_authenticated %}
-          <form method="post" action="{% url 'aistory:view_story' story.id %}" class="comment-form" style="background-color: var(--card-background); padding: 1rem; border-radius: 8px; box-shadow: var(--shadow);">
-            {% csrf_token %}
-            <textarea name="content" rows="3" placeholder="Write a comment..." style="width: 100%; padding: 10px; border-radius: 6px;  border: 1px solid #333;"></textarea>
-            <br><br>
-            <button type="submit" class="btn action-btn joker-purple">Post Comment</button>
-          </form>
-        {% else %}
-          <p><a href="{% url 'authentication:login' %}" style="color: var(--joker-green);">Login</a> to comment.</p>
-        {% endif %}
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'aistory:view_story' story.id %}" class="comment-form"
+              style="background-color: var(--card-background); padding: 1rem; border-radius: 8px; box-shadow: var(--shadow);">
+              {% csrf_token %}
+              <textarea name="content" rows="3" placeholder="Write a comment..."
+                style="width: 100%; padding: 10px; border-radius: 6px;  border: 1px solid #333;"></textarea>
+              <br><br>
+              <button type="submit" class="btn action-btn joker-purple">Post Comment</button>
+            </form>
+            {% else %}
+            <p><a href="{% url 'authentication:login' %}" style="color: var(--joker-green);">Login</a> to comment.</p>
+            {% endif %}
 
 
-          </a>
-          
-          
-        
-      </div>
-      
-      <div class="action-card">
-        <div class="card-header">Story Information</div>
-        <div class="card-content story-info-card">
-          <div class="info-item">
-            <div class="info-icon">
-              <i class="fas fa-book"></i>
-            </div>
-            <div>
-              <div class="info-label">Theme</div>
-              <div>{{ story.theme|title }}</div>
+            </a>
+
+
+
+          </div>
+
+          <div class="action-card">
+            <div class="card-header">Story Information</div>
+            <div class="card-content story-info-card">
+              <div class="info-item">
+                <div class="info-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <div>
+                  <div class="info-label">Theme</div>
+                  <div>{{ story.theme|title }}</div>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <div class="info-icon">
+                  <i class="fas fa-heart"></i>
+                </div>
+                <div>
+                  <div class="info-label">Emotions</div>
+                  <div class="tags-container">
+                    {% for emotion in emotions_list %}
+                    <span class="tag">{{ emotion|title }}</span>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <div class="info-icon">
+                  <i class="fas fa-users"></i>
+                </div>
+                <div>
+                  <div class="info-label">Collaboration</div>
+                  <div>
+                    {% if story.is_collaborated %}
+                    Collaborative
+                    {% if collaborators %}
+                    <br>
+                    <strong>Collaborated with:</strong>
+                    <ul>
+                      {% for user in collaborators %}
+                      <a style="text-decoration: none;" href="/Mystory/author/{{  user.username }}/">
+                        <li>{{ user.username }}</li>
+                      </a>
+                      {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {% else %}
+                    Individual
+                    {% endif %}
+                  </div>
+
+                </div>
+              </div>
             </div>
           </div>
-          
-          <div class="info-item">
-            <div class="info-icon">
-              <i class="fas fa-heart"></i>
-            </div>
-            <div>
-              <div class="info-label">Emotions</div>
-              <div class="tags-container">
-                {% for emotion in emotions_list %}
-                  <span class="tag">{{ emotion|title }}</span>
+
+          <div class="action-card">
+            <div class="card-header">Similar Stories</div>
+            <div class="card-content">
+              <div class="similar-stories">
+                {% for story in similar_stories %}
+                <a style="text-decoration: none;  " href="{% url 'aistory:view_story' story.id %}"
+                  class="similar-story">
+                  {% if story.image %}
+                  <img src="{{ story.image.url }}" alt="{{ story.title }}" class="similar-story-img">
+                  {% else %}
+                  <img src="{% static 'images/logo4.webp' %}" alt="{{ story.title }}" class="similar-story-img">
+                  {% endif %}
+                  <div class="similar-story-title">{{ story.title }}</div>
+                </a>
                 {% endfor %}
               </div>
             </div>
           </div>
-          
-          <div class="info-item">
-            <div class="info-icon">
-              <i class="fas fa-users"></i>
-            </div>
-            <div>
-                <div class="info-label">Collaboration</div>
-                <div>
-                  {% if story.is_collaborated %}
-                    Collaborative
-                    {% if collaborators %}
-                      <br>
-                      <strong>Collaborated with:</strong>
-                      <ul>
-                        {% for user in collaborators %}
-                         <a style="text-decoration: none;" href="/Mystory/author/{{  user.username }}/"><li>{{ user.username }}</li></a>
-                        {% endfor %}
-                      </ul>
-                    {% endif %}
-                  {% else %}
-                    Individual
-                  {% endif %}
-                </div>
-                
-            </div>
-          </div>
         </div>
       </div>
-      
-      <div class="action-card">
-        <div class="card-header">Similar Stories</div>
-        <div class="card-content">
-          <div class="similar-stories">
-            {% for story in similar_stories %}
-            <a style="text-decoration: none;  " href="{% url 'aistory:view_story' story.id %}" class="similar-story">
-              {% if story.image %}
-                <img src="{{ story.image.url }}" alt="{{ story.title }}" class="similar-story-img">
-              {% else %}
-                <img src="{% static 'images/logo4.webp' %}" alt="{{ story.title }}" class="similar-story-img">
-              {% endif %}
-              <div class="similar-story-title">{{ story.title }}</div>
-            </a>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
 
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- JS for Select2 -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+      <!-- JS for Select2 -->
+      <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<script>
+      <script>
 
-   window.addEventListener('load', function () {
-        const loader = document.getElementById('loaderOverlay');
-        loader.style.display = 'none';
-    });
-    $(document).ready(function() {
-        $('.select-language').select2({
+        window.addEventListener('load', function () {
+          const loader = document.getElementById('loaderOverlay');
+          loader.style.display = 'none';
+        });
+        $(document).ready(function () {
+          $('.select-language').select2({
             placeholder: "Select a language",
             allowClear: true
+          });
         });
-    });
 
 
-    document.addEventListener("DOMContentLoaded", () => {
-  const volumeBtn = document.getElementById("volume-btn");
-  const languageSelect = document.getElementById("language");
-  let isSpeaking = false;
-  const synth = window.speechSynthesis;
-  let utterance;
+        document.addEventListener("DOMContentLoaded", () => {
+          const volumeBtn = document.getElementById("volume-btn");
+          const languageSelect = document.getElementById("language");
+          let isSpeaking = false;
+          const synth = window.speechSynthesis;
+          let utterance;
 
-  // Get available voices
-  function getVoices() {
-    return synth.getVoices();
-  }
+          // Get available voices
+          function getVoices() {
+            return synth.getVoices();
+          }
 
-   
-  const languageFallbackMap = {
-    'ar': 'en-US',    // Arabic falls back to English
-    'fa': 'en-US',    // Persian falls back to English
-    'ur': 'en-US',    // Urdu falls back to English
-    
-  };
- 
-  function isLanguageDirectlySupported(langCode) {
-    const voices = getVoices();
-    return voices.some(voice => voice.lang.toLowerCase().includes(langCode.toLowerCase()));
-  }
 
-   function findBestVoice(langCode) {
-    const voices = getVoices();
-    
-     let matchingVoice = voices.find(voice => 
-      voice.lang.toLowerCase().startsWith(langCode.toLowerCase())
-    );
-    
-     if (!matchingVoice && languageFallbackMap[langCode]) {
-      const fallbackCode = languageFallbackMap[langCode];
-      matchingVoice = voices.find(voice => 
-        voice.lang.toLowerCase().startsWith(fallbackCode.toLowerCase())
-      );
-    }
-    
-     if (!matchingVoice) {
-      matchingVoice = voices.find(voice => voice.name.includes('Google')) || voices[0];
-    }
-    
-    return matchingVoice;
-  }
+          const languageFallbackMap = {
+            'ar': 'en-US',    // Arabic falls back to English
+            'fa': 'en-US',    // Persian falls back to English
+            'ur': 'en-US',    // Urdu falls back to English
 
-   function updateVolumeButton() {
-    const selectedLang = languageSelect?.value || "en";
-    
-     volumeBtn.style.display = "inline-block";
-    
-    if (!isLanguageDirectlySupported(selectedLang)) {
-      volumeBtn.title = "Limited support for this language";
-      volumeBtn.classList.add("limited-support");
-       volumeBtn.innerHTML = "🔊 ⚠️";
-    } else {
-      volumeBtn.title = "Read aloud";
-      volumeBtn.classList.remove("limited-support");
-      volumeBtn.innerHTML = "🔊";
-    }
-  }
+          };
 
-   
-  if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = updateVolumeButton;
-  }
-  
- 
-  setTimeout(updateVolumeButton, 1000);
+          function isLanguageDirectlySupported(langCode) {
+            const voices = getVoices();
+            return voices.some(voice => voice.lang.toLowerCase().includes(langCode.toLowerCase()));
+          }
 
- 
-  volumeBtn.addEventListener("click", () => {
-     
-    const storyText = document.getElementById("story-text")?.innerText;
-    
-    if (!storyText) {
-      console.log("No story text found");
-      return;
-    }
+          function findBestVoice(langCode) {
+            const voices = getVoices();
 
-    if (!isSpeaking) {
-      try {
-        
-        synth.cancel();
-        
-   
-        utterance = new SpeechSynthesisUtterance(storyText);
-        
-         
-        const selectedLang = languageSelect?.value || "en";
-        utterance.lang = selectedLang;
-        
-         
-        const bestVoice = findBestVoice(selectedLang);
-        if (bestVoice) {
-          console.log(`Using voice: ${bestVoice.name} (${bestVoice.lang}) for ${selectedLang}`);
-          utterance.voice = bestVoice;
+            let matchingVoice = voices.find(voice =>
+              voice.lang.toLowerCase().startsWith(langCode.toLowerCase())
+            );
+
+            if (!matchingVoice && languageFallbackMap[langCode]) {
+              const fallbackCode = languageFallbackMap[langCode];
+              matchingVoice = voices.find(voice =>
+                voice.lang.toLowerCase().startsWith(fallbackCode.toLowerCase())
+              );
+            }
+
+            if (!matchingVoice) {
+              matchingVoice = voices.find(voice => voice.name.includes('Google')) || voices[0];
+            }
+
+            return matchingVoice;
+          }
+
+          function updateVolumeButton() {
+            const selectedLang = languageSelect?.value || "en";
+
+            volumeBtn.style.display = "inline-block";
+
+            if (!isLanguageDirectlySupported(selectedLang)) {
+              volumeBtn.title = "Limited support for this language";
+              volumeBtn.classList.add("limited-support");
+              volumeBtn.innerHTML = "🔊 ⚠️";
+            } else {
+              volumeBtn.title = "Read aloud";
+              volumeBtn.classList.remove("limited-support");
+              volumeBtn.innerHTML = "🔊";
+            }
+          }
+
+
+          if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = updateVolumeButton;
+          }
+
+
+          setTimeout(updateVolumeButton, 1000);
+
+
+          volumeBtn.addEventListener("click", () => {
+
+            const storyText = document.getElementById("story-text")?.innerText;
+
+            if (!storyText) {
+              console.log("No story text found");
+              return;
+            }
+
+            if (!isSpeaking) {
+              try {
+
+                synth.cancel();
+
+
+                utterance = new SpeechSynthesisUtterance(storyText);
+
+
+                const selectedLang = languageSelect?.value || "en";
+                utterance.lang = selectedLang;
+
+
+                const bestVoice = findBestVoice(selectedLang);
+                if (bestVoice) {
+                  console.log(`Using voice: ${bestVoice.name} (${bestVoice.lang}) for ${selectedLang}`);
+                  utterance.voice = bestVoice;
+                }
+
+
+                utterance.rate = 0.9;  // Slightly slower
+                utterance.pitch = 1.0; // Normal pitch
+
+
+                utterance.onend = () => {
+                  isSpeaking = false;
+                  updateVolumeButtonState(false);
+                };
+
+                // Handle errors
+                utterance.onerror = (event) => {
+                  console.error("Speech synthesis error:", event);
+                  isSpeaking = false;
+                  updateVolumeButtonState(false);
+                };
+
+
+                synth.speak(utterance);
+                isSpeaking = true;
+                updateVolumeButtonState(true);
+              } catch (error) {
+                console.error("Error starting speech synthesis:", error);
+                isSpeaking = false;
+                updateVolumeButtonState(false);
+              }
+            } else {
+              synth.cancel();
+              isSpeaking = false;
+              updateVolumeButtonState(false);
+            }
+          });
+
+
+          function updateVolumeButtonState(speaking) {
+            if (speaking) {
+              volumeBtn.innerHTML = "⏹️";
+              volumeBtn.classList.add("speaking");
+            } else {
+              const selectedLang = languageSelect?.value || "en";
+              if (!isLanguageDirectlySupported(selectedLang)) {
+                volumeBtn.innerHTML = "🔊 ⚠️";
+              } else {
+                volumeBtn.innerHTML = "🔊";
+              }
+              volumeBtn.classList.remove("speaking");
+            }
+          }
+
+
+          if (languageSelect) {
+            languageSelect.addEventListener("change", () => {
+
+              if (isSpeaking) {
+                synth.cancel();
+                isSpeaking = false;
+              }
+
+              updateVolumeButton();
+            });
+          }
+
+
+          console.log("Available voices:", getVoices().map((v, i) => `${i}: "${v.name} (${v.lang})"`));
+        });
+        function updateLanguageSupportNotification() {
+          const selectedLang = document.getElementById("language")?.value || "en";
+          const notification = document.getElementById("language-support-notification");
+          const message = document.getElementById("notification-message");
+
+
+          const isSupported = isLanguageDirectlySupported(selectedLang);
+
+          if (!isSupported) {
+            const langName = document.querySelector(`#language option[value="${selectedLang}"]`)?.textContent || selectedLang;
+            message.textContent = `Text-to-speech has limited support for ${langName}. Some text may not be read correctly.`;
+            notification.style.display = "block";
+          } else {
+            notification.style.display = "none";
+          }
         }
 
-         
-        utterance.rate = 0.9;  // Slightly slower
-        utterance.pitch = 1.0; // Normal pitch
-        
-         
-        utterance.onend = () => {
-          isSpeaking = false;
-          updateVolumeButtonState(false);
-        };
-        
-        // Handle errors
-        utterance.onerror = (event) => {
-          console.error("Speech synthesis error:", event);
-          isSpeaking = false;
-          updateVolumeButtonState(false);
-        };
-        
-       
-        synth.speak(utterance);
-        isSpeaking = true;
-        updateVolumeButtonState(true);
-      } catch (error) {
-        console.error("Error starting speech synthesis:", error);
-        isSpeaking = false;
-        updateVolumeButtonState(false);
-      }
-    } else {
-       synth.cancel();
-      isSpeaking = false;
-      updateVolumeButtonState(false);
-    }
-  });
 
-   
-  function updateVolumeButtonState(speaking) {
-    if (speaking) {
-      volumeBtn.innerHTML = "⏹️";
-      volumeBtn.classList.add("speaking");
-    } else {
-      const selectedLang = languageSelect?.value || "en";
-      if (!isLanguageDirectlySupported(selectedLang)) {
-        volumeBtn.innerHTML = "🔊 ⚠️";
-      } else {
-        volumeBtn.innerHTML = "🔊";
-      }
-      volumeBtn.classList.remove("speaking");
-    }
-  }
-
-   
-  if (languageSelect) {
-    languageSelect.addEventListener("change", () => {
-  
-      if (isSpeaking) {
-        synth.cancel();
-        isSpeaking = false;
-      }
-      
-      updateVolumeButton();
-    });
-  }
-
-   
-  console.log("Available voices:", getVoices().map((v, i) => `${i}: "${v.name} (${v.lang})"`));
-});
-function updateLanguageSupportNotification() {
-    const selectedLang = document.getElementById("language")?.value || "en";
-    const notification = document.getElementById("language-support-notification");
-    const message = document.getElementById("notification-message");
-    
-     
-    const isSupported = isLanguageDirectlySupported(selectedLang);
-    
-    if (!isSupported) {
-      const langName = document.querySelector(`#language option[value="${selectedLang}"]`)?.textContent || selectedLang;
-      message.textContent = `Text-to-speech has limited support for ${langName}. Some text may not be read correctly.`;
-      notification.style.display = "block";
-    } else {
-      notification.style.display = "none";
-    }
-  }
-  
- 
-  if (languageSelect) {
-    languageSelect.addEventListener("change", updateLanguageSupportNotification);
-  }
-  
- 
-  setTimeout(updateLanguageSupportNotification, 1000);
+        if (languageSelect) {
+          languageSelect.addEventListener("change", updateLanguageSupportNotification);
+        }
 
 
-   
-</script>
-<script>
- 
-class ThemeAudioSystem {
-  constructor() {
-    this.bgMusic = null;
-    this.sfxAudio = [];
-    this.currentTheme = null;
-    this.volume = 0.4;
-    this.isMusicMuted = false;
-    this.isSFXMuted = false;
-    this.isPlaying = false;
+        setTimeout(updateLanguageSupportNotification, 1000);
 
-    this.audioLibrary = {
-happy: {
-    bg: '/static/audio/happy.mp3',   
-    sfx: [
-      'https://assets.mixkit.co/active_storage/sfx/600/600-preview.mp3',  
-      'https://assets.mixkit.co/active_storage/sfx/466/466-preview.mp3',  
-      'https://assets.mixkit.co/active_storage/sfx/1113/1113-preview.mp3'  
-    ]
-  }
 
-,    sad: {
-  bg: '/static/audio/sad.mp3',
 
-  sfx: [
-    '/static/audio/sad2.mp3',
-    '/static/audio/sad3.mp3',
-  ]
-},
+      </script>
+      <script>
 
-      romantic: {
-        bg: '/static/audio/romantic2.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/05/18/audio_9f8e7d6c5b.mp3?filename=heart-beat-112493.mp3'
-        ]
-      },
-      thriller: {
-        bg: '/static/audio/thriller.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/11/11/audio_8j9k0l1m2n.mp3?filename=heartbeat-108696.mp3'
-        ]
-      },
-      adventure: {
-        bg: '/static/audio/adventure.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/07/27/audio_6f7g8h9i0j.mp3?filename=sword-clash-109400.mp3'
-        ]
-      },
-      mystery: {
-        bg: '/static/audio/thriller.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2023/01/30/audio_8e9f0g1h2i.mp3?filename=door-creak-119089.mp3'
-        ]
-      },
-      fantasy: {
-        bg: '/static/audio/fantacy.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/12/20/audio_7o8p9q0r1s.mp3?filename=magic-spell-111138.mp3'
-        ]
-      },
-      scifi: {
-        bg: '/static/audio/scifi.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/09/14/audio_5d6e7f8g9h.mp3?filename=laser-shot-105331.mp3'
-        ]
-      },
-      horror: {
-        bg: '/static/audio/horror.mp3',
-        sfx: [
-          '/static/audio/horror1.mp3'
-        ]
-      },
-      comedy: {
-        bg: '/static/audio/comedy.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/10/31/audio_1s2t3u4v5w.mp3?filename=scream-horror-108678.mp3'
-        ]
-      },
-      inspirational: {
-        bg: '/static/audio/inspar.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
-        ]
-      },
-      melancholy: {
-        bg: '/static/audio/melancholy.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
-        ]
-      },
-      anger: {
-        bg: '/static/audio/anger.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
-        ]
-      },
-      surprise: {
-        bg: '/static/audio/surpraise.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
-        ]
-      },
-      fear: {
-        bg: '/static/audio/fear.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
-        ]
-      },
-    };
+        class ThemeAudioSystem {
+          constructor() {
+            this.bgMusic = null;
+            this.sfxAudio = [];
+            this.currentTheme = null;
+            this.volume = 0.4;
+            this.isMusicMuted = false;
+            this.isSFXMuted = false;
+            this.isPlaying = false;
 
-    this.init();
-  }
+            this.audioLibrary = {
+              happy: {
+                bg: '/static/audio/happy.mp3',
+                sfx: [
+                  'https://assets.mixkit.co/active_storage/sfx/600/600-preview.mp3',
+                  'https://assets.mixkit.co/active_storage/sfx/466/466-preview.mp3',
+                  'https://assets.mixkit.co/active_storage/sfx/1113/1113-preview.mp3'
+                ]
+              }
 
-  init() {
-    this.createAudioControls();
-    this.detectAndLoadTheme();
-    this.setupEventListeners();
-  }
+              , sad: {
+                bg: '/static/audio/sad.mp3',
 
-  createAudioControls() {
-    const controlsHTML = `
+                sfx: [
+                  '/static/audio/sad2.mp3',
+                  '/static/audio/sad3.mp3',
+                ]
+              },
+
+              romantic: {
+                bg: '/static/audio/romantic2.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2022/05/18/audio_9f8e7d6c5b.mp3?filename=heart-beat-112493.mp3'
+                ]
+              },
+              thriller: {
+                bg: '/static/audio/thriller.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2022/11/11/audio_8j9k0l1m2n.mp3?filename=heartbeat-108696.mp3'
+                ]
+              },
+              adventure: {
+                bg: '/static/audio/adventure.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2022/07/27/audio_6f7g8h9i0j.mp3?filename=sword-clash-109400.mp3'
+                ]
+              },
+              mystery: {
+                bg: '/static/audio/thriller.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2023/01/30/audio_8e9f0g1h2i.mp3?filename=door-creak-119089.mp3'
+                ]
+              },
+              fantasy: {
+                bg: '/static/audio/fantacy.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2022/12/20/audio_7o8p9q0r1s.mp3?filename=magic-spell-111138.mp3'
+                ]
+              },
+              scifi: {
+                bg: '/static/audio/scifi.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2022/09/14/audio_5d6e7f8g9h.mp3?filename=laser-shot-105331.mp3'
+                ]
+              },
+              horror: {
+                bg: '/static/audio/horror.mp3',
+                sfx: [
+                  '/static/audio/horror1.mp3'
+                ]
+              },
+              comedy: {
+                bg: '/static/audio/comedy.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2022/10/31/audio_1s2t3u4v5w.mp3?filename=scream-horror-108678.mp3'
+                ]
+              },
+              inspirational: {
+                bg: '/static/audio/inspar.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
+                ]
+              },
+              melancholy: {
+                bg: '/static/audio/melancholy.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
+                ]
+              },
+              anger: {
+                bg: '/static/audio/anger.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
+                ]
+              },
+              surprise: {
+                bg: '/static/audio/surpraise.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
+                ]
+              },
+              fear: {
+                bg: '/static/audio/fear.mp3',
+                sfx: [
+                  'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
+                ]
+              },
+            };
+
+            this.init();
+          }
+
+          init() {
+            this.createAudioControls();
+            this.detectAndLoadTheme();
+            this.setupEventListeners();
+          }
+
+          createAudioControls() {
+            const controlsHTML = `
       <style>
         .audio-controls {
           position: fixed;
@@ -2206,164 +2414,165 @@ happy: {
         </div>
       </div>
     `;
-    document.body.insertAdjacentHTML('beforeend', controlsHTML);
-  }
+            document.body.insertAdjacentHTML('beforeend', controlsHTML);
+          }
 
-  detectAndLoadTheme() {
-    // Detect theme from body class
-    const bodyClasses = document.body.className.split(' ');
-    const themeClass = bodyClasses.find(cls => cls.startsWith('theme-'));
-    
-    if (themeClass) {
-      const theme = themeClass.replace('theme-', '');
-      this.loadThemeAudio(theme);
-    } else {
-      console.log('No theme detected');
-    }
-  }
+          detectAndLoadTheme() {
+            // Detect theme from body class
+            const bodyClasses = document.body.className.split(' ');
+            const themeClass = bodyClasses.find(cls => cls.startsWith('theme-'));
 
-  loadThemeAudio(theme) {
-    if (!this.audioLibrary[theme]) {
-      console.log(`No audio for theme: ${theme}`);
-      return;
-    }
+            if (themeClass) {
+              const theme = themeClass.replace('theme-', '');
+              this.loadThemeAudio(theme);
+            } else {
+              console.log('No theme detected');
+            }
+          }
 
-    this.currentTheme = theme;
-    const themeAudio = this.audioLibrary[theme];
+          loadThemeAudio(theme) {
+            if (!this.audioLibrary[theme]) {
+              console.log(`No audio for theme: ${theme}`);
+              return;
+            }
 
-    // Load background music
-    if (this.bgMusic) {
-      this.bgMusic.pause();
-      this.bgMusic = null;
-    }
+            this.currentTheme = theme;
+            const themeAudio = this.audioLibrary[theme];
 
-    this.bgMusic = new Audio(themeAudio.bg);
-    this.bgMusic.loop = true;
-    this.bgMusic.volume = this.volume;
+            // Load background music
+            if (this.bgMusic) {
+              this.bgMusic.pause();
+              this.bgMusic = null;
+            }
 
-    // Load sound effects
-    this.sfxAudio = themeAudio.sfx.map(url => {
-      const audio = new Audio(url);
-      audio.volume = this.volume;
-      return audio;
-    });
+            this.bgMusic = new Audio(themeAudio.bg);
+            this.bgMusic.loop = true;
+            this.bgMusic.volume = this.volume;
 
-    console.log(`Loaded audio for theme: ${theme}`);
-  }
+            // Load sound effects
+            this.sfxAudio = themeAudio.sfx.map(url => {
+              const audio = new Audio(url);
+              audio.volume = this.volume;
+              return audio;
+            });
 
-  setupEventListeners() {
-    const musicToggle = document.getElementById('musicToggle');
-    const sfxToggle = document.getElementById('sfxToggle');
-    const volumeSlider = document.getElementById('volumeSlider');
-    const volumeLevel = document.getElementById('volumeLevel');
+            console.log(`Loaded audio for theme: ${theme}`);
+          }
 
-    if (musicToggle) {
-      musicToggle.addEventListener('click', () => this.toggleMusic());
-    }
+          setupEventListeners() {
+            const musicToggle = document.getElementById('musicToggle');
+            const sfxToggle = document.getElementById('sfxToggle');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const volumeLevel = document.getElementById('volumeLevel');
 
-    if (sfxToggle) {
-      sfxToggle.addEventListener('click', () => this.toggleSFX());
-    }
+            if (musicToggle) {
+              musicToggle.addEventListener('click', () => this.toggleMusic());
+            }
 
-    if (volumeSlider) {
-      volumeSlider.addEventListener('input', (e) => {
-        const value = e.target.value;
-        this.setVolume(value / 100);
-        if (volumeLevel) {
-          volumeLevel.textContent = `${value}%`;
+            if (sfxToggle) {
+              sfxToggle.addEventListener('click', () => this.toggleSFX());
+            }
+
+            if (volumeSlider) {
+              volumeSlider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                this.setVolume(value / 100);
+                if (volumeLevel) {
+                  volumeLevel.textContent = `${value}%`;
+                }
+              });
+            }
+
+            // Add SFX triggers to interactive elements
+            document.querySelectorAll('.btn, .action-card, .similar-story').forEach(el => {
+              el.addEventListener('mouseenter', () => {
+                if (Math.random() > 0.7) { // 30% chance
+                  this.playRandomSFX();
+                }
+              });
+            });
+          }
+
+          toggleMusic() {
+            if (!this.bgMusic) {
+              console.log('No background music loaded');
+              return;
+            }
+
+            const icon = document.getElementById('musicIcon');
+            const indicator = document.getElementById('musicIndicator');
+
+            if (this.isPlaying) {
+              this.bgMusic.pause();
+              this.isPlaying = false;
+              this.isMusicMuted = true;
+              if (icon) icon.textContent = '🔇';
+              if (indicator) indicator.style.display = 'none';
+              console.log('Music paused');
+            } else {
+              this.bgMusic.play().then(() => {
+                this.isPlaying = true;
+                this.isMusicMuted = false;
+                if (icon) icon.textContent = '🎵';
+                if (indicator) indicator.style.display = 'block';
+                console.log('Music playing');
+              }).catch(err => {
+                console.error('Failed to play music:', err);
+              });
+            }
+          }
+
+          toggleSFX() {
+            this.isSFXMuted = !this.isSFXMuted;
+            const icon = document.getElementById('sfxIcon');
+            const indicator = document.getElementById('sfxIndicator');
+
+            if (icon) icon.textContent = this.isSFXMuted ? '🔇' : '🔊';
+            if (indicator) indicator.style.display = this.isSFXMuted ? 'none' : 'block';
+
+            console.log('SFX:', this.isSFXMuted ? 'muted' : 'unmuted');
+          }
+
+          setVolume(level) {
+            this.volume = level;
+            if (this.bgMusic) {
+              this.bgMusic.volume = level;
+            }
+            this.sfxAudio.forEach(sfx => {
+              sfx.volume = level;
+            });
+          }
+
+          playRandomSFX() {
+            if (this.isSFXMuted || !this.sfxAudio || this.sfxAudio.length === 0) {
+              return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * this.sfxAudio.length);
+            const sfx = this.sfxAudio[randomIndex].cloneNode();
+            sfx.volume = this.volume;
+            sfx.play().catch(err => {
+              console.log('SFX play failed:', err);
+            });
+          }
         }
-      });
-    }
 
-    // Add SFX triggers to interactive elements
-    document.querySelectorAll('.btn, .action-card, .similar-story').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        if (Math.random() > 0.7) { // 30% chance
-          this.playRandomSFX();
-        }
-      });
-    });
-  }
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+          window.themeAudio = new ThemeAudioSystem();
 
-  toggleMusic() {
-    if (!this.bgMusic) {
-      console.log('No background music loaded');
-      return;
-    }
+          // Auto-start music on first user interaction
+          const startAudio = () => {
+            if (window.themeAudio && window.themeAudio.bgMusic && !window.themeAudio.isPlaying) {
+              window.themeAudio.toggleMusic();
+            }
+            document.removeEventListener('click', startAudio);
+          };
 
-    const icon = document.getElementById('musicIcon');
-    const indicator = document.getElementById('musicIndicator');
-
-    if (this.isPlaying) {
-      this.bgMusic.pause();
-      this.isPlaying = false;
-      this.isMusicMuted = true;
-      if (icon) icon.textContent = '🔇';
-      if (indicator) indicator.style.display = 'none';
-      console.log('Music paused');
-    } else {
-      this.bgMusic.play().then(() => {
-        this.isPlaying = true;
-        this.isMusicMuted = false;
-        if (icon) icon.textContent = '🎵';
-        if (indicator) indicator.style.display = 'block';
-        console.log('Music playing');
-      }).catch(err => {
-        console.error('Failed to play music:', err);
-      });
-    }
-  }
-
-  toggleSFX() {
-    this.isSFXMuted = !this.isSFXMuted;
-    const icon = document.getElementById('sfxIcon');
-    const indicator = document.getElementById('sfxIndicator');
-    
-    if (icon) icon.textContent = this.isSFXMuted ? '🔇' : '🔊';
-    if (indicator) indicator.style.display = this.isSFXMuted ? 'none' : 'block';
-    
-    console.log('SFX:', this.isSFXMuted ? 'muted' : 'unmuted');
-  }
-
-  setVolume(level) {
-    this.volume = level;
-    if (this.bgMusic) {
-      this.bgMusic.volume = level;
-    }
-    this.sfxAudio.forEach(sfx => {
-      sfx.volume = level;
-    });
-  }
-
-  playRandomSFX() {
-    if (this.isSFXMuted || !this.sfxAudio || this.sfxAudio.length === 0) {
-      return;
-    }
-    
-    const randomIndex = Math.floor(Math.random() * this.sfxAudio.length);
-    const sfx = this.sfxAudio[randomIndex].cloneNode();
-    sfx.volume = this.volume;
-    sfx.play().catch(err => {
-      console.log('SFX play failed:', err);
-    });
-  }
-}
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  window.themeAudio = new ThemeAudioSystem();
-  
-  // Auto-start music on first user interaction
-  const startAudio = () => {
-    if (window.themeAudio && window.themeAudio.bgMusic && !window.themeAudio.isPlaying) {
-      window.themeAudio.toggleMusic();
-    }
-    document.removeEventListener('click', startAudio);
-  };
-  
-  document.addEventListener('click', startAudio, { once: true });
-});
-</script>
+          document.addEventListener('click', startAudio, { once: true });
+        });
+      </script>
 
 </body>
+
 </html>
