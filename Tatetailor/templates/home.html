@@ -1,1141 +1,192 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TaleTailor - Create Your Own Story</title>
-    {% load static %}
-    <link rel="icon" type="image/jpg" href="{% static 'images/fav.jpg' %}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
 
-    <style>
-      /* Global Styles */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Arial", sans-serif;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaleTailor - Create Your Own Story</title>
 
-      #logo,
-      a[href*="spline.design"] {
-        display: none !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-      }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
 
-      body {
-        background-color: #000;
-        color: white;
-      }
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-      /* Header Styles */
-      header {
-        background-color: #333;
-        padding: 1rem 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #444;
-      }
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
 
-      .logo-container {
-        padding: 0.5rem 1.5rem;
-        background-color: #000;
-        border-radius: 0;
-        margin-left: 2rem;
-      }
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
 
-      .logo {
-        font-size: 1.8rem;
-        font-weight: bold;
-        color: white;
-        text-transform: uppercase;
-      }
+<body>
+  <!-- Background Elements -->
+  <div class="hero-bg-glow"></div>
 
-      .nav-links {
-        display: flex;
-        gap: 1rem;
-      }
+  <header>
+    <div class="header-container">
+      <div class="logo">TALETAILOR</div>
 
-      .nav-link {
-        color: white;
-        text-decoration: none;
-        background-color: #000;
-        padding: 0.8rem 1.5rem;
-        border-radius: 8px;
-        font-weight: bold;
-      }
-      .nav-link::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background-color: var(--primary);
-        transition: width 0.3s ease;
-      }
-
-      .nav-link:hover::after {
-        width: 100%;
-      }
-
-      .nav-link:hover {
-        background-color: rgba(138, 43, 226, 0.1);
-      }
-
-      .user-actions {
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-        margin-right: 2rem;
-      }
-
-      .dynamic-label {
-        color: #aaa;
-      }
-
-      .toggle {
-        position: relative;
-        width: 50px;
-        height: 24px;
-        background-color: #444;
-        border-radius: 25px;
-        cursor: pointer;
-      }
-
-      .toggle::after {
-        content: "";
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background-color: white;
-        border-radius: 50%;
-        top: 2px;
-        left: 2px;
-        transition: transform 0.3s ease;
-      }
-
-      .toggle.active::after {
-        transform: translateX(26px);
-      }
-
-      .heart-icon,
-      .profile-icon {
-        font-size: 1.5rem;
-        cursor: pointer;
-      }
-
-      /* Hero Section Styles */
-      .hero {
-        background-color: #2a5b5e;
-        height: 90vh;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: relative;
-        overflow: hidden;
-        padding: 0 2rem;
-      }
-
-      .hero-content {
-        width: 50%;
-        z-index: 2;
-      }
-
-      .hero-title {
-        font-size: 3.5rem;
-        margin-bottom: 1rem;
-        font-style: italic;
-        color: white;
-        font-weight: bold;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      }
-
-      .hero-subtitle {
-        font-size: 1.5rem;
-        margin-bottom: 2rem;
-        color: white;
-      }
-
-      .search-box {
-        width: 100%;
-        max-width: 600px;
-        padding: 1rem 1rem 1rem 3rem;
-        border-radius: 30px;
-        border: none;
-        font-size: 1.1rem;
-        background-color: white;
-        background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
-        background-repeat: no-repeat;
-        background-position: 15px center;
-        background-size: 20px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .search-box:focus {
-        outline: none;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .book-illustration {
-        position: absolute;
-        right: 0;
-        width: 50%;
-        height: 100%;
-        background-image: url("/api/placeholder/600/800");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        z-index: 1;
-      }
-
-      /* Create Story Section */
-      .create-section {
-        background-color: #000;
-        padding: 4rem 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 3rem;
-      }
-
-      .add-button {
-        width: 500px;
-        height: 190px;
-        background-color: transparent;
-        border: 2px solid #8c52ff;
-        border-radius: 65px;
-        color: white;
-        font-size: 1.2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-      .irish-grover-regular {
-        font-family: "Irish Grover", serif;
-        font-weight: 400;
-        font-style: normal;
-      }
-
-      .add-button:hover {
-        background-color: #8c52ff;
-      }
-
-      .plus-icon {
-        font-size: 10rem;
-        color: #8c52ff;
-        margin-right: 10px;
-      }
-
-      .add-button:hover .plus-icon {
-        color: white;
-      }
-
-      .create-title {
-        text-align: center;
-        font-size: 1.5rem;
-        letter-spacing: 1px;
-        font-weight: normal;
-      }
-
-      .tool-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 3rem;
-        width: 100%;
-        max-width: 800px;
-        margin-top: 1rem;
-      }
-
-      .tool-button {
-        width: 250px;
-        height: 150px;
-        background-color: transparent;
-        border: 2px solid #8c52ff;
-        border-radius: 55px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        margin-bottom: 30px;
-      }
-
-      .tool-button:hover {
-        background-color: #8c52ff;
-      }
-
-      .tool-icon {
-        color: #8c52ff;
-        font-size: 4.5rem;
-      }
-
-      .tool-button:hover .tool-icon {
-        color: white;
-      }
-
-      /* Trending Section */
-      .trending-section {
-        padding: 3rem 2rem;
-        background-color: #000;
-      }
-
-      .trending-title {
-        font-size: 3rem;
-        font-style: italic;
-        margin-bottom: 2.5rem;
-        color: white;
-      }
-
-      .story-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-      }
-
-      .story-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transition: transform 0.3s ease;
-        cursor: pointer;
-      }
-
-      .story-card:hover {
-        transform: translateY(-10px);
-      }
-
-      .story-image {
-        width: 100%;
-        height: 200px;
-        background-color: #444;
-        border-radius: 15px;
-        margin-bottom: 1rem;
-        overflow: hidden;
-        border: 2px solid #8c52ff;
-      }
-
-      .story-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .story-title {
-        font-size: 2rem;
-        text-align: center;
-        color: white;
-        font-weight: normal;
-      }
-
-      /* Footer Styles */
-      footer {
-        background-color: #000;
-        padding: 4rem 2rem;
-        border-top: 1px solid #333;
-      }
-
-      .footer-container {
-        display: flex;
-        justify-content: space-between;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .footer-brand-section {
-        width: 30%;
-      }
-
-      .footer-logo {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 1.5rem;
-        color: white;
-      }
-
-      .footer-tagline {
-        font-size: 0.9rem;
-        line-height: 1.5;
-        color: #ccc;
-        margin-bottom: 2rem;
-      }
-
-      .social-icons {
-        display: flex;
-        gap: 1.5rem;
-      }
-
-      .social-icon {
-        font-size: 1.2rem;
-        color: white;
-        text-decoration: none;
-      }
-
-      .footer-links-section {
-        width: 25%;
-      }
-
-      .footer-section-title {
-        font-size: 1.2rem;
-        margin-bottom: 1.5rem;
-        color: white;
-        font-weight: normal;
-      }
-
-      .footer-links {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      .footer-link {
-        color: #ccc;
-        text-decoration: none;
-        font-size: 0.9rem;
-        transition: color 0.3s ease;
-      }
-
-      .footer-link:hover {
-        color: white;
-      }
-      .tool-text {
-        margin-top: 8px; /* Adds space below the button */
-        font-size: 14px;
-        color: #555;
-      }
-      /* Professional Trending Section Styles */
-      .trending-section {
-        padding: 2.5rem 2rem;
-        background-color: #1e1e2e;
-        border-radius: 8px;
-        margin: 2rem auto;
-        max-width: 1200px;
-      }
-
-      .trending-title {
-        font-size: 1.75rem;
-        margin-bottom: 1.5rem;
-        color: #e2e2e2;
-        font-weight: 500;
-        position: relative;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid #3d3d4a;
-      }
-
-      .story-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-      }
-
-      @media (max-width: 992px) {
-        .story-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
-
-      @media (max-width: 576px) {
-        .story-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .story-card {
-        display: flex;
-        flex-direction: column;
-        background-color: #2d2d3a;
-        border-radius: 6px;
-        overflow: hidden;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        border: 1px solid #3d3d4a;
-      }
-
-      .story-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-      }
-
-      .story-image {
-        width: 100%;
-        height: 180px;
-        background-color: #3d3d4a;
-        overflow: hidden;
-        border: none;
-        border-bottom: 1px solid #3d3d4a;
-        border-radius: 0;
-        margin-bottom: 0;
-      }
-
-      .story-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-      }
-
-      .story-card:hover .story-image img {
-        transform: scale(1.05);
-      }
-
-      .story-title {
-        font-size: 1.125rem;
-        text-align: left;
-        color: #e2e2e2;
-        padding: 1rem;
-        margin: 0;
-        line-height: 1.4;
-        font-weight: 400;
-      }
-
-      /* Link styles */
-      .trending-section a {
-        text-decoration: none;
-        color: inherit;
-        display: block;
-      }
-
-      /* Create Story Section */
-      .create-section {
-        background-color: #000;
-        background-image: linear-gradient(
-          to bottom,
-          rgba(35, 10, 60, 0.4),
-          rgba(0, 0, 0, 0.95)
-        );
-        padding: 5rem 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 3rem;
-        position: relative;
-      }
-
-      /* Section header */
-      .create-header {
-        text-align: center;
-        margin-bottom: 1rem;
-      }
-
-      .create-title {
-        font-size: 2.5rem;
-        letter-spacing: 2px;
-        color: #fff;
-        margin-bottom: 1rem;
-        text-shadow: 0 0 15px rgba(140, 82, 255, 0.6);
-      }
-
-      .create-subtitle {
-        color: #ccc;
-        font-size: 1.1rem;
-        max-width: 600px;
-        margin: 0 auto;
-      }
-
-      /* Main create button */
-      .create-button-container {
-        text-decoration: none;
-        display: block;
-      }
-
-      .add-button {
-        width: 500px;
-        height: 190px;
-        background-color: rgba(140, 82, 255, 0.1);
-        border: 2px solid #8c52ff;
-        border-radius: 65px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        box-shadow: 0 0 25px rgba(140, 82, 255, 0.3);
-      }
-
-      .add-button:hover {
-        background-color: rgba(140, 82, 255, 0.3);
-        transform: translateY(-5px);
-        box-shadow: 0 5px 30px rgba(140, 82, 255, 0.5);
-      }
-
-      .plus-icon {
-        font-size: 6rem;
-        color: #8c52ff;
-        margin-right: 15px;
-        transition: all 0.3s ease;
-      }
-
-      .button-text {
-        font-family: "Irish Grover", serif;
-        font-size: 1.8rem;
-        color: #fff;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .add-button:hover .plus-icon {
-        color: white;
-        transform: rotate(90deg);
-        font-size: 4rem;
-      }
-
-      .add-button:hover .button-text {
-        opacity: 1;
-      }
-
-      /* Tools section */
-      .tools-wrapper {
-        width: 100%;
-        max-width: 900px;
-        margin-top: 2rem;
-      }
-
-      .tools-heading {
-        text-align: center;
-        color: #fff;
-        font-size: 1.8rem;
-        margin-bottom: 2rem;
-        position: relative;
-      }
-
-      .tools-heading:after {
-        content: "";
-        display: block;
-        width: 100px;
-        height: 3px;
-        background: linear-gradient(
-          to right,
-          transparent,
-          #8c52ff,
-          transparent
-        );
-        margin: 1rem auto;
-      }
-
-      .tool-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 3rem;
-        flex-wrap: wrap;
-      }
-
-      .tool-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .tool-link {
-        text-decoration: none;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .tool-button {
-        width: 180px;
-        height: 180px;
-        background-color: rgba(140, 82, 255, 0.08);
-        border: 2px solid #8c52ff;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 0 15px rgba(140, 82, 255, 0.2);
-        margin-bottom: 15px;
-      }
-
-      .tool-button:hover {
-        background-color: rgba(140, 82, 255, 0.2);
-        transform: translateY(-5px);
-        box-shadow: 0 5px 20px rgba(140, 82, 255, 0.4);
-      }
-
-      .tool-icon {
-        color: #8c52ff;
-        font-size: 4rem;
-        transition: all 0.3s ease;
-      }
-
-      .tool-button:hover .tool-icon {
-        color: white;
-        transform: scale(1.1);
-      }
-
-      .tool-label {
-        color: #fff;
-        font-size: 1.4rem;
-        transition: all 0.3s ease;
-        text-align: center;
-      }
-
-      .tool-link:hover .tool-label {
-        color: #8c52ff;
-        text-shadow: 0 0 8px rgba(140, 82, 255, 0.6);
-      }
-
-      /* Irish Grover font */
-      .irish-grover-regular {
-        font-family: "Irish Grover", serif;
-        font-weight: 400;
-        font-style: normal;
-      }
-
-      /* Responsive adjustments */
-      @media (max-width: 768px) {
-        .add-button {
-          width: 90%;
-          height: 150px;
-        }
-
-        .tool-buttons {
-          gap: 1.5rem;
-        }
-
-        .tool-button {
-          width: 140px;
-          height: 140px;
-        }
-
-        .create-title {
-          font-size: 2rem;
-        }
-      }
-
-      .theme-happy {
-        background-color: #fff9c4;
-        color: #333;
-      }
-      .theme-sad {
-        background-color: #dfe6e9;
-        color: #2d3436;
-      }
-      .theme-romantic {
-        background-color: #ffe0e9;
-        color: #880e4f;
-      }
-      .theme-thriller {
-        background-color: #2d3436;
-        color: #f1f1f1;
-      }
-      .theme-neutral {
-        background-color: #f8f9fa;
-        color: #212529;
-      }
-    </style>
-  </head>
-  <body class="">
-    <header>
-      <div class="logo-container">
-        <div class="logo irish-grover-regular">TALETAILOR</div>
-      </div>
-      <div class="nav-links">
+      <nav class="nav-links">
         <a href="#" class="nav-link">HOME</a>
         <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
         <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
         {% if user.is_superuser %}
-
-        <a
-          style="text-decoration: none"
-          href="{% url 'authentication:dashboard' %}"
-        >
-          <button class="nav-link">Admin Panel</button>
-        </a>
+        <a href="{% url 'authentication:dashboard' %}" class="nav-link">ADMIN</a>
         {% endif %}
-      </div>
-      <div class="user-actions">
-        <a
-          style="text-decoration: none"
-          href="{% url 'mystory:collaboration_requests' %}"
-          class="heart-icon"
-          >❤️</a
-        >
+      </nav>
 
-        <a
-          href="{% url 'messaging:chat' %}"
-          style="text-decoration: none"
-          class="message-icon"
-        >
-          <i
-            class="fas fa-comments"
-            style="font-size: 20px; color: #25d366"
-          ></i>
+      <div class="user-actions">
+        <a href="{% url 'mystory:collaboration_requests' %}" class="icon-btn" title="Requests">
+          <i class="fas fa-heart"></i>
         </a>
-        <!-- Profile Icon to trigger the modal -->
-        <div
-          class="profile-icon"
-          data-bs-toggle="modal"
-          data-bs-target="#profileModal"
-        >
-          👤
-        </div>
+        <a href="{% url 'messaging:chat' %}" class="icon-btn" title="Messages">
+          <i class="fas fa-comment-alt"></i>
+        </a>
+        <a href="#" class="icon-btn" data-bs-toggle="modal" data-bs-target="#profileModal" title="Profile">
+          <i class="fas fa-user"></i>
+        </a>
       </div>
-    </header>
-    <div
-      class="modal fade"
-      id="profileModal"
-      tabindex="-1"
-      aria-labelledby="profileModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="profileModalLabel">Profile Options</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <p>
-              <a
-                href="{% url 'authentication:view_profile' %}"
-                class="btn btn-light w-100"
-                >👤 Profile
-              </a>
-            </p>
-            <p>
-              <a href="{% url 'mystory:mystory1' %}" class="btn btn-light w-100"
-                >💾 My Story
-              </a>
-            </p>
-            <p><a href="#" class="btn btn-light w-100">⚙️ Settings </a></p>
-            <p>
-              <a
-                href="{% url 'authentication:logout' %}"
-                class="btn btn-danger w-100"
-                >🚪 Logout</a
-              >
-            </p>
+    </div>
+  </header>
+
+  <!-- Modal -->
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(5px);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content"
+        style="background: var(--bg-dark); border: 1px solid var(--glass-border); color: white;">
+        <div class="modal-header" style="border-bottom: 1px solid var(--glass-border);">
+          <h5 class="modal-title">Profile Options</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-grid gap-3">
+            <a href="{% url 'authentication:view_profile' %}" class="btn btn-outline-light"><i
+                class="fas fa-user me-2"></i> Profile</a>
+            <a href="{% url 'mystory:mystory1' %}" class="btn btn-outline-light"><i class="fas fa-book-open me-2"></i>
+              My Story</a>
+            <a href="#" class="btn btn-outline-light"><i class="fas fa-cog me-2"></i> Settings</a>
+            <a href="{% url 'authentication:logout' %}" class="btn btn-outline-danger"><i
+                class="fas fa-sign-out-alt me-2"></i> Logout</a>
           </div>
         </div>
       </div>
     </div>
-    <main>
-      <section class="hero">
-        <div class="hero-content">
-          <h1 class="irish-grover-regular">
-            Hiii {{user.username|cut:"@gmail.com"}}
-          </h1>
-          <h1 class="hero-title irish-grover-regular">
-            Make Your Own Story........!
-          </h1>
-          <p class="hero-subtitle irish-grover-regular">
-            Explore based on your mood
-          </p>
-          <input type="text" class="search-box" placeholder="Search" />
-        </div>
+  </div>
 
-        <div class="book-illustration">
-          <spline-viewer
-            url="https://prod.spline.design/e8HE-gsHhfaG6Xle/scene.splinecode"
-          ></spline-viewer>
-        </div>
-      </section>
+  <main>
+    <section class="hero" data-aos="fade-up">
+      <div class="hero-content">
+        <div class="hero-greeting">Hello, {{user.username|cut:"@gmail.com"}}</div>
+        <h1 class="hero-title">Craft Your <br>Digital Legend</h1>
+        <p class="hero-subtitle">Unleash your creativity. Build unique narratives. Explore infinite worlds.</p>
 
-      <section class="create-section">
-        <div class="create-header">
-          <h2 class="create-title irish-grover-regular">
-            CREATE YOUR OWN STORY
-          </h2>
-          <p class="create-subtitle">
-            Unleash your creativity and build unique narratives
-          </p>
-        </div>
-
-        <a
-          href="{% url 'mystory:yourownstory' %}"
-          class="create-button-container"
-        >
-          <button class="add-button">
-            <span class="plus-icon">+</span>
-            <span class="button-text">Start Creating</span>
-          </button>
-        </a>
-
-        <div class="tools-wrapper">
-          <h3 class="tools-heading irish-grover-regular">Story Tools</h3>
-          <div class="tool-buttons">
-            <div class="tool-container">
-              <a href="{% url 'aistory:explore' %}" class="tool-link">
-                <button class="tool-button">
-                  <span class="tool-icon">🔍</span>
-                </button>
-                <span class="tool-label irish-grover-regular">Explore</span>
-              </a>
-            </div>
-
-            <div class="tool-container">
-              <a href="{% url 'mystory:mystory1' %}" class="tool-link">
-                <button class="tool-button">
-                  <span class="tool-icon">💾</span>
-                </button>
-                <span class="tool-label irish-grover-regular">My Story</span>
-              </a>
-            </div>
-
-            <div class="tool-container">
-              <a href="{% url 'aistory:aimake1' %}" class="tool-link">
-                <button class="tool-button">
-                  <span class="tool-icon">🧰</span>
-                </button>
-                <span class="tool-label irish-grover-regular">AI Generate</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section class="trending-section">
-        <h2 class="trending-title irish-grover-regular">Trending...</h2>
-
-        <div class="story-grid">
-          {% for story in trending_stories %}
-          <a href="{% url 'aistory:view_story' story.id %}">
-            <div class="story-card">
-              <div class="story-image">
-                {% if story.image %}
-                <img src="{{ story.image.url }}" alt="{{ story.title }}" />
-                {% else %}
-                <img
-                  src="{% static 'images/logo4.webp' %}"
-                  alt="{{ story.title }}"
-                />
-                {% endif %}
-              </div>
-              <h3 class="story-title irish-grover-regular">
-                {{ story.title }}
-              </h3>
-            </div>
-          </a>
-          {% endfor %}
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <div class="footer-container">
-        <div class="footer-brand-section">
-          <div class="footer-logo">Taletailor</div>
-          <p class="footer-tagline">
-            "Where passion meets precision – Discover the world meticulously,
-            capturing the essence of every detail, one model at a time."
-          </p>
-          <div class="social-icons">
-            <a href="#" class="social-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="white"
-              >
-                <path
-                  d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"
-                ></path>
-              </svg>
-            </a>
-            <a href="#" class="social-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="white"
-              >
-                <path
-                  d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
-                ></path>
-              </svg>
-            </a>
-            <a href="#" class="social-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="white"
-              >
-                <path
-                  d="M12 3c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 8.5c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5z"
-                ></path>
-                <path
-                  d="M18.5 1.5c-1.4 0-2.5 1.1-2.5 2.5s1.1 2.5 2.5 2.5 2.5-1.1 2.5-2.5-1.1-2.5-2.5-2.5z"
-                ></path>
-                <path
-                  d="M16.5 10.5c-.3 0-.5-.2-.5-.5s.2-.5.5-.5.5.2.5.5-.2.5-.5.5z"
-                ></path>
-              </svg>
-            </a>
-            <a href="#" class="social-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="white"
-              >
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path>
-                <path d="M17 8h-3v2h3V8z"></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-        <div class="footer-links-section">
-          <h3 class="footer-section-title">Services</h3>
-          <div class="footer-links">
-            <a href="#" class="footer-link">Bonus program</a>
-            <a href="#" class="footer-link">Gift cards</a>
-            <a href="#" class="footer-link">Credit and payment</a>
-            <a href="#" class="footer-link">Service contracts</a>
-            <a href="#" class="footer-link">Non-cash account</a>
-            <a href="#" class="footer-link">Payment</a>
-          </div>
-        </div>
-        <div class="footer-links-section">
-          <h3 class="footer-section-title">Assistance to the buyer</h3>
-          <div class="footer-links">
-            <a href="#" class="footer-link">Find an order</a>
-            <a href="#" class="footer-link">Terms of delivery</a>
-            <a href="#" class="footer-link">Exchange and return of goods</a>
-            <a href="#" class="footer-link">Guarantee</a>
-            <a href="#" class="footer-link">Frequently asked questions</a>
-            <a href="#" class="footer-link">Terms of use of the site</a>
-          </div>
+        <div class="search-container">
+          <input type="text" class="search-box" placeholder="Search for stories, genres, or creators..." />
         </div>
       </div>
-    </footer>
-    <script
-      type="module"
-      src="https://unpkg.com/@splinetool/viewer@1.10.74/build/spline-viewer.js"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </section>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Toggle button functionality
-        const toggle = document.querySelector(".toggle");
-        toggle.addEventListener("click", function () {
-          this.classList.toggle("active");
-          if (this.classList.contains("active")) {
-            this.style.backgroundColor = "#8c52ff";
-          } else {
-            this.style.backgroundColor = "#444";
-          }
-        });
+    <section class="create-section">
+      <h2 class="section-title" data-aos="fade-up">Start Creating<span class="section-subtitle">Choose your path</span>
+      </h2>
 
-        // Create a more dynamic book illustration
-        const bookIllustration = document.querySelector(".book-illustration");
-        bookIllustration.innerHTML = `
-                <svg width="100%" height="100%" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Background ocean waves -->
-                    <path d="M0 400 Q 100 380, 200 400 Q 300 420, 400 400 Q 500 380, 600 400 Q 700 420, 800 400 L 800 600 L 0 600 Z" fill="#1a3f42"/>
-                    
-                    <!-- Open book -->
-                    <rect x="150" y="350" width="500" height="250" rx="10" ry="10" fill="#112b2e"/>
-                    <path d="M400 350 L400 600" stroke="#000" stroke-width="5"/>
-                    
-                    <!-- Ship drawings -->
-                    <path d="M200 450 Q 220 435, 240 450 L 240 470 L 200 470 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                    <line x1="220" y1="410" x2="220" y2="450" stroke="#fff" stroke-width="2"/>
-                    <path d="M210 420 Q 220 410, 230 420" fill="none" stroke="#fff" stroke-width="2"/>
-                    
-                    <!-- Island with palm tree -->
-                    <ellipse cx="550" cy="480" rx="60" ry="20" fill="none" stroke="#fff" stroke-width="2"/>
-                    <line x1="550" y1="480" x2="550" y2="440" stroke="#fff" stroke-width="2"/>
-                    <path d="M530 440 Q 550 420, 570 440" fill="none" stroke="#fff" stroke-width="2"/>
-                    <path d="M540 450 Q 550 435, 560 450" fill="none" stroke="#fff" stroke-width="2"/>
-                    
-                    <!-- Flying bird -->
-                    <path d="M650 380 Q 660 370, 670 380 Q 680 370, 690 380" fill="none" stroke="#fff" stroke-width="2"/>
-                    
-                    <!-- Sea monster tentacle -->
-                    <path d="M300 500 Q 320 480, 340 500 Q 360 520, 380 500" fill="none" stroke="#fff" stroke-width="2"/>
-                </svg>
-            `;
+      <a href="{% url 'mystory:yourownstory' %}" class="cta-large" data-aos="zoom-in">
+        <button class="btn-pulse">
+          <i class="fas fa-plus"></i>
+          <span>Create New Story</span>
+        </button>
+      </a>
 
-        // Make story cards interactive
-        const storyCards = document.querySelectorAll(".story-card");
-        storyCards.forEach((card) => {
-          card.addEventListener("mouseenter", function () {
-            this.querySelector(".story-image").style.boxShadow =
-              "0 0 15px #8c52ff";
-          });
-          card.addEventListener("mouseleave", function () {
-            this.querySelector(".story-image").style.boxShadow = "none";
-          });
-        });
+      <div class="tools-grid">
+        <a href="{% url 'aistory:explore' %}" class="tool-card" data-aos="fade-up" data-aos-delay="100">
+          <span class="tool-icon"><i class="fas fa-compass"></i></span>
+          <h3 class="tool-title">Explore</h3>
+        </a>
 
-        // Add button hover effects
-        const addButton = document.querySelector(".add-button");
-        addButton.addEventListener("mouseenter", function () {
-          this.style.backgroundColor = "#8c52ff";
-          this.querySelector(".plus-icon").style.color = "white";
-        });
-        addButton.addEventListener("mouseleave", function () {
-          this.style.backgroundColor = "transparent";
-          this.querySelector(".plus-icon").style.color = "#8c52ff";
-        });
+        <a href="{% url 'mystory:mystory1' %}" class="tool-card" data-aos="fade-up" data-aos-delay="200">
+          <span class="tool-icon"><i class="fas fa-book-open"></i></span>
+          <h3 class="tool-title">My Library</h3>
+        </a>
 
-        // Tool buttons hover effects
-        const toolButtons = document.querySelectorAll(".tool-button");
-        toolButtons.forEach((button) => {
-          button.addEventListener("mouseenter", function () {
-            this.style.backgroundColor = "#8c52ff";
-            this.querySelector(".tool-icon").style.color = "white";
-          });
-          button.addEventListener("mouseleave", function () {
-            this.style.backgroundColor = "transparent";
-            this.querySelector(".tool-icon").style.color = "#8c52ff";
-          });
-        });
+        <a href="{% url 'aistory:aimake1' %}" class="tool-card" data-aos="fade-up" data-aos-delay="300">
+          <span class="tool-icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+          <h3 class="tool-title">AI Generator</h3>
+        </a>
+      </div>
+    </section>
+
+    <section class="trending-section">
+      <h2 class="section-title" data-aos="fade-up">Trending Now<span class="section-subtitle">What the world is
+          reading</span></h2>
+
+      <div class="story-grid">
+        {% for story in trending_stories %}
+        <a href="{% url 'aistory:view_story' story.id %}" style="text-decoration: none;">
+          <div class="story-card" data-aos="fade-up">
+            <div class="story-image-wrapper">
+              {% if story.image %}
+              <img src="{{ story.image.url }}" alt="{{ story.title }}" />
+              {% else %}
+              <img src="{% static 'images/logo4.webp' %}" alt="{{ story.title }}" />
+              {% endif %}
+            </div>
+            <div class="story-content">
+              <h3 class="story-title">{{ story.title }}</h3>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h2>Taletailor</h2>
+        <p class="footer-tagline">
+          Where passion meets precision. Capturing the essence of every detail, one story at a time.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Services</h3>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Bonus Program</a>
+          <a href="#" class="footer-link">Gift Cards</a>
+          <a href="#" class="footer-link">Subscription</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Support</h3>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Help Center</a>
+          <a href="#" class="footer-link">Community Guidelines</a>
+          <a href="#" class="footer-link">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100
       });
-    </script>
-
-    <script>
-  function removeSplineBranding() {
-    const viewer = document.querySelector("spline-viewer");
-    if (!viewer) return;
-
-    const shadow = viewer.shadowRoot;
-    if (!shadow) return;
-
-    const logo = shadow.querySelector('a[href*="spline.design"]');
-    if (logo) logo.remove();
-  }
-  const interval = setInterval(() => {
-    removeSplineBranding();
-  }, 500);
-  setTimeout(() => clearInterval(interval), 10000);
-</script>
-
-
+    });
+  </script>
 </body>
 
-  
 </html>
