@@ -19,7 +19,7 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
-
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.74/build/spline-viewer.js"></script>
   <!-- AOS Animation -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
@@ -30,10 +30,10 @@
 
   <header>
     <div class="header-container">
-      <div class="logo">TALETAILOR</div>
+      <a href="{% url 'authentication:home' %}" class="logo">TALETAILOR</a>
 
       <nav class="nav-links">
-        <a href="#" class="nav-link">HOME</a>
+        <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
         <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
         <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
         {% if user.is_superuser %}
@@ -85,6 +85,9 @@
         <div class="hero-greeting">Hello, {{user.username|cut:"@gmail.com"}}</div>
         <h1 class="hero-title">Craft Your <br>Digital Legend</h1>
         <p class="hero-subtitle">Unleash your creativity. Build unique narratives. Explore infinite worlds.</p>
+        <div class="book-illustration">
+          <spline-viewer url="https://prod.spline.design/e8HE-gsHhfaG6Xle/scene.splinecode"></spline-viewer>
+        </div>
 
         <div class="search-container">
           <input type="text" class="search-box" placeholder="Search for stories, genres, or creators..." />
@@ -96,12 +99,12 @@
       <h2 class="section-title" data-aos="fade-up">Start Creating<span class="section-subtitle">Choose your path</span>
       </h2>
 
-      <a href="{% url 'mystory:yourownstory' %}" class="cta-large" data-aos="zoom-in">
-        <button class="btn-pulse">
+      <div class="cta-large" data-aos="zoom-in">
+        <a href="{% url 'mystory:edit_story' %}" class="btn-pulse" style="text-decoration: none;">
           <i class="fas fa-plus"></i>
           <span>Create New Story</span>
-        </button>
-      </a>
+        </a>
+      </div>
 
       <div class="tools-grid">
         <a href="{% url 'aistory:explore' %}" class="tool-card" data-aos="fade-up" data-aos-delay="100">

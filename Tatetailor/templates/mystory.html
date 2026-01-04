@@ -30,7 +30,7 @@
 
   <header>
     <div class="header-container">
-      <div class="logo">TALETAILOR</div>
+      <a href="{% url 'authentication:home' %}" class="logo">TALETAILOR</a>
 
       <nav class="nav-links">
         <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
@@ -203,10 +203,10 @@
                 <a href="{% url 'aistory:view_story' story.id %}" class="action-item">
                   <i class="fas fa-eye"></i> View
                 </a>
-                <a href="#" class="action-item">
+                <a href="{% url 'mystory:edit_story' story.id %}" class="action-item">
                   <i class="fas fa-edit"></i> Edit
                 </a>
-                <a href="#" class="action-item">
+                <a href="{% url 'mystory:share_story' story.id %}" class="action-item">
                   <i class="fas fa-share-alt"></i> Share
                 </a>
                 <button class="action-item danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ story.id }}">
