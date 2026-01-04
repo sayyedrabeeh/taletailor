@@ -2009,7 +2009,7 @@ class ThemeAudioSystem {
 
     this.audioLibrary = {
 happy: {
-    bg: 'https://www.bensound.com/bensound-music/bensound-ukulele.mp3',   
+    bg: '/static/audio/happy.mp3',   
     sfx: [
       'https://assets.mixkit.co/active_storage/sfx/600/600-preview.mp3',  
       'https://assets.mixkit.co/active_storage/sfx/466/466-preview.mp3',  
@@ -2017,61 +2017,93 @@ happy: {
     ]
   }
 
-,
-      sad: {
-        bg: 'https://cdn.pixabay.com/download/audio/2023/01/18/audio_8c2d0f8f8f.mp3?filename=sad-piano-background-118458.mp3',
-        sfx: [
-          'https://cdn.pixabay.com/download/audio/2022/08/02/audio_5c6e6f8f8f.mp3?filename=rain-sounds-8002.mp3'
-        ]
-      },
+,    sad: {
+  bg: '/static/audio/sad.mp3',
+
+  sfx: [
+    '/static/audio/sad2.mp3',
+    '/static/audio/sad3.mp3',
+  ]
+},
+
       romantic: {
-        bg: 'https://cdn.pixabay.com/download/audio/2023/02/24/audio_3e3c1f8f8f.mp3?filename=romantic-piano-121947.mp3',
+        bg: '/static/audio/romantic2.mp3',
         sfx: [
           'https://cdn.pixabay.com/download/audio/2022/05/18/audio_9f8e7d6c5b.mp3?filename=heart-beat-112493.mp3'
         ]
       },
       thriller: {
-        bg: 'https://cdn.pixabay.com/download/audio/2023/06/20/audio_4f5g6h7i8j.mp3?filename=tense-suspense-background-music-145997.mp3',
+        bg: '/static/audio/thriller.mp3',
         sfx: [
           'https://cdn.pixabay.com/download/audio/2022/11/11/audio_8j9k0l1m2n.mp3?filename=heartbeat-108696.mp3'
         ]
       },
       adventure: {
-        bg: 'https://cdn.pixabay.com/download/audio/2022/08/09/audio_1a2b3c4d5e.mp3?filename=epic-cinematic-background-music-112790.mp3',
+        bg: '/static/audio/adventure.mp3',
         sfx: [
           'https://cdn.pixabay.com/download/audio/2022/07/27/audio_6f7g8h9i0j.mp3?filename=sword-clash-109400.mp3'
         ]
       },
       mystery: {
-        bg: 'https://cdn.pixabay.com/download/audio/2023/04/12/audio_5u6v7w8x9y.mp3?filename=mystery-mystic-mystical-music-142783.mp3',
+        bg: '/static/audio/thriller.mp3',
         sfx: [
           'https://cdn.pixabay.com/download/audio/2023/01/30/audio_8e9f0g1h2i.mp3?filename=door-creak-119089.mp3'
         ]
       },
       fantasy: {
-        bg: 'https://cdn.pixabay.com/download/audio/2023/08/15/audio_2j3k4l5m6n.mp3?filename=enchanted-fantasy-147892.mp3',
+        bg: '/static/audio/fantacy.mp3',
         sfx: [
           'https://cdn.pixabay.com/download/audio/2022/12/20/audio_7o8p9q0r1s.mp3?filename=magic-spell-111138.mp3'
         ]
       },
       scifi: {
-        bg: 'https://cdn.pixabay.com/download/audio/2023/07/05/audio_9y0z1a2b3c.mp3?filename=sci-fi-ambient-146789.mp3',
+        bg: '/static/audio/scifi.mp3',
         sfx: [
           'https://cdn.pixabay.com/download/audio/2022/09/14/audio_5d6e7f8g9h.mp3?filename=laser-shot-105331.mp3'
         ]
       },
       horror: {
-        bg: 'https://cdn.pixabay.com/download/audio/2023/10/10/audio_6n7o8p9q0r.mp3?filename=horror-background-music-151234.mp3',
+        bg: '/static/audio/horror.mp3',
+        sfx: [
+          '/static/audio/horror1.mp3'
+        ]
+      },
+      comedy: {
+        bg: '/static/audio/comedy.mp3',
         sfx: [
           'https://cdn.pixabay.com/download/audio/2022/10/31/audio_1s2t3u4v5w.mp3?filename=scream-horror-108678.mp3'
         ]
       },
       inspirational: {
-        bg: 'https://cdn.pixabay.com/download/audio/2023/05/20/audio_3h4i5j6k7l.mp3?filename=inspirational-motivational-145678.mp3',
+        bg: '/static/audio/inspar.mp3',
         sfx: [
           'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
         ]
-      }
+      },
+      melancholy: {
+        bg: '/static/audio/melancholy.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
+        ]
+      },
+      anger: {
+        bg: '/static/audio/anger.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
+        ]
+      },
+      surprise: {
+        bg: '/static/audio/surpraise.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
+        ]
+      },
+      fear: {
+        bg: '/static/audio/fear.mp3',
+        sfx: [
+          'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
+        ]
+      },
     };
 
     this.init();
