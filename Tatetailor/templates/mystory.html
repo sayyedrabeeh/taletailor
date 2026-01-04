@@ -1,686 +1,647 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <title>TaleTailor -   Storytelling Platform</title>
-    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaleTailor - My Stories</title>
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap');
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      background: linear-gradient(to bottom, #121212, #1e1e2d);
-      color: #fff;
-      font-family: 'Roboto', sans-serif;
-      line-height: 1.6;
-    }
-    
-    header {
-            background-color: #333;
-            padding: 1rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #444;
-        }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
 
-        .logo-container {
-            padding: 0.5rem 1.5rem;
-            background-color: #000;
-            border-radius: 0;
-            margin-left: 2rem;
-        }
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: white;
-            text-transform: uppercase;
-        }
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/mystory_modern.css' %}">
 
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            background-color: #000;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-         .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--primary);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .nav-link:hover {
-            background-color: rgba(138, 43, 226, 0.1);
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-right: 2rem;
-        }
-
-        .dynamic-label {
-            color: #aaa;
-        }
-
-        .toggle {
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background-color: #444;
-            border-radius: 25px;
-            cursor: pointer;
-        }
-
-        .toggle::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s ease;
-        }
-
-        .toggle.active::after {
-            transform: translateX(26px);
-        }
-
-        .heart-icon, .profile-icon {
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-    
-    .main-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-    
-    .title {
-      font-family: 'Playfair Display', serif;
-      font-size: 3rem;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(to right, #f39c12, #e74c3c);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-align: center;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .search-container {
-      margin-bottom: 3rem;
-      display: flex;
-      justify-content: center;
-    }
-    
-    .search-bar {
-      width: 100%;
-      max-width: 700px;
-      padding: 1rem 1.5rem;
-      border-radius: 2rem;
-      border: none;
-      background: rgba(255, 255, 255, 0.1);
-      font-size: 1rem;
-      color: #fff;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-    }
-    
-    .search-bar:focus {
-      outline: none;
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    }
-    
-    .story-container {
-      display: flex;
-      margin-bottom: 3rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 1rem;
-      overflow: hidden;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-    }
-    
-    .story-container:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-      background: rgba(255, 255, 255, 0.08);
-    }
-    
-    .story-image {
-      flex: 0 0 40%;
-      max-width: 500px;
-      position: relative;
-      overflow: hidden;
-    }
-    .story-image img {
-  max-height: 450px;  
-  width: auto;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-    .story-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: all 0.5s ease;
-    }
-    
-    .story-container:hover .story-image img {
-      transform: scale(1.05);
-    }
-    
-    .story-details {
-      flex: 1;
-      padding: 2rem;
-      background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
-    }
-    
-    .story-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-      position: relative;
-      padding-bottom: 0.5rem;
-    }
-    
-    .story-title::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 80px;
-      height: 3px;
-      background: linear-gradient(to right, #f39c12, #e74c3c);
-    }
-    
-    .story-description {
-      font-style: italic;
-      color: #cbd5e0;
-      margin-bottom: 2rem;
-      font-size: 1.2rem;
-      line-height: 1.7;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    }
-    
-    .story-meta {
-      color: #a0aec0;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-    }
-    
-    .story-meta::before {
-      content: "•";
-      margin-right: 0.5rem;
-      color: #f39c12;
-    }
-    
-    .story-badge {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      background: linear-gradient(to right, #6a0dad, #9b59b6);
-      border-radius: 2rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: #fff;
-      margin-top: 1rem;
-    }
-    
-    .footer {
-      text-align: center;
-      margin-top: 3rem;
-      padding: 2rem;
-      color: #a0aec0;
-      font-size: 0.9rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .irish-grover-regular {
-  font-family: "Irish Grover", serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
- 
-.search-container {
-  margin: 2rem 0;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.search-container form {
-  display: flex;
-  width: 100%;
-  max-width: 700px;
-  position: relative;
-}
-
-.search-container .search-bar {
-  width: 100%;
-  padding: 1rem 1.5rem;
-  padding-right: 3rem; /* Space for the clear button */
-  border-radius: 2rem 0 0 2rem;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.1);
-  font-size: 1rem;
-  color: #fff;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.search-container .search-bar:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-/* Clear button styling */
-.search-clear {
-  position: absolute;
-  right: 6.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: #fff;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: bold;
-  transition: all 0.2s ease;
-}
-
-.search-clear:hover {
-  background: rgba(255, 255, 255, 0.4);
-  transform: translateY(-50%) scale(1.1);
-}
-
-.search-container button[type="submit"] {
-  background: linear-gradient(to right, #6a0dad, #9b59b6);
-  color: white;
-  border: none;
-  padding: 0 1.5rem;
-  border-radius: 0 2rem 2rem 0;
-  cursor: pointer;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-}
-
-.search-container button[type="submit"]:hover {
-  background: linear-gradient(to right, #7b1fa2, #8e24aa);
-  box-shadow: 0 4px 12px rgba(155, 89, 182, 0.5);
-  transform: translateY(-2px);
-}
-
-/* Pagination Styling */
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin: 3rem 0;
-  padding: 1rem;
-}
-
-.pagination .step-links {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.75rem 1.5rem;
-  border-radius: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.pagination a {
-  color: #a0aec0;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
-  transition: all 0.3s ease;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.pagination a:hover {
-  background: rgba(106, 13, 173, 0.5);
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-.pagination .current {
-  padding: 0.5rem 1rem;
-  color: #f39c12;
-  font-weight: 500;
-}
-
-  .empty-message {
-  text-align: center;
-  margin-top: 40px;
-  animation: fadeInUp 0.6s ease-out;
-  color: #555;
-}
-
-.empty-message h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.empty-message p {
-  font-size: 0.9rem;
-  color: #888;
-  margin-top: 8px;
-}
-
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.no-stories-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 60px 20px;
-  animation: fadeInUp 0.8s ease-out;
-}
-
-.no-stories-box {
-  text-align: center;
-  background: #f9f9f9;
-  border-radius: 16px;
-  padding: 30px;
-  max-width: 500px;
-  width: 100%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  animation: fadeInUp 0.8s ease-out;
-}
-
-.no-stories-image {
-  width: 100px;
-  margin-bottom: 20px;
-  opacity: 0.7;
-}
-
-.no-stories-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.no-stories-text {
-  font-size: 1rem;
-  color: #666;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.add-button-link {
-  text-decoration: none;
-}
-
-/* Button styling */
-.add-button {
-  background-color: #4f46e5; /* Indigo */
-  border: none;
-  border-radius: 8px;
-  padding: 12px 24px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.add-button:hover {
-  background-color: #4338ca; /* Darker indigo */
-  transform: translateY(-2px);
-}
-
-.button-text {
-  color: white;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-  </style>
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
+
 <body>
-    <header>
-        <div class="logo-container">
-            <div class="logo irish-grover-regular">TALETAILOR</div>
-        </div>
-        <div class="nav-links">
-            <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
-            <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
-            <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
-            {% if user.is_superuser %}
-            <br><br>
-            <a style="text-decoration: none;" href="{% url 'authentication:users' %}">
-                <button  class="nav-link">
-                    Admin Panel
-                </button>
-            </a>
+  <!-- Background Elements -->
+  <div class="hero-bg-glow"></div>
+
+  <header>
+    <div class="header-container">
+      <div class="logo">TALETAILOR</div>
+
+      <nav class="nav-links">
+        <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+        <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+        <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+        {% if user.is_superuser %}
+        <a href="{% url 'authentication:dashboard' %}" class="nav-link">ADMIN</a>
         {% endif %}
+      </nav>
+
+      <div class="user-actions">
+        <a href="{% url 'mystory:collaboration_requests' %}" class="icon-btn" title="Requests">
+          <i class="fas fa-heart"></i>
+        </a>
+        <a href="{% url 'messaging:chat' %}" class="icon-btn" title="Messages">
+          <i class="fas fa-comment-alt"></i>
+        </a>
+        <a href="#" class="icon-btn" data-bs-toggle="modal" data-bs-target="#profileModal" title="Profile">
+          <i class="fas fa-user"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Modal -->
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(5px);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content"
+        style="background: var(--bg-dark); border: 1px solid var(--glass-border); color: white;">
+        <div class="modal-header" style="border-bottom: 1px solid var(--glass-border);">
+          <h5 class="modal-title">Profile Options</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="user-actions">
-            
-            <a style="text-decoration: none;" href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
-                    <a href="{% url 'messaging:chat' %}" style="text-decoration: none;" class="message-icon">
-            <i class="fas fa-comments" style="font-size: 20px; color: #25D366;"></i> 
-            </a>
-            <!-- Profile Icon to trigger the modal -->
-            <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
-                👤
-            </div>
+        <div class="modal-body">
+          <div class="d-grid gap-3">
+            <a href="{% url 'authentication:view_profile' %}" class="btn btn-outline-light"><i
+                class="fas fa-user me-2"></i> Profile</a>
+            <a href="{% url 'mystory:mystory1' %}" class="btn btn-outline-light"><i class="fas fa-book-open me-2"></i>
+              My Story</a>
+            <a href="#" class="btn btn-outline-light"><i class="fas fa-cog me-2"></i> Settings</a>
+            <a href="{% url 'authentication:logout' %}" class="btn btn-outline-danger"><i
+                class="fas fa-sign-out-alt me-2"></i> Logout</a>
+          </div>
         </div>
-    </header>
-  
+      </div>
+    </div>
+  </div>
+
   <main class="main-content">
-    <h1 class="title">MY STORY</h1>
-    
-       <div class="search-container">
-        <form method="get">
-          <input type="text" name="search" placeholder="Search for stories, authors, or genres..." class="search-bar" value="{{ query }}">
-          <button type="button" class="search-clear" onclick="clearSearch()">×</button>
-          <button type="submit">Search</button>
+    <!-- Page Header with Stats -->
+    <div class="page-header" data-aos="fade-down">
+      <h1 class="title">MY STORY</h1>
+      <p class="subtitle">Manage and explore your creative works</p>
+
+      <!-- Story Statistics -->
+      <div class="stats-container" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-card">
+          <i class="fas fa-book"></i>
+          <div class="stat-info">
+            <span class="stat-number">{{ stories.paginator.count|default:0 }}</span>
+            <span class="stat-label">Total Stories</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-users"></i>
+          <div class="stat-info">
+            <span class="stat-number" id="collab-count">0</span>
+            <span class="stat-label">Collaborations</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-pen-fancy"></i>
+          <div class="stat-info">
+            <span class="stat-number" id="word-count">0</span>
+            <span class="stat-label">Total Words</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="controls-section" data-aos="fade-up">
+      <div class="search-container">
+        <form method="get" id="searchForm">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" name="search" placeholder="Search stories by title, content, or author..."
+            class="search-bar" value="{{ query }}" id="searchInput">
+          <button type="button" class="search-clear" onclick="clearSearch()" id="clearBtn"
+            style="display: {{ query|yesno:'flex,none' }}">×</button>
+          <button type="submit" class="search-submit">
+            <i class="fas fa-search me-2"></i>
+            <span>Search</span>
+          </button>
         </form>
       </div>
-   
-      {% if messages %}
-      <div class="container mt-3">
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
+
+      <!-- Filter and Sort Controls -->
+      <div class="filter-controls">
+        <div class="filter-group">
+          <button class="filter-btn active" data-filter="all">
+            <i class="fas fa-th"></i> All Stories
+          </button>
+          <button class="filter-btn" data-filter="collaborated">
+            <i class="fas fa-users"></i> Collaborated
+          </button>
+          <button class="filter-btn" data-filter="individual">
+            <i class="fas fa-user"></i> Individual
+          </button>
+        </div>
+
+        <div class="sort-group">
+          <label for="sortSelect"><i class="fas fa-sort"></i> Sort by:</label>
+          <select id="sortSelect" class="sort-select">
+            <option value="recent">Most Recent</option>
+            <option value="oldest">Oldest First</option>
+            <option value="title">Title (A-Z)</option>
+            <option value="words">Word Count</option>
+          </select>
+        </div>
       </div>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages-container" data-aos="fade-down">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <i class="fas fa-{{ message.tags|yesno:'check-circle,exclamation-triangle' }}"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+    </div>
     {% endif %}
-     {% for story in stories %}
-   
-    <a style="text-decoration: none; color: #fff;" href="{% url 'aistory:view_story' story.id %}" class="draft-link">
-    <div class="story-container">
-      <div class="story-image">
-        {% if story.image %}
-          <img src="{{ story.image.url }}" alt="{{ story.title }}">
-        {% else %}
-          <img src="{% static 'images/logo4.webp' %}" alt="Default story image">
-        {% endif %}
-      </div>
-    
-      <div class="story-details">
-        <h2 class="story-title">{{ story.title }}</h2>
-        <p class="story-description">{{ story.content|truncatechars:150 }}</p>
-        <p class="story-meta">Words: {{ story.content|wordcount }}</p>
-        <p class="story-meta">Posted: {{ story.status|default:"Draft"|capfirst }}</p>
-        <p class="story-meta">Created: {% if story.user == request.user %}By You{% else %}By {{ story.user.username }}{% endif %}</p>
-    
-        {% if story.is_collaborated %}
-          <div class="story-badge">Collaborated</div>
-          <p class="story-meta">Collaborators: 
-            {% for user in story.collaborators.all %}
+
+    <!-- Stories Grid -->
+    <div class="stories-list" id="storiesList">
+      {% for story in stories %}
+      <div class="story-container" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}"
+        data-filter-type="{% if story.is_collaborated %}collaborated{% else %}individual{% endif %}"
+        data-word-count="{{ story.content|wordcount }}" data-title="{{ story.title|lower }}">
+
+        <!-- Story Image with Overlay -->
+        <div class="story-image">
+          {% if story.image %}
+          <img src="{{ story.image.url }}" alt="{{ story.title }}" loading="lazy">
+          {% else %}
+          <img src="{% static 'images/logo4.webp' %}" alt="Default story image" loading="lazy">
+          {% endif %}
+          <div class="image-overlay">
+            <a href="{% url 'aistory:view_story' story.id %}" class="overlay-btn">
+              <i class="fas fa-eye"></i> Read Story
+            </a>
+          </div>
+        </div>
+
+        <!-- Story Details -->
+        <div class="story-details">
+          <div class="story-header">
+            <a href="{% url 'aistory:view_story' story.id %}" class="story-link">
+              <h2 class="story-title">{{ story.title }}</h2>
+            </a>
+
+            <!-- Quick Actions Menu -->
+            <div class="quick-actions">
+              <button class="action-toggle" onclick="toggleActions(this)">
+                <i class="fas fa-ellipsis-v"></i>
+              </button>
+              <div class="actions-menu">
+                <a href="{% url 'aistory:view_story' story.id %}" class="action-item">
+                  <i class="fas fa-eye"></i> View
+                </a>
+                <a href="#" class="action-item">
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="#" class="action-item">
+                  <i class="fas fa-share-alt"></i> Share
+                </a>
+                <button class="action-item danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ story.id }}">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <p class="story-description">{{ story.content|truncatechars:180 }}</p>
+
+          <!-- Story Metadata -->
+          <div class="story-metadata">
+            <div class="meta-item">
+              <i class="fas fa-font"></i>
+              <span>{{ story.content|wordcount }} words</span>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-clock"></i>
+              <span class="read-time" data-words="{{ story.content|wordcount }}"></span>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-calendar"></i>
+              <span>{{ story.created_at|date:"M d, Y"|default:"Recently" }}</span>
+            </div>
+          </div>
+
+          <!-- Badges and Status -->
+          <div class="badges-row">
+            <span class="status-badge status-{{ story.status|default:'draft'|lower }}">
+              <i class="fas fa-circle"></i> {{ story.status|default:"Draft"|capfirst }}
+            </span>
+
+            {% if story.is_collaborated %}
+            <span class="story-badge collab-badge">
+              <i class="fas fa-users"></i> Collaborated
+            </span>
+            {% else %}
+            <span class="story-badge individual-badge">
+              <i class="fas fa-user"></i> Individual
+            </span>
+            {% endif %}
+          </div>
+
+          <!-- Collaborators Info -->
+          {% if story.is_collaborated %}
+          <div class="collaborators-info">
+            <i class="fas fa-user-friends"></i>
+            <span class="collab-text">
+              {% for user in story.collaborators.all %}
               {{ user.username }}{% if not forloop.last %}, {% endif %}
               {% empty %}
-             collaborators didn't acccept invitations. 
+              Pending invitations
               {% endfor %}
-        {% else %}
-        <div class="story-badge">Induvidal</div>
-        {% endif %}</p> 
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ story.id }}">
-            <i class="fas fa-trash"></i> Delete
-        </button>
-      </div>
-      
-    </div>
-   </a>
-   
-    {% empty %}
-     <div class="no-stories-container">
-    <div class="no-stories-box">
-      <img src="{% static 'images/empty-folder.jpeg' %}" alt="No Stories" class="no-stories-image">
-      <h2 class="no-stories-title">You haven’t created any stories yet.</h2>
-      <p class="no-stories-text">Click the “Create Story” button to get started.</p>
-       <a href="{% url 'mystory:yourownstory' %}" class="add-button-link">
-      <button class="add-button">
-        <span class="button-text">Start Creating</span>
-      </button>
-    </a>
-    </div>
-    
-  </div>
-    {% endfor %}
-    <div class="pagination">
-        <span class="step-links">
-          {% if stories.has_previous %}
-            <a href="?search={{ query }}&page=1">&laquo; First</a>
-            <a href="?search={{ query }}&page={{ stories.previous_page_number }}">Previous</a>
+            </span>
+          </div>
           {% endif %}
-      
-          <span class="current">
-            Page {{ stories.number }} of {{ stories.paginator.num_pages }}
-          </span>
-      
-          {% if stories.has_next %}
-            <a href="?search={{ query }}&page={{ stories.next_page_number }}">Next</a>
-            <a href="?search={{ query }}&page={{ stories.paginator.num_pages }}">Last &raquo;</a>
-          {% endif %}
-        </span>
+        </div>
       </div>
 
-    {% for story in stories %}
-    <div class="modal fade" id="deleteModal{{ story.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ story.id }}" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" style="color: #000;" id="deleteModalLabel{{ story.id }}">Confirm Delete</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body"style="color: #000;">
-              Are you sure you want to delete "<strong>{{ story.title }}</strong>"?
-            </div>
-            <div class="modal-footer">
-              <form method="POST" action="{% url 'mystory:delete_story' story.id %}">
-                {% csrf_token %}
-                <button type="button" style="color: #000;" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" style="color: #000;" class="btn btn-danger">Yes, Delete</button>
-              </form>
-            </div>
+      {% empty %}
+      <!-- Enhanced Empty State -->
+      <div class="no-stories-container" data-aos="zoom-in">
+        <div class="no-stories-box">
+          <div class="empty-icon">
+            <i class="fas fa-book-open"></i>
+          </div>
+          <h2 class="no-stories-title">Your Story Library is Empty</h2>
+          <p class="no-stories-text">Start your creative journey by crafting your first story. Every great writer starts
+            with a single word.</p>
+          <a href="{% url 'mystory:yourownstory' %}" class="create-story-btn">
+            <i class="fas fa-plus-circle"></i>
+            <span>Create Your First Story</span>
+          </a>
+
+          <!-- Quick Tips -->
+          <div class="quick-tips">
+            <h4>Quick Tips:</h4>
+            <ul>
+              <li><i class="fas fa-lightbulb"></i> Use AI assistance for inspiration</li>
+              <li><i class="fas fa-users"></i> Collaborate with other writers</li>
+              <li><i class="fas fa-share"></i> Share your stories with the community</li>
+            </ul>
           </div>
         </div>
       </div>
-      {% endfor %}  
+      {% endfor %}
+    </div>
+    <div class="pagination">
+      <span class="step-links">
+        {% if stories.has_previous %}
+        <a href="?search={{ query }}&page=1">&laquo; First</a>
+        <a href="?search={{ query }}&page={{ stories.previous_page_number }}">Previous</a>
+        {% endif %}
 
-    
-      
+        <span class="current">
+          Page {{ stories.number }} of {{ stories.paginator.num_pages }}
+        </span>
+
+        {% if stories.has_next %}
+        <a href="?search={{ query }}&page={{ stories.next_page_number }}">Next</a>
+        <a href="?search={{ query }}&page={{ stories.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+      </span>
+    </div>
+
+    {% for story in stories %}
+    <div class="modal fade" id="deleteModal{{ story.id }}" tabindex="-1"
+      aria-labelledby="deleteModalLabel{{ story.id }}" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" style="color: #000;" id="deleteModalLabel{{ story.id }}">Confirm Delete</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" style="color: #000;">
+            Are you sure you want to delete "<strong>{{ story.title }}</strong>"?
+          </div>
+          <div class="modal-footer">
+            <form method="POST" action="{% url 'mystory:delete_story' story.id %}">
+              {% csrf_token %}
+              <button type="button" style="color: #000;" class="btn btn-secondary"
+                data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" style="color: #000;" class="btn btn-danger">Yes, Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+
+
 
 
 
 
   </main>
-  
-  <footer class="footer">
-    <p>© 2025 TaleTailor - Professional Storytelling Platform. All rights reserved.</p>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h2>Taletailor</h2>
+        <p class="footer-tagline">
+          Where passion meets precision. Capturing the essence of every detail, one story at a time.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Services</h3>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Bonus Program</a>
+          <a href="#" class="footer-link">Gift Cards</a>
+          <a href="#" class="footer-link">Subscription</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Support</h3>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Help Center</a>
+          <a href="#" class="footer-link">Community Guidelines</a>
+          <a href="#" class="footer-link">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    function clearSearch() {
-      document.querySelector('.search-bar').value = '';
-      // Optional: Auto-focus on the search input after clearing
-      document.querySelector('.search-bar').focus();
+    // Initialize AOS
+    document.addEventListener('DOMContentLoaded', function () {
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100,
+        easing: 'ease-out-cubic'
+      });
+
+      // Calculate and display statistics
+      calculateStatistics();
+
+      // Calculate read times for all stories
+      calculateReadTimes();
+
+      // Setup filter and sort functionality
+      setupFilters();
+      setupSort();
+
+      // Setup search enhancements
+      setupSearch();
+
+      // Close actions menu when clicking outside
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.quick-actions')) {
+          document.querySelectorAll('.actions-menu.show').forEach(menu => {
+            menu.classList.remove('show');
+          });
+        }
+      });
+    });
+
+    // Calculate statistics
+    function calculateStatistics() {
+      const stories = document.querySelectorAll('.story-container');
+      let collabCount = 0;
+      let totalWords = 0;
+
+      stories.forEach(story => {
+        const filterType = story.getAttribute('data-filter-type');
+        const wordCount = parseInt(story.getAttribute('data-word-count')) || 0;
+
+        if (filterType === 'collaborated') {
+          collabCount++;
+        }
+        totalWords += wordCount;
+      });
+
+      // Animate counters
+      animateCounter('collab-count', collabCount);
+      animateCounter('word-count', totalWords);
     }
-    </script>
+
+    // Animate counter with easing
+    function animateCounter(id, target) {
+      const element = document.getElementById(id);
+      if (!element) return;
+
+      const duration = 1000;
+      const start = 0;
+      const increment = target / (duration / 16);
+      let current = start;
+
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          element.textContent = target.toLocaleString();
+          clearInterval(timer);
+        } else {
+          element.textContent = Math.floor(current).toLocaleString();
+        }
+      }, 16);
+    }
+
+    // Calculate read time (average 200 words per minute)
+    function calculateReadTimes() {
+      document.querySelectorAll('.read-time').forEach(element => {
+        const words = parseInt(element.getAttribute('data-words')) || 0;
+        const minutes = Math.ceil(words / 200);
+        element.textContent = `${minutes} min read`;
+      });
+    }
+
+    // Filter functionality
+    function setupFilters() {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const stories = document.querySelectorAll('.story-container');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+          // Update active state
+          filterBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+
+          const filter = this.getAttribute('data-filter');
+
+          stories.forEach(story => {
+            const filterType = story.getAttribute('data-filter-type');
+
+            if (filter === 'all' || filterType === filter) {
+              story.style.display = 'flex';
+              // Re-trigger AOS animation
+              story.classList.add('aos-animate');
+            } else {
+              story.style.display = 'none';
+            }
+          });
+        });
+      });
+    }
+
+    // Sort functionality
+    function setupSort() {
+      const sortSelect = document.getElementById('sortSelect');
+      if (!sortSelect) return;
+
+      sortSelect.addEventListener('change', function () {
+        const sortType = this.value;
+        const storiesList = document.getElementById('storiesList');
+        const stories = Array.from(document.querySelectorAll('.story-container'));
+
+        stories.sort((a, b) => {
+          switch (sortType) {
+            case 'recent':
+              // Assuming newer stories are added last in DOM
+              return 0; // Keep original order
+            case 'oldest':
+              return 0; // Reverse would need timestamp data
+            case 'title':
+              const titleA = a.getAttribute('data-title');
+              const titleB = b.getAttribute('data-title');
+              return titleA.localeCompare(titleB);
+            case 'words':
+              const wordsA = parseInt(a.getAttribute('data-word-count')) || 0;
+              const wordsB = parseInt(b.getAttribute('data-word-count')) || 0;
+              return wordsB - wordsA; // Descending order
+            default:
+              return 0;
+          }
+        });
+
+        // Re-append sorted stories
+        stories.forEach(story => storiesList.appendChild(story));
+
+        // Re-initialize AOS for sorted items
+        AOS.refresh();
+      });
+    }
+
+    // Enhanced search functionality
+    function setupSearch() {
+      const searchInput = document.getElementById('searchInput');
+      const clearBtn = document.getElementById('clearBtn');
+
+      if (searchInput) {
+        searchInput.addEventListener('input', function () {
+          if (this.value.length > 0) {
+            clearBtn.style.display = 'flex';
+          } else {
+            clearBtn.style.display = 'none';
+          }
+        });
+
+        // Add keyboard shortcut (Ctrl/Cmd + K)
+        document.addEventListener('keydown', function (e) {
+          if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            searchInput.focus();
+          }
+        });
+      }
+    }
+
+    // Clear search function
+    function clearSearch() {
+      const searchInput = document.getElementById('searchInput');
+      const clearBtn = document.getElementById('clearBtn');
+
+      if (searchInput) {
+        searchInput.value = '';
+        clearBtn.style.display = 'none';
+        searchInput.focus();
+
+        // If there's a query parameter, reload without it
+        const url = new URL(window.location);
+        if (url.searchParams.has('search')) {
+          url.searchParams.delete('search');
+          window.location.href = url.toString();
+        }
+      }
+    }
+
+    // Toggle quick actions menu
+    function toggleActions(button) {
+      const menu = button.nextElementSibling;
+      const allMenus = document.querySelectorAll('.actions-menu');
+
+      // Close all other menus
+      allMenus.forEach(m => {
+        if (m !== menu) {
+          m.classList.remove('show');
+        }
+      });
+
+      // Toggle current menu
+      menu.classList.toggle('show');
+
+      // Prevent event from bubbling
+      event.stopPropagation();
+    }
+
+    // Add smooth scroll to top button
+    window.addEventListener('scroll', function () {
+      const scrollBtn = document.getElementById('scrollTopBtn');
+      if (scrollBtn) {
+        if (window.pageYOffset > 300) {
+          scrollBtn.classList.add('show');
+        } else {
+          scrollBtn.classList.remove('show');
+        }
+      }
+    });
+
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // Add loading state for images
+    document.querySelectorAll('.story-image img').forEach(img => {
+      img.addEventListener('load', function () {
+        this.classList.add('loaded');
+      });
+    });
+
+    // Keyboard navigation for story cards
+    document.addEventListener('keydown', function (e) {
+      const stories = Array.from(document.querySelectorAll('.story-container:not([style*="display: none"])'));
+      const activeElement = document.activeElement;
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        const currentIndex = stories.findIndex(story => story.contains(activeElement));
+
+        if (currentIndex !== -1) {
+          e.preventDefault();
+          const nextIndex = e.key === 'ArrowDown'
+            ? Math.min(currentIndex + 1, stories.length - 1)
+            : Math.max(currentIndex - 1, 0);
+
+          const nextStory = stories[nextIndex];
+          const link = nextStory.querySelector('.story-link');
+          if (link) link.focus();
+        }
+      }
+    });
+  </script>
+
+  <!-- Scroll to Top Button -->
+  <button id="scrollTopBtn" class="scroll-top-btn" onclick="scrollToTop()" title="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 </body>
+
 </html>

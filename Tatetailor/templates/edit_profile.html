@@ -1,343 +1,209 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Your Profile</title>
-    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaleTailor - Edit Your Profile</title>
 
-    <style>
-        :root {
-            --primary-color: #6200ea;
-            --secondary-color: #03dac6;
-            --accent-color: #ff6d00;
-            --text-light: #ffffff;
-            --text-dark: #272727;
-            --gradient-start: #6200ea;
-            --gradient-mid: #b64fc8;
-            --gradient-end: #ff6d00;
-            --card-bg: rgba(255, 255, 255, 0.15);
-            --input-bg: rgba(255, 255, 255, 0.1);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        }
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-        body {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
-            min-height: 100vh;
-            padding: 30px;
-            color: var(--text-light);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow-x: hidden;
-        }
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/profile_modern.css' %}">
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('/api/placeholder/1000/1000') center/cover no-repeat;
-            opacity: 0.1;
-            z-index: -1;
-        }
-
-        .form-container {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 600px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .form-container:hover {
-            transform: translateY(-5px);
-        }
-
-        .form-header {
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .form-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
-        }
-
-        .form-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 20px;
-            color: var(--text-light);
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-
-        .form-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: var(--secondary-color);
-            border-radius: 2px;
-        }
-
-        .edit-form {
-            padding: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--secondary-color);
-            transform: translateX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .form-group:hover label {
-            transform: translateX(5px);
-        }
-
-        .form-group input[type="text"],
-        .form-group textarea {
-            width: 100%;
-            padding: 15px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 10px;
-            background: var(--input-bg);
-            color: var(--text-light);
-            outline: none;
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .form-group input[type="text"]:focus,
-        .form-group textarea:focus {
-            box-shadow: 0 0 0 2px var(--secondary-color);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .file-input-container {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .file-input-button {
-            display: block;
-            padding: 15px;
-            background: var(--input-bg);
-            color: var(--text-light);
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .file-input-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .file-input-container input[type="file"] {
-            position: absolute;
-            font-size: 100px;
-            top: 0;
-            right: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .file-name {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: var(--secondary-color);
-            text-align: center;
-            min-height: 20px;
-        }
-
-        .preview-container {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin: 20px auto;
-            background: var(--input-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--secondary-color);
-        }
-
-        .preview-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-        }
-
-        .preview-placeholder {
-            font-size: 3rem;
-            color: var(--secondary-color);
-        }
-
-        .submit-button {
-            background: var(--accent-color);
-            color: var(--text-light);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: block;
-            margin: 30px auto 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 109, 0, 0.3);
-        }
-
-        .submit-button:hover {
-            background: #ff8f00;
-            transform: translateY(-2px);
-            box-shadow: 0 7px 15px rgba(255, 109, 0, 0.5);
-        }
-
-        .cancel-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .cancel-link:hover {
-            color: var(--text-light);
-        }
-
-        /* Animation elements */
-        .bubble {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            animation: float 15s infinite ease-in-out;
-            z-index: -1;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-20px) rotate(180deg);
-            }
-        }
-    </style>
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
-<body>
-    <!-- Background bubbles -->
-    <div class="bubble" style="width: 100px; height: 100px; top: 10%; left: 10%;"></div>
-    <div class="bubble" style="width: 150px; height: 150px; top: 60%; left: 80%;"></div>
-    <div class="bubble" style="width: 80px; height: 80px; top: 30%; left: 70%;"></div>
-    <div class="bubble" style="width: 120px; height: 120px; top: 80%; left: 20%;"></div>
-    <div class="bubble" style="width: 60px; height: 60px; top: 10%; left: 50%;"></div>
 
-    <div class="form-container">
-        <div class="form-header">
-            <h2 class="form-title">Edit Your Profile</h2>
-        </div>
-    
-        <form method="POST" enctype="multipart/form-data" class="edit-form">
-            {% csrf_token %}
-    
-            <div class="preview-container">
-                {% if profile.profile_picture %}
-                    <img src="{{ profile.profile_picture.url }}" class="preview-image" alt="Profile preview">
-                {% else %}
-                    <div class="preview-placeholder">
-                        <i>No Image</i>
-                    </div>
+<body>
+    <!-- Background Elements -->
+    <div class="hero-bg-glow"></div>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">TALETAILOR</div>
+
+            <nav class="nav-links">
+                <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+                <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+                <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+                {% if user.is_superuser %}
+                <a href="{% url 'authentication:dashboard' %}" class="nav-link">ADMIN</a>
                 {% endif %}
+            </nav>
+
+            <div class="user-actions">
+                <a href="{% url 'mystory:collaboration_requests' %}" class="icon-btn" title="Requests">
+                    <i class="fas fa-heart"></i>
+                </a>
+                <a href="{% url 'messaging:chat' %}" class="icon-btn" title="Messages">
+                    <i class="fas fa-comment-alt"></i>
+                </a>
+                <a href="#" class="icon-btn" data-bs-toggle="modal" data-bs-target="#profileModal" title="Profile">
+                    <i class="fas fa-user"></i>
+                </a>
             </div>
-    
-            <div class="form-group">
-                <label for="profile_picture">Profile Picture</label>
-                <div class="file-input-container">
-                    <input type="file" name="profile_picture" id="profile_picture">
+        </div>
+    </header>
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(5px);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content"
+                style="background: var(--bg-dark); border: 1px solid var(--glass-border); color: white;">
+                <div class="modal-header" style="border-bottom: 1px solid var(--glass-border);">
+                    <h5 class="modal-title">Profile Options</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'authentication:view_profile' %}" class="btn btn-outline-light"><i
+                                class="fas fa-user me-2"></i> Profile</a>
+                        <a href="{% url 'mystory:mystory1' %}" class="btn btn-outline-light"><i
+                                class="fas fa-book-open me-2"></i>
+                            My Story</a>
+                        <a href="#" class="btn btn-outline-light"><i class="fas fa-cog me-2"></i> Settings</a>
+                        <a href="{% url 'authentication:logout' %}" class="btn btn-outline-danger"><i
+                                class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                    </div>
                 </div>
             </div>
-    
-            <div class="form-group">
-                <label for="bio">Bio</label>
-                <textarea name="bio" id="bio" rows="4">{{ profile.bio }}</textarea>
-            </div>
-    
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input type="text" name="address" id="address" value="{{ profile.address }}">
-            </div>
-            <div class="form-group">
-                <label for="address">phone_number</label>
-                <input type="text" name="phone_number" id="phone_number" value="{{ profile.phone_number }}">
-            </div>
-    
-            <button type="submit" class="submit-button">Save Changes</button>
-            <a href="javascript:history.back()" class="cancel-link">Cancel and Return</a>
-        </form>
+        </div>
     </div>
-    
 
+    <main class="main-content">
+        <div class="glass-panel form-panel" data-aos="zoom-in">
+            <h2 class="user-title text-center mb-4">Edit Profile</h2>
+
+            <form method="POST" enctype="multipart/form-data" class="profile-form">
+                {% csrf_token %}
+
+                <div class="preview-avatar-section">
+                    <div class="preview-avatar">
+                        {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" id="profilePreview" alt="Profile preview">
+                        {% else %}
+                        <div class="profile-initials-placeholder" id="placeholderAvatar" style="font-size: 3rem;">
+                            <span>{{ request.user.username|first|upper }}</span>
+                        </div>
+                        <img src="" id="profilePreview" style="display: none;" alt="Profile preview">
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="profile_picture">Profile Picture</label>
+                    <div class="file-input-wrapper">
+                        <div class="file-input-custom">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span id="fileNameDisplay">Choose a new photo...</span>
+                        </div>
+                        <input type="file" name="profile_picture" id="profile_picture" onchange="previewFile()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Biography</label>
+                    <textarea name="bio" id="bio"
+                        placeholder="Tell the world about your creative journey...">{{ profile.bio|default:"" }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Location</label>
+                    <input type="text" name="address" id="address" placeholder="e.g. Wonderland, USA"
+                        value="{{ profile.address|default:"" }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" name="phone_number" id="phone_number" placeholder="e.g. +1 234 567 890"
+                        value="{{ profile.phone_number|default:"" }}">
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn-pulse btn-submit">
+                        <i class="fas fa-save"></i>
+                        <span>Save Changes</span>
+                    </button>
+                    <a href="{% url 'authentication:view_profile' %}" class="cancel-back">
+                        <i class="fas fa-times me-1"></i> Cancel and Return
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Taletailor</h2>
+                <p class="footer-tagline">
+                    Where passion meets precision. Capturing the essence of every detail, one story at a time.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h3>Services</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Bonus Program</a>
+                    <a href="#" class="footer-link">Gift Cards</a>
+                    <a href="#" class="footer-link">Subscription</a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Support</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Help Center</a>
+                    <a href="#" class="footer-link">Community Guidelines</a>
+                    <a href="#" class="footer-link">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-         
-         document.querySelectorAll('.bubble').forEach((bubble, index) => {
-             const delay = index * 2;
-             const duration = 15 + Math.random() * 10;
-      
-             bubble.style.animationDelay = `${delay}s`;
-             bubble.style.animationDuration = `${duration}s`;
-         });
-        
-        
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 100
+            });
+        });
+
+        function previewFile() {
+            const preview = document.getElementById('profilePreview');
+            const placeholder = document.getElementById('placeholderAvatar');
+            const file = document.getElementById('profile_picture').files[0];
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const reader = new FileReader();
+
+            if (file) {
+                fileNameDisplay.textContent = file.name;
+                reader.onloadend = function () {
+                    preview.src = reader.result;
+                    preview.style.display = 'block';
+                    if (placeholder) placeholder.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                fileNameDisplay.textContent = "Choose a new photo...";
+            }
+        }
     </script>
 </body>
+
 </html>

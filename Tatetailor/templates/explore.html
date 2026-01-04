@@ -1,1199 +1,372 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaleTailor - Find Your Stories</title>
-     <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', 'Arial', sans-serif;
-        }
-
-        :root {
-            --primary: #8a2be2;
-            --primary-light: rgba(138, 43, 226, 0.2);
-            --primary-dark: #6a1cb2;
-            --dark-bg: #121212;
-            --card-bg: #1e1e1e;
-            --header-bg: #1a1a1a;
-            --text-primary: #ffffff;
-            --text-secondary: #bbbbbb;
-            --text-tertiary: #888888;
-            --border: #333333;
-        }
-
-        body {
-            background-color: var(--dark-bg);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        /* Header Styles */
-        header {
-            background-color: var(--header-bg);
-            padding: 1rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo-container {
-            padding: 0.5rem 1.5rem;
-            margin-left: 2rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--text-primary);
-            letter-spacing: 1px;
-            position: relative;
-            padding-left: 10px;
-        }
-
-        .logo::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background-color: var(--primary);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.2rem;
-        }
-
-        .nav-link {
-            color: var(--text-primary);
-            text-decoration: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--primary);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .nav-link:hover {
-            background-color: rgba(138, 43, 226, 0.1);
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.8rem;
-            margin-right: 2rem;
-        }
-
-        .mode-toggle {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .dynamic-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .toggle {
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background-color: #444;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .toggle::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        .toggle.active {
-            background-color: var(--primary);
-        }
-
-        .toggle.active::after {
-            transform: translateX(26px);
-        }
-
-        .action-icon {
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: transform 0.2s ease, color 0.2s ease;
-            color: var(--text-secondary);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .action-icon:hover {
-            transform: scale(1.1);
-            color: var(--primary);
-            background-color: rgba(138, 43, 226, 0.1);
-        }
-        
-        .search-container {
-            padding: 2rem;
-            display: flex;
-            justify-content: center;
-            position: relative;
-        }
-        
-        .search-bar {
-            width: 50%;
-            padding: 0.9rem 1rem 0.9rem 3rem;
-            border-radius: 30px;
-            border: 1px solid var(--border);
-            background-color: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-bar:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
-            width: 60%;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: calc(25% + 15px);
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-tertiary);
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
-
-        .search-bar:focus + .search-icon {
-            color: var(--primary);
-            left: calc(20% + 15px);
-        }
-        
-        .main-content {
-            display: flex;
-            min-height: calc(100vh - 200px);
-        }
-        
-        .filters {
-            width: 20%;
-            background-color: var(--card-bg);
-            padding: 1.5rem;
-            border-right: 1px solid var(--border);
-        }
-
-        .filter-title {
-            color: var(--text-primary);
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .filter-category {
-            margin-bottom: 1.5rem;
-        }
-        
-        .filter-toggle {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            padding: 0.7rem;
-            font-weight: 500;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-        }
-
-        .filter-toggle:hover {
-            background-color: rgba(138, 43, 226, 0.1);
-        }
-
-        .filter-toggle span:first-child {
-            display: flex;
-            align-items: center;
-        }
-
-        .filter-icon {
-            margin-right: 10px;
-            color: var(--primary);
-        }
-
-        .filter-options {
-            padding: 0.5rem 0 0.5rem 1.8rem;
-            display: none;
-        }
-
-        .filter-option {
-            margin: 0.5rem 0;
-            display: flex;
-            align-items: center;
-        }
-
-        .filter-checkbox {
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border: 1px solid var(--border);
-            border-radius: 3px;
-            margin-right: 10px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .filter-checkbox:checked {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .filter-checkbox:checked::after {
-            content: '✓';
-            position: absolute;
-            color: white;
-            font-size: 12px;
-            top: -1px;
-            left: 3px;
-        }
-
-        .filter-label {
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
-        
-        .content-container {
-            width: 80%;
-            padding: 1.5rem 2rem;
-        }
-        
-        .view-controls {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            align-items: center;
-        }
-
-        .results-info {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        .view-buttons {
-            display: flex;
-        }
-
-        .view-button {
-            background-color: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            padding: 0.5rem 1rem;
-            border-radius: 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s ease;
-        }
-
-        .view-button:first-child {
-            border-radius: 6px 0 0 6px;
-        }
-
-        .view-button:last-child {
-            border-radius: 0 6px 6px 0;
-        }
-        
-        .view-button.active {
-            background-color: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .view-button:not(.active):hover {
-            background-color: rgba(138, 43, 226, 0.1);
-        }
-        
-        /* Grid View Styles */
-        .stories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-        
-        .grid-card {
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            background-color: var(--card-bg);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .grid-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 30px rgba(138, 43, 226, 0.2);
-        }
-
-        .card-hover-info {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 1.5rem;
-        }
-
-        .grid-card:hover .card-hover-info {
-            opacity: 1;
-        }
-
-        .card-category {
-            background-color: var(--primary);
-            color: white;
-            padding: 0.2rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-        
-        .grid-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .grid-card:hover .grid-image {
-            transform: scale(1.1);
-        }
-        
-        .grid-info {
-            padding: 1.2rem;
-        }
-
-        .grid-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            position: relative;
-            padding-bottom: 0.5rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .grid-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background-color: var(--primary);
-        }
-
-        .grid-meta {
-            display: flex;
-            justify-content: space-between;
-            color: var(--text-tertiary);
-            font-size: 0.8rem;
-            margin-top: 1rem;
-        }
-
-        .grid-tags {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .grid-tag {
-            background-color: rgba(138, 43, 226, 0.1);
-            color: var(--primary);
-            font-size: 0.7rem;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            border: 1px solid rgba(138, 43, 226, 0.3);
-        }
-        
-        /* List View Styles */
-        .stories-list {
-            display: none;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        
-        .list-card {
-            display: flex;
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .list-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.2);
-        }
-        
-        .list-image-container {
-            width: 180px;
-            height: 150px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .list-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .list-card:hover .list-image {
-            transform: scale(1.1);
-        }.list-details {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .list-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            position: relative;
-            padding-bottom: 0.5rem;
-        }
-
-        .list-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background-color: var(--primary);
-        }
-        
-        .list-description {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            flex-grow: 1;
-        }
-        
-        .list-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-        }
-
-        .list-stats {
-            display: flex;
-            gap: 1.2rem;
-            color: var(--text-tertiary);
-            font-size: 0.85rem;
-        }
-
-        .stat {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .list-tags {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .list-tag {
-            background-color: rgba(138, 43, 226, 0.1);
-            color: var(--primary);
-            font-size: 0.7rem;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            border: 1px solid rgba(138, 43, 226, 0.3);
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin: 2.5rem 0;
-            gap: 0.3rem;
-        }
-        
-        .page-button {
-            padding: 0.6rem 1rem;
-            background-color: var(--card-bg);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            min-width: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .page-button.active {
-            background-color: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        .page-button:hover:not(.active) {
-            background-color: rgba(138, 43, 226, 0.1);
-            color: var(--primary);
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .stories-grid, .stories-list {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .stories-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 992px) {
-            .stories-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .search-bar {
-                width: 70%;
-            }
-            .search-icon {
-                left: calc(15% + 15px);
-            }
-            .search-bar:focus + .search-icon {
-                left: calc(10% + 15px);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-            .filters {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-            }
-            .content-container {
-                width: 100%;
-            }
-            .stories-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .list-image-container {
-                width: 120px;
-            }
-            .search-bar {
-                width: 90%;
-            }
-            .search-icon {
-                left: calc(5% + 15px);
-            }
-        }
-
-        @media (max-width: 576px) {
-            .logo-container {
-                margin-left: 1rem;
-            }
-            .user-actions {
-                margin-right: 1rem;
-                gap: 1rem;
-            }
-            .nav-links {
-                gap: 0.5rem;
-            }
-            .nav-link {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.9rem;
-            }
-            .stories-grid {
-                grid-template-columns: 1fr;
-            }
-            .view-controls {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-            .list-card {
-                flex-direction: column;
-            }
-            .list-image-container {
-                width: 100%;
-                height: 180px;
-            }
-        }
-        
-        /* Header Styles */
-        header {
-            background-color: #333;
-            padding: 1rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #444;
-        }
-
-        .logo-container {
-            padding: 0.5rem 1.5rem;
-            background-color: #000;
-            border-radius: 0;
-            margin-left: 2rem;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: white;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            background-color: #000;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-right: 2rem;
-        }
-
-        .dynamic-label {
-            color: #aaa;
-        }
-
-        .toggle {
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background-color: #444;
-            border-radius: 25px;
-            cursor: pointer;
-        }
-
-        .toggle::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s ease;
-        }
-
-        .toggle.active::after {
-            transform: translateX(26px);
-        }
-
-        .heart-icon, .profile-icon {
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        .irish-grover-regular {
-        font-family: "Irish Grover", serif;
-        font-weight: 400;
-        font-style: normal;
-        }
-
-  /* Search Container - Professional Style */
-.search-container {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.filter-title {
-    font-size: 0.9rem;
-    color: #333333;
-    margin-bottom: 0.75rem;
-    font-weight: 600;
-}
-
-.search-input-wrapper {
-    position: relative;
-}
-
-.search-input-wrapper input {
-    width: 100%;
-    padding: 0.7rem 0.75rem;
-    border: 1px solid #cccccc;
-    border-radius: 3px;
-    font-size: 0.9rem;
-    transition: border-color 0.2s ease;
-    background-color: #f9f9f9;
-}
-
-.search-input-wrapper input:focus {
-    outline: none;
-    border-color: #999999;
-    background-color: #ffffff;
-}
-
-.search-input-wrapper input::placeholder {
-    color: #999999;
-}
-
-/* Filter Actions - Professional Style */
-.filter-actions {
-    margin-top: 1.5rem;
-    display: flex;
-    gap: 0.75rem;
-    padding: 1rem 0;
-    border-top: 1px solid #e0e0e0;
-}
-
-.apply-filters-btn {
-    padding: 0.6rem 1rem;
-    background-color: #4a4a4a;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    font-weight: 500;
-    cursor: pointer;
-    flex: 1;
-    transition: background-color 0.2s;
-    font-size: 0.85rem;
-}
-
-.apply-filters-btn:hover {
-    background-color: #333333;
-}
-
-.clear-filters-btn {
-    padding: 0.6rem 1rem;
-    background-color: #f2f2f2;
-    color: #4a4a4a;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
-    text-align: center;
-    text-decoration: none;
-    font-weight: 500;
-    flex: 1;
-    transition: all 0.2s;
-    font-size: 0.85rem;
-}
-
-.clear-filters-btn:hover {
-    background-color: #e6e6e6;
-}
-    </style>
+    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
+    <link rel="stylesheet" href="{% static 'css/explore_modern.css' %}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
+
 <body>
+    <!-- Background Elements -->
+    <div class="hero-bg-glow"></div>
+
     <header>
-        <div class="logo-container">
-            <div class="logo irish-grover-regular">TALETAILOR</div>
-        </div>
-        <div class="nav-links">
-            <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
-            <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
-            <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
-            {% if user.is_superuser %}
-            <a style="text-decoration: none;" href="{% url 'authentication:users' %}"
-                  class="nav-link">
-                    Admin Panel
-                
-            </a>
-        {% endif %}
-        </div>
-        <div class="user-actions">
-             
-            <a style="text-decoration: none;" href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
-         <a href="{% url 'messaging:chat' %}" style="text-decoration: none;" class="message-icon">
-            <i class="fas fa-comments" style="font-size: 20px; color: #25D366;"></i> 
-            </a>
-            <!-- Profile Icon to trigger the modal -->
-            <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
-                👤
+        <div class="header-container">
+            <div class="logo">TALETAILOR</div>
+
+            <nav class="nav-links">
+                <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+                <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+                <a href="{% url 'aistory:explore' %}" class="nav-link active">EXPLORE</a>
+                {% if user.is_superuser %}
+                <a href="{% url 'authentication:dashboard' %}" class="nav-link">ADMIN</a>
+                {% endif %}
+            </nav>
+
+            <div class="user-actions">
+                <a href="{% url 'mystory:collaboration_requests' %}" class="icon-btn" title="Requests">
+                    <i class="fas fa-heart"></i>
+                </a>
+                <a href="{% url 'messaging:chat' %}" class="icon-btn" title="Messages">
+                    <i class="fas fa-comment-alt"></i>
+                </a>
+                <a href="#" class="icon-btn" data-bs-toggle="modal" data-bs-target="#profileModal" title="Profile">
+                    <i class="fas fa-user"></i>
+                </a>
             </div>
         </div>
     </header>
-    
-    <!-- <div class="search-container">
-        <input type="text" class="search-bar" placeholder="Search for stories, genres, authors...">
-        <i class="fas fa-search search-icon"></i>
-    </div> -->
-    
-    <main class="main-content">
-        <aside class="filters">
-            <form method="get" action="" id="filter-form">
-                <!-- Add search input at the top -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(5px);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content"
+                style="background: var(--bg-dark); border: 1px solid var(--glass-border); color: white;">
+                <div class="modal-header" style="border-bottom: 1px solid var(--glass-border);">
+                    <h5 class="modal-title">Profile Options</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'authentication:view_profile' %}" class="btn btn-outline-light"><i
+                                class="fas fa-user me-2"></i> Profile</a>
+                        <a href="{% url 'mystory:mystory1' %}" class="btn btn-outline-light"><i
+                                class="fas fa-book-open me-2"></i> My Story</a>
+                        <a href="#" class="btn btn-outline-light"><i class="fas fa-cog me-2"></i> Settings</a>
+                        <a href="{% url 'authentication:logout' %}" class="btn btn-outline-danger"><i
+                                class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="explore-container">
+        <!-- Sidebar Filters -->
+        <aside class="filters-sidebar glass-panel p-4" data-aos="fade-right">
+            <form method="GET" action="{% url 'aistory:explore' %}" id="filter-form">
+
                 <div class="search-container">
-                
-                    <div class="search-input-wrapper">
-                        <input type="text" name="search" value="{{ search_query }}" placeholder="Search stories...">
-                    </div>
+                    <input type="text" name="search" class="search-box" placeholder="Search stories..."
+                        value="{{ search_query|default:'' }}">
                 </div>
-                
-                <h3 class="filter-title" style="color: #fff;">Filters</h3>
-                <div class="filter-category">
+
+                <!-- Length Filter -->
+                <div class="filter-group">
                     <div class="filter-toggle">
-                        <span><i class="fas fa-clock filter-icon"></i> Length</span>
+                        <span><i class="fas fa-clock fs-5 me-2"></i> Length</span>
+                        <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="filter-options">
-                        <div class="filter-option">
-                            <input type="checkbox" id="short" name="length" value="short" class="filter-checkbox" {% if "short" in selected_lengths %}checked{% endif %}>
-                            <label for="short" class="filter-label">Short (less than 500 (words))</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="medium" name="length" value="medium" class="filter-checkbox" {% if "medium" in selected_lengths %}checked{% endif %}>
-                            <label for="medium" class="filter-label">Medium (500 - 1500 (words))</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="long" name="length" value="long" class="filter-checkbox" {% if "long" in selected_lengths %}checked{% endif %}>
-                            <label for="long" class="filter-label">Long (more than 1500 (words))</label>
-                        </div>
+                        <label class="custom-checkbox">
+                            {% if "short" in selected_lengths %}
+                            <input type="checkbox" name="length" value="short" checked>
+                            {% else %}
+                            <input type="checkbox" name="length" value="short">
+                            {% endif %}
+                            Short (< 500 words) </label>
+                                <label class="custom-checkbox">
+                                    {% if "medium" in selected_lengths %}
+                                    <input type="checkbox" name="length" value="medium" checked>
+                                    {% else %}
+                                    <input type="checkbox" name="length" value="medium">
+                                    {% endif %}
+                                    Medium (500 - 1500)
+                                </label>
+                                <label class="custom-checkbox">
+                                    {% if "long" in selected_lengths %}
+                                    <input type="checkbox" name="length" value="long" checked>
+                                    {% else %}
+                                    <input type="checkbox" name="length" value="long">
+                                    {% endif %}
+                                    Long (> 1500 words)
+                                </label>
                     </div>
                 </div>
-                <div class="filter-category">
+
+                <!-- Type/Genre Filter -->
+                <div class="filter-group">
                     <div class="filter-toggle">
-                        <span><i class="fas fa-book filter-icon"></i> Type</span>
+                        <span><i class="fas fa-book fs-5 me-2"></i> Type</span>
+                        <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="filter-options">
-                        <div class="filter-option">
-                            <input type="checkbox" id="fantasy" name="type" value="fantasy" class="filter-checkbox" {% if "fantasy" in selected_types %}checked{% endif %}>
-                            <label for="fantasy" class="filter-label">Fantasy</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="mystery" name="type" value="mystery" class="filter-checkbox" {% if "mystery" in selected_types %}checked{% endif %}>
-                            <label for="mystery" class="filter-label">Mystery</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="scifi" name="type" value="scifi" class="filter-checkbox" {% if "scifi" in selected_types %}checked{% endif %}>
-                            <label for="scifi" class="filter-label">Sci-Fi</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="romance" name="type" value="romance" class="filter-checkbox" {% if "romance" in selected_types %}checked{% endif %}>
-                            <label for="romance" class="filter-label">Romance</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="horror" name="type" value="horror" class="filter-checkbox" {% if "horror" in selected_types %}checked{% endif %}>
-                            <label for="horror" class="filter-label">Horror</label>
-                        </div>
+                        <label class="custom-checkbox">
+                            {% if "fantasy" in selected_types %}
+                            <input type="checkbox" name="type" value="fantasy" checked>
+                            {% else %}
+                            <input type="checkbox" name="type" value="fantasy">
+                            {% endif %}
+                            Fantasy
+                        </label>
+                        <label class="custom-checkbox">
+                            {% if "mystery" in selected_types %}
+                            <input type="checkbox" name="type" value="mystery" checked>
+                            {% else %}
+                            <input type="checkbox" name="type" value="mystery">
+                            {% endif %}
+                            Mystery
+                        </label>
+                        <label class="custom-checkbox">
+                            {% if "scifi" in selected_types %}
+                            <input type="checkbox" name="type" value="scifi" checked>
+                            {% else %}
+                            <input type="checkbox" name="type" value="scifi">
+                            {% endif %}
+                            Sci-Fi
+                        </label>
+                        <label class="custom-checkbox">
+                            {% if "romance" in selected_types %}
+                            <input type="checkbox" name="type" value="romance" checked>
+                            {% else %}
+                            <input type="checkbox" name="type" value="romance">
+                            {% endif %}
+                            Romance
+                        </label>
+                        <label class="custom-checkbox">
+                            {% if "horror" in selected_types %}
+                            <input type="checkbox" name="type" value="horror" checked>
+                            {% else %}
+                            <input type="checkbox" name="type" value="horror">
+                            {% endif %}
+                            Horror
+                        </label>
                     </div>
                 </div>
-                <div class="filter-category">
+
+                <!-- Emotion Filter -->
+                <div class="filter-group">
                     <div class="filter-toggle">
-                        <span><i class="fas fa-heart filter-icon"></i> Emotion</span>
+                        <span><i class="fas fa-heart fs-5 me-2"></i> Emotion</span>
+                        <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="filter-options">
-                        <div class="filter-option">
-                            <input type="checkbox" id="happy" name="emotion" value="happy" class="filter-checkbox" {% if "happy" in selected_emotions %}checked{% endif %}>
-                            <label for="happy" class="filter-label">Happy</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="sad" name="emotion" value="sad" class="filter-checkbox" {% if "sad" in selected_emotions %}checked{% endif %}>
-                            <label for="sad" class="filter-label">Sad</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="suspenseful" name="emotion" value="suspenseful" class="filter-checkbox" {% if "suspenseful" in selected_emotions %}checked{% endif %}>
-                            <label for="suspenseful" class="filter-label">Suspenseful</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="scary" name="emotion" value="scary" class="filter-checkbox" {% if "scary" in selected_emotions %}checked{% endif %}>
-                            <label for="scary" class="filter-label">Scary</label>
-                        </div>
+                        <label class="custom-checkbox">
+                            {% if "happy" in selected_emotions %}
+                            <input type="checkbox" name="emotion" value="happy" checked>
+                            {% else %}
+                            <input type="checkbox" name="emotion" value="happy">
+                            {% endif %}
+                            Happy
+                        </label>
+                        <label class="custom-checkbox">
+                            {% if "sad" in selected_emotions %}
+                            <input type="checkbox" name="emotion" value="sad" checked>
+                            {% else %}
+                            <input type="checkbox" name="emotion" value="sad">
+                            {% endif %}
+                            Sad
+                        </label>
+                        <label class="custom-checkbox">
+                            {% if "suspenseful" in selected_emotions %}
+                            <input type="checkbox" name="emotion" value="suspenseful" checked>
+                            {% else %}
+                            <input type="checkbox" name="emotion" value="suspenseful">
+                            {% endif %}
+                            Suspenseful
+                        </label>
+                        <label class="custom-checkbox">
+                            {% if "scary" in selected_emotions %}
+                            <input type="checkbox" name="emotion" value="scary" checked>
+                            {% else %}
+                            <input type="checkbox" name="emotion" value="scary">
+                            {% endif %}
+                            Scary
+                        </label>
                     </div>
                 </div>
-                
-                <!-- Apply Filters Button -->
+
                 <div class="filter-actions">
-                    <button type="submit" class="apply-filters-btn">Apply Filters</button>
-                    <a href="{% url 'aistory:explore' %}" class="clear-filters-btn">Clear All</a>
+                    <button type="submit" class="cta-button btn-pulse w-100">Apply</button>
+                    <a href="{% url 'aistory:explore' %}" class="btn-clear">Clear</a>
                 </div>
             </form>
         </aside>
-        
-        <div class="content-container">
-            <div class="view-controls">
+
+        <!-- Main Content -->
+        <main class="explore-content">
+            <div class="controls-bar glass-panel" data-aos="fade-down">
                 <div class="results-info">
                     <p>
-                        Showing <strong>{{ page_obj|length }}</strong> of 
+                        Showing <strong>{{ page_obj|length }}</strong> of
                         <strong>{{ page_obj.paginator.count }}</strong> stories
                     </p>
-                    
                 </div>
-                <div class="view-buttons">
-                    <button class="view-button grid-view-btn active">
-                        <i class="fas fa-th"></i> Grid
-                    </button>
-                    <button class="view-button list-view-btn">
-                        <i class="fas fa-list"></i> List
-                    </button>
+                <div class="view-toggles">
+                    <button class="view-btn active" id="grid-view" title="Grid View"><i
+                            class="fas fa-th-large"></i></button>
+                    <button class="view-btn" id="list-view" title="List View"><i class="fas fa-list"></i></button>
                 </div>
             </div>
-            
-            <!-- Grid View -->
-            <section class="stories-grid">
-                {% for story in page_obj  %}
-                <a style="text-decoration: none; color: #fff;" href="{% url 'aistory:view_story' story.id %}" class="draft-link">
-                <div class="grid-card">
-                    <div class="card-category">{{ story.emotions|default:"Uncategorized" }}</div>
-                    {% if story.image %}
-                        <img src="{{ story.image.url }}" alt="{{ story.title }}" class="grid-image">
-                    {% else %}
-                        <img src="{% static 'images/logo4.webp' %}" alt="{{ story.title }}" class="grid-image">
-                    {% endif %}
-                    <div class="card-hover-info">
-                        <div class="grid-tags">
-                            <span class="grid-tag">{{ story.get_length_display }}</span>
-                            {% if story.is_collaborated %}
-                                <span class="grid-tag">Collaborative</span>
+
+            <div id="stories-container" class="stories-grid">
+                {% for story in page_obj %}
+                <a href="{% url 'aistory:view_story' story.id %}" style="text-decoration: none;">
+                    <article class="explore-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                        <div class="card-image-container">
+                            {% if story.image %}
+                            <img src="{{ story.image.url }}" alt="{{ story.title }}">
+                            {% else %}
+                            <img src="{% static 'images/logo4.webp' %}" alt="{{ story.title }}">
                             {% endif %}
+                            <span class="card-category-badge">{{ story.emotions|default:"Story" }}</span>
                         </div>
-                    </div>
-                    <div class="grid-info">
-                        <h3 class="grid-title">{{ story.title }}</h3>
-                        <div class="grid-meta">
-                            <span><i class="fas fa-eye"></i> {{ story.view_count|default:"0" }}</span>
-                            <span><i class="fas fa-heart"></i> {{ story.like_count|default:"0" }}</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-                {% endfor %}
-            </section>
-            
-            <!-- List View -->
-            <section class="stories-list">
-                {% for story in page_obj  %}
-                <a style="text-decoration: none; color: #fff;" href="{% url 'aistory:view_story' story.id %}" class="draft-link">
-                <div class="list-card">
-                    <div class="list-image-container">
-                        {% if story.image %}
-                            <img src="{{ story.image.url }}" alt="kjojkk" class="list-image">
-                        {% else %}
-                            <img src="{% static 'images/logo4.webp' %}" alt="okkk" class="list-image">
-                        {% endif %}
-                    </div>
-                    <div class="list-details">
-                        <h3 class="list-title">{{ story.title }}</h3>
-                        <p class="list-description">{{ story.content|truncatewords:30 }}</p>
-                        <div class="list-meta">
-                            <div class="list-stats">
-                                <div class="stat"><i class="fas fa-eye"></i> {{ story.view_count|default:"0" }}</div>
-                                <div class="stat"><i class="fas fa-heart"></i> {{ story.like_count|default:"0" }}</div>
-                             </div>
-                            <div class="list-tags">
-                                <span class="list-tag">{{ story.emotions|default:"General" }}</span>
-                                <span class="list-tag">{{ story.get_length_display }}</span>
+                        <div class="card-details">
+                            <h3 class="card-title">{{ story.title }}</h3>
+                            <div class="grid-tags">
+                                <span class="grid-tag">{{ story.get_length_display }}</span>
                                 {% if story.is_collaborated %}
-                                    <span class="list-tag">Collaborative</span>
+                                <span class="grid-tag">Collab</span>
                                 {% endif %}
                             </div>
+
+                            <!-- Description for List View (Hidden in grid via CSS if needed, shown in list) -->
+                            <p class="list-description d-none">{{ story.content|truncatewords:30 }}</p>
+
+                            <div class="card-meta">
+                                <span class="meta-item" title="Views">
+                                    <i class="fas fa-eye text-primary"></i>
+                                    <span class="fw-bold ms-1">{{ story.view_count|default:"0" }}</span>
+                                </span>
+                                <span class="meta-item" title="Likes">
+                                    <i class="fas fa-heart text-danger"></i>
+                                    <span class="fw-bold ms-1">{{ story.like_count|default:"0" }}</span>
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    </article>
+                </a>
+                {% empty %}
+                <div class="glass-panel p-5 text-center w-100">
+                    <i class="fas fa-ghost fa-3x mb-3 text-muted"></i>
+                    <h3>No stories found</h3>
+                    <p class="text-muted">Try adjusting your filters or search query.</p>
                 </div>
-            </a>
                 {% endfor %}
-            </section>
-
-
-            <div class="pagination">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}" class="page-button">
-                        <i class="fas fa-chevron-left"></i>
-                    </a>
-                {% endif %}
-            
-                {% for num in page_obj.paginator.page_range %}
-                {% if num == 1 or num == page_obj.paginator.num_pages or num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
-                    {% if page_obj.number == num %}
-                        <span class="page-button active">{{ num }}</span>
-                    {% else %}
-                        <a href="?page={{ num }}" class="page-button">{{ num }}</a>
-                    {% endif %}
-                {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
-                    <span class="page-button">...</span>
-                {% endif %}
-            {% endfor %}
-            
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}" class="page-button">
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                {% endif %}
             </div>
-            
-        </div>
-    </main>
-    
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <div class="pagination-container">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+                    class="page-link"><i class="fas fa-chevron-left"></i></a>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <span class="page-link active">{{ num }}</span>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a
+                    href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+                    class="page-link">{{ num }}</a>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+                        class="page-link"><i class="fas fa-chevron-right"></i></a>
+                    {% endif %}
+            </div>
+            {% endif %}
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Toggle functionality
-        // const toggle = document.querySelector('.toggle');
-        // toggle.addEventListener('click', function() {
-        //     this.classList.toggle('active');
-        // });
-        
-        // Filter toggles
-        document.querySelectorAll('.filter-toggle').forEach(toggle => {
-            toggle.addEventListener('click', function() {
-                const options = this.nextElementSibling;
-                const icon = this.querySelector('span:last-child i');
-                
-                if (options.style.display === 'block') {
-                    options.style.display = 'none';
-                    icon.className = 'fas fa-chevron-down';
-                } else {
-                    options.style.display = 'block';
-                    icon.className = 'fas fa-chevron-up';
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 50
+            });
+
+            // Filter Accordions
+            document.querySelectorAll('.filter-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function () {
+                    const options = this.nextElementSibling;
+                    const icon = this.querySelector('.fa-chevron-down, .fa-chevron-up');
+
+                    if (options.style.display === 'flex') {
+                        options.style.display = 'none';
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    } else {
+                        options.style.display = 'flex';
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    }
+                });
+            });
+
+            // Default open for first group if specific logic isn't needed
+            document.querySelectorAll('.filter-options').forEach(el => {
+                if (el.querySelector('input:checked')) {
+                    el.style.display = 'flex';
                 }
             });
-        });
-        
-        // Pagination
-        document.querySelectorAll('.page-button').forEach(button => {
-            button.addEventListener('click', function() {
-                if (!this.classList.contains('active') && 
-                    !this.innerHTML.includes('fa-chevron')) {
-                    document.querySelector('.page-button.active').classList.remove('active');
-                    this.classList.add('active');
-                }
-            });
-        });
-        
-        // View switching
-        const gridViewBtn = document.querySelector('.grid-view-btn');
-        const listViewBtn = document.querySelector('.list-view-btn');
-        const storiesGrid = document.querySelector('.stories-grid');
-        const storiesList = document.querySelector('.stories-list');
-        
-        gridViewBtn.addEventListener('click', function() {
-            if (!this.classList.contains('active')) {
-                this.classList.add('active');
-                listViewBtn.classList.remove('active');
-                storiesGrid.style.display = 'grid';
-                storiesList.style.display = 'none';
-            }
-        });
-        
-        listViewBtn.addEventListener('click', function() {
-            if (!this.classList.contains('active')) {
-                this.classList.add('active');
-                gridViewBtn.classList.remove('active');
-                storiesGrid.style.display = 'none';
-                storiesList.style.display = 'flex';
-            }
-        });
 
-        // Search bar focus effect
-        const searchBar = document.querySelector('.search-bar');
-        searchBar.addEventListener('focus', function() {
-            this.parentElement.classList.add('focused');
-        });
-        
-        searchBar.addEventListener('blur', function() {
-            this.parentElement.classList.remove('focused');
-        });
+            // View Toggle Logic
+            const gridBtn = document.getElementById('grid-view');
+            const listBtn = document.getElementById('list-view');
+            const container = document.getElementById('stories-container');
+            const descriptions = document.querySelectorAll('.list-description');
 
-        // Card hover effects
-        document.querySelectorAll('.grid-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.querySelector('.card-hover-info').style.opacity = 1;
+            gridBtn.addEventListener('click', () => {
+                container.classList.remove('stories-list-layout');
+                container.classList.add('stories-grid');
+                gridBtn.classList.add('active');
+                listBtn.classList.remove('active');
+                descriptions.forEach(el => el.classList.add('d-none'));
             });
-            
-            card.addEventListener('mouseleave', function() {
-                this.querySelector('.card-hover-info').style.opacity = 0;
+
+            listBtn.addEventListener('click', () => {
+                container.classList.remove('stories-grid');
+                container.classList.add('stories-list-layout');
+                listBtn.classList.add('active');
+                gridBtn.classList.remove('active');
+                descriptions.forEach(el => el.classList.remove('d-none'));
             });
         });
     </script>
 </body>
+
 </html>
