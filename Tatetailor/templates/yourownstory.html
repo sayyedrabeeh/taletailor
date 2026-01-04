@@ -1,493 +1,302 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TaleTailor - Create Your Stories</title>
-    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
 
-  <style>
-    :root {
-      --bg-primary: #121212;
-      --bg-secondary: #1e1e1e;
-      --text-primary: #ffffff;
-      --text-secondary: #b3b3b3;
-      --accent: #9c27b0;
-      --accent-light: #bb86fc;
-      --card-bg: #2d2d2d;
-      --card-hover: #3d3d3d;
-    }
-    .irish-grover-regular {
-  font-family: "Irish Grover", serif;
-  font-weight: 400;
-  font-style: normal;
-}
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    body {
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      min-height: 100vh;
-    }
-    
-    header {
-      background-color: var(--bg-secondary);
-      padding: 1.5rem;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    }
-    
-    h1 {
-      text-align: center;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--accent-light);
-    }
-    
-    .subtitle {
-      text-align: center;
-      color: var(--text-secondary);
-      margin-top: 0.5rem;
-    }
-    
-    main {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
-    }
-    
-    .section-container {
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    
-    .section {
-      flex: 1;
-      min-width: 300px;
-      background-color: var(--bg-secondary);
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease;
-    }
-    
-    .section:hover {
-      transform: translateY(-5px);
-    }
-    
-    .section h2 {
-      color: var(--accent-light);
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      border-bottom: 2px solid var(--accent);
-      padding-bottom: 0.5rem;
-    }
-    
-    .section-description {
-      color: var(--text-secondary);
-      margin-bottom: 1.5rem;
-      line-height: 1.6;
-    }
-    
-    .draft-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-    
-    .draft-card {
-      background-color: var(--card-bg);
-      border-radius: 8px;
-      padding: 1.2rem;
-      transition: background-color 0.3s ease;
-      cursor: pointer;
-      height: 180px;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .draft-card:hover {
-      background-color: var(--card-hover);
-    }
-    
-    .draft-title {
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
-    }
-    
-    .draft-excerpt {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      flex: 1;
-    }
-    
-    .draft-date {
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-      margin-top: 0.5rem;
-      text-align: right;
-    }
-    
-    .create-new {
-      background-color: var(--accent);
-      color: white;
-      border: none;
-      padding: 1rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      width: 100%;
-      transition: background-color 0.3s ease;
-    }
-    
-    .create-new:hover {
-      background-color: var(--accent-light);
-    }
-    
-    .icon {
-      margin-right: 0.5rem;
-    }
-    
-    @media (max-width: 768px) {
-      .section-container {
-        flex-direction: column;
-      }
-    }
-    header {
-            background-color: #333;
-            padding: 1rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #444;
-        }
-        .logo-container {
-            padding: 0.5rem 1.5rem;
-            background-color: #000;
-            border-radius: 0;
-            margin-left: 2rem;
-        }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: white;
-            text-transform: uppercase;
-        }
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-        }
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/yourownstory_modern.css' %}">
 
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            background-color: #000;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-right: 2rem;
-        }
-
-        .dynamic-label {
-            color: #aaa;
-        }
-
-        .toggle {
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background-color: #444;
-            border-radius: 25px;
-            cursor: pointer;
-        }
-
-        .toggle::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s ease;
-        }
-
-        .toggle.active::after {
-            transform: translateX(26px);
-        }
-
-        .heart-icon, .profile-icon {
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        .draft-link {
-        text-decoration: none;
-        color: inherit;
-    }
-    .messages {
-    margin: 20px 0; /* Adds space above and below */
-    padding: 15px; /* Adds space inside the box */
-    border-radius: 8px; /* Soft rounded corners */
-    background-color: #f8f9fa; /* Light gray background */
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-}
-
-.alert {
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    font-weight: 500;
-}
-
-/* Different alert styles based on message type */
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border-left: 5px solid #28a745;
-}
-
-.alert-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border-left: 5px solid #dc3545;
-}
-
-.alert-info {
-    background-color: #d1ecf1;
-    color: #0c5460;
-    border-left: 5px solid #17a2b8;
-}
-
-  </style>
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
+
 <body>
-    <header>
-        <div class="logo-container">
-            <div class="logo irish-grover-regular">TALETAILOR</div>
-        </div>
-        <div class="nav-links">
-            <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
-            <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
-            <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
-            {% if user.is_superuser %}
-            <br><br>
-            <a href="{% url 'authentication:dashboard' %}">
-                <button  class="nav-link">
-                    Admin Panel
-                </button>
-            </a>
+  <!-- Background Elements -->
+  <div class="hero-bg-glow"></div>
+
+  <header>
+    <div class="header-container">
+      <a href="{% url 'authentication:home' %}" class="logo">TALETAILOR</a>
+
+      <nav class="nav-links">
+        <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+        <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+        <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+        {% if user.is_superuser %}
+        <a href="{% url 'authentication:dashboard' %}" class="nav-link">ADMIN</a>
         {% endif %}
-        </div>
-        <div class="user-actions">
-             
-          <a style="text-decoration: none;" href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
-         <a href="{% url 'messaging:chat' %}" style="text-decoration: none;" class="message-icon">
-            <i class="fas fa-comments" style="font-size: 20px; color: #25D366;"></i> 
-            </a>
-            <!-- Profile Icon to trigger the modal -->
-            <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
-                👤
-            </div>
-        </div>
-    </header>
-    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="profileModalLabel">Profile Options</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    
-                </div>
-                <div class="modal-body">
-                    <p><a href="#" class="btn btn-light w-100">👤 Profile </a></p>
-                    <p><a href="#" class="btn btn-light w-100">💾 My Story </a></p>
-                    <p><a href="#" class="btn btn-light w-100">⚙️ Settings </a></p>
-                    <p><a href="{% url 'authentication:logout' %}" class="btn btn-danger w-100">🚪 Logout</a></p>
-                </div>
-            </div>
-        </div>
+      </nav>
+
+      <div class="user-actions">
+        <a href="{% url 'mystory:collaboration_requests' %}" class="icon-btn" title="Requests">
+          <i class="fas fa-heart"></i>
+        </a>
+        <a href="{% url 'messaging:chat' %}" class="icon-btn" title="Messages">
+          <i class="fas fa-comment-alt"></i>
+        </a>
+        <a href="#" class="icon-btn" data-bs-toggle="modal" data-bs-target="#profileModal" title="Profile">
+          <i class="fas fa-user"></i>
+        </a>
+      </div>
     </div>
-  
+  </header>
+
+  <!-- Profile Modal -->
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(5px);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content"
+        style="background: var(--bg-dark); border: 1px solid var(--glass-border); color: white;">
+        <div class="modal-header" style="border-bottom: 1px solid var(--glass-border);">
+          <h5 class="modal-title">Profile Options</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-grid gap-3">
+            <a href="{% url 'authentication:view_profile' %}" class="btn btn-outline-light"><i
+                class="fas fa-user me-2"></i> Profile</a>
+            <a href="{% url 'mystory:mystory1' %}" class="btn btn-outline-light"><i class="fas fa-book-open me-2"></i>
+              My Story</a>
+            <a href="#" class="btn btn-outline-light"><i class="fas fa-cog me-2"></i> Settings</a>
+            <a href="{% url 'authentication:logout' %}" class="btn btn-outline-danger"><i
+                class="fas fa-sign-out-alt me-2"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <main>
     {% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-            {{ message }}
-        </div>
-        {% endfor %}
+    <div class="messages-container" data-aos="fade-down" style="margin-bottom: 2rem;">
+      {% for message in messages %}
+      <div class="alert alert-dismissible fade show {% if message.tags %}alert-{{ message.tags }}{% endif %}"
+        role="alert"
+        style="background: var(--glass-bg); color: white; border: 1px solid var(--glass-border); backdrop-filter: blur(10px);">
+        {{ message }}
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
     </div>
     {% endif %}
-       <form method="GET" action="" style="display: flex; gap: 10px; margin-bottom: 1rem; align-items: center;">
-        <input 
-          type="text" 
-          name="q" 
-          id="searchInput"
-          placeholder="Search your stories..." 
-          value="{{ query }}"
-          style="background-color: #222; color: #eee; border: 1px solid #444; padding: 6px 10px; border-radius: 4px; flex: 1;">
-        
-        <button 
-          type="submit" 
-          style="background-color: #555; color: white; border: none; padding: 6px 12px; border-radius: 4px;">
-          🔍 Search
-        </button>
 
-        <button 
-          type="button" 
-          id="clearBtn" 
-          style="display: none; background-color: #333; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer;">
-          ❌
-        </button>
-      </form>
+    <div class="page-header" data-aos="fade-down">
+      <h1>Create Your Stories</h1>
+      <p class="subtitle">Bring your imagination to life, alone or with friends.</p>
+    </div>
 
+    <!-- Modern Search Bar -->
+    <form method="GET" action="" class="search-form" data-aos="fade-up">
+      <div class="search-input-group">
+        <i class="fas fa-search"></i>
+        <input type="text" name="q" id="searchInput" class="search-input" placeholder="Search your stories..."
+          value="{{ query }}">
+        <button type="button" id="clearBtn" class="clear-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <button type="submit" class="search-btn">
+        <i class="fas fa-search"></i>
+        <span>Search</span>
+      </button>
+    </form>
 
     {% if query %}
-        <p>Showing results for "<strong>{{ query }}</strong>"</p>
-    {% endif %} 
+    <div class="search-results-meta mb-4" data-aos="fade-in">
+      <p>Showing results for "<strong>{{ query }}</strong>"</p>
+    </div>
+    {% endif %}
 
-
-    <div class="section-container">
-     
-      <section class="section">
+    <div class="sections-grid">
+      <!-- Individual Story Creation -->
+      <section class="glass-panel" data-aos="fade-right">
+        <div class="section-icon mb-4">
+          <i class="fas fa-feather-alt fa-3x" style="color: var(--accent-primary);"></i>
+        </div>
         <h2>Create Your Own Story</h2>
         <p class="section-description">
-          Embark on a solo adventure and craft your own narrative. Let your imagination run wild with characters, plots, and worlds entirely of your making.
+          Embark on a solo adventure and craft your own narrative. Let your imagination run wild with
+          characters, plots, and worlds entirely of your making.
         </p>
-        <a href="{% url 'mystory:edit_story' %}">
-            <button class="create-new">
-                <span class="icon">✏️</span> Start New Story
-            </button>
+
+        <a href="{% url 'mystory:edit_story' %}" class="btn-pulse">
+          <i class="fas fa-plus-circle"></i>
+          <span>Start New Story</span>
         </a>
-        
-       
-        <div class="draft-container">
-          {% for story in my_stories %}
-          <a href="{% url 'mystory:edit_story' story.id %}" class="draft-link">
-            <div class="draft-card">
-                <div class="draft-title">{{ story.title }}</div>
-                <div class="draft-excerpt">{{ story.content|truncatewords:20 }}</div>
-                {% if story.status == 'draft' %}
-                <div class="draft-status" style="color: red;">
-                  Draft
-                </div>
-              {% elif story.status %}
-                <div class="draft-status" style="color: green;">
-                  {{ story.status|title }}
-                </div>
-              {% else %}
-                <div class="draft-status" style="color: red;">
-                  Draft
-                </div>
-              {% endif %}
-              
-                <div class="draft-date">Last edited: {{ story.updated_at|date:"M d, Y" }}</div>
+
+        <div class="drafts-section mt-4">
+          <h3 class="h5 mb-3 border-bottom pb-2 border-secondary" style="color: var(--text-main); opacity: 0.8;">Recent
+            Drafts</h3>
+          <div class="drafts-list">
+            {% for story in my_stories %}
+            <a href="{% url 'mystory:edit_story' story.id %}" class="draft-card">
+              <div class="draft-info">
+                <span class="draft-title">{{ story.title }}</span>
+                <span class="status-badge status-{{ story.status|default:'draft'|lower }}">
+                  {% if story.status|lower == 'published' %}
+                  <i class="fas fa-check-circle"></i>
+                  {% elif story.status|lower == 'ongoing' %}
+                  <i class="fas fa-pen-nib"></i>
+                  {% else %}
+                  <i class="fas fa-file-alt"></i>
+                  {% endif %}
+                  {{ story.status|default:"Draft" }}
+                </span>
+              </div>
+              <p class="draft-excerpt">{{ story.content|truncatewords:20 }}</p>
+              <div class="draft-meta">
+                <span><i class="fas fa-clock me-1"></i> {{ story.updated_at|date:"M d, Y" }}</span>
+              </div>
+            </a>
+            {% empty %}
+            <div class="text-center py-4 text-muted"
+              style="background: rgba(0,0,0,0.1); border-radius: 12px; border: 1px dashed var(--glass-border);">
+              <p class="mb-0">No stories found.</p>
             </div>
-        </a>
-          {% empty %}
-            <p>No stories found.</p>
-          {% endfor %}
+            {% endfor %}
+          </div>
         </div>
-        
       </section>
-      
-      <section class="section">
+
+      <!-- Collaborative Story Creation -->
+      <section class="glass-panel" data-aos="fade-left">
+        <div class="section-icon mb-4">
+          <i class="fas fa-users fa-3x" style="color: var(--accent-secondary);"></i>
+        </div>
         <h2>Create with a Friend</h2>
         <p class="section-description">
-          Collaborate   with friends to weave tales together. Take turns adding chapters, creating characters, or building upon each other's ideas.
-          <!-- <p>Story ID: {{ story.id }}</p> -->
-
+          Collaborate with friends to weave tales together. Take turns adding chapters, creating characters,
+          or building upon each other's ideas.
         </p>
-         
+
         {% if story %}
-        <a href="{% url 'mystory:invite_collaborator' %}">
-            <button class="create-new">
-                <span class="icon">👥</span> Start Collaborative Story
-            </button>
+        <a href="{% url 'mystory:invite_collaborator' %}" class="btn-pulse"
+          style="background: linear-gradient(135deg, #00e5ff 0%, #8c52ff 100%);">
+          <i class="fas fa-user-plus"></i>
+          <span>Invite Collaborator</span>
         </a>
-    {% else %}
-        <p>✍️ Create at least one story to unlock this feature 🔓.</p>
-    {% endif %}
-    
-        <div class="draft-container">
-          {% for story in colla_stories %}
-          <a href="{% url 'mystory:edit_story' story.id %}" class="draft-link">
-            <div class="draft-card">
-                <div class="draft-title">{{ story.title }}</div>
-                <div class="draft-excerpt">{{ story.content|truncatewords:20 }}</div>
-                {% if story.status == 'draft' %}
-                  <div class="draft-status" style="color: red;">
-                    Draft
-                  </div>
-                {% elif story.status %}
-                  <div class="draft-status" style="color: green;">
-                    {{ story.status|title }}
-                  </div>
-                {% else %}
-                  <div class="draft-status" style="color: red;">
-                    Draft
-                  </div>
-                {% endif %}
-              
-                <div class="draft-date">Last edited: {{ story.updated_at|date:"M d, Y" }}</div>
+        {% else %}
+        <div class="locked-feature mb-4 p-3 rounded"
+          style="background: rgba(0,0,0,0.2); border: 1px dashed var(--glass-border); color: var(--text-muted);">
+          <p class="mb-0 text-center"><i class="fas fa-lock me-2"></i> Create at least one story to unlock
+            collaboration.</p>
+        </div>
+        {% endif %}
+
+        <div class="drafts-section mt-4">
+          <h3 class="h5 mb-3 border-bottom pb-2 border-secondary" style="color: var(--text-main); opacity: 0.8;">
+            Collaboration Drafts</h3>
+          <div class="drafts-list">
+            {% for story in colla_stories %}
+            <a href="{% url 'mystory:edit_story' story.id %}" class="draft-card">
+              <div class="draft-info">
+                <span class="draft-title">{{ story.title }}</span>
+                <span class="status-badge status-{{ story.status|default:'draft'|lower }}">
+                  {% if story.status|lower == 'published' %}
+                  <i class="fas fa-check-circle"></i>
+                  {% elif story.status|lower == 'ongoing' %}
+                  <i class="fas fa-pen-nib"></i>
+                  {% else %}
+                  <i class="fas fa-file-alt"></i>
+                  {% endif %}
+                  {{ story.status|default:"Draft" }}
+                </span>
+              </div>
+              <p class="draft-excerpt">{{ story.content|truncatewords:20 }}</p>
+              <div class="draft-meta">
+                <span><i class="fas fa-clock me-1"></i> {{ story.updated_at|date:"M d, Y" }}</span>
+              </div>
+            </a>
+            {% empty %}
+            <div class="text-center py-4 text-muted"
+              style="background: rgba(0,0,0,0.1); border-radius: 12px; border: 1px dashed var(--glass-border);">
+              <p class="mb-0">No collaborative stories yet.</p>
             </div>
-        </a>
-          {% empty %}
-            <p>No stories found.</p>
-          {% endfor %}
+            {% endfor %}
+          </div>
         </div>
       </section>
     </div>
   </main>
+
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h2>Taletailor</h2>
+        <p class="footer-tagline">
+          Where passion meets precision. Capturing the essence of every detail, one story at a time.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Services</h3>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Bonus Program</a>
+          <a href="#" class="footer-link">Gift Cards</a>
+          <a href="#" class="footer-link">Subscription</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Support</h3>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Help Center</a>
+          <a href="#" class="footer-link">Community Guidelines</a>
+          <a href="#" class="footer-link">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const input = document.getElementById('searchInput');
-  const clearBtn = document.getElementById('clearBtn');
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Initialize AOS
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 50
+      });
 
-  input.addEventListener('input', () => {
-    clearBtn.style.display = input.value.trim() ? 'inline-block' : 'none';
-  });
+      // Search Clear Functionality
+      const input = document.getElementById('searchInput');
+      const clearBtn = document.getElementById('clearBtn');
 
-  clearBtn.addEventListener('click', () => {
-    window.location.href = window.location.pathname;  
-  });
+      const toggleClearBtn = () => {
+        if (clearBtn) {
+          clearBtn.style.display = input.value.trim() ? 'inline-block' : 'none';
+        }
+      };
 
-  
-  window.addEventListener('DOMContentLoaded', () => {
-    if (input.value.trim()) {
-      clearBtn.style.display = 'inline-block';
-    }
-  });
-</script>
+      if (input) {
+        input.addEventListener('input', toggleClearBtn);
+        toggleClearBtn();
+      }
+
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          input.value = '';
+          toggleClearBtn();
+          window.location.href = window.location.pathname;
+        });
+      }
+    });
+  </script>
 </body>
+
 </html>
