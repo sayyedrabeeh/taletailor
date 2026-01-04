@@ -43,6 +43,9 @@
       --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       --shadow-glow: 0 0 20px rgba(109, 40, 217, 0.3);
+      --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      --joker-purple: linear-gradient(135deg, #a855f7 0%, #6d28d9 100%);
+      --joker-green: #10b981;
     }
 
     * {
@@ -106,9 +109,7 @@
       font-weight: 700;
       line-height: 1.2;
       margin-bottom: 1rem;
-      background: linear-gradient(to right, #fff, #cbd5e1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-color);
     }
 
     .story-author {
@@ -174,7 +175,7 @@
       padding: 3rem 3rem 4rem;
       font-size: 1.15rem;
       line-height: 1.9;
-      color: #e2e8f0;
+      color: var(--text-color);
     }
 
     .story-content p {
@@ -245,13 +246,13 @@
     }
 
     .share-btn {
-      background: var(--primary-color);
-      color: white;
+      background: var(--primary-color) !important;
+      color: white !important;
     }
 
     .share-btn:hover {
       filter: brightness(110%);
-      box-shadow: 0 0 15px rgba(109, 40, 217, 0.4);
+      box-shadow: 0 0 15px var(--button-glow);
     }
 
     .like-btn {
@@ -496,14 +497,14 @@
       position: fixed;
       top: 20px;
       left: 20px;
-      background-color: var(--joker-purpl);
+      background: var(--joker-purple);
       color: white;
       padding: 10px 16px;
       border-radius: 6px;
       text-decoration: none;
       font-weight: bold;
       box-shadow: var(--shadow);
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
       z-index: 1000;
     }
 
@@ -522,142 +523,8 @@
     }
 
     /* ===========================
-   EXTRAORDINARY PROFESSIONAL THEMES
-   Advanced Gradient & Visual Effects
-   =========================== */
-
-    /* Enhanced Theme Variables with Advanced Gradients */
-    .theme-happy {
-      --primary-color: #FF9800;
-      --secondary-color: #FFEB3B;
-      --accent-color: #FF5722;
-      --background-color: #FFF9C4;
-      --card-background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
-      --text-color: #5D4037;
-      --light-gray: #E6EE9C;
-      --header-gradient: linear-gradient(135deg, #FFD54F 0%, #FF9800 50%, #F57C00 100%);
-      --glow-color: rgba(255, 152, 0, 0.6);
-      --particle-color: #FFB300;
-    }
-
-    .theme-sad {
-      --primary-color: #546E7A;
-      --secondary-color: #78909C;
-      --accent-color: #455A64;
-      --background-color: linear-gradient(180deg, #ECEFF1 0%, #CFD8DC 100%);
-      --card-background: linear-gradient(135deg, #CFD8DC 0%, #B0BEC5 100%);
-      --text-color: #263238;
-      --light-gray: #90A4AE;
-      --header-gradient: linear-gradient(135deg, #78909C 0%, #546E7A 50%, #37474F 100%);
-      --glow-color: rgba(96, 125, 139, 0.4);
-      --particle-color: #607D8B;
-    }
-
-    .theme-romantic {
-      --primary-color: #E91E63;
-      --secondary-color: #F48FB1;
-      --accent-color: #C2185B;
-      --background-color: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);
-      --card-background: linear-gradient(135deg, #F8BBD0 0%, #F48FB1 50%, #FCE4EC 100%);
-      --text-color: #880E4F;
-      --light-gray: #F8BBD0;
-      --header-gradient: linear-gradient(135deg, #EC407A 0%, #D81B60 50%, #AD1457 100%);
-      --glow-color: rgba(233, 30, 99, 0.6);
-      --particle-color: #F06292;
-    }
-
-    .theme-thriller {
-      --primary-color: #263238;
-      --secondary-color: #37474F;
-      --accent-color: #000000;
-      --background-color: linear-gradient(180deg, #1A2327 0%, #0D1214 100%);
-      --card-background: linear-gradient(135deg, #263238 0%, #1C2629 100%);
-      --text-color: #ECEFF1;
-      --light-gray: #37474F;
-      --header-gradient: linear-gradient(135deg, #37474F 0%, #263238 50%, #000000 100%);
-      --glow-color: rgba(255, 0, 0, 0.3);
-      --particle-color: #455A64;
-    }
-
-    .theme-adventure {
-      --primary-color: #43A047;
-      --secondary-color: #66BB6A;
-      --accent-color: #2E7D32;
-      --background-color: linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%);
-      --card-background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
-      --text-color: #1B5E20;
-      --light-gray: #81C784;
-      --header-gradient: linear-gradient(135deg, #66BB6A 0%, #43A047 50%, #2E7D32 100%);
-      --glow-color: rgba(67, 160, 71, 0.6);
-      --particle-color: #4CAF50;
-    }
-
-    .theme-mystery {
-      --primary-color: #5E35B1;
-      --secondary-color: #7E57C2;
-      --accent-color: #4527A0;
-      --background-color: linear-gradient(180deg, #EDE7F6 0%, #D1C4E9 100%);
-      --card-background: linear-gradient(135deg, #D1C4E9 0%, #B39DDB 100%);
-      --text-color: #311B92;
-      --light-gray: #9575CD;
-      --header-gradient: linear-gradient(135deg, #7E57C2 0%, #5E35B1 50%, #4527A0 100%);
-      --glow-color: rgba(94, 53, 177, 0.6);
-      --particle-color: #673AB7;
-    }
-
-    .theme-fantasy {
-      --primary-color: #7B1FA2;
-      --secondary-color: #9C27B0;
-      --accent-color: #6A1B9A;
-      --background-color: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #CE93D8 100%);
-      --card-background: linear-gradient(135deg, #E1BEE7 0%, #CE93D8 50%, #BA68C8 100%);
-      --text-color: #4A148C;
-      --light-gray: #AB47BC;
-      --header-gradient: linear-gradient(-45deg, #7B1FA2 0%, #9C27B0 25%, #6A1B9A 50%, #8E24AA 75%, #4A148C 100%);
-      --glow-color: rgba(156, 39, 176, 0.7);
-      --particle-color: #BA68C8;
-      background-size: 400% 400%;
-      animation: gradient-flow 15s ease infinite;
-    }
-
-    .theme-scifi {
-      --primary-color: #00BCD4;
-      --secondary-color: #00E5FF;
-      --accent-color: #0097A7;
-      --background-color: linear-gradient(180deg, #E0F7FA 0%, #B2EBF2 100%);
-      --card-background: linear-gradient(135deg, #B2EBF2 0%, #80DEEA 100%);
-      --text-color: #006064;
-      --light-gray: #4DD0E1;
-      --header-gradient: linear-gradient(135deg, #00E5FF 0%, #00BCD4 50%, #0097A7 100%);
-      --glow-color: rgba(0, 229, 255, 0.8);
-      --particle-color: #18FFFF;
-    }
-
-    .theme-horror {
-      --primary-color: #212121;
-      --secondary-color: #424242;
-      --accent-color: #000000;
-      --background-color: linear-gradient(180deg, #121212 0%, #000000 100%);
-      --card-background: linear-gradient(135deg, #1E1E1E 0%, #0D0D0D 100%);
-      --text-color: #F5F5F5;
-      --light-gray: #303030;
-      --header-gradient: linear-gradient(135deg, #424242 0%, #212121 50%, #000000 100%);
-      --glow-color: rgba(139, 0, 0, 0.5);
-      --particle-color: #424242;
-    }
-
-    .theme-inspirational {
-      --primary-color: #FFC107;
-      --secondary-color: #FFD54F;
-      --accent-color: #FFA000;
-      --background-color: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
-      --card-background: linear-gradient(135deg, #FFECB3 0%, #FFE082 50%, #FFD54F 100%);
-      --text-color: #FF6F00;
-      --light-gray: #FFCA28;
-      --header-gradient: linear-gradient(135deg, #FFD54F 0%, #FFC107 50%, #FFA000 100%);
-      --glow-color: rgba(255, 193, 7, 0.7);
-      --particle-color: #FFEB3B;
-    }
+       LAYOUT & VISUAL EFFECTS
+       =========================== */
 
     /* Advanced Card Styling with Gradients */
     .story-main {
@@ -1315,33 +1182,94 @@
        High-End Visual Experiences
        =========================== */
 
-    /* Happy: "Sunrise Gold" - Warm, Optimistic, Premium */
+    /* Happy: "Soothing Sunny" - Warm, Optimistic, Highly Readable */
     .theme-happy {
-      --primary-color: #d97706;
-      /* Amber 600 */
-      --secondary-color: #fbbf24;
-      /* Amber 400 */
-      --accent-color: #78350f;
-      /* Amber 900 */
-
-      --background-color: #fffbeb;
-      /* Amber 50 */
-      --card-background: rgba(255, 255, 255, 0.85);
-      /* White Glass */
-
-      --text-color: #451a03;
-      /* Amber 950 */
-      --text-muted: #92400e;
+      --primary-color: #f59e0b;
+      /* Amber 500 */
+      --secondary-color: #0369a1;
+      /* Sky Blue 700 (Better for Links) */
+      --accent-color: #b45309;
       /* Amber 700 */
-      --border-color: rgba(217, 119, 6, 0.15);
+      --background-url: none;
+      --background-color: #fef9c3;
+      /* Soothing Sunlight Yellow (Yellow 100) */
+      --card-background: #fffdfa;
+      /* Warm Creamy White */
 
-      --header-gradient: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-      --glass-bg: rgba(255, 255, 255, 0.6);
-      --glow-color: rgba(251, 191, 36, 0.3);
-      --particle-color: #d97706;
+      --text-color: #020617;
+      /* Absolute Readability (Near Black) */
+      --text-muted: #131721;
+      /* Deep Charcoal */
+      --border-color: rgba(245, 158, 11, 0.2);
 
-      --button-hover: #b45309;
-      --button-glow: rgba(245, 158, 11, 0.2);
+      --header-gradient: linear-gradient(135deg, #fbbf24 0%, #0ea5e9 100%);
+      --glass-bg: rgba(255, 255, 255, 0.9);
+      --glow-color: rgba(251, 191, 36, 0.15);
+      --particle-color: #f59e0b;
+
+      --button-hover: #020617;
+      --button-glow: rgba(251, 191, 36, 0.3);
+    }
+
+    .theme-happy .story-header {
+      background: var(--header-gradient) !important;
+      animation: happy-shimmer 6s infinite alternate;
+      border-bottom: 4px solid var(--secondary-color);
+    }
+
+    /* Disable dark global meshes for Happy theme */
+    .theme-happy::before,
+    .theme-happy::after,
+    .theme-happy footer::before {
+      display: none !important;
+    }
+
+    .theme-happy {
+      background-image: none !important;
+    }
+
+    .theme-happy .story-title {
+      color: #020617 !important;
+      background: none !important;
+      -webkit-text-fill-color: initial !important;
+      text-shadow: none !important;
+    }
+
+    /* Floating Happiness Bubbles Effect (Near Invisible for Stability) */
+    @keyframes happy-shimmer {
+      0% {
+        box-shadow: 0 5px 15px rgba(251, 191, 36, 0.1);
+      }
+
+      100% {
+        box-shadow: 0 15px 35px rgba(14, 165, 233, 0.2);
+      }
+    }
+
+    .theme-happy::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(circle at 10% 10%, rgba(251, 191, 36, 0.04) 0%, transparent 15%),
+        radial-gradient(circle at 90% 20%, rgba(14, 165, 233, 0.04) 0%, transparent 20%),
+        radial-gradient(circle at 30% 80%, rgba(251, 191, 36, 0.04) 0%, transparent 18%);
+      pointer-events: none;
+      z-index: -1;
+      animation: bubble-float 25s infinite linear;
+    }
+
+    @keyframes bubble-float {
+      0% {
+        background-position: 0 0;
+      }
+
+      100% {
+        background-position: 100px 100px;
+      }
     }
 
     /* Sad: "Storm Slate" - Professional, Serious, Muted */
@@ -2219,9 +2147,9 @@
               happy: {
                 bg: '/static/audio/happy.mp3',
                 sfx: [
-                  'https://assets.mixkit.co/active_storage/sfx/600/600-preview.mp3',
-                  'https://assets.mixkit.co/active_storage/sfx/466/466-preview.mp3',
-                  'https://assets.mixkit.co/active_storage/sfx/1113/1113-preview.mp3'
+                  'https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3', // Fairy arcade sparkle
+                  'https://assets.mixkit.co/active_storage/sfx/1113/1113-preview.mp3', // Sunny pop
+                  'https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3'  // Magical bell
                 ]
               }
 
@@ -2328,87 +2256,116 @@
       <style>
         .audio-controls {
           position: fixed;
-          bottom: 20px;
-          right: 20px;
-          background: rgba(30, 30, 30, 0.95);
-          padding: 15px;
-          border-radius: 10px;
+          bottom: 25px;
+          right: 25px;
+          background: var(--glass-bg);
+          backdrop-filter: blur(15px);
+          padding: 12px 20px;
+          border-radius: 50px;
           display: flex;
-          gap: 10px;
+          gap: 15px;
           align-items: center;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+          border: 1px solid var(--border-color);
           z-index: 1000;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        .audio-controls:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
         .audio-btn {
           background: rgba(255, 255, 255, 0.1);
-          border: none;
-          width: 40px;
-          height: 40px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          width: 44px;
+          height: 44px;
           border-radius: 50%;
           cursor: pointer;
           font-size: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: all 0.3s;
+          transition: all 0.3s ease;
           position: relative;
+          color: var(--text-color);
         }
+
         .audio-btn:hover {
-          background: rgba(255, 255, 255, 0.2);
-          transform: scale(1.1);
+          background: var(--primary-color);
+          color: white;
+          transform: scale(1.1) rotate(10deg);
         }
+
         .audio-indicator {
           position: absolute;
-          top: -2px;
-          right: -2px;
-          width: 8px;
-          height: 8px;
-          background: #1fc55c;
+          top: 0;
+          right: 0;
+          width: 10px;
+          height: 10px;
+          background: var(--secondary-color);
           border-radius: 50%;
+          border: 2px solid var(--glass-bg);
           animation: pulse 1.5s infinite;
         }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(1.2); }
-        }
+
         .volume-control {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 12px;
+          padding-left: 10px;
+          border-left: 1px solid var(--border-color);
         }
+
         .volume-slider {
-          width: 100px;
-          height: 4px;
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 2px;
+          width: 80px;
+          height: 6px;
+          background: rgba(0, 0, 0, 0.1);
+          border-radius: 3px;
           outline: none;
           cursor: pointer;
+          -webkit-appearance: none;
         }
+
         .volume-slider::-webkit-slider-thumb {
-          appearance: none;
-          width: 12px;
-          height: 12px;
-          background: #1fc55c;
+          -webkit-appearance: none;
+          width: 16px;
+          height: 16px;
+          background: var(--primary-color);
           border-radius: 50%;
           cursor: pointer;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+          transition: transform 0.2s;
         }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+          transform: scale(1.2);
+        }
+
         .volume-level {
-          color: white;
-          font-size: 12px;
-          min-width: 35px;
+          color: var(--text-color);
+          font-size: 13px;
+          font-weight: 600;
+          min-width: 40px;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.6; transform: scale(1.3); }
         }
       </style>
       <div class="audio-controls">
-        <button class="audio-btn" id="musicToggle" title="Toggle Background Music">
+        <button class="audio-btn" id="musicToggle" title="Toggle Music">
           <span id="musicIcon">🎵</span>
           <span class="audio-indicator" id="musicIndicator" style="display: none;"></span>
         </button>
-        <button class="audio-btn" id="sfxToggle" title="Toggle Sound Effects">
-          <span id="sfxIcon">🔊</span>
+        <button class="audio-btn" id="sfxToggle" title="Toggle Sound SFX">
+          <span id="sfxIcon">✨</span>
           <span class="audio-indicator" id="sfxIndicator" style="display: none;"></span>
         </button>
         <div class="volume-control">
-          <span style="color: white;">🔉</span>
+          <span style="color: var(--text-muted); font-size: 14px;">�</span>
           <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="40">
           <span class="volume-level" id="volumeLevel">40%</span>
         </div>
