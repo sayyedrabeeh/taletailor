@@ -1,744 +1,699 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ author.username }} - Author Profile</title>
+    <title>{{ author.username }} - Author Profile | TaleTailor</title>
     <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
-        :root {
-            /* Root theme colors and styling */
-            --primary-color: #4a0e5c;
-            --secondary-color: #1fc55c;
-            --accent-color: #8a0e74;
-            --background-color: #121212;
-            --card-background: #1e1e1e;
-            --text-color: #e0e0e0;
-            --light-text: #a0aec0;
-            --border-color: #333333;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            --border-radius: 8px;
-            --header-gradient: linear-gradient(135deg, #4a0e5c, #8a0e74);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            background-color: var(--bg-darker);
+            color: var(--text-main);
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
+        .profile-hero-section {
+            padding-top: 120px;
+            padding-bottom: 60px;
+            position: relative;
         }
 
         .profile-container {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        /* Profile Header Section */
-        .profile-header {
-            background-color: var(--card-background);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 2rem;
-            display: flex;
-            align-items: center;
-            position: relative;
-            border-top: 4px solid var(--primary-color);
-            overflow: hidden;
-        }
-
-        .profile-header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 100px;
-            background: var(--header-gradient);
-            opacity: 0.1;
-            z-index: 0;
-        }
-
-        .profile-avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--secondary-color);
-            box-shadow: var(--shadow);
-            position: relative;
-            z-index: 1;
-        }
-
-        .profile-info {
-            margin-left: 2rem;
-            flex-grow: 1;
-            position: relative;
-            z-index: 1;
-        }
-
-        .profile-username {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-        }
-
-        .profile-stats {
-            display: flex;
-            gap: 2rem;
-            margin: 1rem 0;
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--secondary-color);
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--light-text);
-        }
-
-        .profile-bio {
-            margin-top: 1rem;
-            font-size: 1rem;
-            color: var(--light-text);
-            line-height: 1.6;
-            max-width: 80%;
-        }
-
-        .follow-btn {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            background-color: var(--secondary-color);
-            color: #121212;
-            border: none;
-            border-radius: 25px;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(31, 197, 92, 0.3);
-            letter-spacing: 0.5px;
-            z-index: 2;
-        }
-
-        .follow-btn:hover {
-            background-color: #17a44a;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(31, 197, 92, 0.5);
-        }
-
-        .following-btn {
-            background-color: var(--card-background);
-            color: var(--secondary-color);
-            border: 2px solid var(--secondary-color);
-        }
-
-        .following-btn:hover {
-            background-color: rgba(31, 197, 92, 0.1);
-        }
-
-        /* Main Content Section */
-        /* .profile-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-        } */
-
-        .stories-section, .sidebar-section {
-            background-color: var(--card-background);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin: 0;
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            letter-spacing: 0.5px;
-            background-color: rgba(31, 197, 92, 0.08);
-        }
-
-        .section-title i {
-            margin-right: 0.8rem;
-            color: var(--secondary-color);
-        }
-
-        .section-content {
-            padding: 1.5rem;
-        }
-
-        /* Stories Grid */
-        .story-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .story-card {
-            background-color: rgba(30, 30, 30, 0.8);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border-color);
-            position: relative;
-            text-decoration: none;
-        }
-
-        .story-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            border-color: var(--secondary-color);
-        }
-        
-        .story-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            transition: width 0.3s ease;
-        }
-        
-        .story-card:hover::after {
-            width: 100%;
-        }
-
-        .story-card-img {
-            height: 160px;
-            width: 100%;
-            object-fit: cover;
-        }
-
-        .story-card-content {
-            padding: 1rem;
-        }
-
-        .story-card-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-        }
-
-        .story-excerpt {
-            font-size: 0.9rem;
-            color: var(--light-text);
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-
-        .story-card-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            color: var(--light-text);
-        }
-
-        .meta-icon {
-            display: flex;
-            align-items: center;
-        }
-
-        .meta-icon i {
-            margin-right: 4px;
-            color: var(--secondary-color);
-        }
-
-        .badge {
-            font-size: 0.7rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 3px;
-            display: inline-block;
-            margin-bottom: 0.5rem;
-            margin-right: 0.5rem;
-        }
-
-        .ai-badge {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .collab-badge {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        .genre-badge {
-            background-color: rgba(31, 197, 92, 0.2);
-            color: var(--secondary-color);
-        }
-
-        /* Chat and Sidebar Sections */
-        .sidebar-section {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar-block {
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .sidebar-block:last-child {
-            border-bottom: none;
-        }
-
-        .chat-input-group {
-            display: flex;
-            margin-top: 1rem;
-        }
-
-        #chat-input {
-            flex-grow: 1;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 25px 0 0 25px;
-            font-size: 1rem;
-            outline: none;
-            background-color: rgba(30, 30, 30, 0.9);
-            color: var(--text-color);
-        }
-
-        #chat-input:focus {
-            border-color: var(--secondary-color);
-        }
-
-        .ask-btn {
-            background-color: var(--secondary-color);
-            color: #121212;
-            border: none;
-            border-radius: 0 25px 25px 0;
-            padding: 0.75rem 1.25rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .ask-btn:hover {
-            background-color: #17a44a;
-        }
-
-        #chat-response {
-            margin-top: 1rem;
-            padding: 1rem;
-            background-color: rgba(31, 197, 92, 0.08);
-            border-radius: var(--border-radius);
-            border-left: 4px solid var(--secondary-color);
-            min-height: 60px;
-            display: none;
-            color: var(--text-color);
-        }
-
-        .interest-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .interest-tag {
-            background-color: rgba(31, 197, 92, 0.1);
-            color: var(--secondary-color);
-            padding: 0.4rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .popular-story {
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .popular-story:last-child {
-            border-bottom: none;
-        }
-
-        .popular-story-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .popular-story-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            color: var(--light-text);
-        }
-
-        .tab-container {
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 0 1.5rem;
         }
 
-        .tab {
-            padding: 1rem 1.5rem;
-            font-size: 1rem;
+        /* Profile Header Modernization */
+        .profile-header-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 3.5rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .profile-header-glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-main);
+        }
+
+        .profile-avatar-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar-modern {
+            width: 180px;
+            height: 180px;
+            border-radius: 40px;
+            object-fit: cover;
+            border: 4px solid var(--glass-border);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .profile-avatar-wrapper:hover .profile-avatar-modern {
+            transform: scale(1.05) rotate(2deg);
+            border-color: var(--accent-primary);
+        }
+
+        .online-status {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 25px;
+            height: 25px;
+            background: #10b981;
+            border: 4px solid var(--bg-dark);
+            border-radius: 50%;
+            box-shadow: 0 0 15px #10b981;
+        }
+
+        .profile-info-main {
+            flex-grow: 1;
+        }
+
+        .author-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #fff, #b4b4b4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .author-handle {
+            font-size: 1.1rem;
+            color: var(--accent-secondary);
             font-weight: 600;
-            cursor: pointer;
-            color: var(--light-text);
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .tab.active {
-            color: var(--secondary-color);
-            border-bottom-color: var(--secondary-color);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
             display: block;
         }
 
-        .no-stories {
-            text-align: center;
-            padding: 2rem;
-            color: var(--light-text);
-            font-style: italic;
+        .stats-grid-modern {
+            display: flex;
+            gap: 2.5rem;
+            margin-bottom: 2rem;
         }
 
-        /* Responsive Design */
-        @media (max-width: 900px) {
-            /* .profile-content {
-                grid-template-columns: 1fr;
+        .stat-card-mini {
+            text-align: left;
+        }
+
+        .stat-card-mini .value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            display: block;
+            line-height: 1;
+        }
+
+        .stat-card-mini .label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .bio-modern {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin-bottom: 0;
+        }
+
+        .profile-actions-top {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-modern {
+            padding: 0.8rem 2rem;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+        }
+
+        .btn-primary-gradient {
+            background: var(--gradient-main);
+            color: white;
+            box-shadow: 0 8px 20px rgba(140, 82, 255, 0.3);
+        }
+
+        .btn-primary-gradient:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 25px rgba(140, 82, 255, 0.5);
+            color: #fff;
+        }
+
+        .btn-outline-glass {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+        }
+
+        .btn-outline-glass:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-secondary);
+            color: var(--accent-secondary);
+            transform: translateY(-3px);
+        }
+
+        /* Content Sections */
+        .profile-main-content {
+            padding: 4rem 0;
+        }
+
+        .tabs-header-modern {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn-modern {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tab-btn-modern.active {
+            color: #fff;
+        }
+
+        .tab-btn-modern::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--gradient-main);
+            transition: width 0.3s ease;
+        }
+
+        .tab-btn-modern.active::after {
+            width: 100%;
+        }
+
+        .tab-pane-modern {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .tab-pane-modern.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-             */
-            .profile-header {
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Story Cards Redesign */
+        .story-grid-classic {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .story-card-modern {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none !important;
+        }
+
+        .story-card-modern:hover {
+            transform: translateY(-12px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-img-wrapper {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .story-card-modern:hover .card-img-wrapper img {
+            transform: scale(1.1);
+        }
+
+        .genre-tag-floating {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(14, 14, 14, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            color: var(--accent-secondary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-content-modern {
+            padding: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .badge-row-modern {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.2rem;
+        }
+
+        .badge-premium {
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .badge-ai {
+            background: rgba(140, 82, 255, 0.15);
+            color: var(--accent-primary);
+            border: 1px solid rgba(140, 82, 255, 0.3);
+        }
+
+        .badge-collab {
+            background: rgba(0, 229, 255, 0.15);
+            color: var(--accent-secondary);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+        }
+
+        .card-title-modern {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .card-excerpt-modern {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .card-footer-modern {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-stat-modern {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .footer-stat-modern i {
+            color: var(--accent-primary);
+        }
+
+        /* Empty State */
+        .empty-state-modern {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed var(--glass-border);
+            border-radius: 32px;
+        }
+
+        .empty-icon-orb {
+            width: 80px;
+            height: 80px;
+            background: var(--glass-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 2.5rem;
+            color: var(--text-muted);
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 991px) {
+            .profile-header-glass {
                 flex-direction: column;
                 text-align: center;
+                gap: 2rem;
+                padding: 3rem 2rem;
             }
-            
-            .profile-info {
-                margin-left: 0;
-                margin-top: 1.5rem;
+
+            .bio-modern {
+                margin: 0 auto;
             }
-            
-            .profile-bio {
-                max-width: 100%;
-            }
-            
-            .follow-btn {
-                position: relative;
-                top: auto;
-                right: auto;
-                margin-top: 1.5rem;
-            }
-            
-            .profile-stats {
+
+            .stats-grid-modern {
                 justify-content: center;
+                flex-wrap: wrap;
+                gap: 2rem;
+            }
+
+            .profile-actions-top {
+                position: static;
+                justify-content: center;
+                margin-top: 1rem;
             }
         }
-        .profile-img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;    
-    border: 2px solid #ccc;  
-}
-.btn {
-    display: inline-block;
-    padding: 6px 10px;
-    background-color: #007BFF;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 18px;
-    line-height: 1;
-    width: 70px;
-    font-weight: bold;
-  }
-
-  .btn:hover {
-    background-color: #0056b3;
-  }
-  .stat-value{
-    text-decoration: none;
-  }
-  .home-btn {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background-color: var(--joker-purple);
-  color: white;
-  padding: 10px 16px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  box-shadow: var(--shadow);
-  transition: background-color 0.3s ease;
-  z-index: 1000;
-}
-
-.home-btn:hover {
-  background-color: var(--accent-color);
-}
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="profile-container">
-            <!-- Profile Header -->
-    <a href="{% url 'authentication:home' %}" class="home-btn">
-    <i class="fas fa-home"></i> Home
-  </a>
-            <div class="profile-header">
-                {% if author.profile.profile_picture %}
-                <img src="{{ author.profile.profile_picture.url }}" alt="Profile Picture" class="profile-img">
-            {% else %}
-                <img src="{% static 'images/logo4.webp' %}" alt="Default Profile" class="profile-img">
-            {% endif %}            
-       <div class="profile-info">
-                    <h1 class="profile-username">{{ author.username }}</h1>
-                    <div class="profile-stats">
-                        <div class="stat-item">
-                            <div class="stat-value">{{ total_stories }}</div>
-                            <div class="stat-label">Stories</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value">{{ total_collab }}</div>
-                            <div class="stat-label">Collaborations</div>
-                        </div>
-                        <div class="stat-item">
-                            <a href="{% url 'mystory:user-followers' author.username %}"class="stat-value">{{ author.followers.count }}</a>
-                             
-                            <div class="stat-label">Followers</div>
-                        </div>
-                        <div class="stat-item">
-                            <a href="{% url 'mystory:user-following' author.username %}" class="stat-value">{{ author.following.count }}</a>
-                            <div class="stat-label">Following</div>
-                        </div>
-                    </div>
-                    <p class="profile-bio">{{ author.profile.bio|default:"Creative storyteller and smart reader." }} Joined on {{ author.date_joined|date:"M d, Y" }}</p>
-                </div>
-                {% if request.user.is_authenticated and request.user != author %}
-                {% if is_following %}
-                    <form method="post" action="{% url 'mystory:unfollow_user' author.username %}">
-                        {% csrf_token %}
-                        <button type="submit" class="follow-btn following-btn">
-                            <i class="fas fa-user-check"></i> Following
-                        </button>
-                    </form>
-                {% else %}
-                    <form method="post" action="{% url 'mystory:follow_user' author.username %}">
-                        {% csrf_token %}
-                        <button type="submit" class="follow-btn">
-                            <i class="fas fa-user-plus"></i> Follow
-                        </button>
-                    </form>
-                {% endif %}
-            {% endif %}
-            
-            </div>
-
-            <!-- Main Content -->
-            <div class="profile-content">
-                <!-- Stories Section -->
-                <div class="stories-section">
-                    <div class="tab-container">
-                        <div class="tab active" data-tab="stories"><i class="fas fa-book"></i> Stories</div>
-                        <div class="tab" data-tab="collaborations"><i class="fas fa-users"></i> Collaborations</div>
-                    </div>
-                    
-                    <div id="stories-tab" class="tab-content active">
-                        <h2 class="section-title"><i class="fas fa-book"></i>Stories by {{ author.username }}</h2>
-                        <div class="section-content">
-                            {% if stories %}
-                            <div class="story-grid">
-                                {% for story in stories %}
-                                  
-                                <a href="{% url 'aistory:view_story' story.id %}" class="story-card">
-                                    {% if story.image %}
-                                    <img src="{{ story.image.url }}" alt="{{ story.title }}" class="story-card-img">
-                                    {% else %}
-                                    <img src="{% static 'images/logo4.webp' %}" alt="okkk" class="story-card-img">                                    {% endif %}
-                                    <div class="story-card-content">
-                                        {% if story.is_ai_generated %}
-                                        <span class="badge ai-badge">AI Created</span>
-                                        {% endif %}
-                                        {% if story.is_collaborated %}
-                                        <span class="badge collab-badge">Collaboration</span>
-                                        {% endif %}
-                                        {% if story.genre %}
-                                        <span class="badge genre-badge">{{ story.get_genre_display }}</span>
-                                        {% endif %}
-                                        <h3 class="story-card-title">{{ story.title }}</h3>
-                                        <p class="story-excerpt">{{ story.content|truncatechars:100 }}</p>
-                                        <div class="story-card-meta">
-                                            <span class="meta-icon"><i class="fas fa-calendar"></i> {{ story.created_at|date:"M d, Y" }}</span>
-                                            <span class="meta-icon"><i class="fas fa-heart"></i> {{ story.likes.count }}</span>
-                                        </div>
-                                    </div>
-                                </a>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            <div class="no-stories">
-                                <p>No stories published yet.</p>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-                    <div id="collaborations-tab" class="tab-content">
-                        <h2 class="section-title"><i class="fas fa-users"></i>Collaborated Stories</h2>
-                        <div class="section-content">
-                            {% if collaborated %}
-                            <div class="story-grid">
-                                {% for story in collaborated %}
-                                <div class="story-card">
-                                    {% if story.image %}
-                                    <img src="{{ story.image.url }}" alt="{{ story.title }}" class="story-card-img">
-                                    {% else %}
-                                    <img src="{% static 'images/logo4.webp' %}" alt="okkk" class="story-card-img">                                     {% endif %}
-                                    <div class="story-card-content">
-                                        <span class="badge collab-badge">Collaboration</span>
-                                        {% if story.is_ai_generated %}
-                                        <span class="badge ai-badge">AI Created</span>
-                                        {% endif %}
-                                        {% if story.genre %}
-                                        <span class="badge genre-badge">{{ story.get_genre_display }}</span>
-                                        {% endif %}
-                                        <h3 class="story-card-title">{{ story.title }}</h3>
-                                        <p class="story-excerpt">{{ story.content|truncatechars:100 }}</p>
-                                        <div class="story-card-meta">
-                                            <span class="meta-icon"><i class="fas fa-calendar"></i> {{ story.created_at|date:"M d, Y" }}</span>
-                                            <span class="meta-icon"><i class="fas fa-heart"></i> {{ story.likes.count }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            <div class="no-stories">
-                                <p>No collaborations yet.</p>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Sidebar -->
-                
-            </div>
-        </div>
+    <!-- Background Glows -->
+    <div class="hero-bg-glow" style="top: 0; left: 0;"></div>
+    <div class="hero-bg-glow"
+        style="bottom: 0; right: 0; background: radial-gradient(circle, rgba(0, 229, 255, 0.1) 0%, transparent 70%);">
     </div>
 
+    <!-- Header (Global) -->
+    <header>
+        <div class="header-container">
+            <a href="{% url 'authentication:home' %}" class="logo">TALETAILOR</a>
+            <nav class="nav-links">
+                <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+                <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+                <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+            </nav>
+            <div class="user-actions">
+                <a href="{% url 'messaging:chat' %}" class="icon-btn" title="Messages">
+                    <i class="fas fa-comment-alt"></i>
+                </a>
+                <a href="{% url 'authentication:home' %}" class="icon-btn" title="Home">
+                    <i class="fas fa-home"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Profile Hero -->
+        <section class="profile-hero-section">
+            <div class="profile-container">
+                <div class="profile-header-glass" data-aos="fade-down">
+                    <div class="profile-avatar-wrapper">
+                        {% if author.profile.profile_picture %}
+                        <img src="{{ author.profile.profile_picture.url }}" alt="{{ author.username }}"
+                            class="profile-avatar-modern">
+                        {% else %}
+                        <img src="{% static 'images/logo4.webp' %}" alt="Default Profile" class="profile-avatar-modern">
+                        {% endif %}
+                        <div class="online-status"></div>
+                    </div>
+
+                    <div class="profile-info-main">
+                        <span class="author-handle">@{{ author.username|cut:"@gmail.com" }}</span>
+                        <h1 class="author-name">{{ author.username }}</h1>
+
+                        <div class="stats-grid-modern">
+                            <div class="stat-card-mini">
+                                <span class="value">{{ total_stories }}</span>
+                                <span class="label">Stories</span>
+                            </div>
+                            <div class="stat-card-mini">
+                                <span class="value">{{ total_collab }}</span>
+                                <span class="label">Collabs</span>
+                            </div>
+                            <div class="stat-card-mini">
+                                <a href="{% url 'mystory:user-followers' author.username %}"
+                                    style="text-decoration: none;">
+                                    <span class="value">{{ author.followers.count }}</span>
+                                    <span class="label">Followers</span>
+                                </a>
+                            </div>
+                            <div class="stat-card-mini">
+                                <a href="{% url 'mystory:user-following' author.username %}"
+                                    style="text-decoration: none;">
+                                    <span class="value">{{ author.following.count }}</span>
+                                    <span class="label">Following</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <p class="bio-modern">
+                            {{ author.profile.bio|default:"Deep into narratives, where reality meets legend. Crafting worlds one chapter at a time." }}
+                            <br>
+                            <small class="text-muted"><i class="far fa-calendar-alt me-2"></i>Voyage started
+                                {{author.date_joined|date:"M d, Y" }}</small>
+                        </p>
+                    </div>
+
+                    <div class="profile-actions-top">
+                        {% if request.user.is_authenticated and request.user != author %}
+                        {% if is_following %}
+                        <form method="post" action="{% url 'mystory:unfollow_user' author.username %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-modern btn-outline-glass">
+                                <i class="fas fa-user-check"></i> Following
+                            </button>
+                        </form>
+                        {% else %}
+                        <form method="post" action="{% url 'mystory:follow_user' author.username %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-modern btn-primary-gradient">
+                                <i class="fas fa-user-plus"></i> Follow Author
+                            </button>
+                        </form>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content (Tabs) -->
+        <section class="profile-main-content">
+            <div class="profile-container">
+                <div class="tabs-header-modern" data-aos="fade-up">
+                    <button class="tab-btn-modern active" data-tab="stories-pane">
+                        <i class="fas fa-feather-pointed me-2"></i> Masterpieces
+                    </button>
+                    <button class="tab-btn-modern" data-tab="collabs-pane">
+                        <i class="fas fa-users-viewfinder me-2"></i> Collaborations
+                    </button>
+                </div>
+
+                <!-- Stories Tab -->
+                <div id="stories-pane" class="tab-pane-modern active">
+                    {% if stories %}
+                    <div class="story-grid-classic">
+                        {% for story in stories %}
+                        <a href="{% url 'aistory:view_story' story.id %}" class="story-card-modern" data-aos="fade-up"
+                            data-aos-delay="{{ forloop.counter0|add:1 }}00">
+                            <div class="card-img-wrapper">
+                                {% if story.image %}
+                                <img src="{{ story.image.url }}" alt="{{ story.title }}">
+                                {% else %}
+                                <img src="{% static 'images/logo4.webp' %}" alt="Placeholder">
+                                {% endif %}
+                                {% if story.genre %}
+                                <div class="genre-tag-floating">{{ story.get_genre_display }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="card-content-modern">
+                                <div class="badge-row-modern">
+                                    {% if story.is_ai_generated %}
+                                    <span class="badge-premium badge-ai">Genius AI</span>
+                                    {% endif %}
+                                    {% if story.is_collaborated %}
+                                    <span class="badge-premium badge-collab">The Fellowship</span>
+                                    {% endif %}
+                                </div>
+                                <h3 class="card-title-modern">{{ story.title }}</h3>
+                                <p class="card-excerpt-modern">{{ story.content|truncatechars:120 }}</p>
+                                <div class="card-footer-modern">
+                                    <div class="footer-stat-modern">
+                                        <i class="far fa-heart"></i> {{ story.likes.count }}
+                                    </div>
+                                    <div class="footer-stat-modern">
+                                        <i class="far fa-calendar-alt"></i> {{ story.created_at|date:"M d" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state-modern" data-aos="zoom-in">
+                        <div class="empty-icon-orb"><i class="fas fa-book-open"></i></div>
+                        <h3 class="text-white">Quiet in the Library</h3>
+                        <p class="text-muted">No stories have been manifested yet. The legend is still being written.
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Collabs Tab -->
+                <div id="collabs-pane" class="tab-pane-modern">
+                    {% if collaborated %}
+                    <div class="story-grid-classic">
+                        {% for story in collaborated %}
+                        <a href="{% url 'aistory:view_story' story.id %}" class="story-card-modern">
+                            <div class="card-img-wrapper">
+                                {% if story.image %}
+                                <img src="{{ story.image.url }}" alt="{{ story.title }}">
+                                {% else %}
+                                <img src="{% static 'images/logo4.webp' %}" alt="Placeholder">
+                                {% endif %}
+                                {% if story.genre %}
+                                <div class="genre-tag-floating">{{ story.get_genre_display }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="card-content-modern">
+                                <div class="badge-row-modern">
+                                    <span class="badge-premium badge-collab">The Fellowship</span>
+                                    {% if story.is_ai_generated %}
+                                    <span class="badge-premium badge-ai">AI Assisted</span>
+                                    {% endif %}
+                                </div>
+                                <h3 class="card-title-modern">{{ story.title }}</h3>
+                                <p class="card-excerpt-modern">{{ story.content|truncatechars:120 }}</p>
+                                <div class="card-footer-modern">
+                                    <div class="footer-stat-modern">
+                                        <i class="far fa-heart"></i> {{ story.likes.count }}
+                                    </div>
+                                    <div class="footer-stat-modern">
+                                        <i class="far fa-user"></i> {{ story.author.username }}
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state-modern">
+                        <div class="empty-icon-orb"><i class="fas fa-users-slash"></i></div>
+                        <h3 class="text-white">Solitary Creator</h3>
+                        <p class="text-muted">No collaborative legends yet. Every great hero needs a team sometimes!</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Tab switching
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
-                    
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    
-                    // Add active class to clicked tab and corresponding content
-                    this.classList.add('active');
-                    document.getElementById(`${tabId}-tab`).classList.add('active');
-                });
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init({
+                duration: 1000,
+                once: true,
+                offset: 50
             });
 
-            // Chat functionality
-            const chatInput = document.getElementById('chat-input');
-            const askButton = document.getElementById('ask-button');
-            const chatResponse = document.getElementById('chat-response');
+            // Tab Switching Logic
+            const tabButtons = document.querySelectorAll('.tab-btn-modern');
+            const tabPanes = document.querySelectorAll('.tab-pane-modern');
 
-            askButton.addEventListener('click', function() {
-                const question = chatInput.value.trim();
-                if (!question) return;
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-tab');
 
-                // Show loading state
-                chatResponse.style.display = 'block';
-                chatResponse.innerHTML = 'Thinking...';
+                    // Reset
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    tabPanes.forEach(p => p.classList.remove('active'));
 
-                // Send to backend API
-                fetch('/api/chat/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: JSON.stringify({
-                        question: question,
-                        author: '{{ author.username }}'
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    chatResponse.innerHTML = data.response;
-                })
-                .catch(error => {
-                    // Fallback responses if API fails
-                    chatResponse.innerHTML = getResponseForQuestion(question);
+                    // Set Active
+                    btn.classList.add('active');
+                    document.getElementById(targetId).classList.add('active');
+
+                    // Refresh AOS as content might have changed visibility
+                    AOS.refresh();
                 });
             });
-
-            // Fallback chat responses
-            function getResponseForQuestion(question) {
-                question = question.toLowerCase();
-                
-                if (question.includes('favorite') || question.includes('best')) {
-                    return "{{ author.username }}'s most popular story is {% if popular_stories.0 %}'{{ popular_stories.0.title }}' with {{ popular_stories.0.likes.count }} likes!{% else %}still being discovered by readers.{% endif %}";
-                } else if (question.includes('recent') || question.includes('latest')) {
-                    return "{{ author.username }}'s most recent story is {% if stories.0 %}'{{ stories.0.title }}' published on {{ stories.0.created_at|date:'M d, Y' }}.{% else %}coming soon.{% endif %}";
-                } else if (question.includes('how many') || question.includes('count')) {
-                    return "{{ author.username }} has published {{ total_stories }} stories and collaborated on {{ total_collab }} more.";
-                } else if (question.includes('genre') || question.includes('type')) {
-                    return "{{ author.username }} {% if genre_counts %}writes primarily {% for genre, count in genre_counts.items|slice:':2' %}{{ genre }}{% if not forloop.last %} and {% endif %}{% endfor %} stories.{% else %}explores various genres in their writing.{% endif %}";
-                } else {
-                    return "I'd be happy to help you learn more about {{ author.username }}'s stories. You can ask about popular stories, writing style, genres, or recent publications!";
-                }
-            }
         });
     </script>
 </body>
+
 </html>
