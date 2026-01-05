@@ -257,7 +257,7 @@
 
     .like-btn {
       background: #dc2626;
-      color: white;
+      color: black;
     }
 
     .like-btn:hover {
@@ -1272,32 +1272,69 @@
       }
     }
 
-    /* Sad: "Storm Slate" - Professional, Serious, Muted */
+    /* Sad: "Midnight Melancholy" - Atmospheric, Somber, Immersive */
     .theme-sad {
-      --primary-color: #475569;
-      /* Slate 600 */
-      --secondary-color: #94a3b8;
-      /* Slate 400 */
+      --primary-color: #1e293b;
+      /* Slate 800 */
+      --secondary-color: #64748b;
+      /* Slate 500 */
       --accent-color: #0f172a;
       /* Slate 900 */
 
-      --background-color: #f8fafc;
-      /* Slate 50 */
-      --card-background: rgba(255, 255, 255, 0.9);
+      --background-color: #0a0f18;
+      /* Deep Midnight Slate */
+      --card-background: rgba(15, 23, 42, 0.95);
 
-      --text-color: #1e293b;
-      /* Slate 800 */
-      --text-muted: #64748b;
-      /* Slate 500 */
-      --border-color: rgba(71, 85, 105, 0.1);
+      --text-color: #94a3b8;
+      /* Somber Slate Gray */
+      --text-muted: #475569;
+      /* Slate 600 */
+      --border-color: rgba(148, 163, 184, 0.1);
 
-      --header-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-      --glass-bg: rgba(248, 250, 252, 0.8);
-      --glow-color: rgba(51, 65, 85, 0.1);
-      --particle-color: #94a3b8;
+      --header-gradient: linear-gradient(to bottom, #0f172a 0%, #0a0f18 100%);
+      --glass-bg: rgba(10, 15, 24, 0.8);
+      --glow-color: rgba(30, 41, 59, 0.3);
+      --particle-color: #475569;
 
-      --button-hover: #334155;
-      --button-glow: rgba(71, 85, 105, 0.2);
+      --button-hover: #0f172a;
+      --button-glow: rgba(15, 23, 42, 0.4);
+    }
+
+    .theme-sad .story-main,
+    .theme-sad .action-card,
+    .theme-sad .story-image {
+      filter: grayscale(0.4) contrast(0.9);
+      transition: filter 0.5s ease;
+    }
+
+    .theme-sad .story-main:hover {
+      filter: grayscale(0.2) contrast(1);
+    }
+
+    /* Falling Rain Animation */
+    .theme-sad::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://raw.githubusercontent.com/PavelDoGreat/WebGL-Fluid-Simulation/master/logo/rain.png');
+      background-repeat: repeat;
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 10;
+      animation: rain-fall 0.5s linear infinite;
+    }
+
+    @keyframes rain-fall {
+      0% {
+        background-position: 0 0;
+      }
+
+      100% {
+        background-position: 20px 100px;
+      }
     }
 
     .theme-melancholy {
@@ -1324,60 +1361,143 @@
       --particle-color: #a8a29e;
     }
 
-    /* Romantic: "Rose Quartz" - Elegant, Soft, Boutique */
+    /* Romantic: "Velvet Rose" - Intense, Saturated, Deeply Romantic */
     .theme-romantic {
       --primary-color: #be185d;
-      /* Pink 700 */
-      --secondary-color: #f472b6;
-      /* Pink 400 */
-      --accent-color: #831843;
-      /* Pink 900 */
-
-      --background-color: #fff1f2;
-      /* Rose 50 */
-      --card-background: rgba(255, 255, 255, 0.85);
-
-      --text-color: #881337;
-      /* Rose 900 */
-      --text-muted: #be123c;
       /* Rose 700 */
-      --border-color: rgba(190, 24, 93, 0.1);
+      --secondary-color: #db2777;
+      /* Pink 600 */
+      --accent-color: #831843;
+      /* Rose 900 */
 
-      --header-gradient: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
-      --glass-bg: rgba(255, 255, 255, 0.6);
-      --glow-color: rgba(244, 114, 182, 0.2);
-      --particle-color: #f9a8d4;
+      --background-color: #f9a8d4;
+      /* Saturated Rose Pink (Pink 300) */
+      --card-background: #fdf2f8;
+      /* Soft Pink Silk (Rose 50) - NO WHITE */
 
-      --button-hover: #9d174d;
-      --button-glow: rgba(219, 39, 119, 0.25);
+      --text-color: #500724;
+      /* Deep Velvet Maroon */
+      --text-muted: #831843;
+      /* Deep Rose */
+      --border-color: rgba(131, 24, 67, 0.3);
+
+      --header-gradient: linear-gradient(135deg, #f9a8d4 0%, #be185d 100%);
+      --glass-bg: rgba(253, 242, 248, 0.95);
+      --glow-color: rgba(190, 24, 93, 0.5);
+      --particle-color: #be185d;
+
+      --button-hover: #831843;
+      --button-glow: rgba(190, 24, 93, 0.5);
     }
 
-    /* Thriller: "Noir Crimson" - Cinematic, High Contrast, Edgy */
+    .theme-romantic .story-title {
+      font-family: 'Playfair Display', serif;
+      text-shadow: 0 0 15px rgba(244, 114, 182, 0.2);
+    }
+
+    /* Falling Rose Petals Animation */
+    .theme-romantic::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(circle at 10% 10%, rgba(244, 114, 182, 0.08) 0%, transparent 12%),
+        radial-gradient(circle at 90% 20%, rgba(251, 113, 133, 0.08) 0%, transparent 15%),
+        radial-gradient(circle at 30% 80%, rgba(244, 114, 182, 0.08) 0%, transparent 18%);
+      pointer-events: none;
+      z-index: -1;
+      animation: petal-fall 25s infinite linear;
+    }
+
+    @keyframes petal-fall {
+      0% {
+        background-position: 0 0;
+      }
+
+      100% {
+        background-position: 150px 300px;
+      }
+    }
+
+    /* Thriller: "Noir Heartbeat" - Cinematic, Tense, High Contrast */
     .theme-thriller {
-      --primary-color: #dc2626;
-      /* Red 600 */
-      --secondary-color: #f87171;
-      /* Red 400 */
-      --accent-color: #7f1d1d;
-      /* Red 900 */
+      --primary-color: #b91c1c;
+      /* Sharp Crimson */
+      --secondary-color: #ef4444;
+      /* Red 500 */
+      --accent-color: #450a0a;
+      /* Deep Blood */
 
-      --background-color: #0f0505;
-      /* Black/Red Tint */
-      --card-background: rgba(20, 10, 10, 0.95);
+      --background-color: #050505;
+      /* Pitch Black Noir */
+      --card-background: rgba(10, 5, 5, 0.98);
 
-      --text-color: #fef2f2;
-      /* Red 50 */
-      --text-muted: #fca5a5;
-      /* Red 300 */
-      --border-color: rgba(220, 38, 38, 0.3);
+      --text-color: #fca5a5;
+      /* Muted Rose/Red */
+      --text-muted: #7f1d1d;
+      /* Dark Red */
+      --border-color: rgba(185, 28, 28, 0.2);
 
-      --header-gradient: linear-gradient(135deg, #1a0505 0%, #450a0a 100%);
-      --glass-bg: rgba(0, 0, 0, 0.6);
-      --glow-color: rgba(220, 38, 38, 0.4);
-      --particle-color: #ef4444;
+      --header-gradient: linear-gradient(to bottom, #1a0505 0%, #050505 100%);
+      --glass-bg: rgba(5, 5, 5, 0.85);
+      --glow-color: rgba(185, 28, 28, 0.2);
+      --particle-color: #b91c1c;
 
-      --button-hover: #b91c1c;
-      --button-glow: rgba(220, 38, 38, 0.5);
+      --button-hover: #ffffff;
+      --button-glow: rgba(185, 28, 28, 0.5);
+    }
+
+    /* Heartbeat Pulse Effect */
+    .theme-thriller .story-card {
+      animation: heart-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+      border: 1px solid rgba(185, 28, 28, 0.1);
+    }
+
+    @keyframes heart-pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+
+      5% {
+        transform: scale(1.005);
+        box-shadow: 0 0 30px rgba(185, 28, 28, 0.1);
+      }
+
+      10% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+
+      15% {
+        transform: scale(1.01);
+        box-shadow: 0 0 35px rgba(185, 28, 28, 0.15);
+      }
+
+      20% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+    }
+
+    /* Cinematic Film Grain Overlay */
+    .theme-thriller::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 100;
+      mix-blend-mode: overlay;
     }
 
     /* Horror: "Abyss" - Deep, Dark, Immersive */
@@ -1417,10 +1537,10 @@
       /* Emerald 50 */
       --card-background: rgba(255, 255, 255, 0.9);
 
-      --text-color: #022c22;
-      /* Emerald 950 */
-      --text-muted: #047857;
-      /* Emerald 700 */
+      --text-color: #020617;
+      /* Absolute Readability (Near Black) */
+      --text-muted: #012e23;
+      /* Deepest Emerald */
       --border-color: rgba(5, 150, 105, 0.15);
 
       --header-gradient: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
@@ -1432,31 +1552,63 @@
       --button-glow: rgba(5, 150, 105, 0.3);
     }
 
-    /* Mystery: "Nightshade" - Sophisticated, Deep, Luxurious */
+    /* Mystery: "Midnight Mist" - Enigmatic, Foggy, Deeply Mysterious */
     .theme-mystery {
       --primary-color: #7c3aed;
-      /* Violet 600 */
+      /* Shadow Purple */
       --secondary-color: #a78bfa;
       /* Violet 400 */
       --accent-color: #4c1d95;
-      /* Violet 900 */
+      /* Deep Violet */
 
-      --background-color: #0f172a;
-      /* Slate 900 (Dark) */
-      --card-background: rgba(30, 41, 59, 0.9);
+      --background-color: #020617;
+      /* Midnight Indigo */
+      --card-background: rgba(15, 23, 42, 0.92);
 
-      --text-color: #f1f5f9;
-      /* Slate 100 */
+      --text-color: #e2e8f0;
+      /* Silver Mist */
       --text-muted: #a78bfa;
-      --border-color: rgba(124, 58, 237, 0.25);
+      /* Violet Glow */
+      --border-color: rgba(124, 58, 237, 0.3);
 
-      --header-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      --glass-bg: rgba(15, 23, 42, 0.8);
-      --glow-color: rgba(139, 92, 246, 0.3);
+      --header-gradient: linear-gradient(135deg, #1e1b4b 0%, #020617 100%);
+      --glass-bg: rgba(15, 23, 42, 0.85);
+      --glow-color: rgba(124, 58, 237, 0.4);
       --particle-color: #8b5cf6;
 
       --button-hover: #6d28d9;
-      --button-glow: rgba(124, 58, 237, 0.4);
+      --button-glow: rgba(124, 58, 237, 0.5);
+    }
+
+    /* Floating Midnight Mist Animation */
+    .theme-mystery::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(ellipse at 20% 30%, rgba(124, 58, 237, 0.08) 0%, transparent 40%),
+        radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.06) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 50%, rgba(76, 29, 149, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+      animation: mist-float 20s infinite ease-in-out;
+    }
+
+    @keyframes mist-float {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.6;
+      }
+
+      50% {
+        transform: translate(30px, -20px) scale(1.1);
+        opacity: 0.8;
+      }
     }
 
     /* Fantasy: "Ethereal Dream" - Soft, Magical, Light */
@@ -1472,10 +1624,10 @@
       /* Purple 50 */
       --card-background: rgba(253, 244, 255, 0.9);
 
-      --text-color: #3b0764;
-      /* Purple 950 */
-      --text-muted: #7e22ce;
-      /* Purple 700 */
+      --text-color: #020617;
+      /* Absolute Readability (Near Black) */
+      --text-muted: #3b0764;
+      /* Deepest Purple */
       --border-color: rgba(147, 51, 234, 0.15);
 
       --header-gradient: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
@@ -1528,8 +1680,10 @@
       /* Amber 50 (light) */
       --card-background: rgba(255, 255, 255, 0.95);
 
-      --text-color: #292524;
-      --text-muted: #78350f;
+      --text-color: #020617;
+      /* Absolute Readability (Near Black) */
+      --text-muted: #451a03;
+      /* Dark Amber */
       --border-color: rgba(217, 119, 6, 0.2);
 
       --header-gradient: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
@@ -1554,9 +1708,10 @@
       /* Orange 50 */
       --card-background: rgba(255, 255, 255, 0.9);
 
-      --text-color: #431407;
-      /* Orange 950 */
-      --text-muted: #c2410c;
+      --text-color: #020617;
+      /* Absolute Readability (Near Black) */
+      --text-muted: #431407;
+      /* Deepest Rust */
       --border-color: rgba(249, 115, 22, 0.2);
 
       --header-gradient: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
@@ -2155,23 +2310,25 @@
 
               , sad: {
                 bg: '/static/audio/sad.mp3',
-
                 sfx: [
-                  '/static/audio/sad2.mp3',
-                  '/static/audio/sad3.mp3',
+                  'https://assets.mixkit.co/active_storage/sfx/170/170-preview.mp3',
+                  'https://assets.mixkit.co/active_storage/sfx/171/171-preview.mp3',
+                  'https://assets.mixkit.co/active_storage/sfx/172/172-preview.mp3'
                 ]
               },
 
               romantic: {
-                bg: '/static/audio/romantic2.mp3',
+                bg: '/static/audio/romantic2.mp3', // Gentle piano melody
                 sfx: [
-                  'https://cdn.pixabay.com/download/audio/2022/05/18/audio_9f8e7d6c5b.mp3?filename=heart-beat-112493.mp3'
+                  '/static/audio/romantic3.mp3',   // Harp sparkle 1
                 ]
               },
               thriller: {
                 bg: '/static/audio/thriller.mp3',
                 sfx: [
-                  'https://cdn.pixabay.com/download/audio/2022/11/11/audio_8j9k0l1m2n.mp3?filename=heartbeat-108696.mp3'
+                  'https://assets.mixkit.co/active_storage/sfx/2592/2592-preview.mp3', // Cinematic hit 1
+                  'https://assets.mixkit.co/active_storage/sfx/2593/2593-preview.mp3', // Cinematic hit 2
+                  'https://assets.mixkit.co/active_storage/sfx/2594/2594-preview.mp3'  // Cinematic hit 3
                 ]
               },
               adventure: {
@@ -2181,9 +2338,10 @@
                 ]
               },
               mystery: {
-                bg: '/static/audio/thriller.mp3',
+                bg: '/static/audio/mystry.mp3', // Enigmatic ambient soundscape
                 sfx: [
-                  'https://cdn.pixabay.com/download/audio/2023/01/30/audio_8e9f0g1h2i.mp3?filename=door-creak-119089.mp3'
+                  '/static/audio/mystry1.mp3',
+                  '/static/audio/mystry2.mp3'
                 ]
               },
               fantasy: {

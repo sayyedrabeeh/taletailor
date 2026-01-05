@@ -190,6 +190,26 @@
       });
     });
   </script>
+
+  <script>
+    function removeSplineBranding() {
+      const viewer = document.querySelector("spline-viewer");
+      if (!viewer) return;
+
+      const shadow = viewer.shadowRoot;
+      if (!shadow) return;
+
+      const logo = shadow.querySelector('a[href*="spline.design"]');
+      if (logo) logo.remove();
+    }
+    const interval = setInterval(() => {
+      removeSplineBranding();
+    }, 500);
+    setTimeout(() => clearInterval(interval), 10000);
+  </script>
+
+
+
 </body>
 
 </html>
