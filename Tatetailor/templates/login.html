@@ -1,305 +1,483 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
-    <title>TaleTailor </title>
-      {% load static %}
+    <title>TaleTailor - Login</title>
     <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
 
-  
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #000;
-            color: white;
-            height: 100%;
-        }
-        
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #424242;
-            padding: 10px 20px;
-        }
-        .irish-grover-regular {
-  font-family: "Irish Grover", serif;
-  font-weight: 400;
-  font-style: normal;
-}
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;800;900&display=swap"
+        rel="stylesheet">
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            background-color: #000;
-            border-radius: 5px;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            background-color: #000;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        
-        .user-options {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-        
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .toggle {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-        
-        .toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .slider {
-            background-color: #7b68ee;
-        }
-        
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-        
-        .favorite-icon, .profile-icon {
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-        }
-        
-        .main-content {
-            display: flex;
-            height: calc(100vh - 70px);
-        }
-        
-        .logo-section {
-            flex: 1;
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: var(--bg-darker);
+            color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
-        
-        .logo-img {
-            width: 500px;
-            height: 500px;
-            margin-bottom: 20px;
-            
-        }
-        
-        .logo-text {
-            color: #9370DB;
-            font-size: 3rem;
-            font-weight: bold;
-            text-align: center;
-            letter-spacing: 2px;
-        }
-        
-        .tagline {
-            color: #9370DB;
-            font-size: 1.5rem;
-            letter-spacing: 10px;
-            text-align: center;
-        }
-        
-        .form-section {
+
+        .login-main-content {
             flex: 1;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            padding-top: 100px;
+            padding-bottom: 40px;
+            position: relative;
+            z-index: 2;
         }
-        
-        .login-form {
-            background-color: #111;
-            padding: 30px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 400px;
-        }
-        
-        .form-field {
-            margin-bottom: 20px;
-        }
-        
-        .form-field label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 18px;
-        }
-        
-        .form-field input {
-            width: 94%;
-            padding: 12px;
-            border-radius: 5px;
-            border: none;
-            background-color: #e0e0e0;
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
-        
-        .signup-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: #ccc;
-            color: black;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            margin-bottom: 15px;
-        }
-        
-        .forgot-password {
-            text-align: center;
-        }
-        
-        .forgot-password a {
-            color: white;
-            text-decoration: none;
-        }
-        .error-message {
-    color: white;
-    background-color: red;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
 
-  .success-message {
-    color: white;
-    background-color: green;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
+        .login-container-dual {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        /* Side Logo Section */
+        .login-brand-side {
+            flex: 1;
+            text-align: center;
+            display: none;
+            /* Hidden on small, shown on large */
+        }
+
+        .login-brand-side img {
+            width: 100%;
+            max-width: 450px;
+            filter: drop-shadow(0 0 30px rgba(140, 82, 255, 0.3));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Glass Login Form */
+        .login-glass-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 4rem;
+            max-width: 500px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .login-glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-main);
+        }
+
+        .login-header-group {
+            margin-bottom: 3rem;
+        }
+
+        .login-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #fff, #b4b4b4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-subtitle {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 1.1rem;
+        }
+
+        /* Form Inputs Modernization */
+        .form-label-modern {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-secondary);
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .input-group-modern {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .input-group-modern i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .input-modern {
+            width: 100%;
+            padding: 1.2rem 1.2rem 1.2rem 3.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .input-modern:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px rgba(140, 82, 255, 0.2);
+        }
+
+        .input-modern:focus+i {
+            color: var(--accent-primary);
+        }
+
+        .login-btn-premium {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--gradient-main);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 1rem;
+            box-shadow: 0 10px 25px rgba(140, 82, 255, 0.4);
+        }
+
+        .login-btn-premium:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(140, 82, 255, 0.6);
+        }
+
+        .signup-redirect {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .signup-link {
+            color: var(--accent-secondary);
+            text-decoration: none;
+            font-weight: 700;
+            margin-left: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .signup-link:hover {
+            color: #fff;
+            text-shadow: 0 0 10px var(--accent-secondary);
+        }
+
+        /* Message Box Styling */
+        .message-box-modern {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        @media (min-width: 992px) {
+            .login-brand-side {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .login-glass-card {
+                padding: 2.5rem;
+            }
+
+            .login-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: all 0.5s ease;
+        }
+
+        .loader-glow {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--gradient-main);
+            position: relative;
+            animation: pulse-glow 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(140, 82, 255, 0.4);
+            }
+
+            70% {
+                transform: scale(1.1);
+                box-shadow: 0 0 40px 20px rgba(140, 82, 255, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(140, 82, 255, 0);
+            }
+        }
+
+        .loader-glow i {
+            font-size: 2.5rem;
+            color: white;
+            animation: flip 2s infinite;
+        }
+
+        @keyframes flip {
+            0% {
+                transform: rotateY(0);
+            }
+
+            50% {
+                transform: rotateY(180deg);
+            }
+
+            100% {
+                transform: rotateY(360deg);
+            }
+        }
+
+        .loading-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
-<body>
-    <div class="navbar">
-        <a href="#" class="logo irish-grover-regular">TALETAILOR</a>
-        
-        <div class="nav-links">
-            <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
-            <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
-            <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
-        </div>
-        
-        <div class="user-options">
-            <div class="toggle-container">
-                 
-            </div>
-            
-            <svg class="favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-            
-            <div class="profile-icon" style="background-color: #666; border-radius: 50%; width: 30px; height: 30px;"></div>
-        </div>
-    </div>
-    
-    <div class="main-content">
-        <div class="logo-section">
-            
-            <img src="{% static 'images/logo2.png' %}" alt="TaleTailor Logo" class="logo-img">
-            
-             
-        </div>
-        
-        <div class="form-section">
-            <form class="login-form" method="POST" action="{% url 'authentication:login' %}">
-                {% csrf_token %}
 
-                <div class="form-field">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" value="{{ email|default:'' }}"placeholder="Enter your Email" required>
-                </div>
-                
-                <div class="form-field">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password" placeholder="Enter A Password" required>
-                </div>
-                {% if messages %}
-                        {% for message in messages %}
-                          <div class="{% if message.tags == 'error' %}error-message{% elif message.tags == 'success' %}success-message{% endif %}">
-                            {{ message }}
-                          </div>
-                        {% endfor %}
-                      {% endif %}
-                   
-                <button type="submit" class="signup-btn">Login</button>
-                
-                <div class="forgot-password">
-                    you didn't have an account :
-                    <a href="{% url 'authentication:signup' %}">signup</a>
-                </div>
-            </form>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader-glow">
+            <i class="fas fa-key"></i>
         </div>
+        <div class="loading-text" id="loadingText">Recognizing Legend...</div>
     </div>
+
+    <!-- Background Elements -->
+    <div class="hero-bg-glow"></div>
+    <div class="hero-bg-glow"
+        style="bottom: 0; right: 0; background: radial-gradient(circle, rgba(0, 229, 255, 0.1) 0%, transparent 70%);">
+    </div>
+
+    <!-- Header (Global) -->
+    <header>
+        <div class="header-container">
+            <a href="{% url 'authentication:home' %}" class="logo">TALETAILOR</a>
+            <nav class="nav-links">
+                <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+                <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+                <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+            </nav>
+            <div class="user-actions">
+                <a href="{% url 'authentication:signup' %}" class="icon-btn" title="Sign Up">
+                    <i class="fas fa-user-plus"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="login-main-content">
+        <div class="login-container-dual">
+            <!-- Left Side Illustration -->
+            <div class="login-brand-side" data-aos="fade-right">
+                <img src="{% static 'images/logo2.png' %}" alt="TaleTailor Brand Illustration">
+            </div>
+
+            <!-- Right Side Login Form -->
+            <div class="login-glass-card" data-aos="fade-left">
+                <div class="login-header-group">
+                    <h1 class="login-title">Return to <br>Legend</h1>
+                    <p class="login-subtitle">Continue your narrative masterpiece.</p>
+                </div>
+
+                {% if messages %}
+                {% for message in messages %}
+                <div
+                    class="message-box-modern {% if message.tags == 'error' %}error-message{% elif message.tags == 'success' %}success-message{% endif %}">
+                    <i
+                        class="fas {% if message.tags == 'error' %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <form method="POST" action="{% url 'authentication:login' %}" id="loginForm">
+                    {% csrf_token %}
+
+                    <div class="form-group-modern">
+                        <label for="email" class="form-label-modern">Email Nexus</label>
+                        <div class="input-group-modern">
+                            <input type="email" name="email" id="email" class="input-modern"
+                                value="{{ email|default:'' }}" placeholder="e.g. hero@taletailor.com" required>
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group-modern">
+                        <label for="password" class="form-label-modern">Cypher key</label>
+                        <div class="input-group-modern">
+                            <input type="password" name="password" id="password" class="input-modern"
+                                placeholder="••••••••" required>
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="login-btn-premium">
+                        Login & Manifest <i class="fas fa-wand-magic-sparkles ms-2"></i>
+                    </button>
+
+                    <div class="signup-redirect">
+                        New seeker?
+                        <a href="{% url 'authentication:signup' %}" class="signup-link">Join the Archive</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-       setTimeout(function() {
-    let messages = document.querySelectorAll('.error-message, .success-message');
-    messages.forEach(function(message) {
-      message.style.transition = "opacity 0.5s ease-out";
-      message.style.opacity = "0";
-      setTimeout(() => message.remove(), 500);  // Remove the element after fade out
-    });
-  }, 3000); // 3 seconds
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init({
+                duration: 1000,
+                once: true,
+                offset: 50
+            });
+
+            // Form submission loading
+            const loginForm = document.getElementById('loginForm');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', function () {
+                    loadingOverlay.style.display = 'flex';
+                });
+            }
+
+            // Message timeout
+            setTimeout(function () {
+                let messages = document.querySelectorAll('.message-box-modern');
+                messages.forEach(function (message) {
+                    message.style.transition = "all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                    message.style.opacity = "0";
+                    message.style.transform = "scale(0.9) translateY(-10px)";
+                    setTimeout(() => message.remove(), 600);
+                });
+            }, 5000);
+        });
     </script>
-    
 </body>
+
 </html>
