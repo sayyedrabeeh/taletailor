@@ -32,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-sicu1e9=)_!c&ce(ym$g!r+0$$som6*9g1a&%+kk1-s+67fq)b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -170,18 +170,18 @@ EMAIL_HOST_PASSWORD = 'kcna rhtl krzv sjma'  # Use an App Password if using Gmai
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'taletailor',   
-        'USER': 'postgres', # Your PostgreSQL username 
-        'PASSWORD': '920728',  # Your PostgreSQL password 
-        'HOST': 'localhost',  # Keep 'localhost' if running locally
-        'PORT': '5432',  # Default PostgreSQL port
-    }
-}
-# settings.py
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'taletailor',   
+#         'USER': 'postgres', # Your PostgreSQL username 
+#         'PASSWORD': '920728',  # Your PostgreSQL password 
+#         'HOST': 'localhost',  # Keep 'localhost' if running locally
+#         'PORT': '5432',  # Default PostgreSQL port
+#     }
+# }
+# # settings.py
+# CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
 
 
 LOGGING = {
@@ -194,6 +194,15 @@ LOGGING = {
         "handlers": ["console"],
         "level": "DEBUG",
     },
+}
+
+import dj_database_url
+import os
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
 }
 
 

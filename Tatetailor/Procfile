@@ -1,4 +1,3 @@
-daphne: python watch_run.py
-celery: celery -A Tatetailor worker --loglevel=info
+web: daphne Tatetailor.asgi:application --bind 0.0.0.0 --port $PORT
+worker: celery -A Tatetailor worker --loglevel=info
 beat: celery -A Tatetailor beat --loglevel=info
- 
