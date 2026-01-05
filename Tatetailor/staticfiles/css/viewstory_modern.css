@@ -1,0 +1,391 @@
+/* ===========================
+   TALETAILOR - VIEW STORY MODERN
+   Premium Glassmorphism Design
+   Theme: Happy (Amber/Gold/Sunset)
+   =========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+:root {
+    --bg-dark: #0f172a;
+    --bg-darker: #020617;
+    --accent-primary: #ef4444;
+    /* Red accent for branding */
+    --happy-primary: #f59e0b;
+    /* Amber 500 */
+    --happy-secondary: #fbbf24;
+    /* Amber 400 */
+    --happy-accent: #d97706;
+    /* Amber 600 */
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --happy-glass: rgba(245, 158, 11, 0.05);
+    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    --gradient-happy: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    --gradient-brand: linear-gradient(135deg, #ef4444 0%, #8c52ff 100%);
+}
+
+body {
+    background-color: var(--bg-darker);
+    color: var(--text-main);
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+    margin: 0;
+    padding-top: 80px;
+}
+
+/* Dynamic Background Glows */
+.hero-bg-glow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.05) 0%, transparent 70%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* ===========================
+   HEADER (Standardized)
+   =========================== */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 1.2rem 0;
+    background: rgba(2, 6, 23, 0.7);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.nav-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--text-main);
+}
+
+.user-actions {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.icon-btn {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.icon-btn:hover {
+    color: var(--happy-primary);
+    transform: translateY(-2px);
+}
+
+/* ===========================
+   MAIN CONTENT LAYOUT
+   =========================== */
+.main-container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2.5rem;
+}
+
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: var(--card-shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+/* ===========================
+   STORY VIEWER SPECIFICS
+   =========================== */
+.story-header {
+    margin-bottom: 2rem;
+}
+
+.story-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: var(--gradient-happy);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+}
+
+.story-author {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.story-author a {
+    color: var(--happy-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.story-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.meta-item i {
+    color: var(--happy-primary);
+}
+
+.story-image {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.story-content {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: #e2e8f0;
+    letter-spacing: 0.01em;
+}
+
+.story-content p {
+    margin-bottom: 2rem;
+}
+
+/* ===========================
+   TRANSLATION & INTERACTION
+   =========================== */
+.interaction-box {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border: 1px solid var(--glass-border);
+}
+
+.translation-form {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.translation-form select {
+    flex: 1;
+    background: rgba(2, 6, 23, 0.5);
+    border: 1px solid var(--glass-border);
+    color: white;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn-modern {
+    background: var(--gradient-happy);
+    color: var(--bg-darker);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+}
+
+/* ===========================
+   SIDEBAR
+   =========================== */
+.sidebar-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.action-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 1.5rem;
+}
+
+.card-title {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--happy-primary);
+    margin-bottom: 1.2rem;
+    font-weight: 800;
+}
+
+.action-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.btn-action {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--happy-primary);
+    transform: translateX(5px);
+}
+
+.btn-action i {
+    width: 20px;
+    text-align: center;
+    color: var(--happy-primary);
+}
+
+/* Comments Section */
+.comments-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.comment-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 3px solid var(--happy-primary);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.comment-author {
+    font-weight: 700;
+    color: var(--happy-primary);
+}
+
+.comment-content {
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Similar Stories */
+.similar-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.similar-card {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.similar-card:hover {
+    transform: translateX(5px);
+}
+
+.similar-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.similar-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+    .main-container {
+        grid-template-columns: 1fr;
+    }
+}

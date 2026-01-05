@@ -1,0 +1,470 @@
+/* ===========================
+   EXPLORE PAGE STYLES
+   Extends home_modern.css
+   =========================== */
+
+/* Layout */
+.explore-container {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1600px;
+    margin: 80px auto 0;
+    /* Clear fixed header */
+    min-height: calc(100vh - 100px);
+}
+
+/* Sidebar Filters */
+.filters-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar for sidebar */
+.filters-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.filters-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.search-container {
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.search-box {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    padding: 1rem 1rem 1rem 2.8rem;
+    /* Space for icon */
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+/* Add a pseudo-element for search icon if not present in HTML, 
+   but since input is self-closing, we usually need a wrapper in HTML.
+   For now, we'll style the input to look premium. */
+.search-box:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+}
+
+.filter-group {
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 1rem;
+}
+
+.filter-group:last-child {
+    border-bottom: none;
+}
+
+/* Accordion Toggles */
+.filter-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.8rem 0;
+    color: var(--text-main);
+    font-weight: 500;
+    font-size: 1.05rem;
+    transition: color 0.2s ease;
+}
+
+.filter-toggle:hover {
+    color: var(--accent-secondary);
+}
+
+.filter-toggle i {
+    color: var(--accent-primary);
+    width: 28px;
+    text-align: center;
+}
+
+.filter-options {
+    display: none;
+    /* Hidden by default for accordion */
+    flex-direction: column;
+    gap: 0.8rem;
+    padding-top: 0.5rem;
+    padding-left: 0.5rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    padding: 2px 0;
+}
+
+.custom-checkbox:hover {
+    color: white;
+    transform: translateX(4px);
+}
+
+.custom-checkbox input {
+    accent-color: var(--accent-primary);
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Filter Actions */
+.filter-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem;
+}
+
+.filter-actions .btn-pulse {
+    flex: 2;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+    border: none;
+    justify-content: center;
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.filter-actions .btn-pulse:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+.btn-clear {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    border-radius: 12px;
+    padding: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-clear:hover {
+    border-color: var(--text-muted);
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Content Area */
+.explore-content {
+    flex-grow: 1;
+}
+
+.controls-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+}
+
+.results-info {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.view-toggles {
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 6px;
+    border-radius: 10px;
+}
+
+.view-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-btn.active,
+.view-btn:hover {
+    background: var(--accent-primary);
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Grid Layout (Re-calibrated for 3 cards per row) */
+.stories-grid {
+    display: grid;
+    /* Use minmax 300px which usually fits 3 on 1200px+ screens */
+    /* Or strictly 3 columns if space allows */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* To strictly enforce 3 columns on larger screens, we can use Media queries */
+@media (min-width: 1200px) {
+    .stories-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.explore-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.explore-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.card-image-container {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.explore-card:hover .card-image-container img {
+    transform: scale(1.1);
+}
+
+.card-category-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.card-details {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    color: var(--text-main);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.grid-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.grid-tag {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--accent-secondary);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.card-meta {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 1rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+/* List View Overrides */
+.stories-list-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.stories-list-layout .explore-card {
+    flex-direction: row;
+    height: 240px;
+}
+
+.stories-list-layout .card-image-container {
+    width: 35%;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.stories-list-layout .grid-tags {
+    margin-bottom: auto;
+}
+
+.stories-list-layout .card-details {
+    padding: 2rem;
+    width: 65%;
+}
+
+.stories-list-layout p.list-description {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+/* Pagination */
+.pagination-container {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.page-link {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 45px;
+    font-weight: 600;
+}
+
+.page-link:hover,
+.page-link.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .stories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .explore-container {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .filters-sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 2rem;
+        max-height: none;
+    }
+
+    .stories-list-layout .explore-card {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .stories-list-layout .card-image-container {
+        width: 100%;
+        height: 200px;
+    }
+
+    .stories-list-layout .card-details {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .stories-grid {
+        grid-template-columns: 1fr;
+    }
+}
