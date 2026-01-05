@@ -1,195 +1,147 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaleTailor -  Story Generator</title>
+  <title>AI Story Architect - TaleTailor</title>
   <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
-      <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-    
-    body {
-      background: linear-gradient(to bottom, #0f0f1a, #1a1a2e);
-      color: #fff;
-      min-height: 100vh;
-    }
-    
-    header {
-            background-color: #333;
-            padding: 1rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #444;
-        }
-
-        .logo-container {
-            padding: 0.5rem 1.5rem;
-            background-color: #000;
-            border-radius: 0;
-            margin-left: 2rem;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: white;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            background-color: #000;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-right: 2rem;
-        }
-
-        .dynamic-label {
-            color: #aaa;
-        }
-
-        .toggle {
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background-color: #444;
-            border-radius: 25px;
-            cursor: pointer;
-        }
-
-        .toggle::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s ease;
-        }
-
-        .toggle.active::after {
-            transform: translateX(26px);
-        }
-
-        .heart-icon, .profile-icon {
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-    .generator-container {
+    .generator-section {
+      padding: 8rem 2rem 4rem;
       max-width: 1000px;
-      margin: 70px auto;
-      padding: 2.5rem;
-      background: linear-gradient(to bottom, rgba(30, 30, 50, 0.8), rgba(20, 20, 40, 0.8));
-      border-radius: 1rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin: 0 auto;
+      min-height: 80vh;
     }
-    
-    .controls-row {
-      display: flex;
+
+    .glass-generator {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 3rem;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-generator::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient-main);
+    }
+
+    .architect-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: var(--gradient-main);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+
+    .architect-subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    /* Form Modernization */
+    .modern-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 1.5rem;
       margin-bottom: 2rem;
-      justify-content: space-between;
     }
-    
-    .dropdown-container {
-      flex: 1;
-      position: relative;
+
+    .input-group-modern {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
     }
-    
-    .dropdown {
-      width: 100%;
-      padding: 1rem 1.5rem;
-      background: rgba(30, 30, 60, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 0.5rem;
-      font-size: 1rem;
+
+    .label-modern {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--accent-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .input-modern {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
       color: #fff;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      font-family: inherit;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 100%;
     }
-    
-    .dropdown:hover {
-      background: rgba(50, 50, 80, 0.5);
-      border-color: rgba(255, 255, 255, 0.2);
+
+    .input-modern:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 15px rgba(140, 82, 255, 0.2);
     }
-    
-    .dropdown-arrow {
-      border: solid #fff;
-      border-width: 0 2px 2px 0;
-      display: inline-block;
-      padding: 3px;
-      transform: rotate(45deg);
-      transition: transform 0.3s ease;
-    }
-    
-    .dropdown:hover .dropdown-arrow {
-      transform: rotate(-135deg);
-    }
-    
-    .toggle-switch-container {
+
+    /* Toggle Switch Redesign */
+    .luxury-toggle {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 1.5rem;
-      background: rgba(30, 30, 60, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
+      height: 100%;
     }
-    
-    .toggle-switch-container:hover {
-      background: rgba(50, 50, 80, 0.5);
-      border-color: rgba(255, 255, 255, 0.2);
+
+    .toggle-text {
+      font-weight: 500;
+      color: var(--text-muted);
     }
-    
-    .toggle-switch {
+
+    .switch {
       position: relative;
       display: inline-block;
-      width: 60px;
-      height: 30px;
+      width: 50px;
+      height: 26px;
     }
-    
-    .toggle-switch input {
+
+    .switch input {
       opacity: 0;
       width: 0;
       height: 0;
     }
-    
-    .toggle-slider {
+
+    .slider {
       position: absolute;
       cursor: pointer;
       top: 0;
@@ -199,161 +151,204 @@
       background-color: rgba(255, 255, 255, 0.1);
       transition: .4s;
       border-radius: 34px;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
     }
-    
-    .toggle-slider:before {
+
+    .slider:before {
       position: absolute;
       content: "";
-      height: 22px;
-      width: 22px;
+      height: 18px;
+      width: 18px;
       left: 4px;
       bottom: 4px;
       background-color: white;
       transition: .4s;
       border-radius: 50%;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     }
-    
-    input:checked + .toggle-slider {
-      background: linear-gradient(to right, #8b5cf6, #3b82f6);
+
+    input:checked+.slider {
+      background: var(--gradient-main);
     }
-    
-    input:checked + .toggle-slider:before {
-      transform: translateX(30px);
+
+    input:checked+.slider:before {
+      transform: translateX(24px);
     }
-    
-    .theme-input, .situation-input {
-      width: 100%;
-      padding: 1.2rem 1.5rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      color: #fff;
-      background: rgba(30, 30, 60, 0.5);
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+    /* Large Inputs */
+    .textarea-modern {
+      min-height: 120px;
+      resize: vertical;
     }
-    
-    .theme-input:focus, .situation-input:focus {
-      outline: none;
-      border-color: rgba(139, 92, 246, 0.5);
-      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.25);
-      background: rgba(50, 50, 80, 0.5);
-    }
-    
-    .theme-input::placeholder, .situation-input::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-    }
-    
-    .button-container {
-      display: flex;
-      justify-content: flex-end;
-    }
-    
-    .generate-button {
-      padding: 1rem 2.5rem;
-      background: linear-gradient(45deg, #8b5cf6, #6366f1);
+
+    .btn-architect {
+      background: var(--gradient-main);
       color: #fff;
       border: none;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-      letter-spacing: 0.5px;
+      padding: 1rem 3rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
     }
-    
-    .generate-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
-      background: linear-gradient(45deg, #9333ea, #4f46e5);
+
+    .btn-architect:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(140, 82, 255, 0.3);
+      color: #fff;
     }
-    
-    .generate-button:active {
-      transform: translateY(-1px);
+
+    .btn-architect i {
+      transition: transform 0.3s ease;
+    }
+
+    .btn-architect:hover i {
+      transform: translateX(5px);
+    }
+
+    @media (max-width: 768px) {
+      .modern-form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .generator-section {
+        padding-top: 6rem;
+      }
     }
   </style>
 </head>
-<body>
-    <header>
-        <div class="logo-container">
-            <div class="logo irish-grover-regular">TALETAILOR</div>
-        </div>
-        <div class="nav-links">
-            <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
-            <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
-            <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
-            {% if user.is_superuser %}
-            <br><br>
-            <a href="{% url 'authentication:users' %}">
-                <button  class="nav-link">
-                    Admin Panel
-                </button>
-            </a>
-        {% endif %}
-        </div>
-        <div class="user-actions">
-       
-            <a style="text-decoration: none;" href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
-        
-             <a href="{% url 'messaging:chat' %}" style="text-decoration: none;" class="message-icon">
-            <i class="fas fa-comments" style="font-size: 20px; color: #25D366;"></i> 
-            </a>
 
-            <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
-                👤
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="{% url 'authentication:home' %}" class="logo">TALETAILOR</a>
+
+      <nav class="nav-links">
+        <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+        <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+        <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+        {% if user.is_superuser %}
+        <a href="{% url 'authentication:dashboard' %}" class="nav-link">ADMIN</a>
+        {% endif %}
+      </nav>
+
+      <div class="user-actions">
+        <a href="{% url 'mystory:collaboration_requests' %}" class="icon-btn" title="Requests">
+          <i class="fas fa-heart"></i>
+        </a>
+        <a href="{% url 'messaging:chat' %}" class="icon-btn" title="Messages">
+          <i class="fas fa-comment-alt"></i>
+        </a>
+        <a href="{% url 'authentication:view_profile' %}" class="icon-btn" title="Profile">
+          <i class="fas fa-user"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="generator-section">
+      <div class="glass-generator" data-aos="zoom-in">
+        <h1 class="architect-title">AI Story Architect</h1>
+        <p class="architect-subtitle">Phase 1: Defining the Essence</p>
+
+        <form method="POST" action="{% url 'aistory:aimake1' %}">
+          {% csrf_token %}
+
+          <div class="modern-form-row">
+            <div class="input-group-modern" data-aos="fade-up" data-aos-delay="100">
+              <label class="label-modern">Emotional Tone</label>
+              <input type="text" name="emotion" class="input-modern" placeholder="e.g. Melancholic, Joyful" required>
             </div>
-        </div>
-    </header>
-  
-    <form method="POST" action="{% url 'aistory:aimake1' %}">
-        {% csrf_token %}
-      
-        <div class="generator-container">
-          <div class="controls-row">
-            <div class="dropdown-container">
-              <div class="dropdown">
-                <label>Emotion</label>
-                <input type="text" name="emotion" placeholder="Enter emotion">
-              </div>
-            </div>
-      
-            <div class="dropdown-container">
-              <div class="toggle-switch-container">
-                Twists & climax
-                <label class="toggle-switch">
+
+            <div class="input-group-modern" data-aos="fade-up" data-aos-delay="200">
+              <label class="label-modern">Complexity</label>
+              <div class="luxury-toggle">
+                <span class="toggle-text">Plot Twists</span>
+                <label class="switch">
                   <input type="checkbox" name="twists" checked>
-                  <span class="toggle-slider"></span>
+                  <span class="slider"></span>
                 </label>
               </div>
             </div>
-      
-            <div class="dropdown-container">
-              <div class="dropdown">
-                <label>Length</label>
-                <input type="text" name="length" placeholder="300 words / 600 words / 900 words">
-              </div>
+
+            <div class="input-group-modern" data-aos="fade-up" data-aos-delay="300">
+              <label class="label-modern">Length</label>
+              <input type="text" name="length" class="input-modern" placeholder="e.g. 500 words" required>
             </div>
           </div>
-      
-          <input type="text" name="theme" class="theme-input" placeholder="Your Theme Of Story (at least 100 words)">
-          <input type="text" name="situation" class="situation-input" placeholder="Your Occasion or Situation (optional)">
-      
-          <div class="button-container">
-            <button type="submit" class="generate-button">Next</button>
-          </div>
-        </div>
-      </form>
-      
-  
-  <script>
-     
 
-      
-    
+          <div class="input-group-modern mb-4" data-aos="fade-up" data-aos-delay="400">
+            <label class="label-modern">Core Theme</label>
+            <p class="mb-2" style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.8);">
+              <i class="fas fa-info-circle me-1" style="color: var(--accent-primary);"></i> NB: Keep the theme concise
+              (small) for best results. It will also be used as the story's title.
+            </p>
+            <textarea name="theme" class="input-modern textarea-modern"
+              placeholder="Give your story a theme (e.g. A journey through the stars)..." required></textarea>
+          </div>
+
+          <div class="input-group-modern mb-5" data-aos="fade-up" data-aos-delay="500">
+            <label class="label-modern">Occasion or Situation (Optional)</label>
+            <input type="text" name="situation" class="input-modern"
+              placeholder="e.g. A birthday gift, a bedtime story">
+          </div>
+
+          <div class="text-center" data-aos="fade-up" data-aos-delay="600">
+            <button type="submit" class="btn-architect">
+              Continue to Characters <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h2>Taletailor</h2>
+        <p class="footer-tagline">
+          Where passion meets precision. Capturing the essence of every detail, one story at a time.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Services</h3>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Bonus Program</a>
+          <a href="#" class="footer-link">Gift Cards</a>
+          <a href="#" class="footer-link">Subscription</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Support</h3>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Help Center</a>
+          <a href="#" class="footer-link">Community Guidelines</a>
+          <a href="#" class="footer-link">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 50
+      });
+    });
   </script>
 </body>
+
 </html>

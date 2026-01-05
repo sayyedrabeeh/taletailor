@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,15 +9,15 @@
     <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
 
     <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Optionally, Bootstrap Icons -->
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Optionally, Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
         * {
@@ -32,7 +33,7 @@
             height: 100vh;
             overflow: hidden;
         }
-        
+
 
         .app-container {
             display: grid;
@@ -59,12 +60,12 @@
             right: 0;
             width: 1px;
             height: 100%;
-            background:  linear-gradient(180deg, transparent 0%, #3b82f6 50%, transparent 100%);
+            background: linear-gradient(180deg, transparent 0%, #3b82f6 50%, transparent 100%);
             opacity: 0.5;
         }
 
-      
-       .nav-item {
+
+        .nav-item {
             width: 50px;
             height: 50px;
             border-radius: 16px;
@@ -193,6 +194,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -236,7 +238,7 @@
 
         .user-info {
             flex: 1;
-            display:flex;
+            display: flex;
         }
 
         .username {
@@ -333,6 +335,7 @@
                 padding: 20px;
             }
         }
+
         .update-header {
             display: flex;
             justify-content: space-between;
@@ -358,252 +361,260 @@
         .icon-btn:hover svg,
         .icon-form button:hover svg {
             transform: scale(1.1);
-            fill: #ff4d4f; /* highlight on hover */
+            fill: #ff4d4f;
+            /* highlight on hover */
         }
 
         .icon-form {
             display: inline;
         }
+
         .alert {
-        padding: 12px;
-        margin: 10px 0;
-        border-radius: 6px;
-        font-size: 14px;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-size: 14px;
         }
 
         .alert-success {
-        background-color: #d4edda;
-        color: #155724;
+            background-color: #d4edda;
+            color: #155724;
         }
-.update-wrapper {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    flex-wrap: nowrap;
-    margin-bottom: 20px;
-}
 
-.update-item {
-    flex: 1 1 0;
-    min-width: 0;
-}
+        .update-wrapper {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            flex-wrap: nowrap;
+            margin-bottom: 20px;
+        }
 
-/* Comments section - Fixed styling */
-.comments {
-    background: rgba(39, 39, 42, 0.5);
-    border: 1px solid rgba(63, 63, 70, 0.3);
-    border-radius: 16px;
-    padding: 16px 16px 0 16px;
-    width: 400px;
-    max-height: 500px;
-    overflow-y: auto;
-    flex-shrink: 0;
-    backdrop-filter: blur(10px);
-    color: #e4e4e7;
-    transition: all 0.3s ease;
-    animation: fadeIn 0.3s ease;
-}
+        .update-item {
+            flex: 1 1 0;
+            min-width: 0;
+        }
 
-/* Show comments when active */
-.comments.show {
-    display: block !important;
-}
+        /* Comments section - Fixed styling */
+        .comments {
+            background: rgba(39, 39, 42, 0.5);
+            border: 1px solid rgba(63, 63, 70, 0.3);
+            border-radius: 16px;
+            padding: 16px 16px 0 16px;
+            width: 400px;
+            max-height: 500px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            backdrop-filter: blur(10px);
+            color: #e4e4e7;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.3s ease;
+        }
 
-/* Comment styling */
-.comment {
-    background: rgba(63, 63, 70, 0.2);
-    border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 12px;
-    border-left: 3px solid rgba(59, 130, 246, 0.5);
-}
+        /* Show comments when active */
+        .comments.show {
+            display: block !important;
+        }
 
-.comment:last-child {
-    margin-bottom: 0;
-}
+        /* Comment styling */
+        .comment {
+            background: rgba(63, 63, 70, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 3px solid rgba(59, 130, 246, 0.5);
+        }
 
-.comment strong {
-    color: #3b82f6;
-    font-weight: 600;
-}
+        .comment:last-child {
+            margin-bottom: 0;
+        }
 
-.comment .text-muted {
-    color: #a1a1aa !important;
-    font-size: 0.875rem;
-}
+        .comment strong {
+            color: #3b82f6;
+            font-weight: 600;
+        }
 
-/* Reply styling */
-.comment .ms-4 {
-    background: rgba(63, 63, 70, 0.1);
-    border-radius: 6px;
-    padding: 8px;
-    border-left: 2px solid rgba(139, 92, 246, 0.4);
-}
+        .comment .text-muted {
+            color: #a1a1aa !important;
+            font-size: 0.875rem;
+        }
 
-/* Form styling in comments */
-.comments .form-control {
-    background: transparent;
-    border: 1px solid rgba(82, 82, 91, 0.3);
-    color: #e4e4e7;
-    border-radius: 8px;
-}
+        /* Reply styling */
+        .comment .ms-4 {
+            background: rgba(63, 63, 70, 0.1);
+            border-radius: 6px;
+            padding: 8px;
+            border-left: 2px solid rgba(139, 92, 246, 0.4);
+        }
 
-.comments .form-control:focus {
-    background: rgba(63, 63, 70, 0.5);
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
-    color: #e4e4e7;
-}
+        /* Form styling in comments */
+        .comments .form-control {
+            background: transparent;
+            border: 1px solid rgba(82, 82, 91, 0.3);
+            color: #e4e4e7;
+            border-radius: 8px;
+        }
 
-.comments .form-control::placeholder {
-    color: #a1a1aa;
-}
+        .comments .form-control:focus {
+            background: rgba(63, 63, 70, 0.5);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+            color: #e4e4e7;
+        }
 
-.comments .btn {
-    border-radius: 6px;
-    font-size: 0.875rem;
-}
+        .comments .form-control::placeholder {
+            color: #a1a1aa;
+        }
 
-.comments .btn-primary {
-    background: #3b82f6;
-    border-color: #3b82f6;
-}
+        .comments .btn {
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
 
-.comments .btn-primary:hover {
-    background: #2563eb;
-    border-color: #2563eb;
-}
+        .comments .btn-primary {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
 
-.comments .btn-outline-primary {
-    color: #3b82f6;
-    border-color: #3b82f6;
-}
+        .comments .btn-primary:hover {
+            background: #2563eb;
+            border-color: #2563eb;
+        }
 
-.comments .btn-outline-primary:hover {
-    background: #3b82f6;
-    border-color: #3b82f6;
-    color: white;
-}
+        .comments .btn-outline-primary {
+            color: #3b82f6;
+            border-color: #3b82f6;
+        }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
-    .update-wrapper {
-        flex-direction: column;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
+        .comments .btn-outline-primary:hover {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
 
-    .comments {
-        width: 100%;
-        max-height: 400px;
-    }
-}
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .update-wrapper {
+                flex-direction: column;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
 
-/* Animation for comment reveal */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+            .comments {
+                width: 100%;
+                max-height: 400px;
+            }
+        }
 
-/* Scrollbar styling for comments */
-.comments::-webkit-scrollbar {
-    width: 6px;
-}
+        /* Animation for comment reveal */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
 
-.comments::-webkit-scrollbar-track {
-    background: rgba(63, 63, 70, 0.2);
-    border-radius: 3px;
-}
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-.comments::-webkit-scrollbar-thumb {
-    background: rgba(156, 163, 175, 0.4);
-    border-radius: 3px;
-}
+        /* Scrollbar styling for comments */
+        .comments::-webkit-scrollbar {
+            width: 6px;
+        }
 
-.comments::-webkit-scrollbar-thumb:hover {
-    background: rgba(156, 163, 175, 0.6);
-}
+        .comments::-webkit-scrollbar-track {
+            background: rgba(63, 63, 70, 0.2);
+            border-radius: 3px;
+        }
 
-/* Update interactions styling */
-.update-interactions .btn {
-    border-radius: 20px;
-    font-size: 0.875rem;
-    padding: 6px 12px;
-}
+        .comments::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.4);
+            border-radius: 3px;
+        }
 
-.toggle-comments-btn {
-    transition: all 0.2s ease;
-}
+        .comments::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.6);
+        }
 
-.toggle-comments-btn.active {
-    background-color: rgba(59, 130, 246, 0.1);
-    border-color: #3b82f6;
-    color: #3b82f6;
-}
-.comment-form {
-    position: sticky;
-    bottom: 0;
-    left: 0;
-    background: #1f2022;
-    z-index: 1000;
-    display: flex;
-    margin-bottom: 10px;
-}
-.comment-form button {
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 0 10px;
-    transition: color 0.2s ease;
-}
+        /* Update interactions styling */
+        .update-interactions .btn {
+            border-radius: 20px;
+            font-size: 0.875rem;
+            padding: 6px 12px;
+        }
 
-.comment-form button:hover {
-    color: #1e90ff;
-}
-  
+        .toggle-comments-btn {
+            transition: all 0.2s ease;
+        }
 
+        .toggle-comments-btn.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .comment-form {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            background: #1f2022;
+            z-index: 1000;
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .comment-form button {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 10px;
+            transition: color 0.2s ease;
+        }
+
+        .comment-form button:hover {
+            color: #1e90ff;
+        }
     </style>
 </head>
+
 <body>
     <div class="app-container">
         <!-- Navigation Rail -->
         <div class="nav-rail">
             <a href="{% url 'authentication:home' %}" class="nav-item" title="Home">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
                 </svg>
             </a>
             <a href="{% url 'aistory:explore' %}" class="nav-item" title="Explore">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm3.94 6.06l-2.12 5.66a1 1 0 0 1-.62.62l-5.66 2.12a.25.25 0 0 1-.32-.32l2.12-5.66a1 1 0 0 1 .62-.62l5.66-2.12a.25.25 0 0 1 .32.32z"/>
+                    <path
+                        d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm3.94 6.06l-2.12 5.66a1 1 0 0 1-.62.62l-5.66 2.12a.25.25 0 0 1-.32-.32l2.12-5.66a1 1 0 0 1 .62-.62l5.66-2.12a.25.25 0 0 1 .32.32z" />
                 </svg>
             </a>
             <a href="{% url 'mystory:mystory1' %}" class="nav-item" title="MyStory">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm-1 14.5V7.5a1 1 0 0 1 1.54-.84l5 3.5a1 1 0 0 1 0 1.68l-5 3.5A1 1 0 0 1 11 16.5z"/>
+                    <path
+                        d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm-1 14.5V7.5a1 1 0 0 1 1.54-.84l5 3.5a1 1 0 0 1 0 1.68l-5 3.5A1 1 0 0 1 11 16.5z" />
                 </svg>
             </a>
             <a href="{% url 'mystory:yourownstory' %}" class="nav-item" title="Create Story">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
+                    <path
+                        d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
                 </svg>
             </a>
             <a href="{% url 'messaging:chat' %}" class="nav-item" title="Chat">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
-                    <path d="M20 2H4a2 2 0 0 0-2 2v14l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+                    <path d="M20 2H4a2 2 0 0 0-2 2v14l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" />
                 </svg>
             </a>
             <a href="{% url 'messaging:updates_list' %}" class="nav-item active" title="Updates">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/>
+                    <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z" />
                 </svg>
             </a>
         </div>
@@ -614,13 +625,13 @@
             <div class="page-header">
                 <h1 class="header-title">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/>
+                        <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z" />
                     </svg>
                     Latest Updates
                 </h1>
                 <a href="{% url 'messaging:post_update' %}" class="new-update-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                     </svg>
                     New Update
                 </a>
@@ -630,261 +641,273 @@
             <div class="updates-container">
                 <div class="updates-list">
                     {% if messages %}
-                        <div class="messages">
-                            {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}">
-                                {{ message }}
-                            </div>
-                            {% endfor %}
+                    <div class="messages">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
                         </div>
-                        {% endif %}
-                {% for update in updates %}
-                <div class="update-wrapper">
-                    <!-- Left Side: Update -->
-                    <div class="update-item flex-grow-1">
-                        <div class="update-header">
-                            <div class="user-avatar">
-                                {% if update.user.profile.profile_picture %}
-                                    <img src="{{ update.user.profile.profile_picture.url }}" alt="Profile Picture">
-                                {% else %}
-                                    {{ update.user.username|first|upper }}
-                                {% endif %}
-                            </div>
-                            <div class="user-info">
-                                <div>
-                                    <div class="username">{{ update.user.username|cut:"@gmail.com" }}</div>
-                                    <div class="update-time">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 9h-2V7h2zm0 4h-2v-2h2z"/>
-                                        </svg>
-                                        <span class="time-badge">{{ update.created_at|timesince }} ago</span>
-                                    </div>
-                                </div>
-
-                                {% if update.user == request.user %}
-                                <div class="update-actions d-flex justify-content-end align-items-center gap-2 mt-2">
-                                    <a href="{% url 'messaging:edit_update' update.id %}" 
-                                    class="btn btn-sm btn-outline-secondary d-flex align-items-center" 
-                                    title="Edit this update">
-                                        <i class="bi bi-pencil-square me-1"></i>Edit
-                                    </a>
-                                    <button type="button" 
-                                            class="btn btn-sm btn-outline-danger d-flex align-items-center" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#deleteModal-{{ update.id }}" 
-                                            title="Delete this update">
-                                        <i class="bi bi-trash me-1"></i>Delete
-                                    </button>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <div class="update-content">{{ update.text|linebreaks }}</div>
-
-                        <div class="update-interactions d-flex gap-3 mt-2">
-                            <form method="POST" class="like-form" data-update-id="{{ update.id }}">
-                                {% csrf_token %}
-                                <input type="hidden" name="reaction_type" value="like">
-                                <button type="submit" class="btn btn-outline-success btn-sm">👍 Like (<span class="like-count">{{ update.likes_count }}</span>)</button>
-                            </form>
-
-                            <form method="POST" class="dislike-form" data-update-id="{{ update.id }}">
-                                {% csrf_token %}
-                                <input type="hidden" name="reaction_type" value="dislike">
-                                <button type="submit" class="btn btn-outline-danger btn-sm">👎 Dislike (<span class="dislike-count">{{ update.dislikes_count }}</span>)</button>
-                            </form>
-
-                           <button type="button" class="btn btn-sm btn-outline-secondary toggle-comments-btn" data-update-id="{{ update.id }}">
-                                💬 <span class="comment-count" id="comment-count-{{ update.id }}">{{ update.comments_count }}</span> Comments
-                            </button>
-                        </div>
+                        {% endfor %}
                     </div>
+                    {% endif %}
+                    {% for update in updates %}
+                    <div class="update-wrapper">
+                        <!-- Left Side: Update -->
+                        <div class="update-item flex-grow-1">
+                            <div class="update-header">
+                                <div class="user-avatar">
+                                    {% if update.user.profile.profile_picture %}
+                                    <img src="{{ update.user.profile.profile_picture.url }}" alt="Profile Picture">
+                                    {% else %}
+                                    {{ update.user.username|first|upper }}
+                                    {% endif %}
+                                </div>
+                                <div class="user-info">
+                                    <div>
+                                        <div class="username">{{ update.user.username|cut:"@gmail.com" }}</div>
+                                        <div class="update-time">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                                <path
+                                                    d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 9h-2V7h2zm0 4h-2v-2h2z" />
+                                            </svg>
+                                            <span class="time-badge">{{ update.created_at|timesince }} ago</span>
+                                        </div>
+                                    </div>
 
-                    <!-- Right Side: Comments -->
-                    <div class="comments d-none" id="comments-{{ update.id }}">
-                        {% for comment in update.top_level_comments %}
+                                    {% if update.user == request.user %}
+                                    <div
+                                        class="update-actions d-flex justify-content-end align-items-center gap-2 mt-2">
+                                        <a href="{% url 'messaging:edit_update' update.id %}"
+                                            class="btn btn-sm btn-outline-secondary d-flex align-items-center"
+                                            title="Edit this update">
+                                            <i class="bi bi-pencil-square me-1"></i>Edit
+                                        </a>
+                                        <button type="button"
+                                            class="btn btn-sm btn-outline-danger d-flex align-items-center"
+                                            data-bs-toggle="modal" data-bs-target="#deleteModal-{{ update.id }}"
+                                            title="Delete this update">
+                                            <i class="bi bi-trash me-1"></i>Delete
+                                        </button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="update-content">{{ update.text|linebreaks }}</div>
+
+                            <div class="update-interactions d-flex gap-3 mt-2">
+                                <form method="POST" class="like-form" data-update-id="{{ update.id }}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="reaction_type" value="like">
+                                    <button type="submit" class="btn btn-outline-success btn-sm">👍 Like (<span
+                                            class="like-count">{{ update.likes_count }}</span>)</button>
+                                </form>
+
+                                <form method="POST" class="dislike-form" data-update-id="{{ update.id }}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="reaction_type" value="dislike">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">👎 Dislike (<span
+                                            class="dislike-count">{{ update.dislikes_count }}</span>)</button>
+                                </form>
+
+                                <button type="button" class="btn btn-sm btn-outline-secondary toggle-comments-btn"
+                                    data-update-id="{{ update.id }}">
+                                    💬 <span class="comment-count" id="comment-count-{{ update.id }}">{{update.comments_count }}</span> Comments
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right Side: Comments -->
+                        <div class="comments d-none" id="comments-{{ update.id }}">
+                            {% for comment in update.top_level_comments %}
                             <div class="comment mb-2">
                                 <strong>{{ comment.user.username|cut:"@gmail.com" }}</strong>: {{ comment.text }}
                                 <small class="text-muted ms-2">{{ comment.created_at|timesince }} ago</small>
-                                <form method="POST" class="like-comment-form d-inline" data-comment-id="{{ comment.id }}" >
+                                <form method="POST" class="like-comment-form d-inline"
+                                    data-comment-id="{{ comment.id }}">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-link btn-sm p-0" style="text-decoration: none;">
+                                    <button type="submit" class="btn btn-link btn-sm p-0"
+                                        style="text-decoration: none;">
                                         👍 {{ comment.like_count }}
                                     </button>
                                 </form>
-                                <form method="POST"  class="comment-form d-inline">
+                                <form method="POST" class="comment-form d-inline">
                                     {% csrf_token %}
                                     <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                                    <input type="text" name="text" placeholder="Reply..." class="form-control form-control-sm d-inline w-auto mt-1"style="border: none; border-bottom: 1px solid #ccc; border-radius: 0;" required>
+                                    <input type="text" name="text" placeholder="Reply..."
+                                        class="form-control form-control-sm d-inline w-auto mt-1"
+                                        style="border: none; border-bottom: 1px solid #ccc; border-radius: 0;" required>
                                     <button type="submit" class="btn btn-sm btn-outline-primary mt-1">Reply</button>
                                 </form>
 
                                 {% for reply in comment.replies.all %}
-                                    <div class="ms-4 mt-1">
-                                        <strong>{{ reply.user.username|cut:"@gmail.com" }}</strong>: {{ reply.text }}
-                                        <small class="text-muted ms-2">{{ reply.created_at|timesince }} ago</small>
-                                    </div>
+                                <div class="ms-4 mt-1">
+                                    <strong>{{ reply.user.username|cut:"@gmail.com" }}</strong>: {{ reply.text }}
+                                    <small class="text-muted ms-2">{{ reply.created_at|timesince }} ago</small>
+                                </div>
                                 {% endfor %}
                             </div>
-                        {% empty %}
+                            {% empty %}
                             <p class="">No comments yet. Be the first!</p>
-                        {% endfor %}
+                            {% endfor %}
 
-                        <form method="POST"  class="comment-form" >
+                            <form method="POST" class="comment-form">
 
-                            {% csrf_token %}
-                            <input type="text" name="text" placeholder="Add a comment..." class="form-control mt-2" required>
-                            <button type="submit" title="Send">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>                      
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Delete Modal -->
-                <div class="modal fade" id="deleteModal-{{ update.id }}" tabindex="-1" aria-labelledby="deleteModalLabel-{{ update.id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content border-0 shadow-lg">
-                            <div class="modal-header bg-light border-0">
-                                <h5 class="modal-title text-black fw-semibold">
-                                    <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i> Confirm Deletion
-                                </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body text-muted">
-                                Are you sure you want to <strong>permanently delete</strong> this update?
-                            </div>
-                            <div class="modal-footer bg-light border-0">
-                                <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">
-                                    <i class="bi bi-x-circle me-1"></i> Cancel
+                                {% csrf_token %}
+                                <input type="text" name="text" placeholder="Add a comment..." class="form-control mt-2"
+                                    required>
+                                <button type="submit" title="Send">
+                                    <i class="fas fa-paper-plane"></i>
                                 </button>
-                                <form method="POST" action="{% url 'messaging:delete_update' update.id %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm btn-danger">
-                                        <i class="bi bi-trash me-1"></i> Yes, Delete
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Delete Modal -->
+                    <div class="modal fade" id="deleteModal-{{ update.id }}" tabindex="-1"
+                        aria-labelledby="deleteModalLabel-{{ update.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow-lg">
+                                <div class="modal-header bg-light border-0">
+                                    <h5 class="modal-title text-black fw-semibold">
+                                        <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i> Confirm
+                                        Deletion
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body text-muted">
+                                    Are you sure you want to <strong>permanently delete</strong> this update?
+                                </div>
+                                <div class="modal-footer bg-light border-0">
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">
+                                        <i class="bi bi-x-circle me-1"></i> Cancel
                                     </button>
-                                </form>
+                                    <form method="POST" action="{% url 'messaging:delete_update' update.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash me-1"></i> Yes, Delete
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {% empty %}
+                    <div class="no-updates">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor"
+                            style="margin-bottom: 16px; opacity: 0.5;">
+                            <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z" />
+                        </svg>
+                        <p>No updates from others yet.</p>
+                        <p style="margin-top: 8px; font-size: 14px;">Be the first to share an update!</p>
+                    </div>
+                    {% endfor %}
+
                 </div>
-                {% empty %}
-                <div class="no-updates">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="margin-bottom: 16px; opacity: 0.5;">
-                        <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/>
-                    </svg>
-                    <p>No updates from others yet.</p>
-                    <p style="margin-top: 8px; font-size: 14px;">Be the first to share an update!</p>
-                </div>
-                {% endfor %}
-
-                                </div>
-                            </div>
+            </div>
 
 
 
 
- 
+
 
 
         </div>
     </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    // Toggle comment visibility
-    document.querySelectorAll(".toggle-comments-btn").forEach(button => {
-        button.addEventListener("click", () => {
-            const updateId = button.getAttribute("data-update-id");
-            const commentBox = document.getElementById(`comments-${updateId}`);
-            commentBox.classList.toggle("d-none");
-        });
-    });
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Toggle comment visibility
+            document.querySelectorAll(".toggle-comments-btn").forEach(button => {
+                button.addEventListener("click", () => {
+                    const updateId = button.getAttribute("data-update-id");
+                    const commentBox = document.getElementById(`comments-${updateId}`);
+                    commentBox.classList.toggle("d-none");
+                });
+            });
 
-    // Get CSRF token
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                const trimmed = cookie.trim();
-                if (trimmed.startsWith(name + '=')) {
-                    cookieValue = decodeURIComponent(trimmed.substring(name.length + 1));
-                    break;
+            // Get CSRF token
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let cookie of cookies) {
+                        const trimmed = cookie.trim();
+                        if (trimmed.startsWith(name + '=')) {
+                            cookieValue = decodeURIComponent(trimmed.substring(name.length + 1));
+                            break;
+                        }
+                    }
                 }
+                return cookieValue;
             }
-        }
-        return cookieValue;
-    }
-    const csrftoken = getCookie('csrftoken');
+            const csrftoken = getCookie('csrftoken');
 
-    // Event delegation for like, dislike, comment, reply
-    document.addEventListener("submit", function (e) {
-        const form = e.target;
+            // Event delegation for like, dislike, comment, reply
+            document.addEventListener("submit", function (e) {
+                const form = e.target;
 
-        // Like/dislike post
-        if (form.classList.contains("like-form") || form.classList.contains("dislike-form")) {
-            e.preventDefault();
-            const updateId = form.dataset.updateId;
-            const formData = new FormData(form);
+                // Like/dislike post
+                if (form.classList.contains("like-form") || form.classList.contains("dislike-form")) {
+                    e.preventDefault();
+                    const updateId = form.dataset.updateId;
+                    const formData = new FormData(form);
 
-            fetch(`/messaging/updates/${updateId}/react/`, {
-                method: "POST",
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                body: formData
-            })
-            .then(response => response.ok ? response.json() : Promise.reject("Failed"))
-            .then(data => {
-                const container = form.closest(".update-item");
-                container.querySelector(".like-count").textContent = data.likes_count;
-                container.querySelector(".dislike-count").textContent = data.dislikes_count;
-            })
-            .catch(console.error);
-        }
-
-        // Like a comment
-        if (form.classList.contains("like-comment-form")) {
-            e.preventDefault();
-            const commentId = form.dataset.commentId;
-
-            fetch(`/messaging/comments/${commentId}/like/`, {
-                method: "POST",
-                headers: {
-                    'X-CSRFToken': csrftoken
+                    fetch(`/messaging/updates/${updateId}/react/`, {
+                        method: "POST",
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        body: formData
+                    })
+                        .then(response => response.ok ? response.json() : Promise.reject("Failed"))
+                        .then(data => {
+                            const container = form.closest(".update-item");
+                            container.querySelector(".like-count").textContent = data.likes_count;
+                            container.querySelector(".dislike-count").textContent = data.dislikes_count;
+                        })
+                        .catch(console.error);
                 }
-            })
-            .then(response => response.json())
-            .then(data => {
-                form.querySelector("button").textContent = `👍 ${data.like_count}`;
-            })
-            .catch(console.error);
-        }
 
-        // Post a new comment or reply
-        if (form.classList.contains("comment-form")) {
-            e.preventDefault();
-            const formData = new FormData(form);
-            const updateId = form.closest("[id^='comments-']").id.split("-")[1];
+                // Like a comment
+                if (form.classList.contains("like-comment-form")) {
+                    e.preventDefault();
+                    const commentId = form.dataset.commentId;
 
-            fetch(`/messaging/updates/${updateId}/comment/`, {
-                method: "POST",
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                body: formData
-            })
-            .then(response => response.ok ? response.json() : Promise.reject("Failed"))
-            .then(data => {
-                const commentsContainer = document.getElementById(`comments-${updateId}`);
-                const newComment = document.createElement("div");
-                const isReply = !!data.comment.parent_id;
-                newComment.className = isReply ? "ms-4 mt-1" : "comment mb-2";
+                    fetch(`/messaging/comments/${commentId}/like/`, {
+                        method: "POST",
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            form.querySelector("button").textContent = `👍 ${data.like_count}`;
+                        })
+                        .catch(console.error);
+                }
 
-                if (!isReply) {
-                    newComment.innerHTML = `
+                // Post a new comment or reply
+                if (form.classList.contains("comment-form")) {
+                    e.preventDefault();
+                    const formData = new FormData(form);
+                    const updateId = form.closest("[id^='comments-']").id.split("-")[1];
+
+                    fetch(`/messaging/updates/${updateId}/comment/`, {
+                        method: "POST",
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        body: formData
+                    })
+                        .then(response => response.ok ? response.json() : Promise.reject("Failed"))
+                        .then(data => {
+                            const commentsContainer = document.getElementById(`comments-${updateId}`);
+                            const newComment = document.createElement("div");
+                            const isReply = !!data.comment.parent_id;
+                            newComment.className = isReply ? "ms-4 mt-1" : "comment mb-2";
+
+                            if (!isReply) {
+                                newComment.innerHTML = `
                         <strong>${data.comment.username}</strong>: ${data.comment.text}
                         <small class="text-muted ms-2 time-elapsed" data-created-at="${data.comment.created_at_iso}">just now</small>
 
@@ -900,57 +923,58 @@ document.addEventListener("DOMContentLoaded", function () {
                             <button type="submit" class="btn btn-sm btn-outline-primary mt-1">Reply</button>
                         </form>
                     `;
-                } else {
-                    newComment.innerHTML = `
+                            } else {
+                                newComment.innerHTML = `
                         <strong>${data.comment.username}</strong>: ${data.comment.text}
                         <small class="text-muted ms-2 time-elapsed" data-created-at="${data.comment.created_at_iso}">just now</small>
                     `;
+                            }
+
+                            if (isReply) {
+                                const parent = commentsContainer.querySelector(`[name="parent_id"][value="${data.comment.parent_id}"]`).closest(".comment");
+                                parent.appendChild(newComment);
+                            } else {
+                                commentsContainer.prepend(newComment);
+                                const countSpan = document.getElementById(`comment-count-${updateId}`);
+                                if (countSpan) countSpan.textContent = parseInt(countSpan.textContent) + 1;
+                            }
+
+                            form.reset();
+                            updateAllTimestamps();
+                        })
+                        .catch(console.error);
                 }
+            });
 
-                if (isReply) {
-                    const parent = commentsContainer.querySelector(`[name="parent_id"][value="${data.comment.parent_id}"]`).closest(".comment");
-                    parent.appendChild(newComment);
-                } else {
-                    commentsContainer.prepend(newComment);
-                    const countSpan = document.getElementById(`comment-count-${updateId}`);
-                    if (countSpan) countSpan.textContent = parseInt(countSpan.textContent) + 1;
+            // Update time ago texts
+            function timeSince(date) {
+                const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+                if (seconds < 60) return "just now";
+                const intervals = {
+                    year: 31536000, month: 2592000, day: 86400,
+                    hour: 3600, minute: 60
+                };
+                for (let [unit, value] of Object.entries(intervals)) {
+                    const count = Math.floor(seconds / value);
+                    if (count > 0) return `${count} ${unit}${count > 1 ? 's' : ''} ago`;
                 }
+                return "just now";
+            }
 
-                form.reset();
-                updateAllTimestamps();
-            })
-            .catch(console.error);
-        }
-    });
+            function updateAllTimestamps() {
+                document.querySelectorAll('.time-elapsed').forEach(el => {
+                    const iso = el.dataset.createdAt;
+                    el.textContent = timeSince(iso);
+                });
+            }
 
-    // Update time ago texts
-    function timeSince(date) {
-        const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-        if (seconds < 60) return "just now";
-        const intervals = {
-            year: 31536000, month: 2592000, day: 86400,
-            hour: 3600, minute: 60
-        };
-        for (let [unit, value] of Object.entries(intervals)) {
-            const count = Math.floor(seconds / value);
-            if (count > 0) return `${count} ${unit}${count > 1 ? 's' : ''} ago`;
-        }
-        return "just now";
-    }
-
-    function updateAllTimestamps() {
-        document.querySelectorAll('.time-elapsed').forEach(el => {
-            const iso = el.dataset.createdAt;
-            el.textContent = timeSince(iso);
+            updateAllTimestamps();
+            setInterval(updateAllTimestamps, 60000);
         });
-    }
-
-    updateAllTimestamps();
-    setInterval(updateAllTimestamps, 60000);
-});
-</script>
+    </script>
 
 
 
 </body>
+
 </html>

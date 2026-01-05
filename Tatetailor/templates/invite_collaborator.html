@@ -1,235 +1,423 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invite Collaborators</title>
-    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invite Collaborators - TaleTailor</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        /* Ultra-modern dark mode */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #0d0d0d;
-            color: #e0e0e0;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+        .invite-section {
+            padding: 8rem 2rem 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            min-height: 80vh;
         }
 
-        .container {
-            width: 60%;
-            background: #121212;
-            padding: 30px;
+        .invite-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .invite-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-main);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Search Overrides */
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .modern-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
             border-radius: 12px;
-            box-shadow: 0px 0px 40px rgba(0, 255, 255, 0.15);
-            text-align: center;
-        }
-
-        .invite-header {
-            margin-bottom: 20px;
-        }
-
-        .invite-header h1 {
-            color: #ffffff;
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .invite-header p {
-            color: #bbb;
-            font-size: 14px;
-        }
-
-        /* Search box */
-        .search-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        input[type="text"] {
-            width: 70%;
-            padding: 12px;
-            border: 1px solid #333;
-            border-radius: 6px;
-            background-color: #1e1e1e;
+            padding: 0.8rem 1.5rem;
             color: #fff;
-            font-size: 14px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .modern-input:focus {
             outline: none;
+            border-color: var(--accent-secondary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
         }
 
-        .search-button {
-            padding: 12px 18px;
-            background-color: #00bcd4;
-            color: white;
-            border: none;
-            border-radius: 6px;
+        .search-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 0 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
             cursor: pointer;
-            margin-left: 10px;
-            font-weight: bold;
-            transition: 0.3s;
         }
 
-        .search-button:hover {
-            background-color: #0097a7;
+        .search-btn:hover {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
         }
 
-        /* Collaborator list */
-        .collaborator-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        /* Collaborator List */
+        .collaborator-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        .collaborator-card {
+        .user-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: #1e1e1e;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #333;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .collaborator-card:hover {
-            box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.3);
+        .user-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--accent-primary);
+            transform: translateX(5px);
         }
 
-        .collaborator-info {
+        .user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 1rem;
         }
 
-        .collaborator-info p {
-            font-size: 16px;
-            font-weight: bold;
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
             color: #fff;
         }
 
-        .collaborator-checkbox {
-            transform: scale(1.3);
+        .user-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-main);
         }
 
-        /* Invite button */
-        .invite-button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(45deg, #ff416c, #ff4b2b);
-            color: white;
-            border: none;
+        /* Checkbox Styling */
+        .custom-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--glass-border);
             border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 20px;
-            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
         }
 
-        .invite-button:hover {
-            background: linear-gradient(45deg, #ff4b2b, #ff416c);
-            transform: scale(1.05);
+        input[type="checkbox"]:checked+.user-card .custom-checkbox {
+            background: var(--accent-secondary);
+            border-color: var(--accent-secondary);
+        }
+
+        /* Hide default checkbox */
+        .hidden-checkbox {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Submit Button */
+        .submit-container {
+            margin-top: 3rem;
+            text-align: center;
         }
 
         /* Pagination */
-        .pagination {
-            text-align: center;
-            margin-top: 25px;
+        .modern-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 3rem;
         }
 
-        .pagination a {
-            padding: 10px 15px;
+        .page-link-modern {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
             text-decoration: none;
-            background: #00bcd4;
-            color: white;
-            border-radius: 6px;
-            margin: 0 5px;
-            transition: 0.3s;
+            transition: all 0.3s ease;
         }
 
-        .pagination a:hover {
-            background: #0097a7;
+        .page-link-modern:hover {
+            background: var(--glass-bg);
+            color: var(--text-main);
+            border-color: var(--accent-secondary);
         }
 
-        .pagination span {
-            margin: 0 10px;
+        .page-current {
+            background: var(--gradient-main);
+            color: #fff;
+            border: none;
         }
 
-        /* Message alert */
-        .message {
-            background: #1f7a1f;
-            color: #ffffff;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-weight: bold;
+        /* Alerts */
+        .modern-alert {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 500;
         }
 
-        .warning {
-            background: #8a2b2b;
+        .modern-alert.warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #ef4444;
         }
     </style>
 </head>
+
 <body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="{% url 'authentication:home' %}" class="logo">TALETAILOR</a>
 
-    <div class="container">
-        <div class="invite-header">
-            <h1>Invite Collaborators</h1>
-            <p>Find the perfect writing partners for your story</p>
-        </div>
+            <nav class="nav-links">
+                <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+                <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+                <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+                {% if user.is_superuser %}
+                <a href="{% url 'authentication:dashboard' %}" class="nav-link">ADMIN</a>
+                {% endif %}
+            </nav>
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="message {% if message.tags == 'warning' %}warning{% endif %}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-
-        <form method="GET" action="">
-            <div class="search-container">
-                <input type="text" name="q" placeholder="Search users..." value="{{ search_query }}">
-                <button type="submit" class="search-button">🔍 Search</button>
+            <div class="user-actions">
+                <a href="{% url 'mystory:collaboration_requests' %}" class="icon-btn" title="Requests">
+                    <i class="fas fa-heart"></i>
+                </a>
+                <a href="{% url 'messaging:chat' %}" class="icon-btn" title="Messages">
+                    <i class="fas fa-comment-alt"></i>
+                </a>
+                <a href="{% url 'authentication:view_profile' %}" class="icon-btn" title="Profile">
+                    <i class="fas fa-user"></i>
+                </a>
             </div>
-        </form>
+        </div>
+    </header>
 
-        <form method="POST" action="{% url 'mystory:invite_collaborator'   %}">
-            {% csrf_token %}
-            <div class="collaborator-list">
-                {% for user in users %}
-                    <div class="collaborator-card">
-                        <div class="collaborator-info">
-                            <p>{{ user.username }}</p>
-                        </div>
-                        <input type="checkbox" name="selected_users" value="{{ user.id }}" class="collaborator-checkbox">
-                    </div>
-                {% empty %}
-                    <p>No users found.</p>
+    <main>
+        <section class="invite-section">
+            <div class="invite-container" data-aos="zoom-in">
+                <div class="text-center">
+                    <h1 class="page-title">Find Collaborators</h1>
+                    <p class="page-subtitle">Build something legendary with fellow writers</p>
+                </div>
+
+                {% if messages %}
+                {% for message in messages %}
+                <div class="modern-alert {% if message.tags == 'warning' %}warning{% endif %}" data-aos="fade-down">
+                    <i
+                        class="fas {% if message.tags == 'warning' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %} me-2"></i>
+                    {{ message }}
+                </div>
                 {% endfor %}
+                {% endif %}
+
+                <!-- Search Form -->
+                <form method="GET" action="" class="search-form">
+                    <input type="text" name="q" class="modern-input" placeholder="Search by username or name..."
+                        value="{{ search_query }}">
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+
+                <!-- Collaborators Selection -->
+                <form method="POST" action="{% url 'mystory:invite_collaborator' %}">
+                    {% csrf_token %}
+                    <div class="collaborator-grid" data-aos="fade-up">
+                        {% for user in users %}
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" name="selected_users" value="{{ user.id }}" class="hidden-checkbox">
+                            <div class="user-card">
+                                <div class="user-info">
+                                    <div class="user-avatar">
+                                        {{ user.username|slice:":1"|upper }}
+                                    </div>
+                                    <span class="user-name">{{ user.username }}</span>
+                                </div>
+                                <div class="custom-checkbox">
+                                    <i class="fas fa-check text-white" style="font-size: 12px; display: none;"></i>
+                                </div>
+                            </div>
+                        </label>
+                        {% empty %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-user-slash fa-3x mb-3 text-muted"></i>
+                            <p class="text-muted">No potential collaborators found matching your search.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if users %}
+                    <div class="submit-container">
+                        <button type="submit" class="btn-pulse" style="border: none;">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Send Invitations</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                </form>
+
+                <!-- Pagination -->
+                {% if users.paginator.num_pages > 1 %}
+                <div class="modern-pagination">
+                    {% if users.has_previous %}
+                    <a href="?q={{ search_query }}&page=1" class="page-link-modern" title="First Page">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                    <a href="?q={{ search_query }}&page={{ users.previous_page_number }}" class="page-link-modern">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                    {% endif %}
+
+                    <span class="page-link-modern page-current">
+                        {{ users.number }} / {{ users.paginator.num_pages }}
+                    </span>
+
+                    {% if users.has_next %}
+                    <a href="?q={{ search_query }}&page={{ users.next_page_number }}" class="page-link-modern">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                    <a href="?q={{ search_query }}&page={{ users.paginator.num_pages }}" class="page-link-modern"
+                        title="Last Page">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Taletailor</h2>
+                <p class="footer-tagline">
+                    Where passion meets precision. Capturing the essence of every detail, one story at a time.
+                </p>
             </div>
 
-            <button type="submit" class="invite-button">Send Invitations</button>
-        </form>
+            <div class="footer-col">
+                <h3>Services</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Bonus Program</a>
+                    <a href="#" class="footer-link">Gift Cards</a>
+                    <a href="#" class="footer-link">Subscription</a>
+                </div>
+            </div>
 
-        <div class="pagination">
-            {% if users.has_previous %}
-                <a href="?q={{ search_query }}&page=1">First</a>
-                <a href="?q={{ search_query }}&page={{ users.previous_page_number }}">Previous</a>
-            {% endif %}
-
-            <span>Page {{ users.number }} of {{ users.paginator.num_pages }}</span>
-
-            {% if users.has_next %}
-                <a href="?q={{ search_query }}&page={{ users.next_page_number }}">Next</a>
-                <a href="?q={{ search_query }}&page={{ users.paginator.num_pages }}">Last</a>
-            {% endif %}
+            <div class="footer-col">
+                <h3>Support</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Help Center</a>
+                    <a href="#" class="footer-link">Community Guidelines</a>
+                    <a href="#" class="footer-link">Terms of Use</a>
+                </div>
+            </div>
         </div>
-    </div>
+    </footer>
 
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 50
+            });
+
+            // Show/Hide check icon in custom checkbox
+            const checkboxes = document.querySelectorAll('.hidden-checkbox');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', function () {
+                    const checkIcon = this.nextElementSibling.querySelector('.custom-checkbox i');
+                    if (this.checked) {
+                        checkIcon.style.display = 'block';
+                    } else {
+                        checkIcon.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
+
 </html>

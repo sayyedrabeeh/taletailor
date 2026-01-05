@@ -1,642 +1,400 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="TaleTailor - Professional Story Generator Tool">
-  <title>TaleTailor -  Story Generator</title>
+  <title>AI Story Architect - TaleTailor</title>
   <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
-      <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
-    
-    :root {
-      --primary-color: #8b5cf6;
-      --primary-hover: #7c3aed;
-      --secondary-color: #4f46e5;
-      --bg-dark: #0f0f1a;
-      --bg-darker: #080812;
-      --bg-card: rgba(38, 38, 45, 0.75);
-      --text-primary: #ffffff;
-      --text-secondary: #d1d5db;
-      --text-muted: #9ca3af;
-      --border-color: rgba(255, 255, 255, 0.1);
-      --border-hover: rgba(255, 255, 255, 0.2);
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
-      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
-      --transition: all 0.3s ease;
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-    
-    body {
-      background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
-      color: var(--text-primary);
-      min-height: 100vh;
-      line-height: 1.6;
-    }
-    
-    header {
-            background-color: #333;
-            padding: 1rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #444;
-        }
-
-        .logo-container {
-            padding: 0.5rem 1.5rem;
-            background-color: #000;
-            border-radius: 0;
-            margin-left: 2rem;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: white;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            background-color: #000;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-right: 2rem;
-        }
-
-        .dynamic-label {
-            color: #aaa;
-        }
-
-        .toggle {
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background-color: #444;
-            border-radius: 25px;
-            cursor: pointer;
-        }
-
-        .toggle::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s ease;
-        }
-
-        .toggle.active::after {
-            transform: translateX(26px);
-        }
-
-        .heart-icon, .profile-icon {
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-    .content-container {
+    .generator-section {
+      padding: 8rem 2rem 4rem;
       max-width: 1000px;
-      margin: 50px auto;
+      margin: 0 auto;
+      min-height: 80vh;
+    }
+
+    .glass-generator {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
       padding: 3rem;
-      background: var(--bg-card);
-      border-radius: 1rem;
-      box-shadow: var(--shadow-lg);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border-color);
-    }
-    
-    .step-title {
-      color: var(--primary-color);
-      font-size: 2rem;
-      margin-bottom: 2.5rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      box-shadow: var(--card-shadow);
       position: relative;
-      display: inline-block;
-    }
-    
-    .step-title::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -10px;
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-      border-radius: 2px;
-    }
-    
-    .input-row {
-      margin-bottom: 1.75rem;
-      position: relative;
-    }
-    
-    .input-field {
-      width: 100%;
-      padding: 1.25rem 3rem;
-      border: 1px solid var(--border-color);
-      border-radius: 0.75rem;
-      font-size: 1rem;
-      color: #333;
-      background: rgba(255, 255, 255, 0.95);
-      transition: var(--transition);
-      box-shadow: var(--shadow-sm);
-    }
-    
-    .input-field:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
-    }
-    
-    .input-field::placeholder {
-      color: #6b7280;
-    }
-    
-    .radio-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      left: 1.25rem;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 2px solid #6b7280;
-      background: #fff;
-      cursor: pointer;
-      z-index: 10;
-      transition: var(--transition);
-    }
-    
-    .radio-selected {
-      border-color: var(--primary-color);
-      border-width: 6px;
-    }
-    
-    .radio-deselected {
-      background: #fff;
-    }
-    
-    .radio-button:hover {
-      transform: translateY(-50%) scale(1.05);
-    }
-    
-    .dropdown-arrow {
-      position: absolute;
-      right: 1.25rem;
-      top: 50%;
-      transform: translateY(-50%) rotate(45deg);
-      width: 10px;
-      height: 10px;
-      border: solid #6b7280;
-      border-width: 0 2px 2px 0;
-      display: inline-block;
-      transition: var(--transition);
-      cursor: pointer;
-    }
-    
-    .dropdown-arrow:hover {
-      border-color: #333;
-    }
-    
-    .button-container {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 4rem;
-    }
-    
-    .btn {
-      padding: 1rem 0;
-      border-radius: 0.75rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      width: 230px;
-      text-align: center;
-      letter-spacing: 0.5px;
-    }
-    
-    .back-button {
-      background: transparent;
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-    }
-    
-    .back-button:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--border-hover);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-sm);
-    }
-    
-    .next-button {
-      background: #000;
-      color: var(--text-primary);
-      border: none;
-      box-shadow: var(--shadow-md);
-    }
-    
-    .next-button:hover {
-      background: #111;
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-    
-    .next-button:active, .back-button:active {
-      transform: translateY(0);
-    }
-    
-    /* Professional additions */
-    .progress-container {
-      margin-bottom: 2.5rem;
-      width: 100%;
-      height: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
       overflow: hidden;
     }
-    
-    .progress-bar {
-      height: 100%;
-      width: 66%; /* Step 2 of 3 = ~66% */
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-      border-radius: 4px;
+
+    .glass-generator::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient-main);
     }
-    
-    .step-indicator {
+
+    .architect-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: var(--gradient-main);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+
+    .architect-subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    /* Progress Bar Modernization */
+    .luxury-progress-container {
+      margin-bottom: 3rem;
+      width: 100%;
+    }
+
+    .progress-stats {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-    
-    .step-label {
-      color: var(--text-muted);
-      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
       font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--accent-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    
-    .step-label.active {
-      color: var(--primary-color);
+
+    .luxury-progress-bg {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
     }
-    
-    .tooltip {
-      position: absolute;
-      right: 0;
-      top: -25px;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      opacity: 0;
-      transition: var(--transition);
-      pointer-events: none;
+
+    .luxury-progress-bar {
+      height: 100%;
+      width: 75%;
+      background: var(--gradient-main);
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(140, 82, 255, 0.4);
+      transition: width 1s ease-in-out;
     }
-    
-    .input-row:hover .tooltip {
-      opacity: 1;
+
+    /* Form Modernization */
+    .input-group-modern {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
     }
-    
-    .backdrop {
+
+    .label-modern {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--accent-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .input-modern {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      color: #fff;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .input-modern:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 15px rgba(140, 82, 255, 0.2);
+    }
+
+    .btn-architect {
+      background: var(--gradient-main);
+      color: #fff;
+      border: none;
+      padding: 1.25rem 4rem;
+      border-radius: 15px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .btn-architect:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(140, 82, 255, 0.4);
+      color: #fff;
+    }
+
+    .btn-architect i {
+      transition: transform 0.3s ease;
+    }
+
+    .btn-architect:hover i {
+      transform: rotate(360deg) scale(1.2);
+    }
+
+    @media (max-width: 768px) {
+      .generator-section {
+        padding-top: 6rem;
+      }
+
+      .glass-generator {
+        padding: 2rem;
+      }
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-      z-index: 1000;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      z-index: 10000;
       display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .loader-orb {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--gradient-main);
+      box-shadow: 0 0 50px rgba(138, 92, 246, 0.6);
+      animation: manifest-pulse 2s infinite ease-in-out;
+      margin-bottom: 3rem;
+      display: flex;
       align-items: center;
       justify-content: center;
     }
-    
-    .dropdown-menu {
-      background: white;
-      border-radius: 0.75rem;
-      box-shadow: var(--shadow-lg);
-      width: 300px;
-      overflow: hidden;
-      animation: slideDown 0.3s ease;
+
+    .loader-orb i {
+      font-size: 3rem;
+      color: #fff;
+      animation: spin-pulse 4s infinite linear;
     }
-    
-    .dropdown-item {
-      padding: 1rem 1.5rem;
-      cursor: pointer;
-      transition: var(--transition);
-      color: #333;
-    }
-    
-    .dropdown-item:hover {
-      background: #f3f4f6;
-    }
-    
-    .dropdown-item.selected {
-      background: #f0f9ff;
-      color: var(--primary-color);
-      font-weight: 500;
-    }
-    
-    .dropdown-item:not(:last-child) {
-      border-bottom: 1px solid #f3f4f6;
-    }
-    
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
+
+    @keyframes manifest-pulse {
+
+      0%,
+      100% {
+        transform: scale(0.9);
+        opacity: 0.6;
+        box-shadow: 0 0 30px rgba(138, 92, 246, 0.4);
       }
-      to {
+
+      50% {
+        transform: scale(1.1);
         opacity: 1;
-        transform: translateY(0);
+        box-shadow: 0 0 70px rgba(138, 92, 246, 0.8);
       }
     }
-    
-    /* Responsive adjustments */
-    @media (max-width: 1024px) {
-      .content-container {
-        width: 90%;
-        padding: 2rem;
+
+    @keyframes spin-pulse {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
       }
     }
-    
-    @media (max-width: 768px) {
-      .header {
-        padding: 1rem;
-        flex-wrap: wrap;
-      }
-      
-      .nav {
-        order: 3;
-        width: 100%;
-        margin-top: 1rem;
-        justify-content: space-between;
-      }
-      
-      .nav-button {
-        padding: 0.75rem 1rem;
-        flex: 1;
-      }
-      
-      .button-container {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      .btn {
-        width: 100%;
-      }
+
+    .loading-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      background: var(--gradient-main);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .loading-subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      letter-spacing: 2px;
     }
   </style>
 </head>
+
 <body>
-    <header>
-        <div class="logo-container">
-            <div class="logo irish-grover-regular">TALETAILOR</div>
-        </div>
-        <div class="nav-links">
-            <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
-            <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
-            <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
-            {% if user.is_superuser %}
-            <br><br>
-            <a href="{% url 'authentication:users' %}">
-                <button  class="nav-link">
-                    Admin Panel
-                </button>
-            </a>
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loader-orb">
+      <i class="fas fa-magic"></i>
+    </div>
+    <h2 class="loading-title">Manifesting</h2>
+    <p class="loading-subtitle">The AI is weaving your legendary tale...</p>
+  </div>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="{% url 'authentication:home' %}" class="logo">TALETAILOR</a>
+
+      <nav class="nav-links">
+        <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+        <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+        <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+        {% if user.is_superuser %}
+        <a href="{% url 'authentication:dashboard' %}" class="nav-link">ADMIN</a>
         {% endif %}
-        </div>
-        <div class="user-actions">
-         
-            <a style="text-decoration: none;" href="{% url 'mystory:collaboration_requests' %}" class="heart-icon">❤️</a>
-        <a href="{% url 'messaging:chat' %}" style="text-decoration: none;" class="message-icon">
-            <i class="fas fa-comments" style="font-size: 20px; color: #25D366;"></i> 
-            </a>
-            <!-- Profile Icon to trigger the modal -->
-            <div class="profile-icon" data-bs-toggle="modal" data-bs-target="#profileModal">
-                👤
-            </div>
-        </div>
-    </header>
-  
-  <div class="content-container">
-    <div class="step-indicator">
-      <span class="step-label">Story Theme</span>
-      <span class="step-label active">Character Details</span>
-      <span class="step-label">Final Settings</span>
+      </nav>
+
+      <div class="user-actions">
+        <a href="{% url 'mystory:collaboration_requests' %}" class="icon-btn" title="Requests">
+          <i class="fas fa-heart"></i>
+        </a>
+        <a href="{% url 'messaging:chat' %}" class="icon-btn" title="Messages">
+          <i class="fas fa-comment-alt"></i>
+        </a>
+        <a href="{% url 'authentication:view_profile' %}" class="icon-btn" title="Profile">
+          <i class="fas fa-user"></i>
+        </a>
+      </div>
     </div>
-    
-    <div class="progress-container">
-      <div class="progress-bar"></div>
-    </div>
-    
-    <h2 class="step-title">Next step of making</h2>
-    
-    <form method="POST" action="{% url 'aistory:aimake2' %}">
-        {% csrf_token %}
-      
-        <div class="content-container">
-          <!-- Progress Indicators & Labels -->
-      
-          <h2 class="step-title">Next step of making</h2>
-      
-          <div class="input-row">
-            <span class="tooltip">Select number of characters</span>
-            <input type="text" name="char_count" class="input-field" placeholder="Character count (optional)">
+  </header>
+
+  <main>
+    <section class="generator-section">
+      <div class="glass-generator" data-aos="zoom-in">
+        <h1 class="architect-title">AI Story Architect</h1>
+        <p class="architect-subtitle">Phase 2: Sculpting the World</p>
+
+        <div class="luxury-progress-container" data-aos="fade-up">
+          <div class="progress-stats">
+            <span>Progress</span>
+            <span>75% Complete</span>
           </div>
-      
-          <div class="input-row">
-            <span class="tooltip">Add character names</span>
-            <input type="text" name="char_names" class="input-field" placeholder="Character Names (optional)">
-          </div>
-      
-          <div class="input-row">
-            <span class="tooltip">Enter story locations</span>
-            <input type="text" name="places" class="input-field" placeholder="Places in the story (optional)">
-          </div>
-      
-          <div class="button-container">
-            <button type="submit" class="btn next-button">Generate Story</button>
+          <div class="luxury-progress-bg">
+            <div class="luxury-progress-bar"></div>
           </div>
         </div>
-      </form>
-      
+
+        <form method="POST" action="{% url 'aistory:aimake2' %}">
+          {% csrf_token %}
+
+          <div class="input-group-modern" data-aos="fade-up" data-aos-delay="100">
+            <label class="label-modern"><i class="fas fa-users me-2"></i> Character Count</label>
+            <input type="text" name="char_count" class="input-modern"
+              placeholder="How many souls inhabit this tale? (e.g. 3 characters)">
+          </div>
+
+          <div class="input-group-modern" data-aos="fade-up" data-aos-delay="200">
+            <label class="label-modern"><i class="fas fa-signature me-2"></i> Character Names</label>
+            <input type="text" name="char_names" class="input-modern" placeholder="Name the legends... (optional)">
+          </div>
+
+          <div class="input-group-modern mb-5" data-aos="fade-up" data-aos-delay="300">
+            <label class="label-modern"><i class="fas fa-map-marked-alt me-2"></i> Locations & Settings</label>
+            <input type="text" name="places" class="input-modern"
+              placeholder="Where does the magic happen? (e.g. A floating city, deep forest)">
+          </div>
+
+          <div class="text-center" data-aos="fade-up" data-aos-delay="400">
+            <button type="submit" class="btn-architect">
+              Manifest Story <i class="fas fa-magic"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h2>Taletailor</h2>
+        <p class="footer-tagline">
+          Where passion meets precision. Capturing the essence of every detail, one story at a time.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Services</h3>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Bonus Program</a>
+          <a href="#" class="footer-link">Gift Cards</a>
+          <a href="#" class="footer-link">Subscription</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Support</h3>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Help Center</a>
+          <a href="#" class="footer-link">Community Guidelines</a>
+          <a href="#" class="footer-link">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Radio button functionality
-    const radioButtons = document.querySelectorAll('.radio-button');
-    const inputFields = document.querySelectorAll('.input-field');
-    
-    radioButtons.forEach((button, index) => {
-      button.addEventListener('click', () => {
-        // Clear all selected state
-        radioButtons.forEach(btn => {
-          btn.classList.remove('radio-selected');
-          btn.classList.add('radio-deselected');
+    document.addEventListener('DOMContentLoaded', function () {
+      AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 50
+      });
+
+      // Show loading overlay on form submission
+      const form = document.querySelector('form');
+      if (form) {
+        form.addEventListener('submit', function () {
+          document.getElementById('loadingOverlay').style.display = 'flex';
         });
-        
-        // Set clicked button to selected
-        button.classList.add('radio-selected');
-        button.classList.remove('radio-deselected');
-        
-        // Focus the corresponding input field
-        inputFields[index].focus();
-      });
-    });
-    
-    // Toggle switch functionality
-    const toggleSwitch = document.querySelector('.toggle-switch');
-    
-    toggleSwitch.addEventListener('click', () => {
-      toggleSwitch.classList.toggle('active');
-    });
-    
-    // Dropdown functionality
-    const dropdownArrow = document.querySelector('.dropdown-arrow');
-    const backdrop = document.querySelector('.backdrop');
-    const dropdownMenu = document.querySelector('.dropdown-menu');
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
-    
-    dropdownArrow.addEventListener('click', () => {
-      backdrop.style.display = 'flex';
-    });
-    
-    backdrop.addEventListener('click', (e) => {
-      if (e.target === backdrop) {
-        backdrop.style.display = 'none';
       }
-    });
-    
-    dropdownItems.forEach(item => {
-      item.addEventListener('click', () => {
-        // Update selected item
-        dropdownItems.forEach(i => i.classList.remove('selected'));
-        item.classList.add('selected');
-        
-        // Update input field with selection
-        inputFields[0].value = item.textContent;
-        
-        // Close dropdown
-        backdrop.style.display = 'none';
-      });
-    });
-    
-    // Input field focus effects
-    inputFields.forEach((field, index) => {
-      field.addEventListener('focus', () => {
-        radioButtons.forEach(btn => {
-          btn.classList.remove('radio-selected');
-          btn.classList.add('radio-deselected');
-        });
-        
-        radioButtons[index].classList.add('radio-selected');
-        radioButtons[index].classList.remove('radio-deselected');
-      });
-    });
-    
-    // Navigation buttons
-    document.querySelector('.back-button').addEventListener('click', () => {
-      console.log('Back button clicked');
-      // Animation effect
-      document.querySelector('.content-container').style.opacity = '0.5';
-      setTimeout(() => {
-        // This would normally navigate to previous page
-        document.querySelector('.content-container').style.opacity = '1';
-      }, 300);
-    });
-    
-    document.querySelector('.next-button').addEventListener('click', () => {
-      console.log('Next button clicked');
-      // Validation and animation effect
-      const characterCount = inputFields[0].value;
-      
-      if (!characterCount && radioButtons[0].classList.contains('radio-selected')) {
-        inputFields[0].style.borderColor = '#ef4444';
-        inputFields[0].style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.25)';
-        
-        setTimeout(() => {
-          inputFields[0].style.borderColor = '';
-          inputFields[0].style.boxShadow = '';
-        }, 2000);
-        return;
-      }
-      
-      document.querySelector('.content-container').style.opacity = '0.5';
-      setTimeout(() => {
-        // This would normally navigate to next page
-        document.querySelector('.content-container').style.opacity = '1';
-      }, 300);
-    });
-    
-    // Professional additions: Key commands and accessibility
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && backdrop.style.display === 'flex') {
-        backdrop.style.display = 'none';
-      }
-      
-      if (e.key === 'Enter' && document.activeElement === inputFields[0]) {
-        backdrop.style.display = 'flex';
-      }
-    });
-    
-    // Save data in session storage for persistence
-    window.addEventListener('beforeunload', () => {
-      const formData = {
-        characterCount: inputFields[0].value,
-        characterNames: inputFields[1].value,
-        places: inputFields[2].value
-      };
-      
-      sessionStorage.setItem('taletailorFormData', JSON.stringify(formData));
-    });
-    
-    // Load saved data if exists
-    window.addEventListener('load', () => {
-      const savedData = sessionStorage.getItem('taletailorFormData');
-      if (savedData) {
-        const formData = JSON.parse(savedData);
-        inputFields[0].value = formData.characterCount || '';
-        inputFields[1].value = formData.characterNames || '';
-        inputFields[2].value = formData.places || '';
-      }
-      
-      // Add page load animation
-      document.querySelector('.content-container').style.opacity = '0';
-      setTimeout(() => {
-        document.querySelector('.content-container').style.opacity = '1';
-      }, 100);
     });
   </script>
 </body>
+
 </html>

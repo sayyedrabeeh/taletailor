@@ -550,6 +550,9 @@
           transparent 0%,
           rgba(255, 255, 255, 0.1) 50%,
           transparent 100%);
+    }
+
+    .story-main:hover::before {
       animation: shine 3s infinite;
     }
 
@@ -934,62 +937,98 @@
        =========================== */
 
     .translation-box {
-      background: var(--card-background);
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
       border: 1px solid var(--border-color);
       border-radius: var(--border-radius);
-      padding: 1.5rem;
-      margin: 1.5rem 0;
+      padding: 1.5rem 2rem;
+      margin: 2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      z-index: 10;
+    }
+
+    .translation-form {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 1.5rem;
       align-items: center;
-      box-shadow: var(--shadow-sm);
+      width: 100%;
     }
 
     .translation-box label {
       font-weight: 600;
       color: var(--text-color);
-      font-size: 0.95rem;
+      font-size: 1rem;
+      white-space: nowrap;
+    }
+
+    .select-wrapper {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
     }
 
     .translation-box select,
     .select-language {
-      flex: 1;
-      min-width: 250px;
-      padding: 0.75rem 1rem;
+      width: 100%;
+      padding: 0.8rem 1.2rem;
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background: var(--card-background);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
       color: var(--text-color);
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-family: 'Outfit', sans-serif;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .translation-box select:focus,
     .select-language:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.15);
     }
 
-    .translation-box button[type="submit"] {
-      padding: 0.75rem 2rem;
-      background: var(--primary-color);
+    .translate-submit-btn {
+      padding: 0.8rem 2.5rem;
+      background: var(--header-gradient);
       color: white;
       border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.95rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       font-family: 'Outfit', sans-serif;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
-    .translation-box button[type="submit"]:hover {
-      background: var(--button-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px var(--button-glow);
+    .translate-submit-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 25px var(--button-glow);
+      filter: brightness(110%);
+    }
+
+    #language-support-notification {
+      background: rgba(255, 193, 7, 0.1) !important;
+      border: 1px solid rgba(255, 193, 7, 0.3) !important;
+      padding: 1rem 1.25rem !important;
+      border-radius: 12px !important;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    #language-support-notification p {
+      margin: 0;
+      color: #ffc107;
+      font-size: 0.95rem;
     }
 
     /* Select2 Overrides */
@@ -1611,32 +1650,123 @@
       }
     }
 
-    /* Fantasy: "Ethereal Dream" - Soft, Magical, Light */
+    /* Fantasy: "Celestial Dreamscape" - Deep, Magical, Starlit */
     .theme-fantasy {
-      --primary-color: #9333ea;
-      /* Purple 600 */
+      --primary-color: #8b5cf6;
+      /* Royal Purple */
       --secondary-color: #c084fc;
-      /* Purple 400 */
-      --accent-color: #581c87;
-      /* Purple 900 */
+      /* Light Lavender */
+      --accent-color: #fcd34d;
+      /* Starlight Gold */
 
-      --background-color: #faf5ff;
-      /* Purple 50 */
-      --card-background: rgba(253, 244, 255, 0.9);
+      --background-color: #050816;
+      /* Deep Midnight Night */
+      --card-background: rgba(13, 10, 36, 0.92);
+      /* Deep Indigo Crystal */
 
-      --text-color: #020617;
-      /* Absolute Readability (Near Black) */
-      --text-muted: #3b0764;
-      /* Deepest Purple */
-      --border-color: rgba(147, 51, 234, 0.15);
+      --text-color: #f1f5f9;
+      /* Starlight White */
+      --text-muted: #a78bfa;
+      /* Lavender Glow */
+      --border-color: rgba(139, 92, 246, 0.3);
 
-      --header-gradient: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-      --glass-bg: rgba(255, 255, 255, 0.6);
-      --glow-color: rgba(192, 132, 252, 0.25);
-      --particle-color: #d8b4fe;
+      --header-gradient: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+      --glass-bg: rgba(15, 12, 41, 0.85);
+      --glow-color: rgba(139, 92, 246, 0.5);
+      --particle-color: #fcd34d;
 
-      --button-hover: #7e22ce;
-      --button-glow: rgba(147, 51, 234, 0.3);
+      --button-hover: #7c3aed;
+      --button-glow: rgba(139, 92, 246, 0.6);
+    }
+
+    .theme-fantasy .story-title {
+      font-family: 'Playfair Display', serif;
+      text-shadow: 0 0 15px rgba(139, 92, 246, 0.4), 0 0 30px rgba(192, 132, 252, 0.2);
+      background: linear-gradient(to right, #f1f5f9, #fcd34d, #f1f5f9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% auto;
+      animation: celestial-shimmer 5s linear infinite;
+    }
+
+    @keyframes celestial-shimmer {
+      to {
+        background-position: 200% center;
+      }
+    }
+
+    /* Magical Floating Stars & Nebula Aurora */
+    .theme-fantasy::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(circle at 15% 15%, #fcd34d 0.5px, transparent 1px),
+        radial-gradient(circle at 85% 25%, #f1f5f9 0.5px, transparent 1px),
+        radial-gradient(circle at 40% 70%, #fcd34d 0.5px, transparent 1px),
+        radial-gradient(circle at 70% 80%, #f1f5f9 0.5px, transparent 1px),
+        radial-gradient(circle at 25% 45%, #fcd34d 0.5px, transparent 1px),
+        radial-gradient(circle at 75% 55%, #f1f5f9 0.5px, transparent 1px),
+        /* Nebula layers */
+        radial-gradient(ellipse at 30% 20%, rgba(139, 92, 246, 0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(192, 132, 252, 0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: -1;
+      animation: celestial-drift 60s infinite linear;
+    }
+
+    @keyframes celestial-drift {
+      0% {
+        transform: scale(1) translate(0, 0);
+      }
+
+      50% {
+        transform: scale(1.1) translate(30px, -20px);
+      }
+
+      100% {
+        transform: scale(1) translate(0, 0);
+      }
+    }
+
+    /* Crystal Glass Cards for Fantasy */
+    .theme-fantasy .action-card,
+    .theme-fantasy .story-main {
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 15px rgba(139, 92, 246, 0.1);
+    }
+
+    .theme-fantasy .meta-item {
+      background: rgba(139, 92, 246, 0.1);
+      border-color: rgba(139, 92, 246, 0.2);
+    }
+
+    .theme-fantasy .meta-item:hover {
+      background: rgba(139, 92, 246, 0.2);
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .theme-fantasy .ai-badge {
+      background: linear-gradient(135deg, #7c3aed 0%, #fcd34d 100%);
+      color: #050816;
+      border: none;
+      font-weight: 700;
+    }
+
+    .theme-fantasy .tag {
+      background: rgba(139, 92, 246, 0.15);
+      border-left: 3px solid #fcd34d;
+    }
+
+    .theme-fantasy .btn {
+      border: 1px solid rgba(252, 211, 77, 0.3);
+    }
+
+    .theme-fantasy .btn:hover {
+      box-shadow: 0 0 25px rgba(139, 92, 246, 0.4), 0 0 10px rgba(252, 211, 77, 0.2);
     }
 
     /* Sci-Fi: "Cyber Future" - Clean, Tech, Neon */
@@ -1695,32 +1825,117 @@
       --button-glow: rgba(245, 158, 11, 0.4);
     }
 
-    /* Comedy: "Playful Pop" - Vivid but Clean */
+    /* Comedy: "Golden Sunshine" - Bold, Vibrant, Playful */
     .theme-comedy {
-      --primary-color: #f97316;
-      /* Orange 500 */
-      --secondary-color: #fb923c;
-      /* Orange 400 */
-      --accent-color: #c2410c;
-      /* Orange 700 */
+      --primary-color: #f59e0b;
+      /* Amber 500 */
+      --secondary-color: #fbbf24;
+      /* Amber 400 */
+      --accent-color: #d97706;
+      /* Amber 600 */
 
-      --background-color: #fff7ed;
-      /* Orange 50 */
-      --card-background: rgba(255, 255, 255, 0.9);
+      --background-color: #fcd34d;
+      /* Bold Golden Yellow (Amber 300) */
+      --card-background: #fef3c7;
+      /* Soft Cream Yellow (Amber 100) - NO WHITE */
 
       --text-color: #020617;
       /* Absolute Readability (Near Black) */
-      --text-muted: #431407;
-      /* Deepest Rust */
-      --border-color: rgba(249, 115, 22, 0.2);
+      --text-muted: #78350f;
+      /* Deep Amber */
+      --border-color: rgba(217, 119, 6, 0.3);
 
-      --header-gradient: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
-      --glass-bg: rgba(255, 255, 255, 0.8);
-      --glow-color: rgba(249, 115, 22, 0.5);
-      --particle-color: #fdba74;
+      --header-gradient: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+      --glass-bg: rgba(254, 243, 199, 0.95);
+      --glow-color: rgba(245, 158, 11, 0.6);
+      --particle-color: #fbbf24;
 
-      --button-hover: #ea580c;
-      --button-glow: rgba(249, 115, 22, 0.4);
+      --button-hover: #d97706;
+      --button-glow: rgba(245, 158, 11, 0.5);
+    }
+
+    /* Bouncing Confetti Animation */
+    .theme-comedy::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(circle at 15% 20%, #f59e0b 0%, transparent 3%),
+        radial-gradient(circle at 85% 30%, #fb923c 0%, transparent 3%),
+        radial-gradient(circle at 45% 10%, #fbbf24 0%, transparent 3%),
+        radial-gradient(circle at 70% 50%, #f59e0b 0%, transparent 3%),
+        radial-gradient(circle at 25% 70%, #fb923c 0%, transparent 3%),
+        radial-gradient(circle at 90% 80%, #fbbf24 0%, transparent 3%);
+      pointer-events: none;
+      z-index: -1;
+      animation: confetti-bounce 3s infinite ease-in-out;
+    }
+
+    @keyframes confetti-bounce {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.7;
+      }
+
+      25% {
+        transform: translateY(-15px) rotate(5deg);
+        opacity: 0.9;
+      }
+
+      50% {
+        transform: translateY(0) rotate(-5deg);
+        opacity: 0.8;
+      }
+
+      75% {
+        transform: translateY(-10px) rotate(3deg);
+        opacity: 0.9;
+      }
+    }
+
+    /* Playful Story Card Bounce */
+    .theme-comedy .story-card {
+      animation: card-bounce 4s infinite ease-in-out;
+    }
+
+    @keyframes card-bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    /* Comedy Theme Badge Styling */
+    .theme-comedy .meta-item {
+      background: rgba(217, 119, 6, 0.15);
+      border-color: rgba(217, 119, 6, 0.3);
+      color: #78350f;
+    }
+
+    .theme-comedy .meta-item:hover {
+      background: rgba(217, 119, 6, 0.25);
+      border-color: rgba(217, 119, 6, 0.5);
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .theme-comedy .meta-item i {
+      color: #f59e0b;
+    }
+
+    .theme-comedy .ai-badge {
+      background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      color: #020617;
+      border: 2px solid #d97706;
     }
   </style>
 </head>
@@ -1767,122 +1982,126 @@
       {% if story.image %}
       <img src="{{ story.image.url }}" alt="{{ story.title }}" class="story-image">
       {% endif %}
-      <div class="translation-box" style="display: flex; justify-content: space-between;">
-        <form method="post" action="{% url 'aistory:translate_story' story.id %}">
+      <div class="translation-box">
+        <form method="post" action="{% url 'aistory:translate_story' story.id %}" class="translation-form">
           {% csrf_token %}
-          <label for="language">Translate to:</label>
-          <select class="select-language" name="language" id="language" style="width: 300px;">
-            <option value="en">English</option>
-            <option value="af">Afrikaans</option>
-            <option value="sq">Albanian</option>
-            <option value="am">Amharic</option>
-            <option value="ar">Arabic</option>
-            <option value="hy">Armenian</option>
-            <option value="az">Azerbaijani</option>
-            <option value="eu">Basque</option>
-            <option value="be">Belarusian</option>
-            <option value="bn">Bengali</option>
-            <option value="bs">Bosnian</option>
-            <option value="bg">Bulgarian</option>
-            <option value="ca">Catalan</option>
-            <option value="ceb">Cebuano</option>
-            <option value="ny">Chichewa</option>
-            <option value="zh-cn">Chinese (Simplified)</option>
-            <option value="zh-tw">Chinese (Traditional)</option>
-            <option value="co">Corsican</option>
-            <option value="hr">Croatian</option>
-            <option value="cs">Czech</option>
-            <option value="da">Danish</option>
-            <option value="nl">Dutch</option>
-            <option value="en">English</option>
-            <option value="eo">Esperanto</option>
-            <option value="et">Estonian</option>
-            <option value="tl">Filipino</option>
-            <option value="fi">Finnish</option>
-            <option value="fr">French</option>
-            <option value="fy">Frisian</option>
-            <option value="gl">Galician</option>
-            <option value="ka">Georgian</option>
-            <option value="de">German</option>
-            <option value="el">Greek</option>
-            <option value="gu">Gujarati</option>
-            <option value="ht">Haitian Creole</option>
-            <option value="ha">Hausa</option>
-            <option value="haw">Hawaiian</option>
-            <option value="iw">Hebrew</option>
-            <option value="hi">Hindi</option>
-            <option value="hmn">Hmong</option>
-            <option value="hu">Hungarian</option>
-            <option value="is">Icelandic</option>
-            <option value="ig">Igbo</option>
-            <option value="id">Indonesian</option>
-            <option value="ga">Irish</option>
-            <option value="it">Italian</option>
-            <option value="ja">Japanese</option>
-            <option value="jw">Javanese</option>
-            <option value="kn">Kannada</option>
-            <option value="kk">Kazakh</option>
-            <option value="km">Khmer</option>
-            <option value="ko">Korean</option>
-            <option value="ku">Kurdish (Kurmanji)</option>
-            <option value="ky">Kyrgyz</option>
-            <option value="lo">Lao</option>
-            <option value="la">Latin</option>
-            <option value="lv">Latvian</option>
-            <option value="lt">Lithuanian</option>
-            <option value="lb">Luxembourgish</option>
-            <option value="mk">Macedonian</option>
-            <option value="mg">Malagasy</option>
-            <option value="ms">Malay</option>
-            <option value="ml">Malayalam</option>
-            <option value="mt">Maltese</option>
-            <option value="mi">Maori</option>
-            <option value="mr">Marathi</option>
-            <option value="mn">Mongolian</option>
-            <option value="my">Myanmar (Burmese)</option>
-            <option value="ne">Nepali</option>
-            <option value="no">Norwegian</option>
-            <option value="ps">Pashto</option>
-            <option value="fa">Persian</option>
-            <option value="pl">Polish</option>
-            <option value="pt">Portuguese</option>
-            <option value="pa">Punjabi</option>
-            <option value="ro">Romanian</option>
-            <option value="ru">Russian</option>
-            <option value="sm">Samoan</option>
-            <option value="gd">Scots Gaelic</option>
-            <option value="sr">Serbian</option>
-            <option value="st">Sesotho</option>
-            <option value="sn">Shona</option>
-            <option value="sd">Sindhi</option>
-            <option value="si">Sinhala</option>
-            <option value="sk">Slovak</option>
-            <option value="sl">Slovenian</option>
-            <option value="so">Somali</option>
-            <option value="es">Spanish</option>
-            <option value="su">Sundanese</option>
-            <option value="sw">Swahili</option>
-            <option value="sv">Swedish</option>
-            <option value="tg">Tajik</option>
-            <option value="ta">Tamil</option>
-            <option value="te">Telugu</option>
-            <option value="th">Thai</option>
-            <option value="tr">Turkish</option>
-            <option value="uk">Ukrainian</option>
-            <option value="ur">Urdu</option>
-            <option value="uz">Uzbek</option>
-            <option value="vi">Vietnamese</option>
-            <option value="cy">Welsh</option>
-            <option value="xh">Xhosa</option>
-            <option value="yi">Yiddish</option>
-            <option value="yo">Yoruba</option>
-            <option value="zu">Zulu</option>
-          </select>
-          <button type="submit">Translate</button>
+          <label for="language">Translate Story:</label>
+          <div class="select-wrapper">
+            <select class="select-language" name="language" id="language">
+              <option value="en">English</option>
+              <option value="af">Afrikaans</option>
+              <option value="sq">Albanian</option>
+              <option value="am">Amharic</option>
+              <option value="ar">Arabic</option>
+              <option value="hy">Armenian</option>
+              <option value="az">Azerbaijani</option>
+              <option value="eu">Basque</option>
+              <option value="be">Belarusian</option>
+              <option value="bn">Bengali</option>
+              <option value="bs">Bosnian</option>
+              <option value="bg">Bulgarian</option>
+              <option value="ca">Catalan</option>
+              <option value="ceb">Cebuano</option>
+              <option value="ny">Chichewa</option>
+              <option value="zh-cn">Chinese (Simplified)</option>
+              <option value="zh-tw">Chinese (Traditional)</option>
+              <option value="co">Corsican</option>
+              <option value="hr">Croatian</option>
+              <option value="cs">Czech</option>
+              <option value="da">Danish</option>
+              <option value="nl">Dutch</option>
+              <option value="en">English</option>
+              <option value="eo">Esperanto</option>
+              <option value="et">Estonian</option>
+              <option value="tl">Filipino</option>
+              <option value="fi">Finnish</option>
+              <option value="fr">French</option>
+              <option value="fy">Frisian</option>
+              <option value="gl">Galician</option>
+              <option value="ka">Georgian</option>
+              <option value="de">German</option>
+              <option value="el">Greek</option>
+              <option value="gu">Gujarati</option>
+              <option value="ht">Haitian Creole</option>
+              <option value="ha">Hausa</option>
+              <option value="haw">Hawaiian</option>
+              <option value="iw">Hebrew</option>
+              <option value="hi">Hindi</option>
+              <option value="hmn">Hmong</option>
+              <option value="hu">Hungarian</option>
+              <option value="is">Icelandic</option>
+              <option value="ig">Igbo</option>
+              <option value="id">Indonesian</option>
+              <option value="ga">Irish</option>
+              <option value="it">Italian</option>
+              <option value="ja">Japanese</option>
+              <option value="jw">Javanese</option>
+              <option value="kn">Kannada</option>
+              <option value="kk">Kazakh</option>
+              <option value="km">Khmer</option>
+              <option value="ko">Korean</option>
+              <option value="ku">Kurdish (Kurmanji)</option>
+              <option value="ky">Kyrgyz</option>
+              <option value="lo">Lao</option>
+              <option value="la">Latin</option>
+              <option value="lv">Latvian</option>
+              <option value="lt">Lithuanian</option>
+              <option value="lb">Luxembourgish</option>
+              <option value="mk">Macedonian</option>
+              <option value="mg">Malagasy</option>
+              <option value="ms">Malay</option>
+              <option value="ml">Malayalam</option>
+              <option value="mt">Maltese</option>
+              <option value="mi">Maori</option>
+              <option value="mr">Marathi</option>
+              <option value="mn">Mongolian</option>
+              <option value="my">Myanmar (Burmese)</option>
+              <option value="ne">Nepali</option>
+              <option value="no">Norwegian</option>
+              <option value="ps">Pashto</option>
+              <option value="fa">Persian</option>
+              <option value="pl">Polish</option>
+              <option value="pt">Portuguese</option>
+              <option value="pa">Punjabi</option>
+              <option value="ro">Romanian</option>
+              <option value="ru">Russian</option>
+              <option value="sm">Samoan</option>
+              <option value="gd">Scots Gaelic</option>
+              <option value="sr">Serbian</option>
+              <option value="st">Sesotho</option>
+              <option value="sn">Shona</option>
+              <option value="sd">Sindhi</option>
+              <option value="si">Sinhala</option>
+              <option value="sk">Slovak</option>
+              <option value="sl">Slovenian</option>
+              <option value="so">Somali</option>
+              <option value="es">Spanish</option>
+              <option value="su">Sundanese</option>
+              <option value="sw">Swahili</option>
+              <option value="sv">Swedish</option>
+              <option value="tg">Tajik</option>
+              <option value="ta">Tamil</option>
+              <option value="te">Telugu</option>
+              <option value="th">Thai</option>
+              <option value="tr">Turkish</option>
+              <option value="uk">Ukrainian</option>
+              <option value="ur">Urdu</option>
+              <option value="uz">Uzbek</option>
+              <option value="vi">Vietnamese</option>
+              <option value="cy">Welsh</option>
+              <option value="xh">Xhosa</option>
+              <option value="yi">Yiddish</option>
+              <option value="yo">Yoruba</option>
+              <option value="zu">Zulu</option>
+            </select>
+          </div>
+          <button type="submit" class="translate-submit-btn">
+            <i class="fas fa-language"></i> Translate
+          </button>
         </form>
-        <div id="language-support-notification"
-          style="display: none; margin-top: 10px; padding: 8px; background-color: #fff9e6; border: 1px solid #ffc107; border-radius: 4px; font-size: 14px;">
-          <p style="margin: 0; color: #856404;">
+        <div id="language-support-notification" style="display: none;">
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>
             <strong>Note:</strong> <span id="notification-message">Text-to-speech may have limited support for this
               language.</span>
           </p>
@@ -2141,6 +2360,8 @@
           }
 
           function updateVolumeButton() {
+            if (!volumeBtn) return; // Guard against null
+
             const selectedLang = languageSelect?.value || "en";
 
             volumeBtn.style.display = "inline-block";
@@ -2293,7 +2514,8 @@
             this.bgMusic = null;
             this.sfxAudio = [];
             this.currentTheme = null;
-            this.volume = 0.4;
+            this.musicVolume = 0.4;
+            this.sfxVolume = 0.4;
             this.isMusicMuted = false;
             this.isSFXMuted = false;
             this.isPlaying = false;
@@ -2347,7 +2569,7 @@
               fantasy: {
                 bg: '/static/audio/fantacy.mp3',
                 sfx: [
-                  'https://cdn.pixabay.com/download/audio/2022/12/20/audio_7o8p9q0r1s.mp3?filename=magic-spell-111138.mp3'
+                  '/static/audio/fantacy1.mp3'
                 ]
               },
               scifi: {
@@ -2369,7 +2591,7 @@
                 ]
               },
               inspirational: {
-                bg: '/static/audio/inspar.mp3',
+                bg: '/static/audio/inspare.mp3',
                 sfx: [
                   'https://cdn.pixabay.com/download/audio/2022/06/15/audio_8m9n0o1p2q.mp3?filename=success-fanfare-102345.mp3'
                 ]
@@ -2418,11 +2640,12 @@
           right: 25px;
           background: var(--glass-bg);
           backdrop-filter: blur(15px);
-          padding: 12px 20px;
-          border-radius: 50px;
+          padding: 15px 20px;
+          border-radius: 16px;
           display: flex;
-          gap: 15px;
-          align-items: center;
+          flex-direction: column;
+          gap: 12px;
+          min-width: 280px;
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
           border: 1px solid var(--border-color);
           z-index: 1000;
@@ -2432,6 +2655,12 @@
         .audio-controls:hover {
           transform: translateY(-5px);
           box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .audio-controls-row {
+          display: flex;
+          gap: 15px;
+          align-items: center;
         }
 
         .audio-btn {
@@ -2448,6 +2677,7 @@
           transition: all 0.3s ease;
           position: relative;
           color: var(--text-color);
+          flex-shrink: 0;
         }
 
         .audio-btn:hover {
@@ -2471,13 +2701,19 @@
         .volume-control {
           display: flex;
           align-items: center;
-          gap: 12px;
-          padding-left: 10px;
-          border-left: 1px solid var(--border-color);
+          gap: 8px;
+          flex: 1;
+        }
+
+        .volume-label {
+          color: var(--text-muted);
+          font-size: 12px;
+          font-weight: 600;
+          min-width: 50px;
         }
 
         .volume-slider {
-          width: 80px;
+          flex: 1;
           height: 6px;
           background: rgba(0, 0, 0, 0.1);
           border-radius: 3px;
@@ -2501,11 +2737,28 @@
           transform: scale(1.2);
         }
 
+        .volume-slider::-moz-range-thumb {
+          width: 16px;
+          height: 16px;
+          background: var(--primary-color);
+          border-radius: 50%;
+          cursor: pointer;
+          border: none;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
         .volume-level {
           color: var(--text-color);
-          font-size: 13px;
+          font-size: 12px;
           font-weight: 600;
-          min-width: 40px;
+          min-width: 35px;
+          text-align: right;
+        }
+
+        .volume-divider {
+          height: 1px;
+          background: var(--border-color);
+          margin: 4px 0;
         }
 
         @keyframes pulse {
@@ -2514,18 +2767,26 @@
         }
       </style>
       <div class="audio-controls">
-        <button class="audio-btn" id="musicToggle" title="Toggle Music">
-          <span id="musicIcon">🎵</span>
-          <span class="audio-indicator" id="musicIndicator" style="display: none;"></span>
-        </button>
-        <button class="audio-btn" id="sfxToggle" title="Toggle Sound SFX">
-          <span id="sfxIcon">✨</span>
-          <span class="audio-indicator" id="sfxIndicator" style="display: none;"></span>
-        </button>
+        <div class="audio-controls-row">
+          <button class="audio-btn" id="musicToggle" title="Toggle Music">
+            <span id="musicIcon">🎵</span>
+            <span class="audio-indicator" id="musicIndicator" style="display: none;"></span>
+          </button>
+          <button class="audio-btn" id="sfxToggle" title="Toggle Sound SFX">
+            <span id="sfxIcon">✨</span>
+            <span class="audio-indicator" id="sfxIndicator" style="display: none;"></span>
+          </button>
+        </div>
+        <div class="volume-divider"></div>
         <div class="volume-control">
-          <span style="color: var(--text-muted); font-size: 14px;">�</span>
-          <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="40">
-          <span class="volume-level" id="volumeLevel">40%</span>
+          <span class="volume-label">🎵 Music</span>
+          <input type="range" class="volume-slider" id="musicVolumeSlider" min="0" max="100" value="40">
+          <span class="volume-level" id="musicVolumeLevel">40%</span>
+        </div>
+        <div class="volume-control">
+          <span class="volume-label">✨ SFX</span>
+          <input type="range" class="volume-slider" id="sfxVolumeSlider" min="0" max="100" value="40">
+          <span class="volume-level" id="sfxVolumeLevel">40%</span>
         </div>
       </div>
     `;
@@ -2562,23 +2823,27 @@
 
             this.bgMusic = new Audio(themeAudio.bg);
             this.bgMusic.loop = true;
-            this.bgMusic.volume = this.volume;
+            this.bgMusic.volume = this.musicVolume;
 
             // Load sound effects
             this.sfxAudio = themeAudio.sfx.map(url => {
               const audio = new Audio(url);
-              audio.volume = this.volume;
+              audio.volume = this.sfxVolume;
               return audio;
             });
 
             console.log(`Loaded audio for theme: ${theme}`);
+            console.log(`SFX count: ${this.sfxAudio.length}`);
+            console.log(`Initial SFX volume: ${this.sfxVolume}`);
           }
 
           setupEventListeners() {
             const musicToggle = document.getElementById('musicToggle');
             const sfxToggle = document.getElementById('sfxToggle');
-            const volumeSlider = document.getElementById('volumeSlider');
-            const volumeLevel = document.getElementById('volumeLevel');
+            const musicVolumeSlider = document.getElementById('musicVolumeSlider');
+            const sfxVolumeSlider = document.getElementById('sfxVolumeSlider');
+            const musicVolumeLevel = document.getElementById('musicVolumeLevel');
+            const sfxVolumeLevel = document.getElementById('sfxVolumeLevel');
 
             if (musicToggle) {
               musicToggle.addEventListener('click', () => this.toggleMusic());
@@ -2588,12 +2853,22 @@
               sfxToggle.addEventListener('click', () => this.toggleSFX());
             }
 
-            if (volumeSlider) {
-              volumeSlider.addEventListener('input', (e) => {
+            if (musicVolumeSlider) {
+              musicVolumeSlider.addEventListener('input', (e) => {
                 const value = e.target.value;
-                this.setVolume(value / 100);
-                if (volumeLevel) {
-                  volumeLevel.textContent = `${value}%`;
+                this.setMusicVolume(value / 100);
+                if (musicVolumeLevel) {
+                  musicVolumeLevel.textContent = `${value}%`;
+                }
+              });
+            }
+
+            if (sfxVolumeSlider) {
+              sfxVolumeSlider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                this.setSFXVolume(value / 100);
+                if (sfxVolumeLevel) {
+                  sfxVolumeLevel.textContent = `${value}%`;
                 }
               });
             }
@@ -2645,29 +2920,55 @@
             if (icon) icon.textContent = this.isSFXMuted ? '🔇' : '🔊';
             if (indicator) indicator.style.display = this.isSFXMuted ? 'none' : 'block';
 
-            console.log('SFX:', this.isSFXMuted ? 'muted' : 'unmuted');
+            console.log('SFX toggled:', this.isSFXMuted ? 'MUTED' : 'UNMUTED');
           }
 
-          setVolume(level) {
-            this.volume = level;
+          setMusicVolume(level) {
+            this.musicVolume = level;
             if (this.bgMusic) {
               this.bgMusic.volume = level;
             }
+          }
+
+          setSFXVolume(level) {
+            this.sfxVolume = level;
+            console.log(`✅ SFX volume changed to: ${(level * 100).toFixed(0)}%`);
             this.sfxAudio.forEach(sfx => {
               sfx.volume = level;
             });
           }
 
           playRandomSFX() {
-            if (this.isSFXMuted || !this.sfxAudio || this.sfxAudio.length === 0) {
+            console.log('playRandomSFX called');
+            console.log('  - isSFXMuted:', this.isSFXMuted);
+            console.log('  - sfxAudio length:', this.sfxAudio?.length);
+            console.log('  - sfxVolume:', this.sfxVolume);
+
+            if (this.isSFXMuted) {
+              console.log('❌ SFX is muted, not playing');
+              return;
+            }
+
+            if (!this.sfxAudio || this.sfxAudio.length === 0) {
+              console.log('❌ No SFX audio loaded');
               return;
             }
 
             const randomIndex = Math.floor(Math.random() * this.sfxAudio.length);
-            const sfx = this.sfxAudio[randomIndex].cloneNode();
-            sfx.volume = this.volume;
-            sfx.play().catch(err => {
-              console.log('SFX play failed:', err);
+            const sfx = this.sfxAudio[randomIndex];
+
+            // Reset to beginning and set current volume
+            sfx.currentTime = 0;
+            sfx.volume = this.sfxVolume;
+
+            console.log(`🔊 Playing SFX #${randomIndex} at volume ${(this.sfxVolume * 100).toFixed(0)}%`);
+            console.log('  - Source:', sfx.src);
+            console.log('  - Volume:', sfx.volume);
+
+            sfx.play().then(() => {
+              console.log('✅ SFX started playing');
+            }).catch(err => {
+              console.error('❌ SFX play failed:', err);
             });
           }
         }

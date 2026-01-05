@@ -1,222 +1,440 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Output Display</title>
-     <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
+    <title>Story Manifested - TaleTailor</title>
+    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            line-height: 1.6;
-        }
-        
-        .container {
+        .output-section {
+            padding: 8rem 2rem 4rem;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            min-height: 90vh;
         }
-        
-        header {
-            background: linear-gradient(135deg, #3d4a59, #252b3a, #1a1e2c);
-            color: white;
-            padding: 20px;
-            border-radius: 10px 10px 0 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+        .glass-output-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 4rem;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
         }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+
+        .glass-output-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--gradient-main);
         }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.8;
-        }
-        
-        main {
-            background: #1e1e1e;
-            border-radius: 0 0 10px 10px;
-            padding: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
-        }
-        
-        .output-container {
-            margin-top: 20px;
-        }
-        
-        .output-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #333;
-        }
-        
-        .output-title {
-            font-size: 1.5rem;
-            color: #8b5cf6;
-        }
-        
-        .timestamp {
-            color: #a0aec0;
-            font-size: 0.9rem;
-        }
-        
-        .output-content {
-            background-color: #252525;
-            border-left: 4px solid #8b5cf6;
-            padding: 20px;
-            border-radius: 0 5px 5px 0;
-            font-size: 1.1rem;
-            color: #e0e0e0;
-        }
-        
-        .output-footer {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #333;
-        }
-        
-        button {
-            background-color: #8b5cf6;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-weight: 500;
-        }
-        
-        button:hover {
-            background-color: #7c3aed;
-        }
-        
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #252525;
-            border-radius: 10px;
-        }
-        
-        select, input {
-            padding: 10px;
-            border: 1px solid #444;
-            border-radius: 5px;
-            font-size: 1rem;
-            background-color: #333;
-            color: #e0e0e0;
-        }
-        
-        .model-selection {
-            display: flex;
-            align-items: center;
-        }
-        
-        .model-selection label {
-            margin-right: 10px;
-            font-weight: 500;
-        }
-        
-        footer {
+
+        .output-title-section {
             text-align: center;
-            margin-top: 40px;
-            color: #a0aec0;
-            font-size: 0.9rem;
+            margin-bottom: 3.5rem;
         }
-        
+
+        .manifested-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: var(--gradient-main);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(138, 92, 246, 0.3);
+        }
+
+        .story-display-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .story-meta-row {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .output-meta-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .output-meta-item i {
+            color: var(--accent-secondary);
+        }
+
+        .story-content-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 3rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .story-content-box p {
+            margin-bottom: 1.8rem;
+        }
+
+        .story-content-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .loader-orb {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-main);
+            box-shadow: 0 0 50px rgba(138, 92, 246, 0.6);
+            animation: manifest-pulse 2s infinite ease-in-out;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader-orb i {
+            font-size: 3rem;
+            color: #fff;
+            animation: spin-pulse 4s infinite linear;
+        }
+
+        @keyframes manifest-pulse {
+
+            0%,
+            100% {
+                transform: scale(0.9);
+                opacity: 0.6;
+                box-shadow: 0 0 30px rgba(138, 92, 246, 0.4);
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+                box-shadow: 0 0 70px rgba(138, 92, 246, 0.8);
+            }
+        }
+
+        @keyframes spin-pulse {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .loading-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        .action-footer {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 3rem;
+        }
+
+        .btn-manifest {
+            padding: 1rem 3rem;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+        }
+
+        .btn-save {
+            background: var(--gradient-main);
+            color: #fff;
+            border: none;
+            box-shadow: 0 10px 25px rgba(138, 92, 246, 0.3);
+        }
+
+        .btn-save:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(138, 92, 246, 0.5);
+            color: #fff;
+        }
+
+        .btn-discard {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-discard:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            transform: translateY(-2px);
+        }
+
         @media (max-width: 768px) {
-            .output-header {
+            .glass-output-panel {
+                padding: 2rem;
+            }
+
+            .story-display-title {
+                font-size: 2.25rem;
+            }
+
+            .story-content-box {
+                padding: 1.5rem;
+                font-size: 1.1rem;
+            }
+
+            .action-footer {
                 flex-direction: column;
-                align-items: flex-start;
+                gap: 1rem;
             }
-            
-            .timestamp {
-                margin-top: 5px;
-            }
-            
-            .controls {
-                flex-direction: column;
-            }
-            
-            .model-selection {
-                margin-bottom: 15px;
+
+            .btn-manifest {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>AI Output Display</h1>
-            <p class="subtitle">Professional visualization of AI-generated content</p>
-        </header>
-        
-        <main>
-             
-            
-            <div class="output-container">
-                <div class="output-header">
-                    <h2 class="output-title">AI Response</h2>
-                    <span class="timestamp">Generated on March 15, 2025 at 10:45 AM</span>
-                </div>
-                <h1>Title:{{ theme }}</h1>
-                <div class="output-content">
-                    
 
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loader-orb">
+            <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <h2 class="loading-title">Archiving</h2>
+        <p class="loading-subtitle">Saving your legendary masterpiece to the private archive...</p>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="{% url 'authentication:home' %}" class="logo">TALETAILOR</a>
+
+            <nav class="nav-links">
+                <a href="{% url 'authentication:home' %}" class="nav-link">HOME</a>
+                <a href="{% url 'mystory:mystory1' %}" class="nav-link">STORY</a>
+                <a href="{% url 'aistory:explore' %}" class="nav-link">EXPLORE</a>
+                {% if user.is_superuser %}
+                <a href="{% url 'authentication:dashboard' %}" class="nav-link">ADMIN</a>
+                {% endif %}
+            </nav>
+
+            <div class="user-actions">
+                <a href="{% url 'mystory:collaboration_requests' %}" class="icon-btn" title="Requests">
+                    <i class="fas fa-heart"></i>
+                </a>
+                <a href="{% url 'messaging:chat' %}" class="icon-btn" title="Messages">
+                    <i class="fas fa-comment-alt"></i>
+                </a>
+                <a href="{% url 'authentication:view_profile' %}" class="icon-btn" title="Profile">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="output-section">
+            <div class="glass-output-panel" data-aos="zoom-in">
+                <div class="output-title-section">
+                    <div class="manifested-badge" data-aos="fade-down" data-aos-delay="200">AI Artifact Manifested</div>
+                    <h1 class="story-display-title" data-aos="fade-up" data-aos-delay="300">{{ theme }}</h1>
+
+                    <div class="story-meta-row" data-aos="fade-up" data-aos-delay="400">
+                        <div class="output-meta-item">
+                            <i class="fas fa-theater-masks"></i> {{ emotion|title }}
+                        </div>
+                        <div class="output-meta-item">
+                            <i class="fas fa-align-left"></i> {{ length }}
+                        </div>
+                        <div class="output-meta-item">
+                            <i class="fas fa-file-word"></i> {{ word_count }} Words
+                        </div>
+                        {% if twists %}
+                        <div class="output-meta-item">
+                            <i class="fas fa-random"></i> Plot Twists Active
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="story-content-box" data-aos="fade-up" data-aos-delay="500">
                     {% if story %}
-                        {% for paragraph in story.splitlines %}
-                            <p>{{ paragraph }}</p>
-                        {% endfor %}
+                    {% for paragraph in story.splitlines %}
+                    {% if paragraph.strip %}
+                    <p>{{ paragraph }}</p>
+                    {% endif %}
+                    {% endfor %}
                     {% else %}
-                        <p>No story found.</p>
+                    <div class="text-center py-5">
+                        <i class="fas fa-exclamation-triangle fa-3x mb-3 text-warning"></i>
+                        <p>The manifest failed to materialize. Please try again.</p>
+                    </div>
                     {% endif %}
                 </div>
-                <div class="word-count">
-                    <strong>Word Count:</strong> {{ word_count }}
-                </div>
-                
+
                 {% if story %}
-                <div class="output-footer">
-                    <form method="POST" action="{% url 'aistory:post_private_story' %}" enctype="multipart/form-data" >
+                <div class="action-footer" data-aos="fade-up" data-aos-delay="600">
+                    <a href="{% url 'aistory:aimake1' %}" class="btn-manifest btn-discard">
+                        <i class="fas fa-redo"></i> Redraft
+                    </a>
+
+                    <form method="POST" action="{% url 'aistory:post_private_story' %}" enctype="multipart/form-data"
+                        class="m-0">
                         {% csrf_token %}
                         <input type="hidden" name="emotion" value="{{ emotion }}">
                         <input type="hidden" name="length" value="{{ length }}">
                         <input type="hidden" name="theme" value="{{ theme }}">
                         <input type="hidden" name="situation" value="{{ situation }}">
                         <input type="hidden" name="twists" value="{{ twists }}">
- 
                         <textarea name="story" style="display:none;">{{ story }}</textarea>
 
-                        <button type="submit">Post Privately</button>
+                        <button type="submit" class="btn-manifest btn-save">
+                            <i class="fas fa-cloud-upload-alt"></i> Save to Private Archive
+                        </button>
                     </form>
                 </div>
                 {% endif %}
             </div>
-        </main>
-        
-        <footer>
-            <p>&copy; 2025 AI Output Display Platform | All rights reserved</p>
-        </footer>
-    </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Taletailor</h2>
+                <p class="footer-tagline">
+                    Where passion meets precision. Capturing the essence of every detail, one story at a time.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h3>Services</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Bonus Program</a>
+                    <a href="#" class="footer-link">Gift Cards</a>
+                    <a href="#" class="footer-link">Subscription</a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Support</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Help Center</a>
+                    <a href="#" class="footer-link">Community Guidelines</a>
+                    <a href="#" class="footer-link">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init({
+                duration: 1000,
+                once: true,
+                offset: 50
+            });
+
+            // Show loading overlay on form submission
+            const saveForm = document.querySelector('form');
+            if (saveForm) {
+                saveForm.addEventListener('submit', function () {
+                    document.getElementById('loadingOverlay').style.display = 'flex';
+                });
+            }
+        });
+    </script>
 </body>
+
 </html>
