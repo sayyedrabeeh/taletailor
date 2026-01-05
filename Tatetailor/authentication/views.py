@@ -75,9 +75,7 @@ def verify_otp(request):
             messages.error(request, "Session expired. Try signing up again.")
              
             return redirect('authentication:signup')
-        if entered_otp and otp_storage.get(email) == int(entered_otp):
-            print("OTPenetered",entered_otp)
-            print("OTP",otp_storage.get(email)) 
+        if entered_otp and otp_storage.get(email) == int(entered_otp): 
             if User.objects.filter(email=email).exists():
                 messages.warning(request, "User already registered. Please log in.")
                 return redirect('authentication:login') 
@@ -85,7 +83,6 @@ def verify_otp(request):
             user.save()
              
             user = authenticate(request, username=email, password=password)
-            Profile.objects.create(user=user)
             if user:
                 login(request, user)
                 messages.success(request, "Signup successful.") 
@@ -105,8 +102,6 @@ def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-
-        
         try:
             user = User.objects.get(email=email)  
             user = authenticate(request, username=user.username, password=password) 

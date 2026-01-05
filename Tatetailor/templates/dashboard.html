@@ -1,694 +1,688 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
-    
-    <title>TaleTailor Admin</title>
+    <title>TaleTailor - Archive Administration</title>
     <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
-         :root {
-            --primary: #2c3e50;
-            --secondary: #34495e;
-            --accent: #3498db;
-            --light: #ecf0f1;
-            --dark: #121212;
-            --danger: #e74c3c;
-            --success: #2ecc71;
-            --warning: #f39c12;
-            --text-primary: #333;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         body {
-            background-color: #f5f5f5;
-            color: var(--text-primary);
+            background-color: var(--bg-darker);
+            color: var(--text-main);
             min-height: 100vh;
-        }
-        
-        /* Header Section */
-        .header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--primary);
-            padding: 15px 20px;
-            box-shadow: var(--shadow);
-            position: sticky;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Nav Rail Redesign */
+        .sidebar-rail {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            height: 100vh;
+            position: fixed;
+            left: 0;
             top: 0;
-            z-index: 100;
+            padding-top: 100px;
+            z-index: 90;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-            background-color: var(--dark);
-            padding: 8px 16px;
-            border-radius: 4px;
-            color: white;
-            letter-spacing: 1px;
-        }
-        
-        .admin-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: white;
-            margin-left: -200px;
-        }
-        
-        .user-controls {
+
+        .nav-item-modern {
             display: flex;
             align-items: center;
-            gap: 20px;
-        }
-        
-        .logout-btn {
-            color: white;
+            padding: 1.2rem 2rem;
+            color: var(--text-muted);
             text-decoration: none;
-        }
-        
-        .profile-icon {
-            width: 40px;
-            height: 40px;
-            background-color: var(--light);
-            border-radius: 50%;
-            background-image: url('/static/images/profile1.webp');  
-            background-size: cover;
-            background-position: center;
-            cursor: pointer;
-            border: 2px solid white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        /* Main Layout */
-        .main-container {
-            display: flex;
-            height: calc(100vh - 70px);
-        }
-        
-        /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: white;
-            height: 100%;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            color: var(--text-primary);
-            border-left: 4px solid transparent;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        
-        .sidebar-item:hover {
-            background-color: rgba(52, 152, 219, 0.05);
-            border-left: 4px solid var(--accent);
-        }
-        
-        .sidebar-item.active {
-            background-color: rgba(52, 152, 219, 0.1);
-            border-left: 4px solid var(--accent);
-            font-weight: 600;
-        }
-        
-        .sidebar-item i {
-            margin-right: 12px;
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-            color: var(--accent);
-        }
-        
-        .content {
-            flex: 1;
-            padding: 25px;
-            overflow-y: auto;
-            background-color: #f5f5f5;
-        }
-        
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        
-        .content-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
-        /* Search and Filters */
-        .search-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            align-items: center;
-        }
-        
-        .search-bar {
-            position: relative;
-            width: 60%;
-        }
-        
-        .search-bar input {
-            width: 100%;
-            padding: 12px 15px 12px 40px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            background-color: white;
-            color: var(--text-primary);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .search-bar input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
-            outline: none;
-        }
-        
-        .search-bar i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #aaa;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .sort-button,
-        .add-button {
-            padding: 10px 15px;
-            background-color: white;
-            border: 1px solid #ddd;
-            color: var(--text-primary);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
             font-weight: 500;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            gap: 1.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            margin: 0.5rem 1rem;
+            border-radius: 12px;
         }
-        
-        .sort-button:hover,
-        .add-button:hover {
-            background-color: #f8f9fa;
-            border-color: #aaa;
+
+        .nav-item-modern i {
+            font-size: 1.4rem;
+            transition: all 0.3s ease;
         }
-        
-        .sort-button i,
-        .add-button i {
-            margin-right: 6px;
+
+        .nav-item-modern span {
+            font-size: 1rem;
+            letter-spacing: 0.5px;
         }
-        
-        .add-button {
-            background-color: var(--accent);
-            color: white;
-            border: none;
+
+        .nav-item-modern:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
         }
-        
-        .add-button:hover {
-            background-color: #2980b9;
-            color: white;
+
+        .nav-item-modern.active {
+            color: #fff;
+            background: rgba(140, 82, 255, 0.1);
+            border: 1px solid rgba(140, 82, 255, 0.2);
         }
-        
-        /* Stats Row */
-        .stats-row {
+
+        .nav-item-modern.active i {
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px rgba(140, 82, 255, 0.5);
+        }
+
+        .nav-item-modern.active::after {
+            content: '';
+            position: absolute;
+            left: -1rem;
+            top: 20%;
+            height: 60%;
+            width: 4px;
+            background: var(--gradient-main);
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 15px var(--accent-primary);
+        }
+
+        /* Main Content Adjustment */
+        .dashboard-wrapper {
+            margin-left: 280px;
+            padding: 120px 3rem 5rem;
+            width: calc(100% - 280px);
+            position: relative;
+            z-index: 2;
+        }
+
+        .dashboard-header-modern {
             display: flex;
             justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 30px;
+            align-items: flex-end;
+            margin-bottom: 4rem;
         }
-        
-        .stat-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            flex: 1;
+
+        .dashboard-title-group h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, #fff, #b4b4b4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-subtitle {
+            font-family: 'Outfit', sans-serif;
+            color: var(--accent-secondary);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .admin-date-pill {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.8rem 1.5rem;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .admin-date-pill strong {
+            color: #fff;
+            margin-left: 5px;
+        }
+
+        /* Stats Section */
+        .stats-grid-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
             display: flex;
             align-items: center;
-            gap: 15px;
-            box-shadow: var(--shadow);
+            gap: 2rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
         }
-        
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
+
+        .stat-card-glass:hover {
+            transform: translateY(-10px);
+            border-color: rgba(140, 82, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-icon-wrapper {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 2rem;
+            position: relative;
+            z-index: 2;
         }
-        
-        .stat-card.users .stat-icon {
-            background-color: rgba(52, 152, 219, 0.1);
-            color: var(--accent);
+
+        .stat-card-glass.users .stat-icon-wrapper {
+            background: rgba(140, 82, 255, 0.1);
+            color: var(--accent-primary);
         }
-        
-        .stat-card.stories .stat-icon {
-            background-color: rgba(46, 204, 113, 0.1);
-            color: var(--success);
+
+        .stat-card-glass.stories .stat-icon-wrapper {
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--accent-secondary);
         }
-        
-        .stat-card.active .stat-icon {
-            background-color: rgba(243, 156, 18, 0.1);
-            color: var(--warning);
+
+        .stat-card-glass.active .stat-icon-wrapper {
+            background: rgba(255, 183, 77, 0.1);
+            color: #ffb74d;
         }
-        
-        .stat-card.revenue .stat-icon {
-            background-color: rgba(231, 76, 60, 0.1);
-            color: var(--danger);
+
+        .stat-card-glass.revenue .stat-icon-wrapper {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
         }
-        
-        .stat-info h3 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 5px;
+
+        .stat-info-group h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.2rem;
         }
-        
-        .stat-info p {
-            font-size: 14px;
-            color: #777;
+
+        .stat-info-group p {
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-muted);
             margin: 0;
-        }
-        
-        /* Users Table */
-        .users-table {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            margin-top: 25px;
-        }
-        
-        .users-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .users-table th {
-            background-color: #f8f9fa;
-            padding: 15px;
-            text-align: left;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             font-weight: 600;
-            color: var(--text-primary);
-            border-bottom: 1px solid #eee;
         }
-        
-        .users-table td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
+
+        /* Chart Section */
+        .chart-section-glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 3rem;
+            margin-bottom: 5rem;
         }
-        
-        .users-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .users-table tr:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .user-actions {
+
+        .section-header-modern {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title-modern {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title-modern i {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Story Grid Redesign */
+        .stories-container-modern {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        /* Reusing story-card-modern logic but keeping it localized for dashboard autonomy */
+        .story-card-admin {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .story-card-admin:hover {
+            transform: translateY(-12px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-img-wrapper {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .story-card-admin:hover .card-img-wrapper img {
+            transform: scale(1.1);
+        }
+
+        .admin-card-content {
+            padding: 1.8rem;
+        }
+
+        .admin-story-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .meta-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .meta-stat i {
+            color: var(--accent-secondary);
+        }
+
+        .meta-stat strong {
+            color: #fff;
+        }
+
+        .meta-author {
+            color: var(--accent-primary);
+            font-weight: 700;
+        }
+
+        /* Floating Logout Adjustment */
+        .admin-logout-trigger {
+            position: absolute;
+            top: 2rem;
+            right: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            z-index: 100;
+        }
+
+        .logout-link-modern {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
             gap: 10px;
+            padding: 0.8rem 1.6rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        
-        .user-actions button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
+
+        .logout-link-modern i {
+            color: #ef4444;
+            transition: all 0.3s ease;
         }
-        
-        .user-actions .edit {
-            color: var(--accent);
+
+        .logout-link-modern:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #fff;
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.2);
         }
-        
-        .user-actions .delete {
-            color: var(--danger);
+
+        .logout-link-modern:hover i {
+            transform: translateX(-3px);
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
         }
-        
-        /* Tab Content */
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        /* Status Indicator */
-        .status {
-            padding: 5px 10px;
+
+        .admin-avatar {
+            width: 50px;
+            height: 50px;
             border-radius: 15px;
-            font-size: 12px;
-            font-weight: 500;
+            border: 2px solid var(--accent-primary);
+            background: url('/static/images/profile1.webp') center/cover;
+            box-shadow: 0 0 15px rgba(140, 82, 255, 0.3);
         }
-        
-        .status.active {
-            background-color: rgba(46, 204, 113, 0.1);
-            color: var(--success);
+
+        @media (max-width: 992px) {
+            .sidebar-rail {
+                width: 80px;
+            }
+
+            .nav-item-modern span {
+                display: none;
+            }
+
+            .dashboard-wrapper {
+                margin-left: 80px;
+                width: calc(100% - 80px);
+                padding: 100px 1.5rem;
+            }
+
+            .dashboard-title-group h1 {
+                font-size: 2.5rem;
+            }
         }
-        
-        .status.inactive {
-            background-color: rgba(231, 76, 60, 0.1);
-            color: var(--danger);
+
+        @media (max-width: 768px) {
+            .sidebar-rail {
+                display: none;
+            }
+
+            .dashboard-wrapper {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .dashboard-header-modern {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2rem;
+            }
         }
-        .section {
-  margin: 40px auto;
-  
-  max-width: 1200px;
-}
-
-.section-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 25px;
-  color: #333;
-}
-
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
-.story-card {
-  width: 300px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s;
-}
-
-.story-card:hover {
-  transform: scale(1.02);
-}
-
-.story-image {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-
-.story-info {
-  padding: 15px;
-}
-
-.story-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #222;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.story-meta {
-  font-size: 14px;
-  color: #666;
-  margin: 4px 0;
-}
-
-.center {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.view-all-btn {
-  display: inline-block;
-  padding: 10px 25px;
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-
-.view-all-btn:hover {
-  background-color: #0056b3;
-}
-
-.view-all-btn.red {
-  background-color: #dc3545;
-}
-
-.view-all-btn.red:hover {
-  background-color: #a71d2a;
-}
-
     </style>
 </head>
+
 <body>
-    <header class="header">
-        <a href="{% url 'authentication:home' %}" style="text-decoration: none;" class="logo">TALETAILOR</a>
-        <div class="admin-title">ADMINISTRATION PANEL</div>
-        <div class="user-controls">
-            <a href="{% url 'authentication:logout' %}" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-            <div class="profile-icon"></div>
+    <!-- Background Elements -->
+    <div class="hero-bg-glow"></div>
+    <div class="hero-bg-glow"
+        style="bottom: 0; right: 0; background: radial-gradient(circle, rgba(0, 229, 255, 0.1) 0%, transparent 70%);">
+    </div>
+
+    <!-- Admin Navigation Rail -->
+    <aside class="sidebar-rail">
+        <a href="{% url 'authentication:dashboard' %}" class="nav-item-modern active">
+            <i class="fas fa-grid-2"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="{% url 'authentication:users' %}" class="nav-item-modern">
+            <i class="fas fa-users-crown"></i>
+            <span>Legends</span>
+        </a>
+        <a href="{% url 'authentication:stories' %}" class="nav-item-modern">
+            <i class="fas fa-books"></i>
+            <span>Archives</span>
+        </a>
+    </aside>
+
+    <!-- Header Overlay -->
+    <header>
+        <div class="header-container">
+            <a href="{% url 'authentication:home' %}" class="logo">TALETAILOR</a>
+            <div class="admin-logout-trigger">
+                <a href="{% url 'authentication:logout' %}" class="logout-link-modern">
+                    <i class="fas fa-portal-exit"></i> Disconnect
+                </a>
+                <div class="admin-avatar"></div>
+            </div>
         </div>
     </header>
-    <div class="main-container">
-        <div class="sidebar">
-            <a href=" {% url 'authentication:dashboard' %}" class="sidebar-item active">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href=" {% url 'authentication:users' %}" class="sidebar-item">
-                <i class="fas fa-users"></i>
-                <span>Customers</span>
-            </a>
-            <a href="{% url 'authentication:stories' %} " class="sidebar-item ">
-                <i class="fas fa-book"></i>
-                <span>Stories</span>
-            </a>
-        </div>   
 
-        <div class="content">
-            <div id="customers-tab" class="tab-content active">
-                <div class="content-header">
-                    <h2 class="content-title">Dashboard</h2>
-                    <div class="date">
-                        <span>Today: <strong>{% now "F j, Y" %}</strong></span>
+    <main class="dashboard-wrapper">
+        <!-- Content Header -->
+        <div class="dashboard-header-modern" data-aos="fade-down">
+            <div class="dashboard-title-group">
+                <p class="dashboard-subtitle">Control Nexus</p>
+                <h1>Archive Overview</h1>
+            </div>
+            <div class="admin-date-pill">
+                <i class="far fa-calendar-alt me-2"></i> Nexus Cycle: <strong>{% now "F j, Y" %}</strong>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-grid-dashboard">
+            <div class="stat-card-glass users" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-icon-wrapper">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info-group">
+                    <h3>{{ users|length }}</h3>
+                    <p>Total Legends</p>
+                </div>
+            </div>
+
+            <div class="stat-card-glass stories" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-icon-wrapper">
+                    <i class="fas fa-book-sparkles"></i>
+                </div>
+                <div class="stat-info-group">
+                    <h3>{{ total_stories }}</h3>
+                    <p>Archived Tales</p>
+                </div>
+            </div>
+
+            <div class="stat-card-glass active" data-aos="fade-up" data-aos-delay="300">
+                <div class="stat-icon-wrapper">
+                    <i class="fas fa-chart-line-up"></i>
+                </div>
+                <div class="stat-info-group">
+                    <h3>85%</h3>
+                    <p>Vitality Rate</p>
+                </div>
+            </div>
+
+            <div class="stat-card-glass revenue" data-aos="fade-up" data-aos-delay="400">
+                <div class="stat-icon-wrapper">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <div class="stat-info-group">
+                    <h3>$12.6K</h3>
+                    <p>Essence Value</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-section-glass" data-aos="fade-up">
+            <div class="section-header-modern">
+                <h2 class="section-title-modern">
+                    <i class="fas fa-signature"></i> Creation Frequency
+                </h2>
+                <div class="chart-legend-custom">
+                    <span class="badge rounded-pill bg-purple-soft">Daily Registrations</span>
+                </div>
+            </div>
+
+            <div style="position: relative; height: 350px;">
+                <canvas id="userChart"></canvas>
+            </div>
+
+            {{ labels|json_script:"labels-data" }}
+            {{ data|json_script:"chart-data" }}
+        </div>
+
+        <!-- Top Viewed Stories -->
+        <section class="section-archives" data-aos="fade-up">
+            <h2 class="section-title-modern">
+                <i class="fas fa-eye"></i> Most Resonating Tales
+            </h2>
+            <div class="stories-container-modern">
+                {% for story in top_viewed_stories %}
+                <div class="story-card-admin" data-aos="zoom-in" data-aos-delay="{{ forloop.counter|add:'100' }}">
+                    <div class="card-img-wrapper">
+                        {% if story.image %}
+                        <img src="{{ story.image.url }}" alt="{{ story.title }}">
+                        {% else %}
+                        <img src="{% static 'images/logo4.webp' %}" alt="Placeholder">
+                        {% endif %}
+                    </div>
+                    <div class="admin-card-content">
+                        <h3 class="admin-story-title">{{ story.title }}</h3>
+                        <div class="admin-meta-row">
+                            <span class="meta-stat">
+                                <i class="fas fa-ghost"></i> Views: <strong>{{ story.view_count }}</strong>
+                            </span>
+                            <span class="meta-author">@{{ story.user.username }}</span>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="stats-row">
-                    <div class="stat-card users">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>{{ users|length }}</h3>
-                            <p>Total Users</p>
-                        </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Top Liked Stories -->
+        <section class="section-archives mt-5" data-aos="fade-up">
+            <h2 class="section-title-modern">
+                <i class="fas fa-heart-pulse"></i> Legends' Favorites
+            </h2>
+            <div class="stories-container-modern">
+                {% for story in top_liked_stories %}
+                <div class="story-card-admin" data-aos="zoom-in" data-aos-delay="{{ forloop.counter|add:'100' }}">
+                    <div class="card-img-wrapper">
+                        {% if story.image %}
+                        <img src="{{ story.image.url }}" alt="{{ story.title }}">
+                        {% else %}
+                        <img src="{% static 'images/logo4.webp' %}" alt="Placeholder">
+                        {% endif %}
                     </div>
-                    
-                    <div class="stat-card stories">
-                        <div class="stat-icon">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>{{ total_stories }}</h3>
-                            <p>Total Stories</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card active">
-                        <div class="stat-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>85%</h3>
-                            <p>Active Users</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card revenue">
-                        <div class="stat-icon">
-                            <i class="fas fa-dollar-sign"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>$12,650</h3>
-                            <p>Monthly Revenue</p>
+                    <div class="admin-card-content">
+                        <h3 class="admin-story-title">{{ story.title }}</h3>
+                        <div class="admin-meta-row">
+                            <span class="meta-stat">
+                                <i class="fas fa-heart"></i> Likes: <strong>{{ story.like_count }}</strong>
+                            </span>
+                            <span class="meta-author">@{{ story.user.username }}</span>
                         </div>
                     </div>
                 </div>
-                
-                 
-                
+                {% endfor %}
             </div>
-            <div style="
-            justify-content: space-between;
-            display: flex;">
-            <h2>User Registrations Per Day</h2>
-             
-        </div>
-            <canvas id="userChart" width="600" height="300"></canvas>
-                <!-- Dashboard content here -->
-                {{ labels|json_script:"labels-data" }}
-                {{ data|json_script:"chart-data" }}
-        
-     
-    <section class="section">
-        <h2 class="section-title">📊 Top 6 Viewed Stories</h2>
-      
-        <div class="card-container">
-          {% for story in top_viewed_stories %}
-          <div class="story-card">
-            {% if story.image %}
-            <img src="{{ story.image.url }}" class="story-image" alt="Story Image">
-            {% else %}
-            <img src="{% static 'images/logo4.webp' %}"class="story-image" alt="Default story image">
-            {% endif %}
-            <div class="story-info">
-              <h3 class="story-title">{{ story.title }}</h3>
-              <p class="story-meta">👁️ Views: <strong>{{ story.view_count }}</strong></p>
-              <p class="story-meta">✍️ {{ story.user.username }}</p>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      
-         
-      </section>
-      
-      <section class="section">
-        <h2 class="section-title">❤️ Top 6 Liked Stories</h2>
-      
-        <div class="card-container">
-          {% for story in top_liked_stories %}
-          <div class="story-card">
-            {% if story.image %}
-            <img src="{{ story.image.url }}" class="story-image" alt="Story Image">
-            {% else %}
-            <img src="{% static 'images/logo4.webp' %}"class="story-image" alt="Default story image">
-            {% endif %}
-            <div class="story-info">
-              <h3 class="story-title">{{ story.title }}</h3>
-              <p class="story-meta">❤️ Likes: <strong>{{ story.like_count }}</strong></p>
-              <p class="story-meta">✍️ {{ story.user.username }}</p>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </section>
-      
-    </div>
-   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        </section>
+    </main>
 
-   <script>
-       // Filter users by name or email
-       function filterUsers() {
-           const input = document.getElementById('search-input');
-           const filter = input.value.toUpperCase();
-           const table = document.getElementById('users-table');
-           const rows = table.getElementsByTagName('tr');
-   
-           for (let i = 1; i < rows.length; i++) {
-               const nameCell = rows[i].getElementsByTagName('td')[1];
-               const emailCell = rows[i].getElementsByTagName('td')[2];
-   
-               if (nameCell && emailCell) {
-                   const nameValue = nameCell.textContent || nameCell.innerText;
-                   const emailValue = emailCell.textContent || emailCell.innerText;
-   
-                   if (
-                       nameValue.toUpperCase().indexOf(filter) > -1 ||
-                       emailValue.toUpperCase().indexOf(filter) > -1
-                   ) {
-                       rows[i].style.display = '';
-                   } else {
-                       rows[i].style.display = 'none';
-                   }
-               }
-           }
-       }
-   
-       // Load user chart when DOM is ready
-       document.addEventListener('DOMContentLoaded', function () {
-           const ctx = document.getElementById('userChart').getContext('2d');
-   
-           const userChart = new Chart(ctx, {
-               type: 'line',
-               data: {
-                   labels: JSON.parse(document.getElementById('labels-data').textContent),
-                   datasets: [{
-                       label: 'Users Joined',
-                       data: JSON.parse(document.getElementById('chart-data').textContent),
-                       borderColor: 'rgba(75, 192, 192, 1)',
-                       backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                       fill: true,
-                       tension: 0.3,
-                       pointRadius: 4,
-                       pointHoverRadius: 6,
-                   }]
-               },
-               options: {
-                   responsive: true,
-                   plugins: {
-                       legend: {
-                           position: 'top',
-                       },
-                       title: {
-                           display: true,
-                           text: 'Users Joined Per Day'
-                       }
-                   },
-                   scales: {
-                       x: {
-                           title: {
-                               display: true,
-                               text: 'Date'
-                           }
-                       },
-                       y: {
-                           beginAtZero: true,
-                           title: {
-                               display: true,
-                               text: 'New Users'
-                           },
-                           ticks: {
-                               stepSize: 1
-                           }
-                       }
-                   }
-               }
-           });
-       });
-   </script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize AOS
+            AOS.init({
+                duration: 1000,
+                once: true,
+                offset: 50
+            });
+
+            // Initialize Chart
+            const ctx = document.getElementById('userChart').getContext('2d');
+            const purpleGradient = ctx.createLinearGradient(0, 0, 0, 400);
+            purpleGradient.addColorStop(0, 'rgba(140, 82, 255, 0.4)');
+            purpleGradient.addColorStop(1, 'rgba(140, 82, 255, 0)');
+
+            const labels = JSON.parse(document.getElementById('labels-data').textContent);
+            const data = JSON.parse(document.getElementById('chart-data').textContent);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Spiritual Connections',
+                        data: data,
+                        borderColor: '#8C52FF',
+                        borderWidth: 4,
+                        backgroundColor: purpleGradient,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#8C52FF',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.5)',
+                                font: { family: 'Outfit' }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.5)',
+                                font: { family: 'Outfit' },
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>

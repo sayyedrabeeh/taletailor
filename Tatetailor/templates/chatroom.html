@@ -960,17 +960,7 @@ chatSocket.onclose = (event) => {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
          
-            const container = document.querySelector(".chat-area .messages-container");
-            if (container && roomName === document.querySelector(".chat-area")?.dataset?.room) {
-                const div = document.createElement("div");
-                div.className = "message sent"; // Sender's message
-                div.innerHTML = `
-                    <div class="message-bubble">${msg}</div>
-                    <div class="message-time">Just now</div>
-                `;
-                container.appendChild(div);
-                container.scrollTop = container.scrollHeight;
-            }
+             
 
             
             const targetChatItem = document.querySelector(`.chat-item[data-room="${roomName}"]`);
