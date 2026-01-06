@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaleTailor - Find Your Stories</title>
-    <link rel="icon" type="image/png" href='static/images/fav.jpg'>
+    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,8 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!-- Styles -->
-    <link rel="stylesheet" href='static/css/home_modern.css'>
-    <link rel="stylesheet" href='static/css/explore_modern.css'>
+    <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
+    <link rel="stylesheet" href="{% static 'css/explore_modern.css' %}">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 
@@ -244,7 +244,7 @@
                             {% if story.image %}
                             <img src="{{ story.image.url }}" alt="{{ story.title }}">
                             {% else %}
-                            <img src='static/images/logo4.webp' alt="{{ story.title }}">
+                            <img src="{% static 'images/logo4.webp' %}" alt="{{ story.title }}">
                             {% endif %}
                             <span class="card-category-badge">{{ story.emotions|default:"Story" }}</span>
                         </div>

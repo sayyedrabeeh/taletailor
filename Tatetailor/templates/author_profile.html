@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ author.username }} - Author Profile | TaleTailor</title>
-    <link rel="icon" type="image/png" href='static/images/fav.jpg'>
+    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href='static/css/home_modern.css'>
+    <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -485,7 +485,7 @@
                         <img src="{{ author.profile.profile_picture.url }}" alt="{{ author.username }}"
                             class="profile-avatar-modern">
                         {% else %}
-                        <img src='static/images/logo4.webp' alt="Default Profile" class="profile-avatar-modern">
+                        <img src="{% static 'images/logo4.webp' %}" alt="Default Profile" class="profile-avatar-modern">
                         {% endif %}
                         <div class="online-status"></div>
                     </div>
@@ -622,7 +622,7 @@
                                 {% if story.image %}
                                 <img src="{{ story.image.url }}" alt="{{ story.title }}">
                                 {% else %}
-                                <img src='static/images/logo4.webp' alt="Placeholder">
+                                <img src="{% static 'images/logo4.webp' %}" alt="Placeholder">
                                 {% endif %}
                                 {% if story.genre %}
                                 <div class="genre-tag-floating">{{ story.get_genre_display }}</div>

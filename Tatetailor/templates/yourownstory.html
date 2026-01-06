@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href='static/css/yourownstory_modern.css'>
+  <link rel="stylesheet" href="{% static 'css/yourownstory_modern.css' %}">
 
   <!-- AOS Animation -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -145,16 +145,8 @@
             <a href="{% url 'mystory:edit_story' story.id %}" class="draft-card">
               <div class="draft-info">
                 <span class="draft-title">{{ story.title }}</span>
-                <span class="status-badge status-{{ story.status|default:'draft'|lower }}">
-                  {% if story.status|lower == 'published' %}
-                  <i class="fas fa-check-circle"></i>
-                  {% elif story.status|lower == 'ongoing' %}
-                  <i class="fas fa-pen-nib"></i>
-                  {% else %}
-                  <i class="fas fa-file-alt"></i>
-                  {% endif %}
-                  {{ story.status|default:"Draft" }}
-                </span>
+                <span class="status-badge status-{{ story.status|default:'draft'|lower }}">{{
+                  story.status|default:"Draft" }}</span>
               </div>
               <p class="draft-excerpt">{{ story.content|truncatewords:20 }}</p>
               <div class="draft-meta">
@@ -204,16 +196,8 @@
             <a href="{% url 'mystory:edit_story' story.id %}" class="draft-card">
               <div class="draft-info">
                 <span class="draft-title">{{ story.title }}</span>
-                <span class="status-badge status-{{ story.status|default:'draft'|lower }}">
-                  {% if story.status|lower == 'published' %}
-                  <i class="fas fa-check-circle"></i>
-                  {% elif story.status|lower == 'ongoing' %}
-                  <i class="fas fa-pen-nib"></i>
-                  {% else %}
-                  <i class="fas fa-file-alt"></i>
-                  {% endif %}
-                  {{ story.status|default:"Draft" }}
-                </span>
+                <span class="status-badge status-{{ story.status|default:'draft'|lower }}">{{
+                  story.status|default:"Draft" }}</span>
               </div>
               <p class="draft-excerpt">{{ story.content|truncatewords:20 }}</p>
               <div class="draft-meta">
