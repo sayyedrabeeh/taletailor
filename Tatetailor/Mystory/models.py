@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 # Create your models here.
+from cloudinary.models import CloudinaryField
+
 
 class Story(models.Model):
     STATUS_CHOICES = [
@@ -11,8 +13,7 @@ class Story(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="stories")
     collaborators = models.ManyToManyField(User, related_name="collaborations", blank=True)
-    image = models.ImageField(upload_to='story_images/', null=True, blank=True)
-
+    image = CloudinaryField('story_image',blank=True,null=True)
     title = models.CharField(max_length=100)
     content = models.TextField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, blank=True,null=True )  

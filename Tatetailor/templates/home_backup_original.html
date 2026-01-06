@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TaleTailor - Create Your Own Story</title>
   {% load static %}
-  <link rel="icon" type="image/jpg" href="{% static 'images/fav.jpg' %}" />
+  <link rel="icon" type="image/jpg" href='static/images/fav.jpg' />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -878,7 +878,7 @@
               {% if story.image %}
               <img src="{{ story.image.url }}" alt="{{ story.title }}" />
               {% else %}
-              <img src="{% static 'images/logo4.webp' %}" alt="{{ story.title }}" />
+              <img src='static/images/logo4.webp' alt="{{ story.title }}" />
               {% endif %}
             </div>
             <h3 class="story-title irish-grover-regular">

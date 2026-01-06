@@ -50,7 +50,23 @@ INSTALLED_APPS = [
      'Aistories',
      'Mystory',
     #  'review',
+    'cloudinary',
+    'cloudinary_storage',
 ]
+
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config(
+    cloud_name = os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    api_key = os.environ.get("CLOUDINARY_API_KEY"),
+    api_secret = os.environ.get("CLOUDINARY_API_SECRET"),
+)
+
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 INSTALLED_APPS += ['channels', 'messaging']
@@ -156,15 +172,15 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise storage for compressed and cached static files
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / "media"
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / "media"
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

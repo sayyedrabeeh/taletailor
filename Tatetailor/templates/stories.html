@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaleTailor - Archives Management</title>
-    <link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
+    <link rel="icon" type="image/png" href='static/images/fav.jpg'>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/home_modern.css' %}">
+    <link rel="stylesheet" href='static/css/home_modern.css'>
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -623,7 +623,7 @@
             <div class="story-card-glass" data-aos="zoom-in" data-aos-delay="{{ forloop.counter|add:'100' }}">
                 <span class="card-badge-nexus">{{ story.emotions|default:"Vibe" }}</span>
                 <div class="card-img-nexus">
-                    <img src="{% if story.image %}{{ story.image.url }}{% else %}{% static 'images/logo4.webp' %}{% endif %}"
+            <img src="{% if story.image %}{{ story.image.url }}{% else %}/static/images/logo4.webp{% endif %}"
                         alt="Archive">
                 </div>
                 <div class="card-content-nexus">

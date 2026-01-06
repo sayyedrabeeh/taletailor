@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="{% static 'css/mystory_modern.css' %}">
+  <link rel="stylesheet" href='static/css/mystory_modern.css'>
 
   <!-- AOS Animation -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -178,7 +178,7 @@
           {% if story.image %}
           <img src="{{ story.image.url }}" alt="{{ story.title }}" loading="lazy">
           {% else %}
-          <img src="{% static 'images/logo4.webp' %}" alt="Default story image" loading="lazy">
+          <img src='static/images/logo4.webp' alt="Default story image" loading="lazy">
           {% endif %}
           <div class="image-overlay">
             <a href="{% url 'aistory:view_story' story.id %}" class="overlay-btn">
