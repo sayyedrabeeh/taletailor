@@ -6,7 +6,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TaleTailor - Create Your Stories</title>
-
+<link rel="icon" type="image/png" href="{% static 'images/fav.jpg' %}">
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -196,8 +196,8 @@
             <a href="{% url 'mystory:edit_story' story.id %}" class="draft-card">
               <div class="draft-info">
                 <span class="draft-title">{{ story.title }}</span>
-                <span class="status-badge status-{{ story.status|default:'draft'|lower }}">{{
-                  story.status|default:"Draft" }}</span>
+                <span class="status-badge status-{{ story.status|default:'draft'|lower }}">
+                  {{story.status|default:"Draft" }}</span>
               </div>
               <p class="draft-excerpt">{{ story.content|truncatewords:20 }}</p>
               <div class="draft-meta">
