@@ -36,6 +36,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from io import BytesIO
 from django.db.models import Q 
+from django.core.files.base import ContentFile
+import requests
 
 load_dotenv()
  
@@ -72,17 +74,53 @@ def yourownstory(request):
 
 
 # @login_required(login_url='authentication:login') 
+# def get_unsplash_image(query):
+#     access_key = 'sx-HxKDsbMy5QCfZfQhhgu7Vu3m9CtkZkZKk1NtaGm4'  
+#     url = f"https://api.unsplash.com/photos/random?query={query}&client_id={access_key}"    
+#     response = requests.get(url)
+#     if response.status_code == 200:
+#         data = response.json()
+#         image_url = data['urls']['regular']
+#         image_response = requests.get(image_url)
+#         if image_response.status_code == 200:
+#             return ContentFile(image_response.content)  
+#     return None
+
 def get_unsplash_image(query):
-    access_key = 'sx-HxKDsbMy5QCfZfQhhgu7Vu3m9CtkZkZKk1NtaGm4'  
-    url = f"https://api.unsplash.com/photos/random?query={query}&client_id={access_key}"    
-    response = requests.get(url)
-    if response.status_code == 200:
+    access_key = os.getenv("UNSPLASH_ACCESS_KEY")
+  
+    url = "https://api.unsplash.com/photos/random"
+
+    headers = {
+        "Authorization": f"Client-ID {access_key}",
+        "Accept-Version": "v1"
+    }
+
+    params = {
+        "query": query,
+        "orientation": "landscape"
+    }
+
+    try:
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        print("Unsplash status:", response.status_code)
+
+        if response.status_code != 200:
+            print("Unsplash error:", response.text)
+            return None
+
         data = response.json()
-        image_url = data['urls']['regular']
-        image_response = requests.get(image_url)
-        if image_response.status_code == 200:
-            return ContentFile(image_response.content)  
+        image_url = data["urls"]["regular"]
+
+        img_response = requests.get(image_url, timeout=10)
+        if img_response.status_code == 200:
+            return ContentFile(img_response.content)
+
+    except Exception as e:
+        print("Unsplash exception:", e)
+
     return None
+
 
 @login_required(login_url='authentication:login') 
 def edit_story(request, story_id=None):    
