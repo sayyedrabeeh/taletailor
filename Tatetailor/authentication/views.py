@@ -13,7 +13,7 @@ from django.db.models.functions import TruncDate
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import user_passes_test, login_required
 from .models import Profile
-
+from django.db import transaction
 
 
 
@@ -106,7 +106,7 @@ def verify_otp(request):
             except Exception as e:
               
                 print(f"Error creating user: {e}")
-                messages.error(request, f"An error occurred. Please try logging in. : {e}")
+                messages.error(request, f"An error occurred. Please try logging in. ")
                 if 'pending_user' in request.session:
                     del request.session['pending_user']
                 return redirect('authentication:login')
