@@ -86,16 +86,19 @@ def yourownstory(request):
 #             return ContentFile(image_response.content)  
 #     return None
 
+import cloudinary.uploader
+
 def get_unsplash_image(query):
     access_key = os.getenv("UNSPLASH_ACCESS_KEY")
-  
-    url = "https://api.unsplash.com/photos/random"
+    if not access_key:
+        print("Unsplash key missing")
+        return None
 
+    url = "https://api.unsplash.com/photos/random"
     headers = {
         "Authorization": f"Client-ID {access_key}",
         "Accept-Version": "v1"
     }
-
     params = {
         "query": query,
         "orientation": "landscape"
@@ -103,8 +106,6 @@ def get_unsplash_image(query):
 
     try:
         response = requests.get(url, headers=headers, params=params, timeout=10)
-        print("Unsplash status:", response.status_code)
-
         if response.status_code != 200:
             print("Unsplash error:", response.text)
             return None
@@ -112,15 +113,16 @@ def get_unsplash_image(query):
         data = response.json()
         image_url = data["urls"]["regular"]
 
-        img_response = requests.get(image_url, timeout=10)
-        if img_response.status_code == 200:
-            return ContentFile(img_response.content)
+        upload_result = cloudinary.uploader.upload(
+            image_url,
+            folder="story_images"
+        )
+
+        return upload_result["public_id"]   
 
     except Exception as e:
-        print("Unsplash exception:", e)
-
-    return None
-
+        print("Unsplash/Cloudinary error:", e)
+        return None
 
 @login_required(login_url='authentication:login') 
 def edit_story(request, story_id=None):    
@@ -165,10 +167,12 @@ def edit_story(request, story_id=None):
                        length=story_length,
                        emotions=", ".join(emotions),
                      )
-                    img_file = get_unsplash_image(new_title)
-                    if img_file:
-                        story.image = img_file
-                        story.save()
+                    public_id = get_unsplash_image(new_title)
+                    
+                    if public_id:
+                        story.image = public_id
+                        story.save(update_fields=["image"])
+                    
                     if post_type == "public":
                           notify_followers(request.user, story,action="posted")
                     messages.success(request, f"Story Created Successfully as {post_type.capitalize()}.")
@@ -213,10 +217,12 @@ def edit_story(request, story_id=None):
             story.save()
             if post_type == "public":
                      notify_followers(request.user, story,action="Updated")
-            img_file = get_unsplash_image(new_title)
-            if img_file:
-               story.image.save(f"{story.id}.jpg", img_file)
-               story.save()
+            public_id = get_unsplash_image(new_title)
+
+            if public_id:
+                 story.image = public_id
+                 story.save(update_fields=["image"])
+
       
             messages.success(request, f"Story posted {post_type.capitalize()} successfully!")
             return redirect("mystory:yourownstory")
