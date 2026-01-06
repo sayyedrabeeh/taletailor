@@ -5,7 +5,13 @@
 # Keep some HTML/CSS/JS files as their original type
 # Adjust these patterns to control which files remain as HTML/CSS/JS
 home.html linguist-language=HTML
+mystory.html linguist-language=HTML
+graph.html linguist-language=HTML
+stories.html linguist-language=HTML
+aimake1.html linguist-language=HTML
+explore.html linguist-language=HTML
 edityourownstory.html linguist-language=HTML
+yourownstory.html linguist-language=HTML
 dashboard.html linguist-language=HTML
 aimake2.html linguist-language=HTML
 # css/specific-folder/*.css linguist-language=CSS
