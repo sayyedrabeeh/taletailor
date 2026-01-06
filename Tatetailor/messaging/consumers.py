@@ -1,4 +1,5 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.exceptions import StopConsumer 
 import json
 
 class ChatConsumer(AsyncWebsocketConsumer):
