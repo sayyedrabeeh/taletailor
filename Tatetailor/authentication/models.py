@@ -24,21 +24,8 @@ class Profile(models.Model):
             return now - self.last_seen <= timedelta(minutes=1)
         return False
     
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=User, dispatch_uid="create_user_profile")
 def create_user_profile(sender, instance, created, **kwargs):
-    """Create or get profile for user - handles duplicates gracefully"""
-    try:
-        
-        profile, created_profile = Profile.objects.get_or_create(user=instance)
-        if created_profile:
-            print(f"✅ Created profile for user: {instance.username}")
-        else:
-            print(f"ℹ️ Profile already exists for user: {instance.username}")
-    except IntegrityError as e:
-        
-        print(f"⚠️ IntegrityError when creating profile: {e}")
-        try:
-            profile = Profile.objects.get(user=instance)
-            print(f"ℹ️ Retrieved existing profile for user: {instance.username}")
-        except Profile.DoesNotExist:
-            print(f"❌ Could not create or retrieve profile for user: {instance.username}")
+    if created:
+        Profile.objects.create(user=instance)
+        print(f"✅ Created profile for user: {instance.username}")
