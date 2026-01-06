@@ -71,9 +71,16 @@
             <a href="{% url 'mystory:mystory1' %}" class="btn btn-outline-light"><i class="fas fa-book-open me-2"></i>
               My Story</a>
             <a href="#" class="btn btn-outline-light"><i class="fas fa-cog me-2"></i> Settings</a>
-            <a href="{% url 'authentication:logout' %}" class="btn btn-outline-danger"><i
-                class="fas fa-sign-out-alt me-2"></i> Logout</a>
-          </div>
+           {% if request.user.is_authenticated %}
+             <a href="{% url 'authentication:logout' %}" class="btn btn-outline-danger btn-sm shadow-sm d-inline-flex align-items-center">
+               <i class="fas fa-sign-out-alt me-2"></i> Logout
+             </a>
+           {% else %}
+             <a href="{% url 'authentication:login' %}" class="btn btn-outline-primary btn-sm shadow-sm d-inline-flex align-items-center">
+               <i class="fas fa-sign-in-alt me-2"></i> Login
+             </a>
+           {% endif %}
+                     </div>
         </div>
       </div>
     </div>
