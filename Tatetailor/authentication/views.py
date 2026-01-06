@@ -75,11 +75,13 @@ def verify_otp(request):
             messages.error(request, "Session expired. Try signing up again.")
              
             return redirect('authentication:signup')
-        # if entered_otp and otp_storage.get(email) == int(entered_otp): 
-        if entered_otp and  int(entered_otp) == 123456 : 
-            if User.objects.filter(email=email).exists():
+        
+        if User.objects.filter(email=email).exists():
                 messages.warning(request, "User already registered. Please log in.")
                 return redirect('authentication:login') 
+                
+        # if entered_otp and otp_storage.get(email) == int(entered_otp): 
+        if entered_otp and  int(entered_otp) == 123456 : 
             user = User.objects.create_user(username=email,email=email,password=password)
             user = authenticate(request, username=email, password=password)
             if user:

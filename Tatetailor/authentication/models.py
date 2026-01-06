@@ -27,4 +27,7 @@ class Profile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.get_or_create(user=instance)
+     
+    else:
+        Profile.objects.get_or_create(user=instance)
  
