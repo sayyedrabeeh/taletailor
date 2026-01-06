@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from datetime import timedelta
 from cloudinary.models import CloudinaryField
+from django.db import IntegrityError
 
 # Create your models here.
 class Profile(models.Model):
