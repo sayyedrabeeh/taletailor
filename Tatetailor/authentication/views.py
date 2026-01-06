@@ -81,7 +81,7 @@ def verify_otp(request):
                 messages.warning(request, "User already registered. Please log in.")
                 return redirect('authentication:login') 
             user=User.objects.create(email=email,username=email,password=make_password(password))
-            user.save()
+             
              
             user = authenticate(request, username=email, password=password)
             if user:
@@ -236,7 +236,7 @@ def delete_story(request, story_id):
 
 @login_required
 def edit_profile(request):
-    profile, created = Profile.objects.get_or_create(user=request.user)
+    profile = request.user.profile
 
     if request.method == 'POST':
         bio = request.POST.get('bio')
@@ -258,5 +258,5 @@ def edit_profile(request):
 
 @login_required
 def view_profile(request):
-    profile, created = Profile.objects.get_or_create(user=request.user)
+    profile  = request.user.profile
     return render(request, 'view_profile.html', {'profile': profile})
