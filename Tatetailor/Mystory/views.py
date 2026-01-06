@@ -128,8 +128,9 @@ def edit_story(request, story_id=None):
                        emotions=", ".join(emotions),
                      )
                     img_file = get_unsplash_image(new_title)
-                    story.image.save(f"{story.id}.jpg", img_file)
-                    story.save()
+                    if img_file:
+                        story.image.save(f"{story.id}.jpg", img_file)
+                        story.save()
                     if post_type == "public":
                           notify_followers(request.user, story,action="posted")
                     messages.success(request, f"Story Created Successfully as {post_type.capitalize()}.")
@@ -178,8 +179,7 @@ def edit_story(request, story_id=None):
             if img_file:
                story.image.save(f"{story.id}.jpg", img_file)
                story.save()
-            print("Image file generated:", img_file)
-            print('sto',story.image)
+      
             messages.success(request, f"Story posted {post_type.capitalize()} successfully!")
             return redirect("mystory:yourownstory")
         elif update_action is not None:
