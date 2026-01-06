@@ -822,9 +822,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function setupWebSocket(roomName) {
         if (chatSocket) chatSocket.close();
 
-        const protocol = location.protocol === "https:" ? "wss" : "ws";
+        const protocol = window.location.protocol === "https:" ? "wss" : "ws";
         const port = 9000;
-        chatSocket = new WebSocket(`${protocol}://127.0.0.1:${port}/ws/chat/${roomName}/`);
+        chatSocket = new WebSocket(`${protocol}://${window.location.host}/ws/chat/${roomName}/`);
 
         chatSocket.onopen = () => {
             console.log("✅ WebSocket connected to room:", roomName);

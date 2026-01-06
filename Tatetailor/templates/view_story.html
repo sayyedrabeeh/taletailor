@@ -552,10 +552,6 @@
           transparent 100%);
     }
 
-    .story-main:hover::before {
-      animation: shine 3s infinite;
-    }
-
     .story-main:hover {
       transform: translateY(-8px) scale(1.01);
       box-shadow:
@@ -563,6 +559,7 @@
         0 0 0 1px rgba(255, 255, 255, 0.2) inset,
         0 0 40px var(--glow-color);
     }
+
 
     /* Extraordinary Header with Multiple Gradient Layers */
     .story-header {
@@ -582,7 +579,6 @@
       background:
         radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
         radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%);
-      animation: float-orbs 8s ease-in-out infinite;
     }
 
     .story-header::after {
@@ -618,7 +614,7 @@
       border-radius: inherit;
       z-index: -1;
       opacity: 0.8;
-      animation: rotate-border 4s linear infinite;
+      animation: none;
     }
 
     .action-card::after {
@@ -669,7 +665,6 @@
         radial-gradient(circle at 70% 30%, var(--particle-color) 0px, transparent 1px);
       background-size: 200px 200px;
       opacity: 0.3;
-      animation: particle-drift 60s linear infinite;
       pointer-events: none;
       z-index: -1;
     }
@@ -691,10 +686,8 @@
         radial-gradient(ellipse at top left, var(--glow-color) 0%, transparent 50%),
         radial-gradient(ellipse at bottom right, var(--glow-color) 0%, transparent 50%),
         radial-gradient(ellipse at top right, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
-      opacity: 0.4;
       pointer-events: none;
       z-index: -1;
-      animation: mesh-flow 20s ease-in-out infinite;
     }
 
     /* Advanced Tag Styling */
@@ -755,7 +748,7 @@
           transparent 0deg,
           rgba(255, 255, 255, 0.3) 90deg,
           transparent 180deg);
-      animation: icon-spin 3s linear infinite;
+      animation: none;
     }
 
     /* Holographic Effect for Images */
@@ -1232,11 +1225,6 @@
       --button-glow: rgba(251, 191, 36, 0.3);
     }
 
-    .theme-happy .story-header {
-      background: var(--header-gradient) !important;
-      animation: happy-shimmer 6s infinite alternate;
-      border-bottom: 4px solid var(--secondary-color);
-    }
 
     /* Disable dark global meshes for Happy theme */
     .theme-happy::before,
@@ -1280,18 +1268,8 @@
         radial-gradient(circle at 30% 80%, rgba(251, 191, 36, 0.04) 0%, transparent 18%);
       pointer-events: none;
       z-index: -1;
-      animation: bubble-float 25s infinite linear;
     }
 
-    @keyframes bubble-float {
-      0% {
-        background-position: 0 0;
-      }
-
-      100% {
-        background-position: 100px 100px;
-      }
-    }
 
     /* Sad: "Midnight Melancholy" - Atmospheric, Somber, Immersive */
     .theme-sad {
@@ -1345,18 +1323,9 @@
       opacity: 0.15;
       pointer-events: none;
       z-index: 10;
-      animation: rain-fall 0.5s linear infinite;
+      animation: none;
     }
 
-    @keyframes rain-fall {
-      0% {
-        background-position: 0 0;
-      }
-
-      100% {
-        background-position: 20px 100px;
-      }
-    }
 
     .theme-melancholy {
       --primary-color: #57534e;
@@ -1417,31 +1386,8 @@
     }
 
     /* Falling Rose Petals Animation */
-    .theme-romantic::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image:
-        radial-gradient(circle at 10% 10%, rgba(244, 114, 182, 0.08) 0%, transparent 12%),
-        radial-gradient(circle at 90% 20%, rgba(251, 113, 133, 0.08) 0%, transparent 15%),
-        radial-gradient(circle at 30% 80%, rgba(244, 114, 182, 0.08) 0%, transparent 18%);
-      pointer-events: none;
-      z-index: -1;
-      animation: petal-fall 25s infinite linear;
-    }
 
-    @keyframes petal-fall {
-      0% {
-        background-position: 0 0;
-      }
 
-      100% {
-        background-position: 150px 300px;
-      }
-    }
 
     /* Thriller: "Noir Heartbeat" - Cinematic, Tense, High Contrast */
     .theme-thriller {
@@ -1601,36 +1547,9 @@
       --button-glow: rgba(124, 58, 237, 0.5);
     }
 
+
     /* Floating Midnight Mist Animation */
-    .theme-mystery::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image:
-        radial-gradient(ellipse at 20% 30%, rgba(124, 58, 237, 0.08) 0%, transparent 40%),
-        radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.06) 0%, transparent 45%),
-        radial-gradient(ellipse at 50% 50%, rgba(76, 29, 149, 0.05) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: -1;
-      animation: mist-float 20s infinite ease-in-out;
-    }
 
-    @keyframes mist-float {
-
-      0%,
-      100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.6;
-      }
-
-      50% {
-        transform: translate(30px, -20px) scale(1.1);
-        opacity: 0.8;
-      }
-    }
 
     /* Fantasy: "Celestial Dreamscape" - Deep, Magical, Starlit */
     .theme-fantasy {
@@ -1666,9 +1585,10 @@
       text-shadow: 0 0 15px rgba(139, 92, 246, 0.4), 0 0 30px rgba(192, 132, 252, 0.2);
       background: linear-gradient(to right, #f1f5f9, #fcd34d, #f1f5f9);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
       background-size: 200% auto;
-      animation: celestial-shimmer 5s linear infinite;
+      animation: none;
     }
 
     @keyframes celestial-shimmer {
@@ -1677,42 +1597,9 @@
       }
     }
 
+
     /* Magical Floating Stars & Nebula Aurora */
-    .theme-fantasy::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image:
-        radial-gradient(circle at 15% 15%, #fcd34d 0.5px, transparent 1px),
-        radial-gradient(circle at 85% 25%, #f1f5f9 0.5px, transparent 1px),
-        radial-gradient(circle at 40% 70%, #fcd34d 0.5px, transparent 1px),
-        radial-gradient(circle at 70% 80%, #f1f5f9 0.5px, transparent 1px),
-        radial-gradient(circle at 25% 45%, #fcd34d 0.5px, transparent 1px),
-        radial-gradient(circle at 75% 55%, #f1f5f9 0.5px, transparent 1px),
-        /* Nebula layers */
-        radial-gradient(ellipse at 30% 20%, rgba(139, 92, 246, 0.07) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 80%, rgba(192, 132, 252, 0.05) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: -1;
-      animation: celestial-drift 60s infinite linear;
-    }
 
-    @keyframes celestial-drift {
-      0% {
-        transform: scale(1) translate(0, 0);
-      }
-
-      50% {
-        transform: scale(1.1) translate(30px, -20px);
-      }
-
-      100% {
-        transform: scale(1) translate(0, 0);
-      }
-    }
 
     /* Crystal Glass Cards for Fantasy */
     .theme-fantasy .action-card,
@@ -1836,53 +1723,13 @@
       --button-glow: rgba(245, 158, 11, 0.5);
     }
 
+
     /* Bouncing Confetti Animation */
-    .theme-comedy::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image:
-        radial-gradient(circle at 15% 20%, #f59e0b 0%, transparent 3%),
-        radial-gradient(circle at 85% 30%, #fb923c 0%, transparent 3%),
-        radial-gradient(circle at 45% 10%, #fbbf24 0%, transparent 3%),
-        radial-gradient(circle at 70% 50%, #f59e0b 0%, transparent 3%),
-        radial-gradient(circle at 25% 70%, #fb923c 0%, transparent 3%),
-        radial-gradient(circle at 90% 80%, #fbbf24 0%, transparent 3%);
-      pointer-events: none;
-      z-index: -1;
-      animation: confetti-bounce 3s infinite ease-in-out;
-    }
 
-    @keyframes confetti-bounce {
-
-      0%,
-      100% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0.7;
-      }
-
-      25% {
-        transform: translateY(-15px) rotate(5deg);
-        opacity: 0.9;
-      }
-
-      50% {
-        transform: translateY(0) rotate(-5deg);
-        opacity: 0.8;
-      }
-
-      75% {
-        transform: translateY(-10px) rotate(3deg);
-        opacity: 0.9;
-      }
-    }
 
     /* Playful Story Card Bounce */
     .theme-comedy .story-card {
-      animation: card-bounce 4s infinite ease-in-out;
+      background: var(--card-background);
     }
 
     @keyframes card-bounce {
