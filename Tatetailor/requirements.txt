@@ -87,3 +87,5 @@ dj-database-url
 whitenoise
 cloudinary
 django-cloudinary-storage
+channels
+channels-redis

@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 # import openai
+import urllib.parse
 
 load_dotenv()
 
@@ -72,14 +73,24 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 INSTALLED_APPS += ['channels', 'messaging']
 ASGI_APPLICATION = 'Tatetailor.asgi.application'
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-             "hosts": [("127.0.0.1", 6379)],
+REDIS_URL = os.environ.get("REDIS_URL")
+
+if REDIS_URL:
+    redis_url = urllib.parse.urlparse(REDIS_URL)
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [(redis_url.hostname, redis_url.port)],
+            },
         },
-    },
-}
+    }
+else:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer",
+        },
+    }
 
 
 MIDDLEWARE = [
