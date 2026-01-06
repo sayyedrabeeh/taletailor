@@ -145,8 +145,8 @@
             <a href="{% url 'mystory:edit_story' story.id %}" class="draft-card">
               <div class="draft-info">
                 <span class="draft-title">{{ story.title }}</span>
-                <span class="status-badge status-{{ story.status|default:'draft'|lower }}">{{
-                  story.status|default:"Draft" }}</span>
+                <span class="status-badge status-{{ story.status|default:'draft'|lower }}">
+                  {{story.status|default:"Draft" }}</span>
               </div>
               <p class="draft-excerpt">{{ story.content|truncatewords:20 }}</p>
               <div class="draft-meta">
