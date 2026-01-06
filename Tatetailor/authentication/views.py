@@ -65,35 +65,56 @@ def send_otp(email):
 def verify_otp(request):
     if request.user.is_authenticated:
         return redirect('authentication:home') 
-    if request.method=='POST':
+    
+    if request.method == 'POST':
         email = request.session.get('pending_user', {}).get('email')   
         password = request.session.get('pending_user', {}).get('password')
-        
-        entered_otp=request.POST.get('otp')
+        entered_otp = request.POST.get('otp')
 
         if not email or not password:
             messages.error(request, "Session expired. Try signing up again.")
-             
             return redirect('authentication:signup')
         
-        if User.objects.filter(email=email).exists():
-                messages.warning(request, "User already registered. Please log in.")
-                return redirect('authentication:login') 
-                
         # if entered_otp and otp_storage.get(email) == int(entered_otp): 
-        if entered_otp and  int(entered_otp) == 123456 : 
-            user = User.objects.create_user(username=email,email=email,password=password)
-            user = authenticate(request, username=email, password=password)
-            if user:
-                login(request, user)
-                messages.success(request, "Signup successful.") 
-                return redirect('authentication:home')
+        if entered_otp and int(entered_otp) == 123456:
+            try:
+                
+                with transaction.atomic():
+                    
+                    if User.objects.filter(email=email).exists():
+                        messages.warning(request, "User already registered. Please log in.")
+                        if 'pending_user' in request.session:
+                            del request.session['pending_user']
+                        return redirect('authentication:login')
+                    
+                    
+                    user = User.objects.create_user(
+                        username=email,
+                        email=email,
+                        password=password
+                    )
+                
+                
+                user = authenticate(request, username=email, password=password)
+                if user:
+                    login(request, user)
+                    if 'pending_user' in request.session:
+                        del request.session['pending_user']
+                    messages.success(request, "Signup successful.") 
+                    return redirect('authentication:home')
+                    
+            except Exception as e:
+              
+                print(f"Error creating user: {e}")
+                messages.error(request, "An error occurred. Please try logging in.")
+                if 'pending_user' in request.session:
+                    del request.session['pending_user']
+                return redirect('authentication:login')
         else:
             messages.error(request, "Invalid OTP. Try again.")
-            return redirect('authentication:verify_otp')           
+            return redirect('authentication:verify_otp')
+            
     return render(request, 'verify_otp.html')
-
-
 def login_view(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:

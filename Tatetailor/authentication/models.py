@@ -25,9 +25,19 @@ class Profile(models.Model):
     
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.get_or_create(user=instance)
-     
-    else:
-        Profile.objects.get_or_create(user=instance)
- 
+    """Create or get profile for user - handles duplicates gracefully"""
+    try:
+        
+        profile, created_profile = Profile.objects.get_or_create(user=instance)
+        if created_profile:
+            print(f"✅ Created profile for user: {instance.username}")
+        else:
+            print(f"ℹ️ Profile already exists for user: {instance.username}")
+    except IntegrityError as e:
+        
+        print(f"⚠️ IntegrityError when creating profile: {e}")
+        try:
+            profile = Profile.objects.get(user=instance)
+            print(f"ℹ️ Retrieved existing profile for user: {instance.username}")
+        except Profile.DoesNotExist:
+            print(f"❌ Could not create or retrieve profile for user: {instance.username}")
