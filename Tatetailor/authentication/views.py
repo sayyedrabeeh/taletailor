@@ -80,9 +80,7 @@ def verify_otp(request):
             if User.objects.filter(email=email).exists():
                 messages.warning(request, "User already registered. Please log in.")
                 return redirect('authentication:login') 
-            user=User.objects.create(email=email,username=email,password=make_password(password))
-             
-             
+            user = User.objects.create_user(username=email,email=email,password=password)
             user = authenticate(request, username=email, password=password)
             if user:
                 login(request, user)

@@ -22,9 +22,9 @@ class Profile(models.Model):
             now = timezone.now()
             return now - self.last_seen <= timedelta(minutes=1)
         return False
-
+    
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.get_or_create(user=instance)
  
