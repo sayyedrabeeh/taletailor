@@ -229,7 +229,7 @@ def send_story_email_to_followers(story, followers, action="posted"):
 @login_required(login_url='authentication:login') 
 def share_story(request, story_id):
     story = get_object_or_404(Story, id=story_id)
-    share_url = request.build_absolute_uri(f"/Mystory/story/{story.id}/")
+    share_url = request.build_absolute_uri(f"/Aistories/view_story/{story.id}/")
     return render(request, "share_story.html", {"share_url": share_url, "story": story})
 
 @login_required(login_url='authentication:login') 
