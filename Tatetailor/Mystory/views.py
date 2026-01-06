@@ -153,7 +153,7 @@ def edit_story(request, story_id=None):
                          s.content.strip().lower() == normalized_content for s in duplicate_stories
                      )
                      
-                    print('duplicate_exists',duplicate_exists)
+                    
                     if duplicate_exists:
                         messages.warning(request, "You've already submitted this story.")
                         return redirect("mystory:yourownstory")
@@ -167,7 +167,7 @@ def edit_story(request, story_id=None):
                      )
                     img_file = get_unsplash_image(new_title)
                     if img_file:
-                        story.image.save(f"{story.id}.jpg", img_file)
+                        story.image = img_file
                         story.save()
                     if post_type == "public":
                           notify_followers(request.user, story,action="posted")
