@@ -179,6 +179,11 @@ STORAGES = {
     },
 }
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://taletailor.onrender.com",
+]
+
+
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR / "media"
 
